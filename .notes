@@ -1,0 +1,18 @@
+// To add encryption of passwords
+// --> npm add bcryptjs
+
+// To JWT
+// --> npm add jsonwebtoken
+// Set token into cookie
+// --> npm add cookie-parser
+
+
+// ---------- GIT COMMANDS ----------- //
+// git status
+// git add .
+// git commit -m "Commit message"
+// git push -u origin main
+
+// Restore files from Git
+// git log --oneline -- <file-name>
+// git checkout .  or  git checkout <commit-ID> -- <file-name>
