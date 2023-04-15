@@ -10,8 +10,13 @@ const FeaturedServices = () => {
     alignItems: "flex-start",
     justifyContent: "flex-end"
   }
+  const flexContainer = {
+    px: "var(--chakra-space-4)",
+    pt: "2em",
+    pb: "1em",
+  }
   return (
-    <Box>
+    <Box sx={flexContainer}>
       <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>FEATURED SERVICES</Heading>
       <SimpleGrid color={"white"} minChildWidth={"290px"} spacing='var(--chakra-space-4)'>
         <Stack sx={stackStyle}>

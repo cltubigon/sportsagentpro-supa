@@ -7,14 +7,8 @@ const ContentArea = () => {
   console.log("Content area rendered")
   return (
     <>
-        <Container bg={"blue.800"} maxW={"1440px"} p={"0"} >
-            <Flex px={"var(--chakra-space-4)"}>
-                <HeroSection/>
-            </Flex>
-        </Container>
-        <Container maxW={"1440px"} py={"30px"}>
-                <QuickAccess/>
-        </Container>
+      <HeroSection/>
+      <QuickAccess/>
     </>
   )
 }

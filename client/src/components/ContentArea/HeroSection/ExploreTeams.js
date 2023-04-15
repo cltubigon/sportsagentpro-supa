@@ -25,8 +25,12 @@ const ExploreTeams = () => {
     minHeight: "62px",
     alignItems: "flex-center",
   }
+  const flexContainer = {
+    px: "var(--chakra-space-4)",
+    py: "1em",
+  }
   return (
-      <Box>
+      <Box sx={flexContainer}>
       <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>EXPLORE TEAMS</Heading>
       <SimpleGrid minChildWidth={"285px"} spacing='var(--chakra-space-4)'>
         <Flex sx={teamContainerStyle}>

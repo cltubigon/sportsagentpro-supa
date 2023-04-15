@@ -32,8 +32,12 @@ const ExploreAtheletes = () => {
     minHeight: "31px",
     alignItems: "flex-center",
   }
+  const flexContainer = {
+    px: "var(--chakra-space-4)",
+    py: "1em",
+  }
   return (
-    <Box>
+    <Box sx={flexContainer}>
       <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>
         EXPLORE ATHLETES
       </Heading>

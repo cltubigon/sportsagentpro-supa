@@ -5,8 +5,15 @@ import {BsSearch, BsSortDownAlt} from 'react-icons/bs'
 import React from "react"
 
 const SubNavigation = () => {
+  const flexContainer = {
+    w: "full",
+    py: "20px",
+    gap: 2,
+    justifyContent: "space-between",
+    px: "var(--chakra-space-4)",
+  }
   return (
-    <Flex w={"full"} py={"20px"} gap={2} justifyContent={"space-between"}>
+    <Flex sx={flexContainer}>
       <Flex w={"350px"}>
         <InputGroup>
           <InputLeftElement pointerEvents="none" children={<BsSearch color="gray.300" />} />
