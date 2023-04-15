@@ -1,10 +1,11 @@
+import { Flex, Heading } from '@chakra-ui/react'
 import React from 'react'
 
 const Home = () => {
   return (
-    <div>
-      <h2>Homepage</h2>
-    </div>
+    <Flex as="section">
+      <Heading as="h2">Homepage</Heading>
+    </Flex>
   )
 }
 
