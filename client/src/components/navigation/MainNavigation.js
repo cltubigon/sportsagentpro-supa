@@ -1,4 +1,6 @@
-import { Avatar, Box, Flex, Heading, Text } from "@chakra-ui/react"
+import { Avatar, Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
+import { useState } from "react"
+import { Link } from "react-router-dom"
 
 const MainNavigation = () => {
     const flexContainer = {
@@ -8,19 +10,32 @@ const MainNavigation = () => {
         bg: "blue.800",
         py: "20px",
     }
+    const [isLogin, setIsLogin] = useState(false)
   return (
     <Flex sx={flexContainer}>
-        <Box>
+        <Flex alignItems={"center"}>
         <Heading as={"h3"} fontSize={"3xl"}>
             Sports Agent Pro
         </Heading>
-        </Box>
-        <Flex gap={10} alignItems={"center"} >
-        <Text>Deals</Text>
-        <Text>Profile</Text>
-        <Text>Help Center</Text>
-        <Text>Logout</Text>
-        <Avatar></Avatar>
+        </Flex>
+        <Flex>
+            {isLogin ?
+            <Flex gap={10} alignItems={"center"}>
+              <Text>Deals</Text>
+              <Text>Profile</Text>
+              <Text>Help Center</Text>
+              <Text>Logout</Text>
+              <Avatar></Avatar>
+            </Flex>
+            :
+            <Link to="login">
+
+            <Flex flexDirection={"column"}>
+              <Avatar size={"sm"} alignSelf={"center"}/>
+              <Text>Login</Text>
+            </Flex>
+            </Link>
+            }
         </Flex>
   </Flex>
   )
