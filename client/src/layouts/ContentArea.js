@@ -4,6 +4,7 @@ import HeroSection from '../components/ContentArea/HeroSection'
 import QuickAccess from '../components/ContentArea/QuickAccess'
 
 const ContentArea = () => {
+  console.log("Content area rendered")
   return (
     <>
         <Container bg={"blue.800"} maxW={"1440px"} p={"0"} >

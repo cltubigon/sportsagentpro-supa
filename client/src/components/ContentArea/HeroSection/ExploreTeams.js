@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
 
 const ExploreTeams = () => {
+  console.log("ExploreTeams rendered")
   const flexLogoStyle = {
     alignItems: "center",
     color: "gray.200",

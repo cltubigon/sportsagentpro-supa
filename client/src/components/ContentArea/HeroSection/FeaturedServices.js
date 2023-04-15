@@ -1,7 +1,7 @@
 import { Box, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
 
 const FeaturedServices = () => {
+  console.log("FeaturedServices rendered")
   const stackStyle = {
     p: "30px",
     bg: 'blue.800',
