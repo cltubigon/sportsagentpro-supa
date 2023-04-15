@@ -1,14 +1,9 @@
-import { Box, Flex, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react"
-import { Icon } from "@chakra-ui/react"
-import { CiBaseball, CiBasketball, CiFootball } from "react-icons/ci"
-import {
-  GiHockey,
-  GiMuscleUp,
-  GiRunningShoe,
-  GiSoccerBall,
-} from "react-icons/gi"
+import { Box, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
+import { Icon } from '@chakra-ui/react'
+import {CiBaseball, CiBasketball, CiFootball} from "react-icons/ci"
+import { GiHockey, GiMuscleUp, GiRunningShoe, GiSoccerBall } from 'react-icons/gi'
 
-const ExploreAtheletes = () => {
+const ExAtheletes = () => {
   console.log("ExploreAtheletes rendered")
   const iconStyle = {
     justifyContent: "center",
@@ -33,74 +28,72 @@ const ExploreAtheletes = () => {
     alignItems: "flex-center",
   }
   return (
-    <Box>
-      <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>
-        EXPLORE ATHLETES
-      </Heading>
-      <SimpleGrid minChildWidth={"160px"} spacing="var(--chakra-space-2)">
+      <Box>
+      <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>EXPLORE ATHLETES</Heading>
+      <SimpleGrid minChildWidth={"160px"} spacing='var(--chakra-space-2)'>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={CiFootball} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={CiFootball} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Football</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Football</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={CiBaseball} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={CiBaseball} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Baseball</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Baseball</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={CiBaseball} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={CiBaseball} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Softball</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Softball</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={CiBasketball} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={CiBasketball} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Basketball</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Basketball</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={GiRunningShoe} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={GiRunningShoe} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Track & Field</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Track & Field</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={GiSoccerBall} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={GiSoccerBall} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Soccer</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Soccer</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={GiMuscleUp} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={GiMuscleUp} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Wresling</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Wresling</Flex>
-          </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Flex alignItems={"center"}>
-              <Icon as={GiHockey} sx={iconStyle} />
+            <Flex justifyContent={"center"}>
+                <Flex alignItems={"center"}>
+                    <Icon as={GiHockey} sx={iconStyle} />
+                </Flex>
+                <Flex sx={sportsTypeStyle} >Ice Hockey</Flex>
             </Flex>
-            <Flex sx={sportsTypeStyle}>Ice Hockey</Flex>
-          </Flex>
         </Flex>
         {/* <Flex sx={sportsContainerStyle}>
             <Flex justifyContent={"center"}>
@@ -261,4 +254,4 @@ const ExploreAtheletes = () => {
   )
 }
 
-export default ExploreAtheletes
+export default ExAtheletes
