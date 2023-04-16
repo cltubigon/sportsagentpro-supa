@@ -6,31 +6,32 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
+import axios from 'axios';
+import { useNavigate } from "react-router-dom"
 
 export default function HookForm() {
+  const navigate = useNavigate()
   const { register, control, handleSubmit, formState, watch } = useForm()
   const { errors } = formState
 
   const onSubmit = (data) => {
-    console.log(data)
+    const options = {
+      method: 'POST',
+      url: 'http://localhost:8000/api/auth/login',
+      headers: {'Content-Type': 'application/json'},
+      data: {email: 'cltubigon@gmail.com', password: 'Dragonfable12356'}
+    };
+    
+    axios.request(options).then(function (response) {
+      console.log(response.data);
+      // navigate('/')
+    }).catch(function (error) {
+      console.error(error);
+    });
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <FormControl isInvalid={errors.name}>
-        <FormLabel htmlFor='name'>First name</FormLabel>
-        <Input
-          id='name'
-          placeholder='name'
-          {...register('name', {
-            required: 'This is required',
-            minLength: { value: 4, message: 'Minimum length should be 4' },
-          })}
-        />
-          <FormErrorMessage>
-            {errors.name && errors.name.message}
-          </FormErrorMessage>
-      </FormControl>
       <FormControl isInvalid={errors.email}>
       <FormLabel htmlFor='email'>Email</FormLabel>
         <Input type='email'
@@ -47,6 +48,21 @@ export default function HookForm() {
         <FormErrorMessage>
           {errors.email && errors.email.message}
         </FormErrorMessage>
+      </FormControl>
+
+      <FormControl isInvalid={errors.password}>
+        <FormLabel htmlFor='password'>password</FormLabel>
+        <Input
+          type='password'
+          id='password'
+          placeholder='password'
+          {...register('password', {
+            required: 'This is required'
+          })}
+        />
+          <FormErrorMessage>
+            {errors.password && errors.password.message}
+          </FormErrorMessage>
       </FormControl>
       <Button mt={4} colorScheme='teal' type='submit'>
         Submit
