@@ -15,15 +15,18 @@ export default function HookForm() {
   const { errors } = formState
 
   const onSubmit = (data) => {
+    // console.log(data)
     const options = {
       method: 'POST',
       url: 'http://localhost:8000/api/auth/login',
       headers: {'Content-Type': 'application/json'},
-      data: {email: 'cltubigon@gmail.com', password: 'Dragonfable12356'}
+      data: {email: data.email, password: data.password}
     };
     
     axios.request(options).then(function (response) {
-      console.log(response.data);
+      // console.log(response)
+      // console.log(response.data);
+      console.log(response.data.token)
       // navigate('/')
     }).catch(function (error) {
       console.error(error);
