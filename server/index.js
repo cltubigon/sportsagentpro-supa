@@ -12,16 +12,21 @@ const app = express()
 dotenv.config()
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: "http://localhost:3000",
   credentials: true, // to enable cookies to be sent to/from the server
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
 app.use(cors(corsOptions))
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Credentials", true)
+  next()
+})
+
 const connect = async () => {
   try {
-    await mongoose.connect(process.env.MONGO, {dbName: 'sports_agent_pro'})
+    await mongoose.connect(process.env.MONGO, { dbName: "sports_agent_pro" })
     console.log("connected to mongoDB")
   } catch (error) {
     throw error
@@ -44,7 +49,7 @@ app.use("/api/hotels", hotelsRoute)
 app.use("/api/rooms", roomsRoute)
 app.use("/api/auth", authRoute)
 
-app.use((err, req, res, next)=>{
+app.use((err, req, res, next) => {
   const errorStatus = err.status || 500
   const errorMessage = err.message || "Something went wrong!"
   return res.status(errorStatus).json({
