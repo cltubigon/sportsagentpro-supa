@@ -1,66 +1,56 @@
+import { useForm } from 'react-hook-form'
 import {
-  Flex,
-  Box,
-  FormControl,
+  FormErrorMessage,
   FormLabel,
+  FormControl,
   Input,
-  Checkbox,
-  Stack,
-  Link,
   Button,
-  Heading,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
 
-export default function Login() {
+export default function HookForm() {
+  const { register, control, handleSubmit, formState, watch } = useForm()
+  const { errors } = formState
+
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
-          </Text>
-        </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}>
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}>
-                <Checkbox>Remember me</Checkbox>
-                <Link color={'blue.400'}>Forgot password?</Link>
-              </Stack>
-              <Button
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}>
-                Sign in
-              </Button>
-            </Stack>
-          </Stack>
-        </Box>
-      </Stack>
-    </Flex>
-  );
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <FormControl isInvalid={errors.name}>
+        <FormLabel htmlFor='name'>First name</FormLabel>
+        <Input
+          id='name'
+          placeholder='name'
+          {...register('name', {
+            required: 'This is required',
+            minLength: { value: 4, message: 'Minimum length should be 4' },
+          })}
+        />
+          <FormErrorMessage>
+            {errors.name && errors.name.message}
+          </FormErrorMessage>
+      </FormControl>
+      <FormControl isInvalid={errors.email}>
+      <FormLabel htmlFor='email'>Email</FormLabel>
+        <Input type='email'
+          id='email'
+          placeholder='email'
+          {...register('email', {
+            required: 'This is required',
+            pattern: {
+              value: /^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+$/i,
+              message: 'Please enter a valid email'
+            }
+          })}
+        />
+        <FormErrorMessage>
+          {errors.email && errors.email.message}
+        </FormErrorMessage>
+      </FormControl>
+      <Button mt={4} colorScheme='teal' type='submit'>
+        Submit
+      </Button>
+    </form>
+  )
 }
