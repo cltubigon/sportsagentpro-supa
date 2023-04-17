@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, Heading, Text } from "@chakra-ui/react"
 import React from "react"
-import SubNavigation from "../components/navigation/SubNavigation"
-import MainNavigation from "../components/navigation/MainNavigation"
+import SubNavigation from "../navigation/SubNavigation"
+import MainNavigation from "../navigation/MainNavigation"
 
 const NavigationBar = () => {
   return (

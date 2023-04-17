@@ -1,6 +1,6 @@
 import React from 'react'
-import TitleSection from '../components/HeroSection/TitleSection'
-import QuickAccess from '../components/HeroSection/QuickAccess'
+import TitleSection from '../HeroSection/TitleSection'
+import QuickAccess from '../HeroSection/QuickAccess'
 
 const HeroSection = () => {
   console.log("Content area rendered")

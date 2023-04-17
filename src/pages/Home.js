@@ -1,8 +1,8 @@
 import { Container } from '@chakra-ui/react'
 import React from 'react'
-import NavigationBar from '../layouts/NavigationBar'
-import HeroSection from '../layouts/HeroSection'
-import Content from '../layouts/Content'
+import NavigationBar from '../components/layouts/NavigationBar'
+import HeroSection from '../components/layouts/HeroSection'
+import Content from '../components/layouts/Content'
 
 const Home = () => {
   const containerStyle = {
@@ -15,7 +15,7 @@ const Home = () => {
     <Container sx={containerStyle}>
       <NavigationBar/>
       <HeroSection />
-      <Content/>
+      <Content />
     </Container>
   )
 }
