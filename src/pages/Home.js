@@ -1,9 +1,8 @@
-import { Container, Flex, Heading } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react'
 import React from 'react'
 import NavigationBar from '../layouts/NavigationBar'
-import ContentArea from '../layouts/ContentArea'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import SignupCard from './Login'
+import HeroSection from '../layouts/HeroSection'
+import Content from '../layouts/Content'
 
 const Home = () => {
   const containerStyle = {
@@ -15,7 +14,8 @@ const Home = () => {
   return (
     <Container sx={containerStyle}>
       <NavigationBar/>
-      <ContentArea />
+      <HeroSection />
+      <Content/>
     </Container>
   )
 }

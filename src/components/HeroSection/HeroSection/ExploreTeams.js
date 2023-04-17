@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, SimpleGrid } from '@chakra-ui/react'
 
 const ExploreTeams = () => {
   console.log("ExploreTeams rendered")
