@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 
 export default function HookForm() {
-  const { register, control, handleSubmit, formState, watch } = useForm()
+  const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
 
   const onSubmit = (data) => {

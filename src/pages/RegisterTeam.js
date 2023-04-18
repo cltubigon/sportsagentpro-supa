@@ -7,15 +7,25 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { connect } from 'react-redux'
-import { createTeam } from '../store/actions/TeamActions'
+import { createTeam } from '../store/actions/teamActions'
+import { useEffect } from 'react'
+
 
 const RegisterTeam = ({createTeam})=> {
-  const { register, control, handleSubmit, formState, watch } = useForm()
-  const { errors } = formState
+  const { register, handleSubmit, formState, reset } = useForm()
+  const { errors, isSubmitSuccessful } = formState
 
   const onSubmit = (data) => {
     createTeam(data)
   }
+
+  console.log("form state: ", formState)
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({ team: '', location: '', totalMembers: '' });
+    }
+  }, [formState, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -71,7 +81,7 @@ const RegisterTeam = ({createTeam})=> {
 
 const mapDispatchToProps = (dispatch)=> {
   return {
-    createTeam: (project) => dispatch(createTeam(project))
+    createTeam: (data) => dispatch(createTeam(data))
   }
 }
 

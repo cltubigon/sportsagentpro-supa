@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
+import { Avatar, Flex, Heading, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 

@@ -1,5 +1,4 @@
-import { Box, Button, Flex, IconButton, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
-import { Icon, ReactIcon, Search2Icon } from '@chakra-ui/icons'
+import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import {GiSettingsKnobs} from 'react-icons/gi'
 import {BsSearch, BsSortDownAlt} from 'react-icons/bs'
 import React from "react"

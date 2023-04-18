@@ -1,5 +1,16 @@
+import { collection, addDoc } from "firebase/firestore";
+
 export const createTeam = (team) => {
-    return (dispatch, getState) => {
-        dispatch({type: "CREATE_TEAM", team})
+    return async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore();
+        try {
+            await addDoc(collection(firestore, 'team'), {
+                ...team,
+                createdAt: new Date()
+            });
+            dispatch({ type: "CREATE_TEAM", team });
+        } catch (err) {
+            dispatch({ type: 'CREATE_TEAM_ERROR', err });
+        }
     }
 }
