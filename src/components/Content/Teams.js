@@ -1,9 +1,10 @@
 import { Heading, Text, Stack, Flex } from '@chakra-ui/layout'
 import React from 'react'
 import { connect } from 'react-redux'
+import { firestoreConnect } from 'react-redux-firebase'
+import { compose } from 'redux'
 
 const Teams = ({teams}) => {
-  console.log(teams)
   return (
     <Flex gap={4}>
       {teams && teams.map((team)=> {
@@ -20,9 +21,15 @@ const Teams = ({teams}) => {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
-    teams: state.team.teams
+    teams: state.firestore.ordered.team
   }
 }
 
-export default connect(mapStateToProps)(Teams)
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+    {collection: 'team'}
+  ])
+)(Teams)

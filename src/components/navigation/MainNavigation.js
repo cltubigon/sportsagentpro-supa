@@ -15,7 +15,7 @@ const MainNavigation = () => {
     <Flex sx={flexContainer}>
         <Flex alignItems={"center"}>
         <Heading as={"h3"} fontSize={"3xl"}>
-            Sports Agent Pro
+            <Link to="/">Sports Agent Pro</Link>
         </Heading>
         </Flex>
         <Flex>

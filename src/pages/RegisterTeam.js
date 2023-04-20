@@ -19,8 +19,6 @@ const RegisterTeam = ({createTeam})=> {
     createTeam(data)
   }
 
-  console.log("form state: ", formState)
-
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset({ team: '', location: '', totalMembers: '' });

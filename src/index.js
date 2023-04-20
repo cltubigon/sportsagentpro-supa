@@ -13,7 +13,9 @@ import { createFirestoreInstance } from 'redux-firestore';
 import firebase from "firebase/compat/app";
 import { rrfConfig } from "./config/fbConfig";
 
-const store = createStore(rootReducer, compose(applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore }))));
+const store = createStore(rootReducer, compose(
+  applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore }))
+));
 
 export const rrfProps = {
   firebase,
