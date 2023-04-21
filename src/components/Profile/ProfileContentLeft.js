@@ -6,6 +6,7 @@ import ProfileContentAbout from './ProfileContentAbout'
 import ProfileSocialMedia from './ProfileSocialMedia'
 
 const ProfileContentLeft = ({athlete}) => {
+  console.log("--------------------------ProfileContentLeft")
   return (
     <Stack flex={1} gap={4} pl={2}>
         <Flex justifyContent={"space-between"} >

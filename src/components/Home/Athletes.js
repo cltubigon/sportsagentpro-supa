@@ -1,6 +1,4 @@
 import { Text, Flex, SimpleGrid, Box } from '@chakra-ui/layout'
-import React from 'react'
-import Teams from '../Content/Teams'
 import { DummyImage } from 'react-simple-placeholder-image'
 import ProfileSocialMedia from '../Profile/ProfileSocialMedia'
 import { compose } from 'redux'
@@ -9,13 +7,11 @@ import { firestoreConnect } from 'react-redux-firebase'
 import { Link } from 'react-router-dom'
 
 const Athletes = ({athletes}) => {
-    // console.log(athletes)
     const cardCOntainer = {
         flexDirection: "column",
         gap: 3,
       }
       const imageContainer = {
-        borderRadius: "lg",
         width: "100%",
         bg: "gray.400",
         justifyContent: "center",
@@ -34,11 +30,12 @@ const Athletes = ({athletes}) => {
       }
   return (
     <>
-    <SimpleGrid minChildWidth={"300px"} gap={6}>
+    <SimpleGrid minChildWidth={"300px"} gap={6} tabIndex={0}>
         {athletes && athletes.map((athlete)=> {
             return (
-                <Flex sx={cardCOntainer} key={athlete.id} >
+              <div key={athlete.id}>
                     <Link to={"/profile/" + athlete.id}>
+                <Flex sx={cardCOntainer}  >
                     <Flex sx={imageContainer}>
                         <DummyImage bgColor='transparent' width={"330px"} height={240} placeholder='330x170' />
                     </Flex>
@@ -47,8 +44,9 @@ const Athletes = ({athletes}) => {
                         <Text sx={cardSportsType}>{athlete.sports} • {athlete.team}</Text>
                         <Box sx={cardSocialMedia}><ProfileSocialMedia /></Box>
                     </Flex>
-                </Link>
                 </Flex>
+                </Link>
+              </div>
             )
             })
         }
@@ -58,8 +56,9 @@ const Athletes = ({athletes}) => {
 }
 
 const mapStateToProps = (state) => {
+  const athlete = state.firestore.ordered.athlete
     return {
-      athletes: state.firestore.ordered.athlete
+      athletes: athlete
     }
   }
 

@@ -2,6 +2,7 @@ import { Flex, Icon, Stack, Text } from '@chakra-ui/react'
 import { BsCardText, BsEye, BsFolder2Open, BsMegaphone, BsPencil, BsPersonBadge } from 'react-icons/bs'
 
 const ProfileContentRight = () => {
+    console.log("--------------------------ProfileContentRight")
     const boxedItems = {
         border: "1px solid #E7EAEC",
         px: "var(--chakra-space-3)",

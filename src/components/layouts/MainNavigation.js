@@ -3,6 +3,8 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 
 const MainNavigation = () => {
+  console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+  console.log("MainNavigation")
     const flexContainer = {
         px: "var(--chakra-space-4)",
         color: "white",
@@ -15,7 +17,7 @@ const MainNavigation = () => {
     <Flex sx={flexContainer}>
         <Flex alignItems={"center"}>
         <Heading as={"h3"} fontSize={"3xl"}>
-            <Link to="/">Sports Agent Pro</Link>
+            <Link to="/">Sports Agent Pros</Link>
         </Heading>
         </Flex>
         <Flex>

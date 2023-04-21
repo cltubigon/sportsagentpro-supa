@@ -1,22 +1,18 @@
 import { Container } from '@chakra-ui/react'
 import React from 'react'
-import NavigationBar from '../components/layouts/NavigationBar'
-import HeroSection from '../components/layouts/HeroSection'
-import Content from '../components/layouts/Content'
-import Footer from '../components/layouts/Footer'
+import HeroSection from '../components/Home/HeroSection/HeroSection'
+import Content from '../components/Home/Content'
+
 
 const Home = () => {
   const containerStyle = {
     maxW: "1440px",
-    h: "100vh",
     px: 0,
   }
   return (
-    <Container sx={containerStyle}>
-      <NavigationBar/>
+    <Container sx={containerStyle} tabIndex={0}>
       <HeroSection />
       <Content />
-      <Footer />
     </Container>
   )
 }

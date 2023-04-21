@@ -1,9 +1,10 @@
-import { Flex, Heading, Icon, SimpleGrid, Stack, Text } from '@chakra-ui/react'
+import { Container, Flex, Heading, Icon, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 import { RiFacebookCircleFill, RiLinkedinBoxFill } from 'react-icons/ri';
 import { AiFillInstagram, AiFillTwitterCircle } from 'react-icons/ai';
 
 const Footer = () => {
+    console.log("Footer rendered")
   const currentYear = new Date().getFullYear();
   return (
     <>

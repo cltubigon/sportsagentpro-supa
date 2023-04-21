@@ -3,10 +3,9 @@ import { useState } from 'react'
 import { VscArrowLeft, VscCopy } from 'react-icons/vsc'
 import './ProfileSubNavigation.css'
 
-const ProfileSubNavigation = (props) => {
-  console.log("ProfileSubNavigation rendered")
+const ProfileSubNavigation = () => {
+  console.log("--------------------------ProfileSubNavigation")
   const [copyLink, setCopyLink] = useState(false)
-  const [animationActive, setAnimationActive] = useState(false)
 
   const copyLinkButton = () => {
     if (copyLink) {
@@ -15,7 +14,7 @@ const ProfileSubNavigation = (props) => {
       setCopyLink(true)
       navigator.clipboard.writeText(window.location.href);
   
-      const setLink = setTimeout(()=> {
+      setTimeout(()=> {
         setCopyLink(false)
       },1000)
     }

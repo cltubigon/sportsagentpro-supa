@@ -26,7 +26,7 @@ export const rrfProps = {
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <React.StrictMode>
+  
     <Provider store={store}>
       <ChakraProvider>
         <ReactReduxFirebaseProvider {...rrfProps}>
@@ -34,5 +34,5 @@ root.render(
         </ReactReduxFirebaseProvider>
       </ChakraProvider>
     </Provider>
-  </React.StrictMode>
+  
 )

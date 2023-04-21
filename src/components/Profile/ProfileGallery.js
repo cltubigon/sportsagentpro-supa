@@ -1,8 +1,8 @@
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { DummyImage } from 'react-simple-placeholder-image'
 
-const ProfileGallery = (props) => {
-  console.log("Gallery Rendered")
+const ProfileGallery = () => {
+  console.log("--------------------------Gallery Rendered")
   return (
     <Flex position={"relative"} gap={2} boxSizing='border-box' alignItems={"center"} justifyContent={"space-between"} px={"var(--chakra-space-4)"} >
         <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>

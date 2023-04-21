@@ -1,10 +1,9 @@
-import { Box, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, SimpleGrid } from '@chakra-ui/react'
 import { Icon } from '@chakra-ui/react'
 import {CiBaseball, CiBasketball, CiFootball} from "react-icons/ci"
 import { GiHockey, GiMuscleUp, GiRunningShoe, GiSoccerBall } from 'react-icons/gi'
 
 const ExAtheletes = () => {
-  console.log("ExploreAtheletes rendered")
   const iconStyle = {
     justifyContent: "center",
     alignItems: "center",
