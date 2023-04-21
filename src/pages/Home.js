@@ -3,12 +3,12 @@ import React from 'react'
 import NavigationBar from '../components/layouts/NavigationBar'
 import HeroSection from '../components/layouts/HeroSection'
 import Content from '../components/layouts/Content'
+import Footer from '../components/layouts/Footer'
 
 const Home = () => {
   const containerStyle = {
     maxW: "1440px",
     h: "100vh",
-    bg: "gray.100",
     px: 0,
   }
   return (
@@ -16,6 +16,7 @@ const Home = () => {
       <NavigationBar/>
       <HeroSection />
       <Content />
+      <Footer />
     </Container>
   )
 }

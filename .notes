@@ -1,11 +1,4 @@
-// To add encryption of passwords
-// --> npm add bcryptjs
-
-// To JWT
-// --> npm add jsonwebtoken
-// Set token into cookie
-// --> npm add cookie-parser
-
+// npm install --legacy-peer-deps react-redux-firebase redux-firestore
 
 // ---------- GIT COMMANDS ----------- //
 // git status

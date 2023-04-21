@@ -5,16 +5,15 @@ import RegisterTeam from "./pages/RegisterTeam"
 import AddAthlete from "./pages/AddAthlete"
 import Profile from "./pages/Profile"
 
-
 function App() {
   return (
     <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home/>}></Route>
-          <Route path="login" element={<Login/>}></Route>
-          <Route path="profile" element={<Profile/>}></Route>
-          <Route path="register-team" element={<RegisterTeam />}></Route>
-          <Route path="add-athlete" element={<AddAthlete />}></Route>
+          <Route exact path="/" element={<Home />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/profile/:id" element={<Profile />}></Route>
+          <Route path="/register-team" element={<RegisterTeam />}></Route>
+          <Route path="/add-athlete" element={<AddAthlete />}></Route>
         </Routes>
     </BrowserRouter>
   )

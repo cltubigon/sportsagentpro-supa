@@ -7,13 +7,14 @@ const FeatServices = () => {
     bg: 'blue.800',
     borderRadius: "8px",
     minHeight: "160px",
+    maxWidth: "100%",
     alignItems: "flex-start",
     justifyContent: "flex-end"
   }
   return (
     <Box>
       <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>FEATURED SERVICES</Heading>
-      <SimpleGrid color={"white"} minChildWidth={"290px"} spacing='var(--chakra-space-4)'>
+      <SimpleGrid columns={{ base: 2 }} color={"white"} minChildWidth={"290px"} spacing='var(--chakra-space-4)'>
         <Stack sx={stackStyle}>
           <Text fontSize={"xl"} lineHeight={"1.2em"}>Birthday shoutouts</Text>
           <Text fontSize={"sm"}>Unique and memorable girts</Text>

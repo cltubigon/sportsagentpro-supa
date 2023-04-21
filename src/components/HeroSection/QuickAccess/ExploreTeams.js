@@ -28,7 +28,7 @@ const ExTeams = () => {
   return (
       <Box>
       <Heading as={"h3"} size={"md"} letterSpacing={"1px"} mb={"12px"}>EXPLORE TEAMS</Heading>
-      <SimpleGrid minChildWidth={"285px"} spacing='var(--chakra-space-4)'>
+      <SimpleGrid columns={2} minChildWidth={"285px"} spacing='var(--chakra-space-4)'>
         <Flex sx={teamContainerStyle}>
           <Flex sx={flexLogoStyle}>L</Flex>
           <Flex sx={teamNameStyle} >Oregon Ducks</Flex>

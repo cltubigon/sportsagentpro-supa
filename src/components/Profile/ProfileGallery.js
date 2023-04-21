@@ -1,40 +1,18 @@
-import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react'
+import { Box, Button, Flex } from '@chakra-ui/react'
+import { DummyImage } from 'react-simple-placeholder-image'
 
-const ProfileGallery = () => {
-    const flexLogoStyle = {
-        alignItems: "center",
-        color: "gray.200",
-        justifyContent: "center",
-        w: "50px",
-        h: "50px",
-        fontSize: "2xl",
-        bg: "gray.500",
-        borderRadius: "100px"
-      }
-      const teamNameStyle = {
-        alignItems: "center",
-        ml: "15px",
-        fontSize: "md",
-        lineHeight: "1.4em",
-      }
-      const teamContainerStyle = {
-        p: "30px",
-        border: "1px solid #cdcdcd",
-        borderRadius: "8px",
-        minHeight: "62px",
-        alignItems: "flex-center",
-      }
-      const flexContainer = {
-        px: "var(--chakra-space-4)",
-        py: "1em",
-      }
+const ProfileGallery = (props) => {
+  console.log("Gallery Rendered")
   return (
-    <Flex gap={2} boxSizing='border-box' alignItems={"center"} justifyContent={"space-between"} px={"var(--chakra-space-4)"} >
-        <Flex><Image w={"100%"} src='https://bit.ly/dan-abramov' alt='Dan Abramov' /></Flex>
-        <Flex><Image w={"100%"} src='https://bit.ly/dan-abramov' alt='Dan Abramov' /></Flex>
-        <Flex><Image w={"100%"} src='https://bit.ly/dan-abramov' alt='Dan Abramov' /></Flex>
-        <Flex><Image w={"100%"} src='https://bit.ly/dan-abramov' alt='Dan Abramov' /></Flex>
-        <Flex><Image w={"100%"} src='https://bit.ly/dan-abramov' alt='Dan Abramov' /></Flex>
+    <Flex position={"relative"} gap={2} boxSizing='border-box' alignItems={"center"} justifyContent={"space-between"} px={"var(--chakra-space-4)"} >
+        <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
+        <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
+        <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
+        <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
+        <Flex display={{ base: 'none', sm: 'block' }} ><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
+        <Box position={"absolute"} bottom={{base: 2, sm: 3, md: 5, lg: 10}} right={{base: 5, sm: 7, md: 8, lg: 12}} >
+          <Button size={{base: 'xs', md: 'md'}} bgColor={"transparent"} border={"1px solid #cdcdcd"} dropShadow={"dark-lg"} _hover={{bgColor:"transparent"}} >View All</Button>
+          </Box>
     </Flex>
   )
 }

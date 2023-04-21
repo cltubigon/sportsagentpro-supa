@@ -28,7 +28,7 @@ const MainNavigation = () => {
               <Avatar></Avatar>
             </Flex>
             :
-            <Link to="login">
+            <Link to="/login">
 
             <Flex flexDirection={"column"}>
               <Avatar size={"sm"} alignSelf={"center"}/>

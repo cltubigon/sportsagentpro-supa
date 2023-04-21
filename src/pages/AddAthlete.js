@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react"
 import { connect } from "react-redux"
 import { useEffect, useState } from "react"
-import { createAthlete } from "../store/actions/althleteAction"
+import { createAthlete } from "../store/actions/athleteAction"
 
 const AddAthlete = ({ createAthlete }) => {
   const { register, handleSubmit, formState, reset, control } = useForm()
