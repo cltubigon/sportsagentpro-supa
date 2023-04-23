@@ -1,6 +1,8 @@
 import { Avatar, Flex, Heading, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { connect } from "react-redux"
+
 
 const MainNavigation = () => {
   console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
@@ -43,4 +45,11 @@ const MainNavigation = () => {
   )
 }
 
-export default MainNavigation
+const mapStateToProps = (state)=> {
+  // console.log(state)
+  return {
+    
+  }
+}
+
+export default connect(mapStateToProps)(MainNavigation)

@@ -1,13 +1,17 @@
 // npm install --legacy-peer-deps react-redux-firebase redux-firestore
+// npm install firebase@9.6.1 firebase/auth
+// "react-redux-firebase": "^3.11.0",
 
 // ---------- GIT COMMANDS ----------- //
 // git status
 // git add .
 // git commit -m "Commit message"
 // git push -u origin main
+# git add . && git commit -m "your commit message" && git push origin your-branch-name
 
 // Restore files from Git
 // git log --oneline -- <file-name>
 // git checkout <ID> .  or  git checkout <commit-ID> -- <file-name>
 
 //--------------------------
+

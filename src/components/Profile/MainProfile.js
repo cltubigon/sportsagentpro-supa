@@ -5,16 +5,17 @@ import ProfileContent from './ProfileContent'
 import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { compose } from 'redux'
+import { Stack, Text } from '@chakra-ui/react'
 
 const Profile = ({athlete}) => {
-        return (
+    return (
         <>
             <ProfileSubNavigation />
-            <ProfileGallery />
+            <ProfileGallery athlete={athlete} />
             <ProfileContent athlete={athlete}/>
         </>
-        )
-    }
+    )
+}
 
 const mapStateToProps = (state, props) => {
     const { id } = props

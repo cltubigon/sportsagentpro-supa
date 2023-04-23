@@ -5,52 +5,59 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { Link } from 'react-router-dom'
+import { HomeSkeleton } from '../Skeleton/Skeletons'
+
 
 const Athletes = ({athletes}) => {
-    const cardCOntainer = {
-        flexDirection: "column",
-        gap: 3,
-      }
-      const imageContainer = {
-        width: "100%",
-        bg: "gray.400",
-        justifyContent: "center",
-        borderRadius: "md",
-      }
-      const cardAthleteName = {
-        fontSize: "xl",
-        fontWeight: "semibold",
-      }
-      const cardSportsType = {
-        color: "gray.600",
-      }
-      const cardSocialMedia = {
-        color: "gray.500",
-        pb: 5,
-      }
+  console.log("-------------------Athletes")
+  const cardCOntainer = {
+      flexDirection: "column",
+      gap: 3,
+    }
+  const imageContainer = {
+    width: "100%",
+    bg: "gray.400",
+    justifyContent: "center",
+    borderRadius: "md",
+  }
+  const cardAthleteName = {
+    fontSize: "xl",
+    fontWeight: "semibold",
+  }
+  const cardSportsType = {
+    color: "gray.600",
+  }
+  const cardSocialMedia = {
+    color: "gray.500",
+    pb: 5,
+  }
   return (
     <>
-    <SimpleGrid minChildWidth={"300px"} gap={6} tabIndex={0}>
-        {athletes && athletes.map((athlete)=> {
-            return (
-              <div key={athlete.id}>
-                    <Link to={"/profile/" + athlete.id}>
-                <Flex sx={cardCOntainer}  >
-                    <Flex sx={imageContainer}>
-                        <DummyImage bgColor='transparent' width={"330px"} height={240} placeholder='330x170' />
+      {athletes ? 
+        <SimpleGrid minChildWidth={"300px"} gap={6} tabIndex={0}>
+          {athletes.map((athlete)=> {
+              return (
+                <div key={athlete.id}>
+                  <Link to={`/profile/${athlete.id}`}>
+                    <Flex sx={cardCOntainer}  >
+                        <Flex sx={imageContainer}>
+                            <DummyImage bgColor='transparent' width={"330px"} height={240} placeholder='330x170' />
+                        </Flex>
+                        <Flex flexDirection={"column"} gap={1}>
+                            <Text sx={cardAthleteName}>{athlete.firstName} {athlete.lastName}</Text>
+                            <Text sx={cardSportsType}>{athlete.sports} • {athlete.team}</Text>
+                            <Box sx={cardSocialMedia}><ProfileSocialMedia /></Box>
+                        </Flex>
                     </Flex>
-                    <Flex flexDirection={"column"} gap={1}>
-                        <Text sx={cardAthleteName}>{athlete.firstName} {athlete.lastName}</Text>
-                        <Text sx={cardSportsType}>{athlete.sports} • {athlete.team}</Text>
-                        <Box sx={cardSocialMedia}><ProfileSocialMedia /></Box>
-                    </Flex>
-                </Flex>
-                </Link>
-              </div>
-            )
+                  </Link>
+                </div>
+              )
             })
-        }
-      </SimpleGrid>
+          }
+        </SimpleGrid>
+        :
+        <HomeSkeleton />
+      }
     </>
   )
 }

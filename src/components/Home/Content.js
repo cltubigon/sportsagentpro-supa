@@ -8,7 +8,6 @@ const Content = () => {
       <>
         <Stack px={"var(--chakra-space-4)"} py={"50px"}>
           <Athletes />
-          {/* <Teams /> */}
         </Stack>
       </>
   )

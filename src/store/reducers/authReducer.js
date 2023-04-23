@@ -1,13 +1,24 @@
-const initState = {
-    teams: [
-        // {id: '1', team: 'AuthGolden State', location: 'United States', totalMembers: '15'},
-        // {id: '2', team: 'AuthBucks', location: 'United States', totalMembers: '15'},
-        // {id: '3', team: 'AuthLakers', location: 'United States', totalMembers: '15'}
-      ]
+const initialState = {
+  authError: null,
 }
 
-const authReducer = (state = initState, action) => {
-    return state
+const authReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case "LOGIN_ERROR":
+        console.log("login error")
+        return {
+          ...state,
+          authError: action.err.code,
+        }
+        case "LOGIN_SUCCESS":
+        console.log("login success")
+        return {
+          ...state,
+          authError: null,
+        }
+    default:
+      return state
+  }
 }
 
 export default authReducer

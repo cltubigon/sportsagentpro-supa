@@ -5,32 +5,35 @@ import {
   FormControl,
   Input,
   Button,
+  Text,
 } from '@chakra-ui/react'
+import { connect } from 'react-redux'
+import { signIn } from '../store/actions/authActions'
+import { useEffect, useState } from 'react'
 
-export default function HookForm() {
+const LoginForm = ({getCreds, getAuthState})=> {
+  const stateError = getAuthState.auth.authError
+  const [authError, setAuthError] = useState(null)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
 
-  const onSubmit = (data) => {
-    console.log(data)
-  }
+  useEffect(() => {
+    if (stateError) {
+      if (stateError === "auth/user-not-found") {
+        setAuthError('User not found');
+      } else {
+        setAuthError('Incorrect username or password');
+      }
+    }
+  }, [stateError]);
 
+  const onSubmit = (data) => {
+    setAuthError(null)
+    getCreds(data)
+  }
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <FormControl isInvalid={errors.name}>
-        <FormLabel htmlFor='name'>First name</FormLabel>
-        <Input
-          id='name'
-          placeholder='name'
-          {...register('name', {
-            required: 'This is required',
-            minLength: { value: 4, message: 'Minimum length should be 4' },
-          })}
-        />
-          <FormErrorMessage>
-            {errors.name && errors.name.message}
-          </FormErrorMessage>
-      </FormControl>
       <FormControl isInvalid={errors.email}>
       <FormLabel htmlFor='email'>Email</FormLabel>
         <Input type='email'
@@ -48,9 +51,37 @@ export default function HookForm() {
           {errors.email && errors.email.message}
         </FormErrorMessage>
       </FormControl>
-      <Button mt={4} colorScheme='teal' type='submit'>
+
+      <FormControl isInvalid={errors.password}>
+        <FormLabel htmlFor='password'>Password</FormLabel>
+        <Input type='password'
+          id='password'
+          placeholder='Password'
+          {...register('password', {
+            required: 'This is required'
+          })}
+        />
+          <FormErrorMessage>
+            {errors.password && errors.password.message}
+          </FormErrorMessage>
+      </FormControl>
+      <Button mt={4} colorScheme='teal' type='submit' >
         Submit
       </Button>
+      <Text>{authError && authError}</Text>
     </form>
+    </>
   )
 }
+const mapStateToProps = (state) => {
+  return {
+    getAuthState: state
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getCreds: (creds) => dispatch(signIn(creds))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
