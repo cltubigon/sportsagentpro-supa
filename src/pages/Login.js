@@ -10,27 +10,29 @@ import {
 import { connect } from 'react-redux'
 import { signIn } from '../store/actions/authActions'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const LoginForm = ({getCreds, getAuthState})=> {
-  const stateError = getAuthState.auth.authError
-  const [authError, setAuthError] = useState(null)
+const LoginForm = ({getCreds, authError, auth})=> {
+  const navigate = useNavigate()
+  const [authErr, setAuthErr] = useState(null)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
 
   useEffect(() => {
-    if (stateError) {
-      if (stateError === "auth/user-not-found") {
-        setAuthError('User not found');
+    if (authError) {
+      if (authError === "auth/user-not-found") {
+        setAuthErr('User not found');
       } else {
-        setAuthError('Incorrect username or password');
+        setAuthErr('Incorrect username or password');
       }
     }
-  }, [stateError]);
+  }, [authError]);
 
   const onSubmit = (data) => {
-    setAuthError(null)
+    setAuthErr(null)
     getCreds(data)
   }
+  auth.uid && navigate('/')
   return (
     <>
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -68,14 +70,15 @@ const LoginForm = ({getCreds, getAuthState})=> {
       <Button mt={4} colorScheme='teal' type='submit' >
         Submit
       </Button>
-      <Text>{authError && authError}</Text>
+      <Text>{authErr && authErr}</Text>
     </form>
     </>
   )
 }
 const mapStateToProps = (state) => {
   return {
-    getAuthState: state
+    authError: state.auth.authError,
+    auth: state.firebase.auth
   }
 }
 const mapDispatchToProps = (dispatch) => {

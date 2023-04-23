@@ -2,10 +2,11 @@ import { Avatar, Flex, Heading, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
+import SignedOutNavigation from "./Navigation/SignedOutNavigation"
+import SignedInNavigation from "./Navigation/SignedInNavigation"
 
 
-const MainNavigation = () => {
-  console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+const MainNavigation = ({auth}) => {
   console.log("MainNavigation")
     const flexContainer = {
         px: "var(--chakra-space-4)",
@@ -14,7 +15,6 @@ const MainNavigation = () => {
         bg: "blue.800",
         py: "20px",
     }
-    const [isLogin, setIsLogin] = useState(false)
   return (
     <Flex sx={flexContainer}>
         <Flex alignItems={"center"}>
@@ -23,32 +23,15 @@ const MainNavigation = () => {
         </Heading>
         </Flex>
         <Flex>
-            {isLogin ?
-            <Flex gap={10} alignItems={"center"}>
-              <Text>Deals</Text>
-              <Text>Profile</Text>
-              <Text>Help Center</Text>
-              <Text>Logout</Text>
-              <Avatar></Avatar>
-            </Flex>
-            :
-            <Link to="/login">
-
-            <Flex flexDirection={"column"}>
-              <Avatar size={"sm"} alignSelf={"center"}/>
-              <Text>Login</Text>
-            </Flex>
-            </Link>
-            }
+            {auth.uid ? <SignedInNavigation /> : <SignedOutNavigation />}
         </Flex>
   </Flex>
   )
 }
 
 const mapStateToProps = (state)=> {
-  // console.log(state)
   return {
-    
+    auth: state.firebase.auth
   }
 }
 

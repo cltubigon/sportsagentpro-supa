@@ -7,11 +7,10 @@
 // git add .
 // git commit -m "Commit message"
 // git push -u origin main
-# git add . && git commit -m "your commit message" && git push origin your-branch-name
+# git add . && git commit -m "your commit message" && git push -u origin main
 
 // Restore files from Git
 // git log --oneline -- <file-name>
 // git checkout <ID> .  or  git checkout <commit-ID> -- <file-name>
 
 //--------------------------
-
