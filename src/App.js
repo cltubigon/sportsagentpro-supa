@@ -10,6 +10,7 @@ import Footer from "./components/layouts/Footer"
 import MainNavigation from "./components/layouts/MainNavigation"
 import ColorMode from "./config/theme/ColorMode"
 import MyProfile from "./pages/MyProfile"
+import SignUp from "./pages/SignUp"
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/profile/:id" element={<Profile />}></Route>
           <Route path="/register-team" element={<RegisterTeam />}></Route>
           <Route path="/add-athlete" element={<AddAthlete />}></Route>
