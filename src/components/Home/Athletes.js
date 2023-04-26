@@ -34,7 +34,7 @@ const Athletes = ({athletes}) => {
   return (
     <>
       {athletes ? 
-        <SimpleGrid minChildWidth={"300px"} gap={6} tabIndex={0}>
+        <SimpleGrid minChildWidth={{base: "100%", sm:"290px", md: "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
           {athletes.map((athlete)=> {
               return (
                 <div key={athlete.id}>

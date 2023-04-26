@@ -1,10 +1,10 @@
-import { Stack, Grid } from '@chakra-ui/layout'
-import { Skeleton, SkeletonText } from '@chakra-ui/react'
+import { Stack, Grid, SimpleGrid, Flex } from '@chakra-ui/layout'
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 export const HomeSkeleton = () => {
     return (
       <>
-        <Grid templateColumns="repeat(3, 1fr)" gridGap={6} mt={"-15px"}>
+        <SimpleGrid minChildWidth={{base: "100%", sm:"290px", md: "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
             <Stack mb={4}>
                 <Skeleton height="240px" my="4" borderRadius={"5px"} />
                 <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
@@ -29,7 +29,15 @@ export const HomeSkeleton = () => {
                 <Skeleton height="240px" my="4" borderRadius={"5px"} />
                 <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
-        </Grid>
+            <Stack>
+                <Skeleton height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+            </Stack>
+            <Stack>
+                <Skeleton height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+            </Stack>
+        </SimpleGrid>
       </>
     )
 }
@@ -53,6 +61,19 @@ export const ProfileGallerySekeleton = () => {
                 <Skeleton height="240px" />
             </Stack>
         </Grid>
+      </>
+    )
+}
+export const NavigationSkeleton = () => {
+    return (
+      <>
+        <Flex gap={4} flexBasis={"423px"} alignItems={"center"}>
+                <Skeleton height="12px" flex={1} />
+                <Skeleton height="12px" flex={1} />
+                <Skeleton height="12px" flex={1} />
+                <Skeleton height="12px" flex={1} />
+                <SkeletonCircle width={"48px"} h={"48px"} />
+        </Flex>
       </>
     )
 }

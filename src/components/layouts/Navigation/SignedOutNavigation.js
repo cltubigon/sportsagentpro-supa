@@ -7,7 +7,7 @@ const SignedOutNavigation = () => {
     <>
       <Link to="/login">
         <Flex flexDirection={"column"}>
-          <Avatar size={"sm"} alignSelf={"center"} />
+          <Avatar size={"xs"} alignSelf={"center"} />
           <Text>Login</Text>
         </Flex>
       </Link>

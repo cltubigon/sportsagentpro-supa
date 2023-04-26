@@ -1,8 +1,9 @@
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
+// import { getFirestore } from "redux-firestore"
 
-export const fbConfig = {
+const fbConfig = {
   apiKey: "AIzaSyAe38bPj3MIjtMZvquIqZRBVe-Ydy-f3Qw",
   authDomain: "sports-agent-pro-5952a.firebaseapp.com",
   projectId: "sports-agent-pro-5952a",
@@ -19,6 +20,6 @@ export const rrfConfig = {
   firebaseStateName: "firebase",
 }
 
-firebase.initializeApp(fbConfig)
-const auth = firebase.auth()
-const firestore = firebase.firestore()
+const app = firebase.initializeApp(fbConfig)
+// const auth = firebase.auth()
+// const firestore = firebase.firestore()

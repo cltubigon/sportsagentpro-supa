@@ -1,4 +1,4 @@
-import { Avatar, Flex, Text } from "@chakra-ui/react"
+import { Avatar, AvatarBadge, Flex, Text } from "@chakra-ui/react"
 import { connect } from "react-redux"
 import { signOut } from "../../../store/actions/authActions"
 const SignedInNavigation = ({signOut}) => {
@@ -10,7 +10,9 @@ const SignedInNavigation = ({signOut}) => {
         <Text>Help Center</Text>
         <Text cursor={"pointer"} onClick={signOut
         }>Logout</Text>
-        <Avatar></Avatar>
+        <Avatar name='Sasuke Uchiha'>
+          <AvatarBadge boxSize='0.9em' bg='green.500' />
+        </Avatar>
       </Flex>
     </>
   )
@@ -21,8 +23,5 @@ const mapDispatchToProps = (dispatch) => {
         signOut: ()=> dispatch(signOut())
     }
 }
-const mapStateToProps = (state) => {
-    return {}
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignedInNavigation)
+export default connect(null, mapDispatchToProps)(SignedInNavigation)

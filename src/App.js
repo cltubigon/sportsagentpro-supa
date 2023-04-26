@@ -8,6 +8,7 @@ import Profile from "./pages/Profile"
 import ScrollToTop from "./utils/ScrollToTop"
 import Footer from "./components/layouts/Footer"
 import MainNavigation from "./components/layouts/MainNavigation"
+import ColorMode from "./config/theme/ColorMode"
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/add-athlete" element={<AddAthlete />}></Route>
         </Routes>
       <Footer />
+      <ColorMode />
     </BrowserRouter>
   )
 }

@@ -32,7 +32,13 @@ const LoginForm = ({getCreds, authError, auth})=> {
     setAuthErr(null)
     getCreds(data)
   }
-  auth.uid && navigate('/')
+  
+  useEffect(() => {
+    if (auth.uid) {
+      navigate('/')
+    }
+  }, [auth.uid])
+  
   return (
     <>
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
