@@ -9,6 +9,7 @@ import ScrollToTop from "./utils/ScrollToTop"
 import Footer from "./components/layouts/Footer"
 import MainNavigation from "./components/layouts/MainNavigation"
 import ColorMode from "./config/theme/ColorMode"
+import MyProfile from "./pages/MyProfile"
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/profile/:id" element={<Profile />}></Route>
           <Route path="/register-team" element={<RegisterTeam />}></Route>
           <Route path="/add-athlete" element={<AddAthlete />}></Route>
+          <Route path="/my-profile" element={<MyProfile />}></Route>
         </Routes>
       <Footer />
       <ColorMode />
