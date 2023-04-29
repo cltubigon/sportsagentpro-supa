@@ -6,6 +6,8 @@ import {
   collection,
   addDoc,
   getDoc,
+  where,
+  query,
 } from "firebase/firestore"
 
 export const signIn = (credentials) => {
@@ -35,7 +37,13 @@ export const signOut = () => {
   }
 }
 
-export const signUp = (newUser, teamId) => {
+export const setAuthError = () => {
+  return (dispatch) => {
+    dispatch({type: "SET_ERROR_TO_DEFAULT"})
+  }
+}
+
+export const signUp = (newUser) => {
   return async (dispatch, getState) => {
     const auth = getAuth()
     const firestore = getFirestore()
@@ -52,22 +60,21 @@ export const signUp = (newUser, teamId) => {
         // add to users table
         firstName: newUser.firstName,
         lastName: newUser.lastName,
+        phoneNumber: newUser.phone,
+        userType: newUser.userType,
         initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
       })
-      console.log("--user added")
 
-      const memberRef = collection(firestore, "athlete", newUser.team, "members") // TODO: change newUser.team to ID of team
+      const memberRef = collection(firestore, newUser.userType)
       await addDoc(memberRef, {
         userId: userCredential.user.uid,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
+        phoneNumber: newUser.phone,
         initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
       })
-      console.log("--user added to team collection")
       dispatch({ type: "SIGNUP_SUCCESS" })
     } catch (err) {
-      console.log("not recorded", err)
-      console.log("not recorded", err.message)
       if (err.message.includes("Document already exists")) {
         dispatch({ type: "SIGNUP_SUCCESS" })
       } else {

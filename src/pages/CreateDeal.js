@@ -11,14 +11,14 @@ import {
 } from "@chakra-ui/react"
 import { connect } from "react-redux"
 import { useEffect, useState } from "react"
-import { createAthlete } from "../store/actions/athleteAction"
+import { createDeal } from "../store/actions/DealActions"
 
-const AddAthlete = ({ createAthlete }) => {
+const CreateDeal = ({ createDeal }) => {
   const { register, handleSubmit, formState, reset, control } = useForm()
   const { errors, isSubmitSuccessful } = formState
 
   const onSubmit = (data) => {
-    createAthlete(data)
+    createDeal(data)
     // console.log(data)
   }
 
@@ -119,8 +119,8 @@ const AddAthlete = ({ createAthlete }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createAthlete: (data) => dispatch(createAthlete(data)),
+    createDeal: (data) => dispatch(createDeal(data)),
   }
 }
 
-export default connect(null, mapDispatchToProps)(AddAthlete)
+export default connect(null, mapDispatchToProps)(CreateDeal)

@@ -1,6 +1,6 @@
 import authReducer from "./authReducer"
 import teamReducer from "./teamReducer"
-import athleteReducer from "./athleteReducer"
+import dealReducer from "./dealReducer"
 import { combineReducers } from "redux"
 import { firestoreReducer } from "redux-firestore"
 import { firebaseReducer } from "react-redux-firebase"
@@ -8,7 +8,7 @@ import { firebaseReducer } from "react-redux-firebase"
 const rootReducer = combineReducers({
   auth: authReducer,
   team: teamReducer,
-  athlete: athleteReducer,
+  deal: dealReducer,
   firestore: firestoreReducer,
   firebase: firebaseReducer
 })
