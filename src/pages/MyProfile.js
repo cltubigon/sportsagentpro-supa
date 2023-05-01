@@ -1,28 +1,34 @@
-import { Container, Heading } from "@chakra-ui/react"
-import React from "react"
-import { connect } from "react-redux"
+import { Button, Container, Heading } from "@chakra-ui/react"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { incrementIt } from "../store/actions/Increment"
 
-const MyProfile = ({ auth }) => {
-    const navigate = useNavigate()
-    if (!auth.uid) return navigate("/login")
+const MyProfile = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const uid = useSelector((state)=> state.firebase.auth.uid)
+  const value = useSelector((state) => state.auth.incrementThis);
+  
   const containerStyle = {
-    maxW: "1440px",
+    maxW: "1440px", 
     px: 0,
   }
+
+  useEffect(()=> {
+    if (!uid) {
+      navigate('/')
+    }
+  },[uid])
   return (
     <>
       <Container sx={containerStyle}>
-        <Heading>My Profile</Heading>
+        <Heading>Number is: {value}</Heading>
+        <Button onClick={()=> dispatch(incrementIt())}>Increment</Button>
       </Container>
     </>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.firebase.auth
-  }
-}
-
-export default connect(mapStateToProps)(MyProfile)
+export default MyProfile

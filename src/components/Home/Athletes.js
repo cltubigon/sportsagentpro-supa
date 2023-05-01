@@ -2,14 +2,20 @@ import { Text, Flex, SimpleGrid, Box } from '@chakra-ui/layout'
 import { DummyImage } from 'react-simple-placeholder-image'
 import ProfileSocialMedia from '../Profile/ProfileSocialMedia'
 import { compose } from 'redux'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { Link } from 'react-router-dom'
 import { HomeSkeleton } from '../Skeleton/Skeletons'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import firebase from 'firebase/compat/app';
+import { dbFetch } from '../../Fetch/dbFetch'
 
 
-const Athletes = ({athletes}) => {
+const Athletes = () => {
   console.log("-------------------Athletes")
+  const athletes = useSelector((state)=> state.firestore.ordered.athlete)
+
   const cardCOntainer = {
       flexDirection: "column",
       gap: 3,
@@ -62,16 +68,4 @@ const Athletes = ({athletes}) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  const athlete = state.firestore.ordered.athlete
-    return {
-      athletes: athlete
-    }
-  }
-
-export default compose(
-    connect(mapStateToProps),
-    firestoreConnect([
-        {collection: 'athlete'}
-    ])
-)(Athletes)
+export default firestoreConnect([{ collection: 'athlete' }])(Athletes);

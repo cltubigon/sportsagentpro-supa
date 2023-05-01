@@ -1,17 +1,16 @@
-import { Flex, Heading, Text } from "@chakra-ui/react"
+import { Flex, Heading } from "@chakra-ui/react"
 import { Link, useLocation } from "react-router-dom"
-import { connect } from "react-redux"
+import { useSelector } from "react-redux"
 import SignedOutNavigation from "./Navigation/SignedOutNavigation"
 import SignedInNavigation from "./Navigation/SignedInNavigation"
 import { NavigationSkeleton } from "../Skeleton/Skeletons"
-import { isLoaded } from "react-redux-firebase"
 
-
-const MainNavigation = ({auth}) => {
+const MainNavigation = () => {
   console.count("rendered main navigation")
-
   const location = useLocation()
-
+  console.log('state', useSelector((state)=> state))
+  const auth = useSelector((state)=> state.firebase.auth)
+  console.log('uid', auth.uid)
   const flexContainer = {
       px: "var(--chakra-space-4)",
       color: "white",
@@ -40,10 +39,4 @@ const MainNavigation = ({auth}) => {
   )
 }
   
-const mapStateToProps = (state)=> {
-  return {
-    auth: state.firebase.auth,
-  }
-}
-
-export default connect(mapStateToProps)(MainNavigation)
+export default MainNavigation

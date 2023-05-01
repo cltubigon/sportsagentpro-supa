@@ -15,7 +15,7 @@ import {
 import {
     FaChevronLeft,
   } from "react-icons/fa"
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import "react-phone-input-2/lib/style.css";
@@ -23,7 +23,12 @@ import './phonefield.css'
 import { setAuthError, signUp } from '../../store/actions/authActions'
 import PhoneInput from 'react-phone-input-2'
 
-const StepTwoInputFields = ({auth, authError, setAuthError, getCreds, userType, oneTwoToggle, setOneTwoToggle})=> {
+const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
+  const dispatch = useDispatch()
+
+  const authError = useSelector((state)=> state.auth.authError)
+  const auth = useSelector((state)=> state.firebase.auth)
+
   const [displayError, setDisplayError] = useState(null)
   const toast = useToast()
 
@@ -47,7 +52,7 @@ const StepTwoInputFields = ({auth, authError, setAuthError, getCreds, userType, 
       })
     }
     return ()=> {
-      setAuthError()
+      dispatch(setAuthError())
       setDisplayError(null)
     }
   }, [displayError])
@@ -57,7 +62,7 @@ const StepTwoInputFields = ({auth, authError, setAuthError, getCreds, userType, 
   const navigate = useNavigate()
 
   const onSubmit = (data) => {
-    getCreds({...data, userType})
+    dispatch(signUp({...data, userType}))
   }
 
   useEffect(() => {
@@ -221,17 +226,4 @@ const StepTwoInputFields = ({auth, authError, setAuthError, getCreds, userType, 
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    authError: state.auth.authError,
-    auth: state.firebase.auth
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getCreds: (creds) => dispatch(signUp(creds)),
-    setAuthError: () => dispatch(setAuthError())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(StepTwoInputFields)
+export default StepTwoInputFields

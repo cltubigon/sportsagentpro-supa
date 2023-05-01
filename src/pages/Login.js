@@ -6,7 +6,6 @@ import {
   Input,
   Button,
   Text,
-  Container,
   Box,
   Heading,
   Flex,
@@ -15,14 +14,19 @@ import {
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAuthError, signIn } from '../store/actions/authActions'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-const LoginForm = ({getCreds, authError, setAuthError, auth})=> {
+const LoginForm = ()=> {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const toast = useToast()
+
+  const authError = useSelector((state)=> state.auth.authError)
+  const auth = useSelector((state)=> state.firebase.auth)
+
   const [displayError, setDisplayError] = useState(null)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
@@ -50,13 +54,13 @@ const LoginForm = ({getCreds, authError, setAuthError, auth})=> {
     }
     
     return ()=> {
-      setAuthError()
+      dispatch(setAuthError())
       setDisplayError(null)
     }
   }, [displayError])
 
   const onSubmit = (data) => {
-    getCreds(data)
+    dispatch(signIn(data))
   }
   
   useEffect(() => {
@@ -148,17 +152,5 @@ const LoginForm = ({getCreds, authError, setAuthError, auth})=> {
     </>
   )
 }
-const mapStateToProps = (state) => {
-  return {
-    authError: state.auth.authError,
-    auth: state.firebase.auth
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getCreds: (creds) => dispatch(signIn(creds)),
-    setAuthError: () => dispatch(setAuthError())
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+export default LoginForm

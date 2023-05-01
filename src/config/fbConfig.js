@@ -1,7 +1,7 @@
+import { lazy } from "react"
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
-// import { getFirestore } from "redux-firestore"
 
 const fbConfig = {
   apiKey: "AIzaSyAe38bPj3MIjtMZvquIqZRBVe-Ydy-f3Qw",
@@ -12,6 +12,8 @@ const fbConfig = {
   appId: "1:132722525781:web:97bf0389c4c028a28c76dc",
 }
 
+const app = firebase.initializeApp(fbConfig)
+
 export const rrfConfig = {
   userProfile: "users",
   useFirestoreForProfile: true,
@@ -20,6 +22,4 @@ export const rrfConfig = {
   firebaseStateName: "firebase",
 }
 
-const app = firebase.initializeApp(fbConfig)
-// const auth = firebase.auth()
-// const firestore = firebase.firestore()
+export default app

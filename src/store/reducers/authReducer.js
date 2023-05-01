@@ -1,9 +1,16 @@
 const initialState = {
   authError: null,
+  incrementThis: 0,
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
+        case "INCREMENT":
+          console.log('increment successful')
+          return {
+            ...state,
+            incrementThis: action.newValue,
+        }
         case "LOGIN_ERROR":
           console.log("login error")
           return {
