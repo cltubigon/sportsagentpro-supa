@@ -4,7 +4,6 @@ import dealReducer from "./dealReducer"
 import { combineReducers } from "redux"
 import { firestoreReducer } from "redux-firestore"
 import { firebaseReducer } from "react-redux-firebase"
-import { incrementIt } from "../actions/Increment"
 
 const rootReducer = combineReducers({
   auth: authReducer,

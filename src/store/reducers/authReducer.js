@@ -1,6 +1,7 @@
 const initialState = {
   authError: null,
   incrementThis: 0,
+  profile: null,
 }
 
 const authReducer = (state = initialState, action) => {

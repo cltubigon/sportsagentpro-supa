@@ -8,7 +8,7 @@ const MyProfile = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const uid = useSelector((state)=> state.firebase.auth.uid)
+  const auth = useSelector((state)=> state.firebase.auth)
   const value = useSelector((state) => state.auth.incrementThis);
   
   const containerStyle = {
@@ -17,10 +17,10 @@ const MyProfile = () => {
   }
 
   useEffect(()=> {
-    if (!uid) {
+    if (auth.isLoaded === true && !auth.uid) {
       navigate('/')
     }
-  },[uid])
+  },[auth])
   return (
     <>
       <Container sx={containerStyle}>

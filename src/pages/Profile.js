@@ -16,5 +16,4 @@ const Profile = () => {
         </Container>
         )
     }
-
 export default (Profile)
