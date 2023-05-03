@@ -10,7 +10,7 @@ const MainNavigation = () => {
   const location = useLocation()
   console.log('state', useSelector((state)=> state))
   const auth = useSelector((state)=> state.firebase.auth)
-  console.log('uid', auth.uid)
+  // console.log('uid', auth.uid)
   const flexContainer = {
       px: "var(--chakra-space-4)",
       color: "white",

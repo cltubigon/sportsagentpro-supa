@@ -9,15 +9,19 @@ import {
   where,
   query,
 } from "firebase/firestore"
+import { getFirebase } from "react-redux-firebase"
 
 export const signIn = (credentials) => {
   return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase()
+    console.log('firebase',firebase)
+    console.log('getState', getState())
     firebase
       .auth()
       .signInWithEmailAndPassword(credentials.email, credentials.password)
-      .then(() => {
+      .then((res) => {
         dispatch({ type: "LOGIN_SUCCESS" })
+        console.log('res',res)
       })
       .catch((err) => {
         dispatch({ type: "LOGIN_ERROR", err })
@@ -82,4 +86,21 @@ export const signUp = (newUser) => {
       }
     }
   }
+}
+
+export const setCurrentUser = (userId) => ({
+  type: 'SET_CURRENT_USER',
+  payload: userId,
+});
+
+export const fetchCurrentUser = () => async (dispatch) => {
+  const firebase = getFirebase()
+  await firebase.auth().ready;
+
+  const user = firebase.auth().currentUser;
+  const userId = user ? user.uid : null;
+
+  console.log('userId: ', userId)
+  console.log('user: ', user)
+  dispatch(setCurrentUser(userId));
 }

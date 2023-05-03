@@ -2,10 +2,18 @@ const initialState = {
   authError: null,
   incrementThis: 0,
   profile: null,
+  currentUser: null,
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
+        case "SET_CURRENT_USER":
+          console.log('current user fetched')
+          console.log(action)
+          return {
+            ...state,
+            currentUser: action.payload,
+        }
         case "INCREMENT":
           console.log('increment successful')
           return {

@@ -12,9 +12,17 @@ import ColorMode from "./config/theme/ColorMode"
 import MyProfile from "./pages/MyProfile"
 import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
+import { useDispatch } from "react-redux"
+import { fetchCurrentUser } from "./store/actions/authActions"
+import { isLoaded } from "react-redux-firebase"
+import { onAuthStateChanged } from "firebase/auth"
+import { auth } from "./config/fbConfig"
 
 
 function App() {
+  console.log('isLoaded(): ', isLoaded())  
+  const dispatch = useDispatch()
+  dispatch(fetchCurrentUser())
   return (
     <BrowserRouter>
     <ScrollToTop />
