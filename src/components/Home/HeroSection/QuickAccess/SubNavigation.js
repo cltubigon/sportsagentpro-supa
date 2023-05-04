@@ -4,7 +4,6 @@ import {BsSearch, BsSortDownAlt} from 'react-icons/bs'
 import React from "react"
 
 const SubNavigation = () => {
-  console.log("--------------------------Subnavigation")
   const flexContainer = {
     w: "full",
     py: "20px",

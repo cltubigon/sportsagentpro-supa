@@ -1,14 +1,25 @@
 import { Text, Flex, SimpleGrid, Box } from '@chakra-ui/layout'
 import { DummyImage } from 'react-simple-placeholder-image'
 import ProfileSocialMedia from '../Profile/ProfileSocialMedia'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { Link } from 'react-router-dom'
 import { HomeSkeleton } from '../Skeleton/Skeletons'
+import { useEffect } from 'react'
+import { saveAthletesToStorage } from '../../store/actions/athleteActions'
 
 const Athletes = () => {
   console.log("-------------------Athletes")
+  const dispatch = useDispatch()
   const athletes = useSelector((state)=> state.firestore.ordered.athlete)
+  const localAthletes = useSelector(state => state.athlete.athletes)
+
+  console.log('localAthletes: ', localAthletes)
+  useEffect(()=> {
+    if (athletes) {
+      dispatch(saveAthletesToStorage(athletes))
+    }
+  },[athletes])
 
   const cardCOntainer = {
       flexDirection: "column",
@@ -33,9 +44,9 @@ const Athletes = () => {
   }
   return (
     <>
-      {athletes ? 
+      {localAthletes ? 
         <SimpleGrid minChildWidth={{base: "100%", sm:"290px", md: "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
-          {athletes.map((athlete)=> {
+          {localAthletes.map((athlete)=> {
               return (
                 <div key={athlete.id}>
                   <Link to={`/profile/${athlete.id}`}>

@@ -15,7 +15,6 @@ const authReducer = (state = initialState, action) => {
           }
         case "LOGIN_SUCCESS":
           console.log("login success")
-          console.log('user data reached reducer')
           return {
             ...state,
             authError: null,
@@ -42,7 +41,6 @@ const authReducer = (state = initialState, action) => {
             authError: null
           }
         case "UPDATE_PROFILE_STATE":
-          console.log('profile data reached reducer')
           return {
             ...state,
             profile: {...state.profile, ...action.profileData}

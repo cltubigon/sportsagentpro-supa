@@ -92,7 +92,6 @@ export const signUp = (newUser) => {
 }
 
 export const updateProfileState = (profileData) => {
-  console.log('profile data reached action')
   return (dispatch) => {
     dispatch({type: 'UPDATE_PROFILE_STATE', profileData})
   }

@@ -4,7 +4,6 @@ import ExploreAtheletes from './ExploreAthletes'
 import { Stack } from '@chakra-ui/react'
 
 const QuickAccess = () => {
-  console.log("--------------------------QuickAccess")
   return (
     <Stack gap={5} px={4} py={8}>
       <FeaturedServices/>

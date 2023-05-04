@@ -2,7 +2,6 @@ import { Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 
 const TitleSection = () => {
-  console.log("--------------------------TitleSection")
   return (
     <Flex px={"var(--chakra-space-4)"} bg={"blue.800"}>
       <Stack color={"whiteAlpha.900"} py={"130px"} width={"100%"} pl={{base: 0, lg: "50px"}}>

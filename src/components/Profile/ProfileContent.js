@@ -3,7 +3,7 @@ import React from 'react'
 import ProfileContentRight from './ProfileContentRight'
 import ProfileContentLeft from './ProfileContentLeft'
 
-const ProfileContent = ({athlete}) => {
+const ProfileContent = () => {
     const profileContentContainer = {
         px: "var(--chakra-space-4)",
         py: "var(--chakra-space-6)",
@@ -20,8 +20,8 @@ const ProfileContent = ({athlete}) => {
     }
   return (
     <Stack sx={profileContentContainer}>
-        <ProfileContentLeft  athlete={athlete} />
-        <ProfileContentRight  athlete={athlete} />
+        <ProfileContentLeft  />
+        <ProfileContentRight />
     </Stack>
   )
 }

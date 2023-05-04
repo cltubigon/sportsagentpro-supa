@@ -4,15 +4,17 @@ import { VscStarFull, VscVerifiedFilled } from 'react-icons/vsc'
 import ProfileContentInterests from './ProfileContentInterests'
 import ProfileContentAbout from './ProfileContentAbout'
 import ProfileSocialMedia from './ProfileSocialMedia'
+import { useSelector } from 'react-redux'
 
-const ProfileContentLeft = ({athlete}) => {
+const ProfileContentLeft = () => {
+  const localSelectedAthlete = useSelector(state => state.athlete.selectedAthlete)
   console.log("--------------------------ProfileContentLeft")
   return (
     <Stack flex={1} gap={4} pl={2}>
         <Flex justifyContent={"space-between"} >
             <Box>
-                <Flex flexDirection={'row'} alignItems={"center"} gap={1} ><Heading fontSize={{base: "2xl", md: "3xl", lg: "4xl"}}>{athlete && athlete.firstName} {athlete && athlete.lastName}</Heading><VscVerifiedFilled color='lightGreen' size={25}/></Flex>
-                <Text>{athlete && athlete.sports} • Forward</Text>
+                <Flex flexDirection={'row'} alignItems={"center"} gap={1} ><Heading fontSize={{base: "2xl", md: "3xl", lg: "4xl"}}>{localSelectedAthlete && localSelectedAthlete.firstName} {localSelectedAthlete && localSelectedAthlete.lastName}</Heading><VscVerifiedFilled color='lightGreen' size={25}/></Flex>
+                <Text>{localSelectedAthlete && localSelectedAthlete.sports} • Forward</Text>
             </Box>
             <Box><DummyImage width={56} height={56} shape='avatar' placeholder='Colored!' bgColor='#2A4365' className='profile' /></Box>
         </Flex>
