@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "crypto-js": "^4.1.1",
     "firebase": "^9.19.1",
     "framer-motion": "^10.11.6",
     "i": "^0.3.7",
@@ -27,7 +28,7 @@
     "react-scripts": "5.0.1",
     "react-simple-placeholder-image": "^0.1.2",
     "redux": "^4.2.1",
-    "redux-firestore": "^1.0.0",
+    "redux-firestore": "^1.2.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "web-vitals": "^2.1.4"

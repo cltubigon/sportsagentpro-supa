@@ -12,7 +12,7 @@ const persistConfig = {
   key: 'user',
   storage,
   whitelist: ['auth', 'deal', 'team'],
-  blacklist: ['isLoggedIn']
+  // blacklist: ['team']
 };
 
 const middleware = [thunk.withExtraArgument({ getFirebase, getFirestore })]

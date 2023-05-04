@@ -1,16 +1,10 @@
 import { Text, Flex, SimpleGrid, Box } from '@chakra-ui/layout'
 import { DummyImage } from 'react-simple-placeholder-image'
 import ProfileSocialMedia from '../Profile/ProfileSocialMedia'
-import { compose } from 'redux'
-import { connect, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { Link } from 'react-router-dom'
 import { HomeSkeleton } from '../Skeleton/Skeletons'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import firebase from 'firebase/compat/app';
-import { dbFetch } from '../../Fetch/dbFetch'
-
 
 const Athletes = () => {
   console.log("-------------------Athletes")

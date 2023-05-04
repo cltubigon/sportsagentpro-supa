@@ -12,9 +12,10 @@ import ColorMode from "./config/theme/ColorMode"
 import MyProfile from "./pages/MyProfile"
 import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
+import { useSelector } from "react-redux"
 
 
-function App() {
+function App() {  
   return (
     <BrowserRouter>
     <ScrollToTop />

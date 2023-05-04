@@ -18,7 +18,7 @@ export const signIn = (credentials) => {
       .auth()
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then((res) => {
-        console.log('user data reached action')
+        console.log('signInAction res: ', res)
         const {email, metadata} = res.user.multiFactor.user
         const userData = {email, metadata}
         dispatch({ type: "LOGIN_SUCCESS", userData })
@@ -60,7 +60,8 @@ export const signUp = (newUser) => {
         newUser.password
       )
 
-      await setDoc(doc(firestore, "users", userCredential.user.uid), {
+      const addUser = await setDoc(doc(firestore, "users", userCredential.user.uid), {
+      // const addUser = await setDoc(doc(firestore, "users", userCredential.user.uid), {
         // add to users table
         firstName: newUser.firstName,
         lastName: newUser.lastName,
@@ -68,6 +69,8 @@ export const signUp = (newUser) => {
         userType: newUser.userType,
         initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
       })
+
+      console.log('Signup addUser: ', addUser)
 
       const memberRef = collection(firestore, newUser.userType)
       await addDoc(memberRef, {

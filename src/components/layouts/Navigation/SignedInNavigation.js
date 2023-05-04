@@ -9,7 +9,8 @@ const SignedInNavigation = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const initials = useSelector((state)=> state.firebase.profile.initials)
+  const initials = useSelector(state => state.auth.profile.initials)
+  // const initials = useSelector((state)=> state.firebase.profile.initials)
 
   const handleSignOut = ()=> {
     dispatch(signOut())

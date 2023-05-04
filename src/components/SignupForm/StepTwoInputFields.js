@@ -166,7 +166,6 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
                     {...field}
                     inputClass="form-control"
                     country="us"
-                    enableAreaCodes={true}
                     enableSearch={true}
                     disableSearchIcon={true}
                     autoFormat={true}
