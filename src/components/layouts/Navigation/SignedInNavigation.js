@@ -2,6 +2,8 @@ import { Avatar, AvatarBadge, Flex, Text } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { signOut } from "../../../store/actions/authActions"
 import { Link, useNavigate } from "react-router-dom"
+import {persistor as userPersistor} from '../../../store/guestUser'
+
 const SignedInNavigation = () => {
   console.count('rendered nav-signin')
   const dispatch = useDispatch()

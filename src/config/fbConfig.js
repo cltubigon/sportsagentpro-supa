@@ -13,7 +13,6 @@ const fbConfig = {
 }
 
 const app = firebase.initializeApp(fbConfig)
-export const auth = firebase.auth()
 
 export const rrfConfig = {
   userProfile: "users",

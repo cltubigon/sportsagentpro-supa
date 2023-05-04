@@ -1,25 +1,12 @@
 const initialState = {
   authError: null,
-  incrementThis: 0,
   profile: null,
-  currentUser: null,
+  incrementThis: 0,
+  isLoggedIn: false
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "SET_CURRENT_USER":
-          console.log('current user fetched')
-          console.log(action)
-          return {
-            ...state,
-            currentUser: action.payload,
-        }
-        case "INCREMENT":
-          console.log('increment successful')
-          return {
-            ...state,
-            incrementThis: action.newValue,
-        }
         case "LOGIN_ERROR":
           console.log("login error")
           return {
@@ -28,18 +15,21 @@ const authReducer = (state = initialState, action) => {
           }
         case "LOGIN_SUCCESS":
           console.log("login success")
+          console.log('user data reached reducer')
           return {
             ...state,
             authError: null,
+            isLoggedIn: true,
+            profile: {...state.profile, ...action.userData},
           }
         case "LOGOUT_SUCCESS":
           console.log("logout success")
-          return state
+          return initialState
         case "SIGNUP_SUCCESS":
           console.log("signup success")
           return {
             ...state,
-            authError: null
+            authError: null,
           }
         case "SIGNUP_ERROR":
           return {
@@ -51,9 +41,15 @@ const authReducer = (state = initialState, action) => {
             ...state,
             authError: null
           }
-    default:
-      return state
-  }
+        case "UPDATE_PROFILE_STATE":
+          console.log('profile data reached reducer')
+          return {
+            ...state,
+            profile: {...state.profile, ...action.profileData}
+          }
+        default:
+          return state
+        }
 }
 
 export default authReducer

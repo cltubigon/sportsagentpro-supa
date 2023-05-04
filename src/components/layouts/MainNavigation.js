@@ -1,16 +1,35 @@
 import { Flex, Heading } from "@chakra-ui/react"
 import { Link, useLocation } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import SignedOutNavigation from "./Navigation/SignedOutNavigation"
 import SignedInNavigation from "./Navigation/SignedInNavigation"
 import { NavigationSkeleton } from "../Skeleton/Skeletons"
+import { updateProfileState } from "../../store/actions/authActions"
+import { useEffect } from "react"
 
 const MainNavigation = () => {
   console.count("rendered main navigation")
+  const dispatch = useDispatch()
   const location = useLocation()
-  console.log('state', useSelector((state)=> state))
+  
+  const getState = useSelector((state)=> state)
+console.log('getState: ', getState)
   const auth = useSelector((state)=> state.firebase.auth)
-  // console.log('uid', auth.uid)
+
+  const profile = useSelector(state=> state.firebase.profile)
+  const {firstName,initials,lastName,phoneNumber,userType} = profile
+
+  const userProfile = {firstName,initials,lastName,phoneNumber,userType}
+
+  console.log('auth.uid: ', auth.uid)
+  console.log('profile.firstName: ', profile.firstName)
+  useEffect(()=> {
+    if (profile.firstName) console.log('dispatched in component', auth.isLoaded)
+    if (profile.firstName) {
+      dispatch(updateProfileState(userProfile))
+    }
+  },[profile.firstName])
+
   const flexContainer = {
       px: "var(--chakra-space-4)",
       color: "white",
