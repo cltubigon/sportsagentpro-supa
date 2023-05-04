@@ -14,18 +14,18 @@ const MainNavigation = () => {
   const getState = useSelector((state)=> state) // TODO: removable
   const profile = useSelector(state=> state.firebase.profile)
   const auth = useSelector((state)=> state.firebase.auth.uid)
-  const dashboardAccess = useSelector(state => state.auth.profile)
-  console.count("-----rendered main navigation and the state is: ", getState)
+  const isLoggedIn = useSelector(state => state.auth.profile)
+  console.log("MainNavigation")
   
   const {firstName,initials,lastName,phoneNumber,userType} = profile
   const userProfile = {firstName,initials,lastName,phoneNumber,userType}
 
   useEffect(()=> {
-    if (dashboardAccess && !auth) {
+    if (isLoggedIn && !auth && auth !== undefined) {
       dispatch(signOut())
     }
-  },[dashboardAccess])
-
+  },[isLoggedIn])
+  
   useEffect(()=> {
     profile.firstName && dispatch(updateProfileState(userProfile))
   },[profile.firstName])
@@ -47,7 +47,7 @@ const MainNavigation = () => {
         </Heading>
         </Flex>
         <Flex>
-            {dashboardAccess ? (<SignedInNavigation />) : (<SignedOutNavigation />)}
+            {isLoggedIn ? (<SignedInNavigation />) : (<SignedOutNavigation />)}
         </Flex>
       </Flex>}
     </>

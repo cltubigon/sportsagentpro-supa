@@ -6,14 +6,24 @@ import { getFirebase } from "react-redux-firebase"
 import { getFirestore } from "firebase/firestore"
 import { composeWithDevTools } from "@redux-devtools/extension"
 import { persistReducer, persistStore } from "redux-persist"
-import firebase from "firebase/compat/app"
+import { encryptTransform } from "redux-persist-transform-encrypt"
+import * as CryptoJS from 'crypto-js';
 
 const persistConfig = {
   key: 'user',
   storage,
   whitelist: ['auth', 'deal', 'team'],
-  // blacklist: ['team']
-};
+  // transforms: [  // TODO: UNCOMMENT IN DEVELOPMENT MODE
+  //     encryptTransform({
+  //         secretKey: 'yzw&8>`n,$%?c,B,q)(I,HY.`Pqbd`D5o|)GFRqm3|0T^Vx}[yw;l^:`+&5M)Hr',
+  //         onError: function (error) {
+  //       console.log(error);
+  //     },
+  //     encryption: CryptoJS.AES.encrypt,
+  //     decryption: CryptoJS.AES.decrypt,
+  //   }),
+  // ],
+}
 
 const middleware = [thunk.withExtraArgument({ getFirebase, getFirestore })]
 const enhancers = [applyMiddleware(...middleware)]

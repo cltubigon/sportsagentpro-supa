@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom"
 
 const MyProfile = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const uid = useSelector((state)=> state.firebase.auth.uid)
   const value = useSelector((state) => state.auth.incrementThis);
