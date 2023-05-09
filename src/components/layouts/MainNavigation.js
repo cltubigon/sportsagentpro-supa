@@ -1,10 +1,11 @@
 import { Flex, Heading } from "@chakra-ui/react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import SignedOutNavigation from "./Navigation/SignedOutNavigation"
 import SignedInNavigation from "./Navigation/SignedInNavigation"
 import { signOut, updateProfileState } from "../../store/actions/authActions"
 import { useEffect } from "react"
+import CryptoJS from 'crypto-js'
 
 const MainNavigation = () => {
   const dispatch = useDispatch()
@@ -19,10 +20,18 @@ const MainNavigation = () => {
   
   const {firstName,initials,lastName,phoneNumber,userType} = profile
   const userProfile = {firstName,initials,lastName,phoneNumber,userType}
-
+  
   useEffect(()=> {
-    if (isLoggedIn && !auth && auth !== undefined) {
-      dispatch(signOut())
+    const runTimeout = setTimeout(()=> {
+      if (isLoggedIn && !auth) {
+        console.log('signing out, bye2x')
+        dispatch(signOut())
+      }
+    }, 8000)
+
+    return () => {
+      clearTimeout(runTimeout)
+      console.log('timeout cleared')
     }
   },[isLoggedIn])
   
@@ -36,6 +45,9 @@ const MainNavigation = () => {
       justifyContent: "space-between",
       bg: "blue.800",
       py: "20px",
+      position: 'fixed',
+      width: '100%',
+      zIndex: '999',
   }
   return (
     <>

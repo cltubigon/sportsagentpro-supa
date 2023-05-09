@@ -7,6 +7,7 @@ import { useState } from 'react'
 import UserType from '../components/SignupForm/UserType'
 import StepTwoInputFields from '../components/SignupForm/StepTwoInputFields'
 import { Link } from 'react-router-dom'
+import Footer from '../components/layouts/Footer'
 
 const SignupForm = ()=> {
   console.count('rendered signup page')
@@ -32,6 +33,7 @@ const SignupForm = ()=> {
 
         <StepTwoInputFields userType={userType} setOneTwoToggle={setOneTwoToggle} oneTwoToggle={oneTwoToggle} />
       </Container>
+      <Footer />
     </>
   )
 }

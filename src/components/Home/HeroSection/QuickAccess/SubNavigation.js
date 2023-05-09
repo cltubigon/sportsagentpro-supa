@@ -10,6 +10,9 @@ const SubNavigation = () => {
     gap: 2,
     justifyContent: "space-between",
     px: "var(--chakra-space-4)",
+    position: 'fixed !important',
+    top: '88px',
+    bg: 'white',
   }
   return (
     <Flex sx={flexContainer}>

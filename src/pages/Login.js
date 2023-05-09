@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAuthError, signIn } from '../store/actions/authActions'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Footer from '../components/layouts/Footer'
 
 const LoginForm = ()=> {
   const dispatch = useDispatch()
@@ -65,7 +66,7 @@ const LoginForm = ()=> {
   
   useEffect(() => {
     if (auth.uid) {
-      navigate('/')
+      navigate('/network')
     }
   }, [auth.uid])
   
@@ -149,6 +150,7 @@ const LoginForm = ()=> {
           </Flex>
         </form>
       </Stack>
+      <Footer />
     </>
   )
 }

@@ -5,9 +5,6 @@ import {
   setDoc,
   collection,
   addDoc,
-  getDoc,
-  where,
-  query,
 } from "firebase/firestore"
 
 export const signIn = (credentials) => {
@@ -18,7 +15,6 @@ export const signIn = (credentials) => {
       .auth()
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then((res) => {
-        console.log('signInAction res: ', res)
         const {email, metadata} = res.user.multiFactor.user
         const userData = {email, metadata}
         dispatch({ type: "LOGIN_SUCCESS", userData })

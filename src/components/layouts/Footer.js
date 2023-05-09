@@ -2,10 +2,14 @@ import { Container, Flex, Heading, Icon, SimpleGrid, Stack, Text } from '@chakra
 import React from 'react'
 import { RiFacebookCircleFill, RiLinkedinBoxFill } from 'react-icons/ri';
 import { AiFillInstagram, AiFillTwitterCircle } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
     console.log("Footer rendered")
-  const currentYear = new Date().getFullYear();
   return (
     <>
         <Stack px={"var(--chakra-space-6)"} pb={12} pt={{base: 10, md: 20}}>

@@ -11,7 +11,8 @@ import {
 } from "@chakra-ui/react"
 import { connect } from "react-redux"
 import { useEffect, useState } from "react"
-import { createPost } from "../../store/actions/PostActions"
+import { createPost } from "../store/actions/PostActions"
+import Footer from "../components/layouts/Footer"
 
 const CreatePost = ({ createPost }) => {
   const { register, handleSubmit, formState, reset, control } = useForm()
@@ -29,6 +30,7 @@ const CreatePost = ({ createPost }) => {
   }, [formState, reset])
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FormControl isInvalid={errors.firstName}>
         <FormLabel htmlFor="firstName">First name</FormLabel>
@@ -114,6 +116,8 @@ const CreatePost = ({ createPost }) => {
         Submit
       </Button>
     </form>
+    <Footer />
+    </>
   )
 }
 

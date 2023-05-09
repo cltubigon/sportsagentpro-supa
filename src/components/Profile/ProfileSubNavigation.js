@@ -2,6 +2,7 @@ import { Button, Flex, Icon, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { VscArrowLeft, VscCopy } from 'react-icons/vsc'
 import './ProfileSubNavigation.css'
+import { Link } from 'react-router-dom'
 
 const ProfileSubNavigation = () => {
   console.log("--------------------------ProfileSubNavigation")
@@ -24,11 +25,11 @@ const ProfileSubNavigation = () => {
     animation: "myAnim 1s ease 0s 2 normal forwards"
   }
   return (
-    <Flex alignItems={"center"} justifyContent={"space-between"} p={"var(--chakra-space-4)"} >
-        <Flex alignItems={"center"}>
+    <Flex alignItems={"center"} justifyContent={"space-between"} p={"var(--chakra-space-4)"} py={5} >
+        <Link to={'/'}><Flex alignItems={"center"}>
         <Icon as={VscArrowLeft}/>
         <Text ml={"5px"} fontWeight={"medium"}>Discover athletes</Text>
-        </Flex>
+        </Flex></Link>
         {copyLink ? <Button sx={copyLink && animateThis} className={copyLink ? "myAnim" : ''} _hover={{bgColor:"transparent"}} variant='solid' >Link copied</Button> :
         <Button onClick={copyLinkButton} leftIcon={<VscCopy />} variant='solid' border={"1px solid gray"}>Share</Button>}
     </Flex>
