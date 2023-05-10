@@ -12,9 +12,11 @@ import MyProfile from "./pages/MyProfile"
 import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
 import Dashboard from "./pages/Dashboard"
+import Build from "./pages/Build"
 
 
 function App() {
+  
   return (
       <BrowserRouter>
       <ScrollToTop />
@@ -29,6 +31,7 @@ function App() {
             <Route path="/my-profile" element={<MyProfile />}></Route>
             <Route path="/user-type" element={<UserType />}></Route>
             <Route path="/network" element={<Dashboard />}></Route>
+            <Route path="/build" element={<Build />}></Route>
           </Routes>
         <ColorMode />
       </BrowserRouter>

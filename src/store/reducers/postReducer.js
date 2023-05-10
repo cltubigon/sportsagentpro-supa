@@ -1,9 +1,22 @@
 const initState = {
-    posts: [],
+    postType: null,
+    activeStep: 'activities',
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+        case 'SET_ACTIVE_STEP':
+            console.log('post type reached reducer', action.data)
+            return {
+                ...state,
+                activeStep: action.data
+            }
+        case 'SAVE_POST_TYPE':
+            console.log('post type reached reducer', action.data)
+            return {
+                ...state,
+                postType: action.data
+            }
         case "CREATE_POST":
             console.log('created a post: ', action.post)
             return state
