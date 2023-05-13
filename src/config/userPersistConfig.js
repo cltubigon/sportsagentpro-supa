@@ -1,6 +1,6 @@
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage
 import { createStore, applyMiddleware } from "redux"
-import rootReducer from "../store/reducers/rootReducer"
+import rootReducer from "./reducers/rootReducer"
 import thunk from "redux-thunk"
 import { getFirebase } from "react-redux-firebase"
 import { getFirestore } from "firebase/firestore"
@@ -12,8 +12,7 @@ import * as CryptoJS from 'crypto-js';
 const persistConfig = {
   key: 'user',
   storage,
-  // whitelist: ['auth', 'athlete', 'deal', 'team', 'post'],
-  blacklist: ['firebase', 'firestore'],
+  blacklist: ['firebase', 'firestore']
   // transforms: [  // TODO: UNCOMMENT IN DEVELOPMENT MODE
   //     encryptTransform({
   //         secretKey: 'yzw&8>`n,$%?c,B,q)(I,HY.`Pqbd`D5o|)GFRqm3|0T^Vx}[yw;l^:`+&5M)Hr',
@@ -32,5 +31,3 @@ const composedEnhancers = composeWithDevTools(...enhancers)
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 const store = createStore(persistedReducer, composedEnhancers)
 const persistor = persistStore(store)
-
-export { store, persistor };

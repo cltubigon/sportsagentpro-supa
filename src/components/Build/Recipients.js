@@ -99,7 +99,6 @@ const Recipients = () => {
             </Flex>
 
 
-
             <Flex sx={contentContainer} flexBasis={'40%'}>       
               <Flex flexGrow={1}>
 
