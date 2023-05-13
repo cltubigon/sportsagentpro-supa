@@ -11,15 +11,15 @@ import { saveAthletesToStorage } from '../../store/actions/athleteActions'
 const Athletes = () => {
   console.log("-------------------Athletes")
   const dispatch = useDispatch()
-  const athletes = useSelector((state)=> state.firestore.ordered.athlete)
+  const firestoreAthletes = useSelector((state)=> state.firestore.ordered.athlete)
   const localAthletes = useSelector(state => state.athlete.athletes)
 
   console.log('localAthletes: ', localAthletes)
   useEffect(()=> {
-    if (athletes) {
-      dispatch(saveAthletesToStorage(athletes))
+    if (firestoreAthletes) {
+      dispatch(saveAthletesToStorage(firestoreAthletes))
     }
-  },[athletes])
+  },[firestoreAthletes])
 
   const cardCOntainer = {
       flexDirection: "column",

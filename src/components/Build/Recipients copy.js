@@ -18,7 +18,7 @@ const Recipients = () => {
   const searchQuery = useSelector(state => state.post.searchRecipient)
   console.log('searchQuery: ', searchQuery)
 
-  const filteredRecipients = searchQuery && searchQuery !== '' ? (localRecipients && localRecipients.filter((athlete) => {
+  const filteredRecipients = searchQuery !== '' ? (localRecipients && localRecipients.filter((athlete) => {
     return(
       athlete.firstName.toLowerCase().includes(searchQuery) || athlete.lastName.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -65,11 +65,12 @@ const Recipients = () => {
             <Flex sx={contentContainer} flexBasis={'60%'}>       
               <Flex flexGrow={1}>
 
+
                   <Flex flexBasis={'100%'} flexDirection={'column'} flexGrow={1} >
                     <FormControl>
                       <InputGroup display={"flex"} flexDirection={"column"}>
 
-                        {filteredRecipients && filteredRecipients.length >= 1 ? (filteredRecipients ? filteredRecipients.map((athlete)=> {
+                        {filteredRecipients && filteredRecipients.length > 1 ? (filteredRecipients ? filteredRecipients.map((athlete)=> {
                               return (
                                 <Flex key={athlete.id} sx={recipientContainer} cursor={'pointer'} onClick={()=> dispatch(setCheckboxTrueOrFalse(athlete.id))} >
                                   {athlete.isChecked ? <Icon as={MdCheckBox} boxSize={5} /> : <Icon as={MdCheckBoxOutlineBlank} boxSize={5} />}
@@ -87,7 +88,7 @@ const Recipients = () => {
                             <RecipientListSkeleton />)
                           : 
                           <Center height={'100%'} width={'100%'}>
-                            <Text fontSize={'xl'}>No recipient selected</Text>
+                            <Text fontSize={'xl'}>No data found</Text>
                           </Center>
                         }
 

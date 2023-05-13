@@ -1,5 +1,6 @@
 import { Stack, Grid, SimpleGrid, Flex } from '@chakra-ui/layout'
-import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import { Icon, Skeleton, SkeletonCircle, SkeletonText, Box } from '@chakra-ui/react'
+import { MdCheckBoxOutlineBlank } from 'react-icons/md'
 
 export const HomeSkeleton = () => {
     return (
@@ -74,6 +75,26 @@ export const NavigationSkeleton = () => {
                 <Skeleton height="12px" flex={1} />
                 <SkeletonCircle width={"48px"} h={"48px"} />
         </Flex>
+      </>
+    )
+}
+
+export const RecipientListSkeleton = () => {
+    const iterate = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    return (
+        <>
+        {iterate.map((item)=> {
+            return (
+                <Flex key={item} gap={4} alignItems={"center"} py={2} px={4}>
+                    <Icon as={MdCheckBoxOutlineBlank} boxSize={5} color={'gray.400'} />
+                    <SkeletonCircle width={"52px"} h={"52px"} />
+                    <Flex flexGrow={1} >
+                        <SkeletonText skeletonHeight={'3'} noOfLines={2} spacing='3' flex={0.7} />
+                    </Flex>
+                </Flex>
+            )
+        })
+        }
       </>
     )
 }
