@@ -49,13 +49,16 @@ const MainNavigation = () => {
     width: "100%",
     zIndex: "999",
   }
+  const myConsole = () => {
+    console.log('I am navigating to homepage.')
+  }
   return (
     <>
       {location.pathname !== "/signup" && location.pathname !== "/login" && location.pathname !== "/build" && (
         <Flex sx={flexContainer}>
           <Flex alignItems={"center"} gap={6}>
             <Heading as={"h3"} fontSize={"3xl"}>
-              <Link to="/">Sports Agent Pros</Link>
+              <Link to="/" onClick={myConsole}>Sports Agent Pros</Link>
             </Heading>
             <Link to={'/build'}><Button colorScheme="twitter" borderRadius={'100px'} leftIcon={<FaFileContract />}>
               Build

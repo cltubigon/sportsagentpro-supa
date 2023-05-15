@@ -66,8 +66,6 @@ export const signUp = (newUser) => {
         initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
       })
 
-      console.log('Signup addUser: ', addUser)
-
       const memberRef = collection(firestore, newUser.userType)
       await addDoc(memberRef, {
         userId: userCredential.user.uid,

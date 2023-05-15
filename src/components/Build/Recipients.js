@@ -19,16 +19,23 @@ const Recipients = () => {
   console.log('searchQuery: ', searchQuery)
 
   const filteredRecipients = searchQuery && searchQuery !== '' ? (localRecipients && localRecipients.filter((athlete) => {
+    const fullName = `${athlete.firstName} ${athlete.lastName} ${athlete.firstName} `
     return(
-      athlete.firstName.toLowerCase().includes(searchQuery) || athlete.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+      fullName.toLowerCase().includes(searchQuery) || fullName.toLowerCase().includes(searchQuery.toLowerCase())
     )
   })) : localRecipients
 
+  console.log('localRecipients.length: ', localRecipients && localRecipients.length)
+
   useEffect(()=> {
-    if (!localRecipients && localAthletes) dispatch(setInitialFilteredAthletes(localAthletes))
+    console.log('firestoreAthletes.length: ',firestoreAthletes && firestoreAthletes.length)
+    console.log('localAthletes.length: ',localAthletes && localAthletes.length)
+    if (!localRecipients && localAthletes || localRecipients && localAthletes && localRecipients.length !== localAthletes.length) dispatch(setInitialFilteredAthletes(localAthletes))
   }, [localAthletes])
 
   useEffect(()=> {
+    console.log('firestoreAthletes.length: ',firestoreAthletes && firestoreAthletes.length)
+    console.log('localAthletes.length: ',localAthletes && localAthletes.length)
     if (firestoreAthletes) {
       dispatch(saveAthletesToStorage(firestoreAthletes))
     }
@@ -77,8 +84,8 @@ const Recipients = () => {
                                     <AvatarBadge boxSize='0.9em' bg='green.500' />
                                   </Avatar>
                                   <Box pl={2}>
-                                    <Text>{athlete.firstName[0]}. {athlete.lastName}</Text>
-                                    <Text>Student-Athlete • Tennis • Fresno State Bulldogs</Text>
+                                    <Text fontWeight={'semibold'}>{athlete.firstName} {athlete.lastName}</Text>
+                                    <Text fontSize={'sm'} color={'gray.500'} >Student-Athlete • Tennis • Fresno State Bulldogs</Text>
                                   </Box>
                                 </Flex>
                               )
@@ -99,6 +106,7 @@ const Recipients = () => {
             </Flex>
 
 
+
             <Flex sx={contentContainer} flexBasis={'40%'}>       
               <Flex flexGrow={1}>
 
@@ -114,8 +122,8 @@ const Recipients = () => {
                                   <AvatarBadge boxSize='0.9em' bg='green.500' />
                                 </Avatar>
                                 <Box pl={2}>
-                                  <Text>{recipient.firstName[0]}. {recipient.lastName}</Text>
-                                  <Text>Student-Athlete • Tennis • Fresno State Bulldogs</Text>
+                                  <Text fontWeight={'semibold'}>{recipient.firstName} {recipient.lastName}</Text>
+                                  <Text fontSize={'sm'} color={'gray.500'}>Student-Athlete • Tennis • Fresno State Bulldogs</Text>
                                 </Box>
                               </Flex>
                             </Flex>

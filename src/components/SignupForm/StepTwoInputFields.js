@@ -11,6 +11,8 @@ import {
   InputGroup,
   InputRightElement,
   useToast,
+  Spinner,
+  Flex,
 } from '@chakra-ui/react'
 import {
     FaChevronLeft,
@@ -24,24 +26,33 @@ import { setAuthError, signUp } from '../../store/actions/authActions'
 import PhoneInput from 'react-phone-input-2'
 
 const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
+  console.log('signup rerendered')
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-
+  const { register, handleSubmit, formState, control, watch } = useForm()
+  const { errors } = formState
+  
   const authError = useSelector((state)=> state.auth.authError)
   const auth = useSelector((state)=> state.firebase.auth)
-
+  const profile = useSelector((state) => state.auth.profile)
+  
+  const [creatingAccount, setCreatingAccount] = useState(false)
   const [displayError, setDisplayError] = useState(null)
+
   const toast = useToast()
 
   useEffect(() => {
     if (authError) {
+      // setCreatingAccount(()=> !creatingAccount)
       if (authError.includes('auth/email-already-in-use')) {
         setDisplayError('email already in use')
-      } 
+      }
     }
   }, [authError]);
   
   useEffect(()=> {
     if (authError) {
+      setCreatingAccount(()=> !creatingAccount)
       toast({
         title: 'Signup error',
         description: displayError,
@@ -57,19 +68,18 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
     }
   }, [displayError])
   
-  const { register, handleSubmit, formState, control, watch } = useForm()
-  const { errors } = formState
-  const navigate = useNavigate()
 
   const onSubmit = (data) => {
+    setCreatingAccount(()=> !creatingAccount)
     dispatch(signUp({...data, userType}))
   }
-
+  
   useEffect(() => {
-    if (auth.uid) {
+    if (auth.uid && profile) {
+      setCreatingAccount(()=> !creatingAccount)
       navigate('/')
     }
-  }, [auth.uid])
+  }, [profile])
 
   const [show, setShow] = useState(false)
   const showPassword = () => setShow(!show)
@@ -104,9 +114,18 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   return (
     <>
         {oneTwoToggle &&
-        <Stack gap={4}>
+          <Stack gap={4}>
             <Icon cursor={'pointer'} as={FaChevronLeft} onClick={()=> setOneTwoToggle((prev)=>!prev)} />
-            <Text fontSize={'3xl'} fontWeight={'semibold'} textAlign={'center'} >Create your account</Text>
+            <Text fontSize={'3xl'} fontWeight={'semibold'} textAlign={'center'} >{creatingAccount ? 'Creating account...' : 'Create your account'}</Text>
+            {creatingAccount && <Flex justifyContent={'center'}>
+              <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+            </Flex>}
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
             
             <FormControl sx={formControlStyle} isInvalid={errors.firstName} isRequired>

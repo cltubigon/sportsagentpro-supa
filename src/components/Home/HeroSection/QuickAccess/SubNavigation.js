@@ -2,8 +2,21 @@ import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/re
 import {GiSettingsKnobs} from 'react-icons/gi'
 import {BsSearch, BsSortDownAlt} from 'react-icons/bs'
 import React from "react"
+import { useEffect } from "react"
+import { searchAthlete } from "../../../../store/actions/PostActions"
+import { useDispatch } from "react-redux"
+import { useForm } from "react-hook-form"
 
 const SubNavigation = () => {
+  const dispatch = useDispatch()
+
+  const { register, watch } = useForm()
+  const searchQuery = watch('searchQuery')
+
+  useEffect(()=> {
+    dispatch(searchAthlete(searchQuery))
+  }, [searchQuery])
+
   const flexContainer = {
     w: "full",
     py: "20px",
@@ -19,7 +32,7 @@ const SubNavigation = () => {
       <Flex w={"350px"}>
         <InputGroup>
           <InputLeftElement pointerEvents="none" children={<BsSearch color="gray.300" />} />
-          <Input type="text" placeholder="Search"  border={"1px solid gray"} />
+          <Input type="text" id={'searchQuery'} {...register('searchQuery')} placeholder="Search"  border={"1px solid gray"} />
         </InputGroup>
       </Flex>
       <Flex gap={2}>

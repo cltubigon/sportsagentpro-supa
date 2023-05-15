@@ -11,12 +11,11 @@ import { saveAthletesToStorage } from '../../store/actions/athleteActions'
 const Athletes = () => {
   console.log("-------------------Athletes")
   const dispatch = useDispatch()
-  const firestoreAthletes = useSelector((state)=> state.firestore.ordered.athlete)
   const localAthletes = useSelector(state => state.athlete.athletes)
-
-  console.log('localAthletes: ', localAthletes)
+  const firestoreAthletes = useSelector((state)=> state.firestore.ordered.athlete)
+  
   useEffect(()=> {
-    if (firestoreAthletes) {
+    if (firestoreAthletes && !localAthletes || firestoreAthletes && localAthletes && firestoreAthletes.length !== localAthletes.length) {
       dispatch(saveAthletesToStorage(firestoreAthletes))
     }
   },[firestoreAthletes])

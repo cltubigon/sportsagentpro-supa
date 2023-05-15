@@ -9,6 +9,7 @@ const Home = () => {
     maxW: "1440px",
     px: 0,
   }
+  console.log('I am rendered')
   return (
     <>
       <Container sx={containerStyle} tabIndex={0}>

@@ -32,6 +32,7 @@ const SignupForm = ()=> {
         <UserType setUserType={setUserType} userType={userType} setOneTwoToggle={setOneTwoToggle} oneTwoToggle={oneTwoToggle} />
 
         <StepTwoInputFields userType={userType} setOneTwoToggle={setOneTwoToggle} oneTwoToggle={oneTwoToggle} />
+        
       </Container>
       <Footer />
     </>

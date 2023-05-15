@@ -21,6 +21,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/layouts/Footer'
 
 const LoginForm = ()=> {
+  console.log('login rendered')
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const toast = useToast()
