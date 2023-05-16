@@ -1,12 +1,39 @@
+import { BsBox, BsCamera, BsHeadset, BsInstagram, BsMic, BsPen, BsPeople, BsSnapchat, BsTiktok, BsYoutube } from 'react-icons/bs'
+import { BsFacebook, BsLinkedin, BsTwitter } from 'react-icons/bs'
+import { FaIcons } from 'react-icons/fa'
+import { HiOutlineUserGroup, HiDotsHorizontal } from 'react-icons/hi'
+import { GoMegaphone } from 'react-icons/go'
+import { TbLicense } from 'react-icons/tb'
+import { BiUserVoice, BiRun } from 'react-icons/bi'
+import { MdOutlineCoPresent } from 'react-icons/md'
+import { AiOutlineEye } from 'react-icons/ai'
+
 const initState = {
     recipients: null,
     postType: null,
-    activeStep: 'deal_type',
+    activeStep: 'activities',
     searchRecipient: '',
+    selectedActivities: [],
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+        case "SET_SELECTED_ACTIVITIES":
+            console.log('SET_SELECTED_ACTIVITIES', action.payload)
+
+            return {
+              ...state,
+              selectedActivities: action.payload,
+            }
+        // case "SET_SELECTED_ACTIVITIES":
+        //     console.log('SET_SELECTED_ACTIVITIES', action.payload)
+        //     const myObject = action.payload
+        //     console.log('myObject: ', myObject)
+
+        //     return {
+        //       ...state,
+        //       selectedActivities: [...state.selectedActivities, myObject],
+        //     }
         case "SEARCH_ATHLETE":
             console.log('SEARCH_ATHLETE', action.payload)
             return {

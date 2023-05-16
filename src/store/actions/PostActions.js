@@ -61,6 +61,34 @@ export const setCheckboxTrueOrFalse = (id) => {
   }
 }
 
+export const selectedActivities = (activity) => {
+  console.log('activity: ', activity)
+  return (dispatch, getState) => {
+    const state = getState()
+    const selectedActivities = state.post.selectedActivities
+    console.log('selectedActivities: ', selectedActivities)
+
+    if (!selectedActivities.some((data)=> {
+      return (
+        data.id === activity.id
+      )
+    })) {
+      const filteredActivity = activity
+      const payload = [...selectedActivities, filteredActivity]
+      dispatch({ type: 'SET_SELECTED_ACTIVITIES', payload})
+    } else {
+      const filteredActivity = selectedActivities.filter((data) => {
+        return (
+          data.id !== activity.id
+          )
+        })
+        
+      const payload = filteredActivity
+      dispatch({ type: 'SET_SELECTED_ACTIVITIES', payload})
+    }
+  }
+}
+
 export const searchAthlete = (payload) => {
   return (dispatch)=> {
     dispatch({ type: 'SEARCH_ATHLETE', payload })
