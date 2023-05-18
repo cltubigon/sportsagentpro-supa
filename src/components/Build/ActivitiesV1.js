@@ -2,7 +2,7 @@ import { SearchIcon } from "@chakra-ui/icons"
 import { Text, Flex, Box, SimpleGrid, Button, CloseButton, Icon, Input, InputGroup, InputLeftElement, Grid, GridItem, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react"
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setActiveStep, selectedActivities, setActivityAmount, updateSelectedActivities } from '../../store/actions/PostActions'
+import { setActiveStep, setActivityAmount, updateSelectedActivities, addOrRemoveActivities } from '../../store/actions/PostActions'
 import { BsAsterisk, BsBox, BsCamera, BsCheckCircleFill, BsChevronLeft, BsChevronRight, BsCurrencyDollar, BsExclamationCircle, BsExclamationCircleFill, BsHeadset, BsInstagram, BsMic, BsPen, BsPeople, BsSnapchat, BsTiktok, BsYoutube } from 'react-icons/bs'
 import { TfiClose, TfiMenuAlt } from 'react-icons/tfi'
 import { RxDashboard } from 'react-icons/rx'
@@ -19,18 +19,26 @@ import { useForm } from "react-hook-form"
 
 const ActivitiesNav1 = () => {
     const dispatch = useDispatch()
+    const reduxState = useSelector(state => state.post)
     const reduxSelectedActivity = useSelector(state => state.post.selectedActivities)
+    console.log('reduxState: ', reduxState)
     
     const [count, setCount] = useState(null)
     const [tab, setTab] = useState(true)
+    const [inputs, setInputs] = useState({})
     
     useEffect(()=> {
       if (reduxSelectedActivity.length !== count) {
         setCount(reduxSelectedActivity.length)
       }
+
+      const selectedActivityIds = reduxSelectedActivity.map(activity => activity.id)
+      const notSelectedKeys = Object.keys(inputs).filter(keys => !selectedActivityIds.some(id => keys === `activityAmount${id}`))
+      notSelectedKeys.forEach(key => {        // remove amount of unselected activity
+        if (inputs.hasOwnProperty(key)) inputs[key] = "0"
+      })
     }, [reduxSelectedActivity, count])
 
-    const [inputs, setInputs] = useState({});
     const handleOnChange = (e) => {
       setInputs({
         ...inputs,
@@ -47,6 +55,8 @@ const ActivitiesNav1 = () => {
         return result;
       }, { ...inputs }))
     },[])
+
+    console.log('inputs: ', inputs)
     useEffect(()=> {
       const hasInput = Object.keys(inputs).length === 0
       !hasInput && dispatch(updateSelectedActivities(inputs))
@@ -358,6 +368,11 @@ const ActivitiesNav1 = () => {
     ]
   }
 
+  const inputBorder =  {
+    borderColor: 'gray.500',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+  }
   return (
     <>
         <Grid
@@ -407,7 +422,7 @@ const ActivitiesNav1 = () => {
                 <SimpleGrid minChildWidth='200px' spacing={4}>
                 {activities.onlineOptionalCategory.map((activity) => {
                     return (
-                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
+                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(addOrRemoveActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
                     <Icon as={activity.icon} color={activity.color} sx={itemsIconStyle} />
                     <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
                     <Text sx={itemDescStyle}>{activity.activityDescription}</Text>
@@ -421,7 +436,7 @@ const ActivitiesNav1 = () => {
                 <SimpleGrid minChildWidth='200px' spacing={4}>
                 {activities.onlineCategory.map((activity) => {
                     return (
-                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
+                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(addOrRemoveActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
                     <Icon as={activity.icon} color={activity.color} sx={itemsIconStyle} />
                     <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
                     <Text sx={itemDescStyle}>{activity.activityDescription}</Text>
@@ -436,7 +451,7 @@ const ActivitiesNav1 = () => {
                 <SimpleGrid minChildWidth='200px' spacing={4}>
                 {activities.offlineCategory.map((activity) => {
                     return (
-                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
+                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(addOrRemoveActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
                     <Icon as={activity.icon} color={activity.color} sx={itemsIconStyle} />
                     <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
                     <Text sx={itemDescStyle}>{activity.activityDescription}</Text>
@@ -460,21 +475,40 @@ const ActivitiesNav1 = () => {
                         </Box>
                       </Flex>
                       <Flex alignItems={'center'}>
-                        <Icon as={BiTrash} boxSize={5} color={'blue.400'} cursor={'pointer'} onClick={()=> dispatch(selectedActivities(activity))} />
+                        <Icon as={BiTrash} boxSize={5} color={'blue.400'} cursor={'pointer'} onClick={()=> dispatch(addOrRemoveActivities(activity))} />
                       </Flex>
                     </Flex>
                     
 
                     <Flex flexGrow={1} flexDirection={'column'} justifyContent={'space-between'} p={2} borderBottom={'1px solid #EBEFF2'}>
                       <Text color={'gray.400'} fontWeight={'semibold'} >Payment</Text>
+                      <Flex>
+                        <Text color={'red'} fontWeight={'semibold'} fontSize={'sm'} >*</Text>
+                        <Text color={'gray.700'} fontWeight={'semibold'} fontSize={'sm'}>Amount</Text>
+                      </Flex>
                       <Text fontSize={'xs'}>Amount to be paid for the activity</Text>
-                      <InputGroup >
+                      <InputGroup my={2} >
                         <InputLeftElement pt={1} pointerEvents="none" color={'gray.800'} children={<BsCurrencyDollar />} />
-
                           <NumberInput name={`activityAmount${activity.id}`} defaultValue={activity.activityAmount > 0 && activity.activityAmount} precision={2}>
-                            <NumberInputField placeholder="0.00" pl={7} onChange={handleOnChange} />
+                            <NumberInputField sx={inputBorder} placeholder="0.00" pl={7} onChange={handleOnChange} />
                           </NumberInput>
                       </InputGroup>
+                    </Flex>
+
+                    <Flex flexGrow={1} flexDirection={'column'} justifyContent={'space-between'} p={2} borderBottom={'1px solid #EBEFF2'}>
+                      <Text color={'gray.400'} fontWeight={'semibold'} >Due date</Text>
+                      <Flex>
+                        <Text color={'red'} fontWeight={'semibold'} fontSize={'sm'} >*</Text>
+                        <Text color={'gray.700'} fontWeight={'semibold'} fontSize={'sm'}>Date and time</Text>
+                      </Flex>
+                      <Text fontSize={'xs'}>Date and time activity is to be completed by</Text>
+                      <InputGroup>
+                        <Input maxW={'300px'} sx={inputBorder} my={2} placeholder="Select Date and Time" size="md" type="datetime-local" />
+                      </InputGroup>
+                    </Flex>
+                    
+                    <Flex px={2} onClick={()=> dispatch(addOrRemoveActivities(activity))} alignItems={'center'} gap={1} pb={2} cursor={'pointer'} color={'blue.400'}><Icon as={BiTrash} boxSize={4} cursor={'pointer'} />
+                      <Text>Remove activity</Text>
                     </Flex>
                     
                   </Flex>

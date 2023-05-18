@@ -62,31 +62,22 @@ export const setCheckboxTrueOrFalse = (id) => {
   }
 }
 
-export const selectedActivities = (activity) => {
+export const addOrRemoveActivities = (activity) => {
   console.log('activity: ', activity)
   return (dispatch, getState) => {
     const state = getState()
     const selectedActivities = state.post.selectedActivities
-
-    let count = selectedActivities.length
-    console.log('count: ', count)
-    if (!selectedActivities.some((data)=> {
-      return (
-        data.id === activity.id
-      )
-    })) {
+    
+    if (!selectedActivities.some(data=> data.id === activity.id)) {  // Add activity
       const filteredActivity = { ...activity, isChecked: true, activityAmount: '' }
+      console.log('filteredActivity yes: ', filteredActivity)
       const payload = [...selectedActivities, filteredActivity]
-      dispatch({ type: 'SET_SELECTED_ACTIVITIES', payload})
+      dispatch({ type: 'ADD_OR_REMOVE_ACTIVITIES', payload})
     } else {
-      const filteredActivity = selectedActivities.filter((data) => {
-        return (
-          data.id !== activity.id
-          )
-        })
-        
+      const filteredActivity = selectedActivities.filter(data => data.id !== activity.id) // Remove activity
+      console.log('filteredActivity else: ', filteredActivity)
       const payload = filteredActivity
-      dispatch({ type: 'SET_SELECTED_ACTIVITIES', payload})
+      dispatch({ type: 'ADD_OR_REMOVE_ACTIVITIES', payload})
     }
   }
 }
@@ -95,6 +86,7 @@ export const updateSelectedActivities = (data) => {
   return (dispatch, getState)=> {
     const state = getState()
     const selectedActivities = state.post.selectedActivities
+    console.log('selectedActivities: ', selectedActivities)
 
     const payload = selectedActivities.map((activity)=> {
       const amount = data[`activityAmount${activity.id}`]

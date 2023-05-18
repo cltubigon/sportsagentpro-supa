@@ -16,8 +16,8 @@ const postReducer = (state = initState, action) => {
               ...state,
               selectedActivities: action.payload,
             }
-        case "SET_SELECTED_ACTIVITIES":
-            console.log('SET_SELECTED_ACTIVITIES', action.payload)
+        case "ADD_OR_REMOVE_ACTIVITIES":
+            console.log('ADD_OR_REMOVE_ACTIVITIES', action.payload)
             return {
               ...state,
               selectedActivities: action.payload,
