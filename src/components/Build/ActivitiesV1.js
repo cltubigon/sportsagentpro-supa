@@ -1,9 +1,9 @@
 import { SearchIcon } from "@chakra-ui/icons"
-import { Text, Flex, Box, SimpleGrid, Button, CloseButton, Icon, Input, InputGroup, InputLeftElement, Grid, GridItem } from "@chakra-ui/react"
+import { Text, Flex, Box, SimpleGrid, Button, CloseButton, Icon, Input, InputGroup, InputLeftElement, Grid, GridItem, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react"
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setActiveStep, selectedActivities } from '../../store/actions/PostActions'
-import { BsBox, BsCamera, BsChevronLeft, BsChevronRight, BsHeadset, BsInstagram, BsMic, BsPen, BsPeople, BsSnapchat, BsTiktok, BsYoutube } from 'react-icons/bs'
+import { setActiveStep, selectedActivities, setActivityAmount, updateSelectedActivities } from '../../store/actions/PostActions'
+import { BsAsterisk, BsBox, BsCamera, BsCheckCircleFill, BsChevronLeft, BsChevronRight, BsCurrencyDollar, BsExclamationCircle, BsExclamationCircleFill, BsHeadset, BsInstagram, BsMic, BsPen, BsPeople, BsSnapchat, BsTiktok, BsYoutube } from 'react-icons/bs'
 import { TfiClose, TfiMenuAlt } from 'react-icons/tfi'
 import { RxDashboard } from 'react-icons/rx'
 import { BsFacebook, BsLinkedin, BsTwitter } from 'react-icons/bs'
@@ -11,29 +11,58 @@ import { FaIcons } from 'react-icons/fa'
 import { HiOutlineUserGroup, HiDotsHorizontal } from 'react-icons/hi'
 import { GoMegaphone } from 'react-icons/go'
 import { TbLicense } from 'react-icons/tb'
-import { BiUserVoice, BiRun } from 'react-icons/bi'
+import { BiUserVoice, BiRun, BiTrash } from 'react-icons/bi'
 import { MdOutlineCoPresent } from 'react-icons/md'
 import { AiOutlineEye } from 'react-icons/ai'
 import { GrFormClose } from "react-icons/gr"
+import { useForm } from "react-hook-form"
 
 const ActivitiesNav1 = () => {
-
     const dispatch = useDispatch()
     const reduxSelectedActivity = useSelector(state => state.post.selectedActivities)
-    console.log('reduxSelectedActivity: ', reduxSelectedActivity)
-  
+    
+    const [count, setCount] = useState(null)
+    const [tab, setTab] = useState(true)
+    
+    useEffect(()=> {
+      if (reduxSelectedActivity.length !== count) {
+        setCount(reduxSelectedActivity.length)
+      }
+    }, [reduxSelectedActivity, count])
+
+    const [inputs, setInputs] = useState({});
+    const handleOnChange = (e) => {
+      setInputs({
+        ...inputs,
+        [e.target.name]: e.target.value
+      })
+    }
+
+    useEffect(()=> {
+      setInputs(reduxSelectedActivity.reduce((result, activity) => {
+        if (activity.activityAmount) {
+          const propertyName = `activityAmount${activity.id}`;
+          result[propertyName] = activity.activityAmount;
+        }
+        return result;
+      }, { ...inputs }))
+    },[])
+    useEffect(()=> {
+      const hasInput = Object.keys(inputs).length === 0
+      !hasInput && dispatch(updateSelectedActivities(inputs))
+    },[inputs, tab])
+    
     const postType = useSelector(state => state.post.postType)
-    const [prevButton, setPrevButton] = useState('deal_type')  
+    const [prevButton, setPrevButton] = useState('deal_type') 
     useEffect(()=> {
       postType === 'opportunity' ? setPrevButton('deal_type') : setPrevButton('recipients')
     }, [postType])
-  
-    const contentContainer = {
-      my: 4,
-      flexDirection: 'column',
-      gap: 4,
-      overflowY: 'auto',
+
+    const isSelected = (id) => {
+      const isSelected = reduxSelectedActivity.some(data => data.id === id)
+      return isSelected
     }
+
     const itemsIconStyle = {
       boxSize: 10,
       textAlign: 'center',
@@ -54,44 +83,28 @@ const ActivitiesNav1 = () => {
       alignItems: 'center',
       p: 3,
       borderRadius: '6px',
-      border: '1px solid transparent',
       _hover: {
-        border: '1px solid #EBEFF2'
+        boxShadow: 'md',
       }
     }
-    const navContainerStyle = {
-        justifyContent: "space-between",
-        flexGrow: 1,
-        py: 5,
-        px: 20,
-        borderBottom: "2px solid #EBEFF2",
-      }
-      const subMenuContainer = {
-        justifyContent: "space-between",
-        flexGrow: 1,
-        pt: 5,
-        pb: 2,
-        px: 20,
-        flexDirection: 'column',
-      }
-  
+    
     const activities = {
       onlineOptionalCategory: [
-      {
-        id: 17,
-        activityTitle: 'Twitter Post',
-        activityDescription: 'One tweet with text or media',
-        color: '#1CA1F2',
-        icon: BsTwitter,
-        isChecked: false,
-        value: 'twitterPost',
-      },
-      {
-        id: 18,
-        activityTitle: 'Twitter Video Monetization',
-        activityDescription: "Videos added to Twitter's video monetization program",
-        color: '#1CA1F2',
-        icon: BsTwitter,
+        {
+          id: 17,
+          activityTitle: 'Twitter Post',
+          activityDescription: 'One tweet with text or media',
+          color: '#1CA1F2',
+          icon: BsTwitter,
+          isChecked: false,
+          value: 'twitterPost',
+        },
+        {
+          id: 18,
+          activityTitle: 'Twitter Video Monetization',
+          activityDescription: "Videos added to Twitter's video monetization program",
+          color: '#1CA1F2',
+          icon: BsTwitter,
         isChecked: false,
         value: 'twitterVideoMonetization',
       },
@@ -344,12 +357,13 @@ const ActivitiesNav1 = () => {
       },
     ]
   }
+
   return (
     <>
         <Grid
             templateAreas={`"header"
-                            "main"
-                            "footer"`}
+            "main"
+            "footer"`}
             gridTemplateRows={'2fr 9fr auto'}
             gridTemplateColumns={'1fr'}
             h='100vh'
@@ -367,33 +381,33 @@ const ActivitiesNav1 = () => {
             </Flex>
 
             <Flex px={20}>
-                <Flex flexGrow={1} gap={8} pt={4} mb={10} borderBottom={"2px solid #EBEFF2"}>
-                    <Text borderBottom={'2px solid #000'} pb={2}>Discover</Text>
-                    <Text>Activity details</Text>
-                </Flex>
+              <Flex flexGrow={1} gap={8} pt={4} mb={tab ? 10 : 2} borderBottom={"2px solid #EBEFF2"}>
+                  <Text cursor={'pointer'} onClick={()=> setTab(()=> true)} borderBottom={tab && '2px solid #000'} pb={2}>Discover</Text>
+                  <Text cursor={'pointer'} onClick={()=> setTab(()=> false)} borderBottom={!tab && '2px solid #000'} pb={2}>Activity details {count > 0 && `(${count})`}</Text>
+              </Flex>
             </Flex>
 
-            <Flex px={20}>
+            {tab && <Flex px={20}>
                 <InputGroup >
                     <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} />
                     <Input placeholder="Search activities..." border={'1px solid #89949F'} borderRadius={'50px'} />
                 </InputGroup>
-            </Flex>
+            </Flex>}
         </GridItem>
 
         {/* -------------------------------------- Content section -------------------------------------- */}
         <GridItem pl={'80px'} pr={'65px'} area={'main'} overflowY={'auto'} position={'relative'}>
-            <Flex bgColor={'white'} pb={4} gap={4} justifyContent={'flex-end'} position={'sticky'} top={'0'}>
+            {tab && <Flex bgColor={'white'} pb={4} gap={4} justifyContent={'flex-end'} position={'sticky'} top={'0'}>
                 <Icon as={RxDashboard} boxSize={6} />
                 <Icon as={TfiMenuAlt} boxSize={6} />
-            </Flex>
+            </Flex>}
 
-            <Box pb={6}>
-                <Flex pb={3}><Text fontWeight={'semibold'}>ONLINE - Optional automated publishing available</Text></Flex>                    
+            {tab && <Box pb={6}>
+                <Flex pb={3}><Text fontWeight={'semibold'}>ONLINE - Optional automated publishing available</Text></Flex>
                 <SimpleGrid minChildWidth='200px' spacing={4}>
                 {activities.onlineOptionalCategory.map((activity) => {
                     return (
-                <Flex key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))}>
+                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
                     <Icon as={activity.icon} color={activity.color} sx={itemsIconStyle} />
                     <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
                     <Text sx={itemDescStyle}>{activity.activityDescription}</Text>
@@ -401,14 +415,13 @@ const ActivitiesNav1 = () => {
                     )
                 })}
                 </SimpleGrid>
-            </Box>
-
-            <Box pb={6}>
+            </Box>}
+            {tab && <Box pb={6}>
                 <Flex pb={3}><Text fontWeight={'semibold'}>ONLINE - Optional automated publishing available</Text></Flex>                    
                 <SimpleGrid minChildWidth='200px' spacing={4}>
                 {activities.onlineCategory.map((activity) => {
                     return (
-                <Flex key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))}>
+                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
                     <Icon as={activity.icon} color={activity.color} sx={itemsIconStyle} />
                     <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
                     <Text sx={itemDescStyle}>{activity.activityDescription}</Text>
@@ -416,14 +429,14 @@ const ActivitiesNav1 = () => {
                     )
                 })}
                 </SimpleGrid>
-            </Box>
+            </Box>}
 
-            <Box pb={6}>
+            {tab && <Box pb={6}>
                 <Flex pb={3}><Text fontWeight={'semibold'}>ONLINE - Optional automated publishing available</Text></Flex>                    
                 <SimpleGrid minChildWidth='200px' spacing={4}>
                 {activities.offlineCategory.map((activity) => {
                     return (
-                <Flex key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))}>
+                <Flex cursor={'pointer'} key={activity.id} sx={itemContainerStyle} onClick={()=> dispatch(selectedActivities(activity))} bgColor={isSelected(activity.id) && 'blue.100'} border={isSelected(activity.id) ? '1px solid #90CDF4' : '1px solid transparent'} >
                     <Icon as={activity.icon} color={activity.color} sx={itemsIconStyle} />
                     <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
                     <Text sx={itemDescStyle}>{activity.activityDescription}</Text>
@@ -431,7 +444,43 @@ const ActivitiesNav1 = () => {
                     )
                 })}
                 </SimpleGrid>
-            </Box>
+            </Box>}
+
+            {/* -------------------------------------- Tab 2 -------------------------------------- */}
+            {!tab && <Flex pb={6} flexDirection={'column'} gap={4}>
+              {reduxSelectedActivity.map((activity)=> {
+                return (
+                  <Flex key={activity.id} flexDirection={'column'} borderColor={'gray.300'} borderWidth={'1px'} borderStyle={'solid'} borderRadius={'6px'} >
+                    <Flex flexGrow={1} justifyContent={'space-between'} p={2} borderBottom={'1px solid #EBEFF2'}>
+                      <Flex alignItems={'flex-start'} gap={2}>
+                        <Icon as={activity.activityAmount > 0 ? BsCheckCircleFill : BsExclamationCircleFill} color={activity.activityAmount > 0 ? 'green.500' : 'gray.500'} mt={'8px'} boxSize={4} />
+                        <Box>
+                          <Text fontSize={'xl'} fontWeight={'semibold'}>{activity.activityTitle}</Text>
+                          {activity.activityAmount > 0 && <Text fontSize={'sm'} color={"green.700"}>{`$${parseInt(activity.activityAmount).toLocaleString()}.00`}</Text>}
+                        </Box>
+                      </Flex>
+                      <Flex alignItems={'center'}>
+                        <Icon as={BiTrash} boxSize={5} color={'blue.400'} cursor={'pointer'} onClick={()=> dispatch(selectedActivities(activity))} />
+                      </Flex>
+                    </Flex>
+                    
+
+                    <Flex flexGrow={1} flexDirection={'column'} justifyContent={'space-between'} p={2} borderBottom={'1px solid #EBEFF2'}>
+                      <Text color={'gray.400'} fontWeight={'semibold'} >Payment</Text>
+                      <Text fontSize={'xs'}>Amount to be paid for the activity</Text>
+                      <InputGroup >
+                        <InputLeftElement pt={1} pointerEvents="none" color={'gray.800'} children={<BsCurrencyDollar />} />
+
+                          <NumberInput name={`activityAmount${activity.id}`} defaultValue={activity.activityAmount > 0 && activity.activityAmount} precision={2}>
+                            <NumberInputField placeholder="0.00" pl={7} onChange={handleOnChange} />
+                          </NumberInput>
+                      </InputGroup>
+                    </Flex>
+                    
+                  </Flex>
+                )
+              })}
+            </Flex>}
         </GridItem>
 
                 {/* -------------------------------------- Footer Section -------------------------------------- */}

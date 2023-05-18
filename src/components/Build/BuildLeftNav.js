@@ -9,8 +9,11 @@ const BuildLeftNav = () => {
     const dispatch = useDispatch()
     const activeStep = useSelector(state => state.post.activeStep)
     const statePost = useSelector(state => state.post)
+    const reduxSelectedActivity = useSelector(state => state.post.selectedActivities)
+    
+    const countActivities = reduxSelectedActivity.length
+    const countRecipients = useSelector(state => state.post.selectedRecipientsCount)
 
-    console.log('statePost: ', statePost)
     const stepTwoCompleted = statePost.recipients && statePost.recipients.some(recipient => recipient.isChecked)
     
     const menuTitleStyle = {
@@ -96,7 +99,7 @@ const BuildLeftNav = () => {
                     {activeStep === 'recipients' ? <Icon as={CheckIcon} boxSize={3} /> : (stepTwoCompleted ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>2</Text>)}
                 </Flex>
                 <Box>
-                    <Text sx={activeStep === 'recipients' ? selectedMenuTitleStyle : menuTitleStyle}>Recipients</Text>
+                    <Text sx={activeStep === 'recipients' ? selectedMenuTitleStyle : menuTitleStyle}>Recipients {countRecipients > 0 && `(${countRecipients})`}</Text>
                     <Text sx={activeStep === 'recipients' ? selectedMenuDescStyle : menuDescStyle}>{stepTwoCompleted ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>}
@@ -106,7 +109,7 @@ const BuildLeftNav = () => {
                     {activeStep === 'activities' ? <Icon as={CheckIcon} boxSize={3} /> : (statePost.activities ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '3' : '2'}</Text>)}
                 </Flex>
                 <Box>
-                    <Text sx={activeStep === 'activities' ? selectedMenuTitleStyle : menuTitleStyle}>Activities</Text>
+                    <Text sx={activeStep === 'activities' ? selectedMenuTitleStyle : menuTitleStyle}>Activities {countActivities > 0 && `(${countActivities})`}</Text>
                     <Text sx={activeStep === 'activities' ? selectedMenuDescStyle : menuDescStyle}>{statePost.activities ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>

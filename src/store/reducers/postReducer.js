@@ -1,39 +1,27 @@
-import { BsBox, BsCamera, BsHeadset, BsInstagram, BsMic, BsPen, BsPeople, BsSnapchat, BsTiktok, BsYoutube } from 'react-icons/bs'
-import { BsFacebook, BsLinkedin, BsTwitter } from 'react-icons/bs'
-import { FaIcons } from 'react-icons/fa'
-import { HiOutlineUserGroup, HiDotsHorizontal } from 'react-icons/hi'
-import { GoMegaphone } from 'react-icons/go'
-import { TbLicense } from 'react-icons/tb'
-import { BiUserVoice, BiRun } from 'react-icons/bi'
-import { MdOutlineCoPresent } from 'react-icons/md'
-import { AiOutlineEye } from 'react-icons/ai'
-
 const initState = {
     recipients: null,
+    selectedRecipientsCount: 0,
     postType: null,
-    activeStep: 'activities',
+    activeStep: 'recipients',
     searchRecipient: '',
     selectedActivities: [],
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
-        case "SET_SELECTED_ACTIVITIES":
-            console.log('SET_SELECTED_ACTIVITIES', action.payload)
+        case "UPDATE_AMOUNT_OF_SELECTED_ACTIVITIES":
+            console.log('UPDATE_AMOUNT_OF_SELECTED_ACTIVITIES', action.payload)
 
             return {
               ...state,
               selectedActivities: action.payload,
             }
-        // case "SET_SELECTED_ACTIVITIES":
-        //     console.log('SET_SELECTED_ACTIVITIES', action.payload)
-        //     const myObject = action.payload
-        //     console.log('myObject: ', myObject)
-
-        //     return {
-        //       ...state,
-        //       selectedActivities: [...state.selectedActivities, myObject],
-        //     }
+        case "SET_SELECTED_ACTIVITIES":
+            console.log('SET_SELECTED_ACTIVITIES', action.payload)
+            return {
+              ...state,
+              selectedActivities: action.payload,
+            }
         case "SEARCH_ATHLETE":
             console.log('SEARCH_ATHLETE', action.payload)
             return {
@@ -45,6 +33,7 @@ const postReducer = (state = initState, action) => {
             return {
               ...state,
               recipients: action.payload,
+              selectedRecipientsCount: action.countPayload,
             }
         case "SET_INITIAL_FILTERED_ATHLETES":
             console.log('SET_INITIAL_FILTERED_ATHLETES', action.payload)

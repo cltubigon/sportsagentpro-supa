@@ -31,7 +31,7 @@ export const setActiveStep = (data) => {
 
 export const setInitialFilteredAthletes = (data) => {
   return (dispatch) => {
-    console.log('data: ', data)
+    // console.log('data: ', data)
     const payload = data.map((athlete)=> {
       return (
         {...athlete, isChecked: false}
@@ -56,8 +56,9 @@ export const setCheckboxTrueOrFalse = (id) => {
         return athlete
       }
     })
-    
-    dispatch({ type: 'SET_CHECK_TRUE_OR_FALSE', payload })
+    const count = payload.filter(athlete => athlete.isChecked === true)
+    const countPayload = count.length
+    dispatch({ type: 'SET_CHECK_TRUE_OR_FALSE', payload, countPayload })
   }
 }
 
@@ -66,14 +67,15 @@ export const selectedActivities = (activity) => {
   return (dispatch, getState) => {
     const state = getState()
     const selectedActivities = state.post.selectedActivities
-    console.log('selectedActivities: ', selectedActivities)
 
+    let count = selectedActivities.length
+    console.log('count: ', count)
     if (!selectedActivities.some((data)=> {
       return (
         data.id === activity.id
       )
     })) {
-      const filteredActivity = activity
+      const filteredActivity = { ...activity, isChecked: true, activityAmount: '' }
       const payload = [...selectedActivities, filteredActivity]
       dispatch({ type: 'SET_SELECTED_ACTIVITIES', payload})
     } else {
@@ -86,6 +88,20 @@ export const selectedActivities = (activity) => {
       const payload = filteredActivity
       dispatch({ type: 'SET_SELECTED_ACTIVITIES', payload})
     }
+  }
+}
+
+export const updateSelectedActivities = (data) => {
+  return (dispatch, getState)=> {
+    const state = getState()
+    const selectedActivities = state.post.selectedActivities
+
+    const payload = selectedActivities.map((activity)=> {
+      const amount = data[`activityAmount${activity.id}`]
+      return {...activity, activityAmount: amount}
+    })
+
+    dispatch({ type: 'UPDATE_AMOUNT_OF_SELECTED_ACTIVITIES', payload})
   }
 }
 

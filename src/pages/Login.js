@@ -32,7 +32,11 @@ const LoginForm = ()=> {
   const [displayError, setDisplayError] = useState(null)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
-
+  
+  const onSubmit = (data) => {
+    dispatch(signIn(data))
+  }
+  
   useEffect(() => {
     if (authError) {
       if (authError === "auth/user-not-found") {
@@ -61,9 +65,6 @@ const LoginForm = ()=> {
     }
   }, [displayError])
 
-  const onSubmit = (data) => {
-    dispatch(signIn(data))
-  }
   
   useEffect(() => {
     if (auth.uid) {
