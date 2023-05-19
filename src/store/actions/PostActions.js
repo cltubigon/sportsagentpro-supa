@@ -92,9 +92,12 @@ export const updateSelectedActivities = (data) => {
     const payload = selectedActivities.map((activity)=> {
       const amount = data[`activityAmount${activity.id}`]
       const date = data[`activityDate${activity.id}`]
-      return {...activity, activityAmount: amount, activityDate: date}
+      console.log('date: ', date)
+      console.log('amount: ', amount)
+      return {...activity, activityAmount: amount || "", ...(date !== undefined && { activityDate: date }) }
     })
 
+    console.log('payload: ', payload)
     dispatch({ type: 'UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', payload})
   }
 }

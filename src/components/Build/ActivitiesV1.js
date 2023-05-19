@@ -20,6 +20,7 @@ import {
   setActiveStep,
   updateSelectedActivities,
   addOrRemoveActivities,
+  setActivityTabStatus,
 } from "../../store/actions/PostActions"
 import {
   BsBox,
@@ -59,17 +60,39 @@ import { motion } from "framer-motion"
 
 const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
-  const reduxState = useSelector((state) => state.post)
-  const reduxSelectedActivity = useSelector(
-    (state) => state.post.selectedActivities
-  )
+  const reduxPostState = useSelector((state) => state.post)
+
+  const { activitiesTabReady, selectedActivities } = reduxPostState
+  const reduxSelectedActivity = selectedActivities
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)
   const [inputs, setInputs] = useState({})
-  // const [myDates, setMyDates] = useState({})
 
-  // const [isClicked, setIsClicked] = useState(false)
+  useEffect(() => {
+    const allAmountsAreReady =
+      reduxSelectedActivity &&
+      !reduxSelectedActivity.some(
+        (activity) =>
+          activity.activityAmount === "" ||
+          activity.activityAmount < 1 ||
+          activity.activityAmount === undefined
+      )
+    const allDatesAreReady =
+      reduxSelectedActivity &&
+      !reduxSelectedActivity.some(
+        (activity) =>
+          activity.activityDate === "" || activity.activityDate === undefined
+      )
+    // console.log("then activity.activityDates are: ", allDatesAreReady)
+    const activityTabStatus =
+      allAmountsAreReady &&
+      allDatesAreReady &&
+      allAmountsAreReady === allDatesAreReady
+    // console.log("activityTabStatus: ", activityTabStatus)
+    dispatch(setActivityTabStatus(activityTabStatus))
+  }, [reduxSelectedActivity, tab])
+
   const [activeActivity, setActiveActivity] = useState([])
   const handleActiveActivityClick = (id) => {
     const check =
@@ -78,11 +101,9 @@ const ActivitiesNav1 = () => {
     check
       ? setActiveActivity([...activeActivity, { id: id }])
       : setActiveActivity(filteredActivity)
-    console.log("check", check)
-    !check && console.log("sorry")
   }
-  // console.log("activeActivity: ", activeActivity)
-console.log('inputs: ', inputs)
+
+  // console.log('inputs: ', inputs)
   const activeChecker = (activity) => {
     const isActive = activeActivity.some((data) => data.id === activity.id)
     return isActive
@@ -103,8 +124,14 @@ console.log('inputs: ', inputs)
         )
     )
     notSelectedKeys.forEach((key) => {
-      // remove amount value of unselected activity
-      if (inputs.hasOwnProperty(key)) inputs[key] = "0"
+      if (inputs.hasOwnProperty(key)) {
+        if (key.includes("activityDate")) {
+          //may try activityAmount too.
+          delete inputs[key]
+        } else {
+          inputs[key] = "0"
+        }
+      }
     })
   }, [reduxSelectedActivity, count])
 
@@ -115,7 +142,7 @@ console.log('inputs: ', inputs)
     })
   }
 
-  console.log("inputs: ", inputs)
+  // console.log("inputs: ", inputs)
 
   useEffect(() => {
     setInputs((prevInputs) => {
@@ -135,15 +162,15 @@ console.log('inputs: ', inputs)
     })
   }, [])
 
-  console.log("inputs: ", inputs)
+  // console.log("inputs: ", inputs)
   useEffect(() => {
-    console.log('inputs: ', inputs)
-    const hasInput = Object.keys(inputs).length === 0
-    console.log('hasInput: ', hasInput)
-    !hasInput && dispatch(updateSelectedActivities(inputs))
+    // console.log('inputs: ', inputs)
+    const hasNoInput = Object.keys(inputs).length === 0
+    // console.log('hasNoInput: ', hasNoInput)
+    !hasNoInput && dispatch(updateSelectedActivities(inputs))
   }, [inputs, tab])
 
-  const postType = useSelector((state) => state.post.postType)
+  const postType = useSelector((state) => state.post.postType) // Preious or Next Button
   const [prevButton, setPrevButton] = useState("deal_type")
   useEffect(() => {
     postType === "opportunity"
@@ -727,13 +754,9 @@ console.log('inputs: ', inputs)
                             boxSize={5}
                             color={"blue.400"}
                             cursor={"pointer"}
-                            onClick={() => {
+                            onClick={() =>
                               dispatch(addOrRemoveActivities(activity))
-                              console.log(
-                                `activity.activityDate${activity.id}:`,
-                                activity.activityDate
-                              )
-                            }}
+                            }
                           />
                           <motion.div
                             initial={{ rotate: 0 }}
@@ -935,10 +958,10 @@ console.log('inputs: ', inputs)
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
-              colorScheme="twitter"
+              colorScheme={activitiesTabReady ? "twitter" : 'gray'}
               onClick={() => dispatch(setActiveStep("details"))}
             >
-              Next Step
+              {activitiesTabReady ? "Next Step" : "Skip step for now"}
             </Button>
           </Flex>
         </GridItem>

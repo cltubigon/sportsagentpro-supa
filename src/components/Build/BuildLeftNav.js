@@ -7,12 +7,13 @@ import { Link } from "react-router-dom"
 
 const BuildLeftNav = () => {
     const dispatch = useDispatch()
-    const activeStep = useSelector(state => state.post.activeStep)
+    // const activeStep = useSelector(state => state.post.activeStep)
     const statePost = useSelector(state => state.post)
-    const reduxSelectedActivity = useSelector(state => state.post.selectedActivities)
+    const { selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount } = statePost
+    // const selectedActivities = useSelector(state => state.post.selectedActivities)
     
-    const countActivities = reduxSelectedActivity.length
-    const countRecipients = useSelector(state => state.post.selectedRecipientsCount)
+    const countActivities = selectedActivities.length
+    // const selectedRecipientsCount = useSelector(state => state.post.selectedRecipientsCount)
 
     const stepTwoCompleted = statePost.recipients && statePost.recipients.some(recipient => recipient.isChecked)
     
@@ -99,18 +100,18 @@ const BuildLeftNav = () => {
                     {activeStep === 'recipients' ? <Icon as={CheckIcon} boxSize={3} /> : (stepTwoCompleted ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>2</Text>)}
                 </Flex>
                 <Box>
-                    <Text sx={activeStep === 'recipients' ? selectedMenuTitleStyle : menuTitleStyle}>Recipients {countRecipients > 0 && `(${countRecipients})`}</Text>
+                    <Text sx={activeStep === 'recipients' ? selectedMenuTitleStyle : menuTitleStyle}>Recipients {selectedRecipientsCount > 0 && `(${selectedRecipientsCount})`}</Text>
                     <Text sx={activeStep === 'recipients' ? selectedMenuDescStyle : menuDescStyle}>{stepTwoCompleted ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>}
 
             <Flex sx={menuContainer} gap={5} onClick={()=> dispatch(setActiveStep('activities'))}>
-                <Flex sx={activeStep === 'activities' ? selectedcircleContainerStyle : (statePost.activities ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: '46px', width: '3px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
-                    {activeStep === 'activities' ? <Icon as={CheckIcon} boxSize={3} /> : (statePost.activities ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '3' : '2'}</Text>)}
+                <Flex sx={activeStep === 'activities' ? selectedcircleContainerStyle : (activitiesTabReady ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: '46px', width: '3px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
+                    {activeStep === 'activities' ? <Icon as={CheckIcon} boxSize={3} /> : (activitiesTabReady ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '3' : '2'}</Text>)}
                 </Flex>
                 <Box>
                     <Text sx={activeStep === 'activities' ? selectedMenuTitleStyle : menuTitleStyle}>Activities {countActivities > 0 && `(${countActivities})`}</Text>
-                    <Text sx={activeStep === 'activities' ? selectedMenuDescStyle : menuDescStyle}>{statePost.activities ? 'Completed' : 'Incomplete'}</Text>
+                    <Text sx={activeStep === 'activities' ? selectedMenuDescStyle : menuDescStyle}>{activitiesTabReady ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>
 
