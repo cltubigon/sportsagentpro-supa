@@ -9,8 +9,8 @@ const initState = {
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
-        case "UPDATE_AMOUNT_OF_SELECTED_ACTIVITIES":
-            console.log('UPDATE_AMOUNT_OF_SELECTED_ACTIVITIES', action.payload)
+        case "UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES":
+            console.log('UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', action.payload)
 
             return {
               ...state,

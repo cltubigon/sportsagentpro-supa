@@ -16,16 +16,22 @@ import { MdOutlineCoPresent } from 'react-icons/md'
 import { AiOutlineEye } from 'react-icons/ai'
 import { GrFormClose } from "react-icons/gr"
 import { useForm } from "react-hook-form"
+import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
 
 const ActivitiesNav1 = () => {
     const dispatch = useDispatch()
     const reduxState = useSelector(state => state.post)
     const reduxSelectedActivity = useSelector(state => state.post.selectedActivities)
     console.log('reduxState: ', reduxState)
+
+    reduxSelectedActivity.map(activity => console.log(`activity.activityDate${activity.id}:`,typeof(activity.activityDate), activity.activityDate))
+    console.log('2023-05-25T03:17')
     
     const [count, setCount] = useState(null)
     const [tab, setTab] = useState(true)
     const [inputs, setInputs] = useState({})
+    const [myDates, setMyDates] = useState({})
+    console.log('myDates: ', myDates)
     
     useEffect(()=> {
       if (reduxSelectedActivity.length !== count) {
@@ -33,28 +39,38 @@ const ActivitiesNav1 = () => {
       }
 
       const selectedActivityIds = reduxSelectedActivity.map(activity => activity.id)
-      const notSelectedKeys = Object.keys(inputs).filter(keys => !selectedActivityIds.some(id => keys === `activityAmount${id}`))
-      notSelectedKeys.forEach(key => {        // remove amount of unselected activity
+      const notSelectedKeys = Object.keys(inputs).filter(keys => !selectedActivityIds.some(id => keys === `activityAmount${id}` || keys === `activityDate${id}`))
+      notSelectedKeys.forEach(key => {        // remove amount value of unselected activity
         if (inputs.hasOwnProperty(key)) inputs[key] = "0"
       })
     }, [reduxSelectedActivity, count])
-
+    
     const handleOnChange = (e) => {
       setInputs({
         ...inputs,
         [e.target.name]: e.target.value
       })
     }
+    
+    console.log('inputs: ', inputs)
 
-    useEffect(()=> {
-      setInputs(reduxSelectedActivity.reduce((result, activity) => {
-        if (activity.activityAmount) {
-          const propertyName = `activityAmount${activity.id}`;
-          result[propertyName] = activity.activityAmount;
-        }
-        return result;
-      }, { ...inputs }))
-    },[])
+    useEffect(() => {
+      setInputs((prevInputs) => {
+        const updatedInputs = { ...prevInputs }
+        
+        reduxSelectedActivity.forEach((activity) => {
+          if (activity.activityAmount) {
+            const amountPropertyName = `activityAmount${activity.id}`
+            updatedInputs[amountPropertyName] = activity.activityAmount
+          }
+          if (activity.activityDate) {
+            const datePropertyName = `activityDate${activity.id}`
+            updatedInputs[datePropertyName] = activity.activityDate
+          }
+        })
+        return updatedInputs;
+      })
+    }, [])
 
     console.log('inputs: ', inputs)
     useEffect(()=> {
@@ -101,7 +117,7 @@ const ActivitiesNav1 = () => {
     const activities = {
       onlineOptionalCategory: [
         {
-          id: 17,
+          id: 1,
           activityTitle: 'Twitter Post',
           activityDescription: 'One tweet with text or media',
           color: '#1CA1F2',
@@ -110,7 +126,7 @@ const ActivitiesNav1 = () => {
           value: 'twitterPost',
         },
         {
-          id: 18,
+          id: 2,
           activityTitle: 'Twitter Video Monetization',
           activityDescription: "Videos added to Twitter's video monetization program",
           color: '#1CA1F2',
@@ -119,7 +135,7 @@ const ActivitiesNav1 = () => {
         value: 'twitterVideoMonetization',
       },
       {
-        id: 19,
+        id: 3,
         activityTitle: 'Facebook Post',
         activityDescription: 'One page post with text or media',
         color: '#1877F2',
@@ -128,7 +144,7 @@ const ActivitiesNav1 = () => {
         value: 'facebookPost',
       },
       {
-        id: 20,
+        id: 4,
         activityTitle: 'LinkedIn Post',
         activityDescription: 'One timeline post with text or media',
         color: '#0077B7',
@@ -139,16 +155,7 @@ const ActivitiesNav1 = () => {
     ],
     onlineCategory: [
       {
-        id: 1,
-        activityTitle: 'Twitter Video Monetization',
-        activityDescription: "Videos added to Twitter's video monetization program",
-        color: '#1CA1F2',
-        icon: BsTwitter,
-        isChecked: false,
-        value: 'twitterVideoMonetization',
-      },
-      {
-        id: 2,
+        id: 5,
         activityTitle: 'Instagram Post',
         activityDescription: 'One photo, video, or carousel post shared to profile',
         color: '#E4405F',
@@ -157,7 +164,7 @@ const ActivitiesNav1 = () => {
         value: 'instagramPost',
       },
       {
-        id: 3,
+        id: 6,
         activityTitle: 'Instagram Story',
         activityDescription: 'One story that stays live for 24 hours. Specify # of frames',
         color: '#E4405F',
@@ -166,7 +173,7 @@ const ActivitiesNav1 = () => {
         value: 'instagramStory',
       },
       {
-        id: 4,
+        id: 7,
         activityTitle: 'Instagram Reels',
         activityDescription: 'One original video shared as a Reel',
         color: '#E4405F',
@@ -175,7 +182,7 @@ const ActivitiesNav1 = () => {
         value: 'instagramReels',
       },
       {
-        id: 5,
+        id: 8,
         activityTitle: 'Facebook Story',
         activityDescription: 'One story that stays live for 24 hours on public FB page',
         color: '#1877F2',
@@ -184,7 +191,7 @@ const ActivitiesNav1 = () => {
         value: 'facebookStory',
       },
       {
-        id: 6,
+        id: 9,
         activityTitle: 'Facebook Live',
         activityDescription: 'One live Facebook broadcast at a dedicated time',
         color: '#1877F2',
@@ -193,7 +200,7 @@ const ActivitiesNav1 = () => {
         value: 'facebookLive',
       },
       {
-        id: 7,
+        id: 10,
         activityTitle: 'YouTube Post',
         activityDescription: "One video uploaded to a user's channel",
         color: '#FF0300',
@@ -202,7 +209,7 @@ const ActivitiesNav1 = () => {
         value: 'youtubePost',
       },
       {
-        id: 8,
+        id: 11,
         activityTitle: 'TikTok Post',
         activityDescription: "One original video posted to a user's profile",
         color: 'gray.700',
@@ -211,7 +218,7 @@ const ActivitiesNav1 = () => {
         value: 'tiktokPost',
       },
       {
-        id: 9,
+        id: 12,
         activityTitle: 'Snapchat Story',
         activityDescription: 'One Snapchat story',
         color: '#FFFC00',
@@ -220,7 +227,7 @@ const ActivitiesNav1 = () => {
         value: 'snapchatStory',
       },
       {
-        id: 10,
+        id: 13,
         activityTitle: 'Snapchat Spotlight',
         activityDescription: 'One Snapchat spotlight',
         color: '#FFFC00',
@@ -229,7 +236,7 @@ const ActivitiesNav1 = () => {
         value: 'snapchatSpotlight',
       },
       {
-        id: 11,
+        id: 14,
         activityTitle: 'Group Licensing',
         activityDescription: 'One Snapchat spotlight',
         color: 'gray.700',
@@ -238,7 +245,7 @@ const ActivitiesNav1 = () => {
         value: 'groupLicensing',
       },
       {
-        id: 12,
+        id: 15,
         activityTitle: 'Podcast Appearance',
         activityDescription: 'One video or audio podcast appearance',
         color: 'gray.700',
@@ -247,7 +254,7 @@ const ActivitiesNav1 = () => {
         value: 'podcastAppearance',
       },
       {
-        id: 13,
+        id: 16,
         activityTitle: 'Digital Press Interview',
         activityDescription: 'One online video or audio interview',
         color: 'gray.700',
@@ -256,7 +263,7 @@ const ActivitiesNav1 = () => {
         value: 'digitalPressInterview',
       },
       {
-        id: 14,
+        id: 17,
         activityTitle: 'Photo / Video / Audio Creation',
         activityDescription: 'One piece of custom photo, video, or audio content',
         color: 'gray.700',
@@ -265,7 +272,7 @@ const ActivitiesNav1 = () => {
         value: 'photoVideoAudioCreation',
       },
       {
-        id: 15,
+        id: 18,
         activityTitle: 'Video Shoutout',
         activityDescription: 'One video sent to the buyer',
         color: 'gray.700',
@@ -274,7 +281,7 @@ const ActivitiesNav1 = () => {
         value: 'videoShoutout',
       },
       {
-        id: 16,
+        id: 19,
         activityTitle: 'Other',
         activityDescription: 'Pitch any unique offer',
         color: 'gray.700',
@@ -285,7 +292,7 @@ const ActivitiesNav1 = () => {
     ],
     offlineCategory: [
       {
-        id: 21,
+        id: 20,
         activityTitle: 'Appearance / Meet-and-Greet',
         activityDescription: 'One in-person appearance at an event',
         color: 'gray.700',
@@ -294,7 +301,7 @@ const ActivitiesNav1 = () => {
         value: 'appearanceMeetAndGreet',
       },
       {
-        id: 22,
+        id: 21,
         activityTitle: 'Autograph Signing',
         activityDescription: 'One autograph signing session',
         color: 'gray.700',
@@ -303,7 +310,7 @@ const ActivitiesNav1 = () => {
         value: 'autographSigning',
       },
       {
-        id: 23,
+        id: 22,
         activityTitle: 'Keynote Speech',
         activityDescription: 'One speaking engagement at an event',
         color: 'gray.700',
@@ -312,7 +319,7 @@ const ActivitiesNav1 = () => {
         value: 'keynoteSpeech',
       },
       {
-        id: 24,
+        id: 23,
         activityTitle: 'Sport Demonstration',
         activityDescription: 'One in-person activity demo, lesson, or clinic',
         color: 'gray.700',
@@ -321,7 +328,7 @@ const ActivitiesNav1 = () => {
         value: 'sportDemonstration',
       },
       {
-        id: 25,
+        id: 24,
         activityTitle: 'Production Shoot (Photo / Video)',
         activityDescription: 'One in-person photo or video shoot',
         color: 'gray.700',
@@ -330,7 +337,7 @@ const ActivitiesNav1 = () => {
         value: 'productionShoot',
       },
       {
-        id: 26,
+        id: 25,
         activityTitle: 'Product Testing & Feedback',
         activityDescription: 'One product testing or feedback session',
         color: 'gray.700',
@@ -339,7 +346,7 @@ const ActivitiesNav1 = () => {
         value: 'productTestingAndFeedback',
       },
       {
-        id: 27,
+        id: 26,
         activityTitle: 'In-person Interview',
         activityDescription: 'One in-person interview appearance',
         color: 'gray.700',
@@ -348,7 +355,7 @@ const ActivitiesNav1 = () => {
         value: 'inPersonInterview',
       },
       {
-        id: 28,
+        id: 27,
         activityTitle: 'Group Marketing',
         activityDescription: "Multiple athlete's NIL used for a group marketing activation",
         color: 'gray.700',
@@ -357,7 +364,7 @@ const ActivitiesNav1 = () => {
         value: 'groupMarketing',
       },
       {
-        id: 29,
+        id: 28,
         activityTitle: 'Licensing',
         activityDescription: "Paying for rights to use athlete's NIL",
         color: 'gray.700',
@@ -468,14 +475,26 @@ const ActivitiesNav1 = () => {
                   <Flex key={activity.id} flexDirection={'column'} borderColor={'gray.300'} borderWidth={'1px'} borderStyle={'solid'} borderRadius={'6px'} >
                     <Flex flexGrow={1} justifyContent={'space-between'} p={2} borderBottom={'1px solid #EBEFF2'}>
                       <Flex alignItems={'flex-start'} gap={2}>
-                        <Icon as={activity.activityAmount > 0 ? BsCheckCircleFill : BsExclamationCircleFill} color={activity.activityAmount > 0 ? 'green.500' : 'gray.500'} mt={'8px'} boxSize={4} />
+                        <Icon 
+                          as={(activity.activityAmount > 0 && activity.activityDate !== "0" && (activity.activityDate || activity.activityDate !== undefined)) ? BsCheckCircleFill : BsExclamationCircleFill}
+
+                          color={(activity.activityAmount > 0 && activity.activityDate !== "0" && (activity.activityDate || activity.activityDate !== undefined)) ? 'green.500' : 'gray.500'} mt={'8px'} boxSize={4}
+                        />
                         <Box>
-                          <Text fontSize={'xl'} fontWeight={'semibold'}>{activity.activityTitle}</Text>
-                          {activity.activityAmount > 0 && <Text fontSize={'sm'} color={"green.700"}>{`$${parseInt(activity.activityAmount).toLocaleString()}.00`}</Text>}
+                          <Text fontSize={'xl'} fontWeight={'semibold'}>
+                            {activity.activityTitle}
+                          </Text>
+                          {activity.activityAmount > 0 && 
+                          <Text fontSize={'sm'} color={"green.700"}>
+                            {`$${parseInt(activity.activityAmount).toLocaleString()}.00`}
+                          </Text>}
                         </Box>
                       </Flex>
                       <Flex alignItems={'center'}>
-                        <Icon as={BiTrash} boxSize={5} color={'blue.400'} cursor={'pointer'} onClick={()=> dispatch(addOrRemoveActivities(activity))} />
+                        <Icon as={BiTrash} boxSize={5} color={'blue.400'} cursor={'pointer'} onClick={()=> {
+                          dispatch(addOrRemoveActivities(activity))
+                          console.log(`activity.activityDate${activity.id}:`, activity.activityDate)
+                        }} />
                       </Flex>
                     </Flex>
                     
@@ -495,6 +514,10 @@ const ActivitiesNav1 = () => {
                       </InputGroup>
                     </Flex>
 
+
+
+
+
                     <Flex flexGrow={1} flexDirection={'column'} justifyContent={'space-between'} p={2} borderBottom={'1px solid #EBEFF2'}>
                       <Text color={'gray.400'} fontWeight={'semibold'} >Due date</Text>
                       <Flex>
@@ -503,12 +526,18 @@ const ActivitiesNav1 = () => {
                       </Flex>
                       <Text fontSize={'xs'}>Date and time activity is to be completed by</Text>
                       <InputGroup>
-                        <Input maxW={'300px'} sx={inputBorder} my={2} placeholder="Select Date and Time" size="md" type="datetime-local" />
+                        <Input maxW={'300px'} value={activity.activityDate} sx={inputBorder} my={2} placeholder="Select Date and Time" size="md" type="datetime-local" 
+                         min={getTimeToUTCFromLocal()} name={`activityDate${activity.id}`} onChange={handleOnChange} />
                       </InputGroup>
                     </Flex>
                     
-                    <Flex px={2} onClick={()=> dispatch(addOrRemoveActivities(activity))} alignItems={'center'} gap={1} pb={2} cursor={'pointer'} color={'blue.400'}><Icon as={BiTrash} boxSize={4} cursor={'pointer'} />
-                      <Text>Remove activity</Text>
+
+
+
+
+                    <Flex px={2} alignItems={'center'} gap={1} pb={2} color={'blue.400'}>
+                      <Icon as={BiTrash} boxSize={4} onClick={()=> dispatch(addOrRemoveActivities(activity))} cursor={'pointer'} />
+                      <Text onClick={()=> dispatch(addOrRemoveActivities(activity))} cursor={'pointer'} >Remove activity</Text>
                     </Flex>
                     
                   </Flex>

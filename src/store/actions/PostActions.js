@@ -69,7 +69,7 @@ export const addOrRemoveActivities = (activity) => {
     const selectedActivities = state.post.selectedActivities
     
     if (!selectedActivities.some(data=> data.id === activity.id)) {  // Add activity
-      const filteredActivity = { ...activity, isChecked: true, activityAmount: '' }
+      const filteredActivity = { ...activity, isChecked: true, activityAmount: '', activityDate: '' }
       console.log('filteredActivity yes: ', filteredActivity)
       const payload = [...selectedActivities, filteredActivity]
       dispatch({ type: 'ADD_OR_REMOVE_ACTIVITIES', payload})
@@ -83,6 +83,7 @@ export const addOrRemoveActivities = (activity) => {
 }
 
 export const updateSelectedActivities = (data) => {
+  console.log('data: ', data)
   return (dispatch, getState)=> {
     const state = getState()
     const selectedActivities = state.post.selectedActivities
@@ -90,10 +91,11 @@ export const updateSelectedActivities = (data) => {
 
     const payload = selectedActivities.map((activity)=> {
       const amount = data[`activityAmount${activity.id}`]
-      return {...activity, activityAmount: amount}
+      const date = data[`activityDate${activity.id}`]
+      return {...activity, activityAmount: amount, activityDate: date}
     })
 
-    dispatch({ type: 'UPDATE_AMOUNT_OF_SELECTED_ACTIVITIES', payload})
+    dispatch({ type: 'UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', payload})
   }
 }
 

@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react'
 
 export const AlertError = (message) => {
+                                                            //TODO: Check if this component is being used
   return (
     <Alert status='error' variant='left-accent'>
     <AlertIcon />
