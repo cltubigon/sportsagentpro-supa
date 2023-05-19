@@ -104,3 +104,9 @@ export const searchAthlete = (payload) => {
     dispatch({ type: 'SEARCH_ATHLETE', payload })
   }
 }
+
+export const setActivityTabStatus = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_ACTIVITY_TAB_STATUS', payload })
+  }
+}

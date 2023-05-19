@@ -2,13 +2,21 @@ const initState = {
     recipients: null,
     selectedRecipientsCount: 0,
     postType: null,
-    activeStep: 'recipients',
+    activeStep: 'deal_type',
     searchRecipient: '',
     selectedActivities: [],
+    activitiesTabReady: false,
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+        case "SET_ACTIVITY_TAB_STATUS":
+            console.log('SET_ACTIVITY_TAB_STATUS', action.payload)
+
+            return {
+              ...state,
+              activitiesTabReady: action.payload,
+            }
         case "UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES":
             console.log('UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', action.payload)
 
