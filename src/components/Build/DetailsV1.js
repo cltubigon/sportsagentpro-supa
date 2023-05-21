@@ -5,20 +5,18 @@ import {
   Button,
   Flex,
   Icon,
-  InputGroup,
   Text,
-  InputLeftElement,
   Input,
   Box,
-  Textarea,
 } from "@chakra-ui/react"
 import { useDispatch } from "react-redux"
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs"
+import { BsChevronLeft, BsChevronRight, BsPlus } from "react-icons/bs"
 import { TfiClose, TfiMenuAlt } from "react-icons/tfi"
-import { RxDashboard } from "react-icons/rx"
 import { setActiveStep } from "../../store/actions/PostActions"
 import { useForm } from "react-hook-form"
-import { Form } from "react-router-dom"
+import { useState } from "react"
+import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
+import RichEditorExample from "../../utils/RichEditor/RichEditor"
 
 const DetailsV1 = () => {
   const dispatch = useDispatch()
@@ -29,7 +27,13 @@ const DetailsV1 = () => {
     console.log("data: ", data)
   }
 
-  const inputStyles = {
+  const [toggleDate, setToggleDate] = useState(false)
+  const handleToggleClick = () => {
+    setToggleDate(() => !toggleDate)
+  }
+
+  // CSS styles --------------
+  const borderColorWidthStyle = {
     borderColor: "gray.500",
     borderWidth: "1px",
     borderStyle: "solid",
@@ -41,13 +45,19 @@ const DetailsV1 = () => {
   const inputLabels = {
     fontWeight: "semibold",
   }
+  const borderRadius = "6px"
+  const height = "200px"
+
+  const reactHookRegister = {
+    ...register("postDescription", { required: true }),
+  }
   return (
     <>
       <Grid
         templateAreas={`"header"
                             "main"
                             "footer"`}
-        gridTemplateRows={"2fr 9fr auto"}
+        gridTemplateRows={"auto 9fr auto"}
         gridTemplateColumns={"1fr"}
         h="100vh"
       >
@@ -76,14 +86,14 @@ const DetailsV1 = () => {
 
         {/* -------------------------------------- Content section -------------------------------------- */}
         <GridItem
-          pl={"80px"}
-          pr={"65px"}
+          px={"80px"}
+          py={2}
           area={"main"}
           overflowY={"auto"}
           position={"relative"}
         >
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Box>
+            <Box mb={4}>
               <Flex>
                 <Text color={"red"}>*</Text>
                 <Text sx={inputLabels}>Offer name</Text>
@@ -92,29 +102,66 @@ const DetailsV1 = () => {
                 Choose something clear and concise, but make it memorable!
               </Text>
               <Input
-                sx={inputStyles}
+                sx={borderColorWidthStyle}
                 id="offer"
                 placeholder="Enter offer name"
-                {...register("offer")}
+                {...register("postTitle")}
               />
             </Box>
 
-            <Box>
+            <Box mb={4}>
               <Flex>
                 <Text color={"red"}>*</Text>
                 <Text sx={inputLabels}>Brief</Text>
               </Flex>
-              <Text sx={inputLabelDescriptions}>
+              <Text sx={inputLabelDescriptions} mb={3}>
                 Provide a brief background of your business, the purpose of your
                 campaign, and clear step-by-step instructions for how to
                 complete each activity in the deal.
               </Text>
-              <Textarea
-                sx={inputStyles}
-                id="brief"
-                placeholder="Create your deal brief here using the instructions above"
-                {...register("brief")}
+              <RichEditorExample
+                borderColorWidthStyle={borderColorWidthStyle}
+                borderRadius={borderRadius}
+                height={height}
               />
+            </Box>
+            <Box mb={4}>
+              <Flex gap={1}>
+                <Text sx={inputLabels}>Expiration date</Text>
+                <Text color={"gray.500"} fontStyle={"italic"}>
+                  (Optional)
+                </Text>
+              </Flex>
+              <Text sx={inputLabelDescriptions}>
+                After this date, the recipient will no longer be able to review
+                or accept your deal.
+              </Text>
+              <Flex alignItems={"center"}>
+                {!toggleDate ? (
+                  <Button
+                    mt={2}
+                    w={"300px"}
+                    leftIcon={<BsPlus fontSize={"24px"} />}
+                    borderColor={"blue.600"}
+                    borderStyle={"solid"}
+                    borderWidth={"1px"}
+                    colorScheme="gray"
+                    color={"blue.600"}
+                    onClick={handleToggleClick}
+                  >
+                    Add deal expiration date
+                  </Button>
+                ) : (
+                  <Input
+                    maxW={"300px"}
+                    sx={borderColorWidthStyle}
+                    placeholder="Select Date and Time"
+                    size="md"
+                    type="datetime-local"
+                    min={getTimeToUTCFromLocal()}
+                  />
+                )}
+              </Flex>
             </Box>
           </form>
         </GridItem>
