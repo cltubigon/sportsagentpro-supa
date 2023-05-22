@@ -6,10 +6,42 @@ const initState = {
     searchRecipient: '',
     selectedActivities: [],
     activitiesTabReady: false,
+    postContent: null,
+    postTitle: null,
+    postExpirationDate: null,
+    detailsTabReady: false,
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_DETAILS_TAB_STATUS":
+          console.log('SET_DETAILS_TAB_STATUS', action.payload)
+
+          return {
+            ...state,
+            detailsTabReady: action.payload,
+          }
+        case "SET_POST_EXPIRATION_DATE":
+            console.log('SET_POST_EXPIRATION_DATE', action.payload)
+
+            return {
+              ...state,
+              postExpirationDate: action.payload,
+            }
+        case "SET_POST_TITLE":
+            console.log('SET_POST_TITLE', action.payload)
+
+            return {
+              ...state,
+              postTitle: action.payload,
+            }
+        case "SET_CONTENT":
+            console.log('SET_CONTENT', action.payload)
+
+            return {
+              ...state,
+              postContent: action.payload,
+            }
         case "SET_ACTIVITY_TAB_STATUS":
             console.log('SET_ACTIVITY_TAB_STATUS', action.payload)
 

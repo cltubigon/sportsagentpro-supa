@@ -108,8 +108,34 @@ export const searchAthlete = (payload) => {
   }
 }
 
+export const setContent = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_CONTENT', payload })
+  }
+}
+
+export const setPostTitle = (payload) => {
+  console.log('SET_POST_TITLE action: ', payload)
+  return (dispatch) => {
+    dispatch({ type: 'SET_POST_TITLE', payload })
+  }
+}
+
+export const setPostExpirationDate = (payload) => {
+  console.log('SET_POST_EXPIRATION_DATE action: ', payload)
+  return (dispatch) => {
+    dispatch({ type: 'SET_POST_EXPIRATION_DATE', payload })
+  }
+}
+
 export const setActivityTabStatus = (payload) => {
   return (dispatch) => {
     dispatch({ type: 'SET_ACTIVITY_TAB_STATUS', payload })
+  }
+}
+
+export const setDetailsTabStatus = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_DETAILS_TAB_STATUS', payload })
   }
 }

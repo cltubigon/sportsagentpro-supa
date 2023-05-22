@@ -1,6 +1,6 @@
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js"
+import { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw, getDefaultKeyBinding } from "draft-js"
 import React, { useState, useRef } from "react"
-import { Box, Flex, IconButton } from "@chakra-ui/react"
+import { Box, Flex, IconButton, Text } from "@chakra-ui/react"
 import "./richEditor.css"
 import "../../../node_modules/draft-js/dist/Draft.css"
 import {
@@ -12,10 +12,19 @@ import {
   BsTypeStrikethrough,
   BsTypeUnderline,
 } from "react-icons/bs"
+import { useDispatch } from "react-redux"
+import { setContent } from "../../store/actions/PostActions"
+import { useEffect } from "react"
 
-const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height }) => {
+const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height, setRawDataString, rawDataParsed, setAvailableCharacters }) => {
+    const dispatch = useDispatch()
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editorRef = useRef(null)
+
+  const characterLimit = 2000
+  const characterCount = editorState.getCurrentContent().getPlainText('').length
+  const remainingCharacters = characterLimit - characterCount
+  // setAvailableCharacters(remainingCharacters)
 
   const focusEditor = () => {
     editorRef.current.focus()
@@ -64,7 +73,7 @@ const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height }) => {
   const styleMap = {
     CODE: {
       backgroundColor: "rgba(0, 0, 0, 0.05)",
-      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+      // fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
       fontSize: 16,
       padding: 2,
     },
@@ -112,6 +121,21 @@ const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height }) => {
       />
     )
   }
+
+  // ------------ RICH TEXT SAVE ------------
+  useEffect(()=> {
+      const rawData = convertToRaw(editorState.getCurrentContent())
+      setRawDataString(JSON.stringify(rawData))
+      setAvailableCharacters(remainingCharacters)
+  }, [editorState])
+
+  // ------------ RICH TEXT GET ------------
+  useEffect(()=> {
+    if (rawDataParsed) {
+        const theContentState = convertFromRaw(rawDataParsed)
+        setEditorState(EditorState.createWithContent(theContentState))
+    }
+  }, [rawDataParsed])
 
   return (
     <Box
@@ -162,6 +186,7 @@ const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height }) => {
           icon={<BsListOl />}
           onToggle={toggleBlockType}
         />
+        <Text ml={'auto'} alignSelf={'flex-end'} color={remainingCharacters < 0 ? 'red' : 'gray.400'} >{remainingCharacters}</Text>
       </Flex>
       <Box
         className={className}
@@ -178,7 +203,7 @@ const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height }) => {
           handleKeyCommand={handleKeyCommand}
           keyBindingFn={mapKeyToEditorCommand}
           onChange={onChangeEditorState}
-          placeholder="Create your deal brief here using the instructions above"
+          placeholder={"Create your deal brief here using the instructions above"}
           ref={editorRef}
           spellCheck={true}
         />

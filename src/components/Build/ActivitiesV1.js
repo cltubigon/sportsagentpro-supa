@@ -62,8 +62,9 @@ const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
   const reduxPostState = useSelector((state) => state.post)
 
-  const { activitiesTabReady, selectedActivities } = reduxPostState
+  const { activitiesTabReady, selectedActivities, postContent } = reduxPostState
   const reduxSelectedActivity = selectedActivities
+  console.log('postContent: ', postContent)
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)

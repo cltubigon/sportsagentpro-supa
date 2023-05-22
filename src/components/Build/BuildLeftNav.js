@@ -9,8 +9,7 @@ const BuildLeftNav = () => {
     const dispatch = useDispatch()
     // const activeStep = useSelector(state => state.post.activeStep)
     const statePost = useSelector(state => state.post)
-    const { selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount } = statePost
-    // const selectedActivities = useSelector(state => state.post.selectedActivities)
+    const { selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount, detailsTabReady } = statePost
     
     const countActivities = selectedActivities.length
     // const selectedRecipientsCount = useSelector(state => state.post.selectedRecipientsCount)
@@ -116,12 +115,12 @@ const BuildLeftNav = () => {
             </Flex>
 
             <Flex sx={menuContainer} gap={5} onClick={()=> dispatch(setActiveStep('details'))}>
-                <Flex sx={activeStep === 'details' ? selectedcircleContainerStyle : (statePost.details ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: '46px', width: '3px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
-                    {activeStep === 'details' ? <Icon as={CheckIcon} boxSize={3} /> : (statePost.details ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '4' : '3'}</Text>)}
+                <Flex sx={activeStep === 'details' ? selectedcircleContainerStyle : (detailsTabReady ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: '46px', width: '3px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
+                    {activeStep === 'details' ? <Icon as={CheckIcon} boxSize={3} /> : (detailsTabReady ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '4' : '3'}</Text>)}
                 </Flex>
                 <Box>
                     <Text sx={activeStep === 'details' ? selectedMenuTitleStyle : menuTitleStyle}>Details</Text>
-                    <Text sx={activeStep === 'details' ? selectedMenuDescStyle : menuDescStyle}>{statePost.details ? 'Completed' : 'Incomplete'}</Text>
+                    <Text sx={activeStep === 'details' ? selectedMenuDescStyle : menuDescStyle}>{detailsTabReady ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>
 

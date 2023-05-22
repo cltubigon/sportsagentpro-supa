@@ -9,28 +9,36 @@ import {
   Input,
   Box,
 } from "@chakra-ui/react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { BsChevronLeft, BsChevronRight, BsPlus } from "react-icons/bs"
 import { TfiClose, TfiMenuAlt } from "react-icons/tfi"
-import { setActiveStep } from "../../store/actions/PostActions"
+import { setActiveStep, setContent, setDetailsTabStatus, setPostContentLength, setPostExpirationDate, setPostTitle } from "../../store/actions/PostActions"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
 import RichEditorExample from "../../utils/RichEditor/RichEditor"
+import { useEffect } from "react"
 
 const DetailsV1 = () => {
   const dispatch = useDispatch()
-  const { register, handleSubmit, formState } = useForm()
-  const { errors } = formState
-
-  const onSubmit = (data) => {
-    console.log("data: ", data)
-  }
+  const { register, watch } = useForm()
+  const reduxPosts = useSelector(state => state.post)
+  const { postContent, postTitle, postExpirationDate } = reduxPosts
+  
+  const [availableCharacters, setAvailableCharacters] = useState(2000)
+  const [isCompleted, setIsCompleted] = useState(null)
 
   const [toggleDate, setToggleDate] = useState(false)
+
   const handleToggleClick = () => {
-    setToggleDate(() => !toggleDate)
+    setToggleDate(() => true)
   }
+
+  useEffect(()=> {
+    const watched = watch(['postTitle', 'expirationDate'])
+    if (watched[0] !== undefined) dispatch(setPostTitle(watched[0]))
+    if (watched[1] !== undefined) dispatch(setPostExpirationDate(watched[1]))
+  }, [watch('postTitle'), watch('expirationDate')])
 
   // CSS styles --------------
   const borderColorWidthStyle = {
@@ -51,6 +59,31 @@ const DetailsV1 = () => {
   const reactHookRegister = {
     ...register("postDescription", { required: true }),
   }
+  
+  useEffect(()=> {
+      setIsCompleted(availableCharacters <= 1949 && availableCharacters >= 0 && postTitle && postExpirationDate ? true : false)
+  }, [availableCharacters, reduxPosts])
+  
+  useEffect(()=> {
+    if (availableCharacters !== 2000) {
+      dispatch(setDetailsTabStatus(isCompleted))
+    }
+  }, [isCompleted])
+
+  // ------------ RICH TEXT SAVE ------------
+  const [rawDataString, setRawDataString] = useState(null)
+  useEffect(()=> {
+    availableCharacters >= -1 && dispatch(setContent(rawDataString))
+
+    return
+  }, [rawDataString])
+  // ------------ RICH TEXT GET ------------
+  const [rawDataParsed, setRawDataParsed] = useState(null)
+  useEffect(()=> {
+    if (postContent) {
+      setRawDataParsed(JSON.parse(postContent))
+    }
+  }, [])
   return (
     <>
       <Grid
@@ -92,7 +125,7 @@ const DetailsV1 = () => {
           overflowY={"auto"}
           position={"relative"}
         >
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          
             <Box mb={4}>
               <Flex>
                 <Text color={"red"}>*</Text>
@@ -103,9 +136,10 @@ const DetailsV1 = () => {
               </Text>
               <Input
                 sx={borderColorWidthStyle}
-                id="offer"
+                id="postTitle"
+                value={postTitle || ''}
+                {...register('postTitle')}
                 placeholder="Enter offer name"
-                {...register("postTitle")}
               />
             </Box>
 
@@ -123,6 +157,9 @@ const DetailsV1 = () => {
                 borderColorWidthStyle={borderColorWidthStyle}
                 borderRadius={borderRadius}
                 height={height}
+                setRawDataString={setRawDataString}
+                rawDataParsed={rawDataParsed}
+                setAvailableCharacters={setAvailableCharacters}
               />
             </Box>
             <Box mb={4}>
@@ -137,8 +174,8 @@ const DetailsV1 = () => {
                 or accept your deal.
               </Text>
               <Flex alignItems={"center"}>
-                {!toggleDate ? (
-                  <Button
+                {!toggleDate && !postExpirationDate &&
+                  (<Button
                     mt={2}
                     w={"300px"}
                     leftIcon={<BsPlus fontSize={"24px"} />}
@@ -150,20 +187,21 @@ const DetailsV1 = () => {
                     onClick={handleToggleClick}
                   >
                     Add deal expiration date
-                  </Button>
-                ) : (
-                  <Input
-                    maxW={"300px"}
-                    sx={borderColorWidthStyle}
-                    placeholder="Select Date and Time"
-                    size="md"
-                    type="datetime-local"
-                    min={getTimeToUTCFromLocal()}
-                  />
-                )}
+                  </Button>)}
+                 
+                {(toggleDate || postExpirationDate) && (<Input
+                  maxW={"300px"}
+                  sx={borderColorWidthStyle}
+                  placeholder="Select Date and Time"
+                  size="md"
+                  type="datetime-local"
+                  id="expirationDate"
+                  defaultValue={postExpirationDate && postExpirationDate}
+                  {...register('expirationDate')}
+                  min={getTimeToUTCFromLocal()}
+                />)}
               </Flex>
             </Box>
-          </form>
         </GridItem>
 
         {/* -------------------------------------- Footer Section -------------------------------------- */}
@@ -177,10 +215,10 @@ const DetailsV1 = () => {
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
-              colorScheme="twitter"
+              colorScheme={availableCharacters < 0 ? "gray":"twitter"}
               onClick={() => dispatch(setActiveStep("review"))}
             >
-              Next Step
+              {availableCharacters < 0 ? 'Skip step for now' : 'Next Step'}
             </Button>
           </Flex>
         </GridItem>
