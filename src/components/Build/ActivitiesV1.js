@@ -22,6 +22,8 @@ import {
   addOrRemoveActivities,
   setActivityTabStatus,
 } from "../../store/actions/PostActions"
+import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
+import { motion } from "framer-motion"
 import {
   BsBox,
   BsCamera,
@@ -55,8 +57,6 @@ import {
 } from "react-icons/bi"
 import { MdOutlineCoPresent } from "react-icons/md"
 import { AiOutlineEye } from "react-icons/ai"
-import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
-import { motion } from "framer-motion"
 
 const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
@@ -64,7 +64,7 @@ const ActivitiesNav1 = () => {
 
   const { activitiesTabReady, selectedActivities, postContent } = reduxPostState
   const reduxSelectedActivity = selectedActivities
-  console.log('postContent: ', postContent)
+  console.log("postContent: ", postContent)
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)
@@ -90,9 +90,13 @@ const ActivitiesNav1 = () => {
       allAmountsAreReady &&
       allDatesAreReady &&
       allAmountsAreReady === allDatesAreReady
-    // console.log("activityTabStatus: ", activityTabStatus)
-    dispatch(setActivityTabStatus(activityTabStatus))
+    console.log("allAmountsAreReady: ", allAmountsAreReady)
+    console.log("allDatesAreReady: ", allDatesAreReady)
+    console.log("activityTabStatus: ", activityTabStatus)
+    if (reduxSelectedActivity.length > 0)
+      dispatch(setActivityTabStatus(activityTabStatus))
   }, [reduxSelectedActivity, tab])
+  console.log("reduxSelectedActivity: ", reduxSelectedActivity)
 
   const [activeActivity, setActiveActivity] = useState([])
   const handleActiveActivityClick = (id) => {
@@ -587,27 +591,28 @@ const ActivitiesNav1 = () => {
               </Flex>
               <SimpleGrid minChildWidth="200px" spacing={4}>
                 {activities.onlineOptionalCategory.map((activity) => {
+                  const {id, icon, color, activityTitle, activityDescription} = activity
                   return (
                     <Flex
                       cursor={"pointer"}
-                      key={activity.id}
+                      key={id}
                       sx={itemContainerStyle}
                       onClick={() => dispatch(addOrRemoveActivities(activity))}
-                      bgColor={isSelected(activity.id) && "blue.100"}
+                      bgColor={isSelected(id) && "blue.100"}
                       border={
-                        isSelected(activity.id)
+                        isSelected(id)
                           ? "1px solid #90CDF4"
                           : "1px solid transparent"
                       }
                     >
                       <Icon
-                        as={activity.icon}
-                        color={activity.color}
+                        as={icon}
+                        color={color}
                         sx={itemsIconStyle}
                       />
-                      <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
+                      <Text sx={itemTitleStyle}>{activityTitle}</Text>
                       <Text sx={itemDescStyle}>
-                        {activity.activityDescription}
+                        {activityDescription}
                       </Text>
                     </Flex>
                   )
@@ -624,27 +629,25 @@ const ActivitiesNav1 = () => {
               </Flex>
               <SimpleGrid minChildWidth="200px" spacing={4}>
                 {activities.onlineCategory.map((activity) => {
+                  const {id, icon, color,activityTitle, activityDescription} = activity
                   return (
                     <Flex
                       cursor={"pointer"}
-                      key={activity.id}
+                      key={id}
                       sx={itemContainerStyle}
                       onClick={() => dispatch(addOrRemoveActivities(activity))}
                       bgColor={isSelected(activity.id) && "blue.100"}
                       border={
-                        isSelected(activity.id)
+                        isSelected(id)
                           ? "1px solid #90CDF4"
                           : "1px solid transparent"
                       }
                     >
-                      <Icon
-                        as={activity.icon}
-                        color={activity.color}
-                        sx={itemsIconStyle}
-                      />
-                      <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
+                      <Icon as={icon} color={color}
+                        sx={itemsIconStyle} />
+                      <Text sx={itemTitleStyle}>{activityTitle}</Text>
                       <Text sx={itemDescStyle}>
-                        {activity.activityDescription}
+                        {activityDescription}
                       </Text>
                     </Flex>
                   )
@@ -662,27 +665,28 @@ const ActivitiesNav1 = () => {
               </Flex>
               <SimpleGrid minChildWidth="200px" spacing={4}>
                 {activities.offlineCategory.map((activity) => {
+                  const {id, icon, color, activityTitle, activityDescription} = activity
                   return (
                     <Flex
                       cursor={"pointer"}
-                      key={activity.id}
+                      key={id}
                       sx={itemContainerStyle}
                       onClick={() => dispatch(addOrRemoveActivities(activity))}
-                      bgColor={isSelected(activity.id) && "blue.100"}
+                      bgColor={isSelected(id) && "blue.100"}
                       border={
-                        isSelected(activity.id)
+                        isSelected(id)
                           ? "1px solid #90CDF4"
                           : "1px solid transparent"
                       }
                     >
                       <Icon
-                        as={activity.icon}
-                        color={activity.color}
+                        as={icon}
+                        color={color}
                         sx={itemsIconStyle}
                       />
-                      <Text sx={itemTitleStyle}>{activity.activityTitle}</Text>
+                      <Text sx={itemTitleStyle}>{activityTitle}</Text>
                       <Text sx={itemDescStyle}>
-                        {activity.activityDescription}
+                        {activityDescription}
                       </Text>
                     </Flex>
                   )
@@ -959,7 +963,7 @@ const ActivitiesNav1 = () => {
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
-              colorScheme={activitiesTabReady ? "twitter" : 'gray'}
+              colorScheme={activitiesTabReady ? "twitter" : "gray"}
               onClick={() => dispatch(setActiveStep("details"))}
             >
               {activitiesTabReady ? "Next Step" : "Skip step for now"}
