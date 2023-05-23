@@ -61,7 +61,7 @@ const DetailsV1 = () => {
   }
   
   useEffect(()=> {
-      setIsCompleted(availableCharacters <= 1949 && availableCharacters >= 0 && postTitle && postExpirationDate ? true : false)
+      setIsCompleted(availableCharacters <= 1949 && availableCharacters >= 0 && postTitle ? true : false)
   }, [availableCharacters, reduxPosts])
   
   useEffect(()=> {

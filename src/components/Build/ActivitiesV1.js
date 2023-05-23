@@ -169,7 +169,7 @@ const ActivitiesNav1 = () => {
 
   // console.log("inputs: ", inputs)
   useEffect(() => {
-    // console.log('inputs: ', inputs)
+    console.log('inputs: ', inputs)
     const hasNoInput = Object.keys(inputs).length === 0
     // console.log('hasNoInput: ', hasNoInput)
     !hasNoInput && dispatch(updateSelectedActivities(inputs))

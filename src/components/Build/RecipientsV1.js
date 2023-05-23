@@ -79,7 +79,7 @@ const RecipientsV1 = () => {
         <Flex px={20}>
             <Flex flexGrow={1} gap={8} pt={4} mb={tab ? 10 : 2} borderBottom={"2px solid #EBEFF2"}>
                 <Text onClick={()=> setTab(()=> true)} borderBottom={tab ? '2px solid #000' : 'none'} pb={2} cursor={'pointer'}>Discover</Text>
-                <Text onClick={()=> setTab(()=> false)} color={count < 1 && 'gray.400'} borderBottom={tab ? 'none' : '2px solid #000'} pb={2} cursor={'pointer'}>Selected Receipients {count > 0 && `(${count})`}</Text>
+                <Text onClick={()=> setTab(()=> false)} color={count < 1 && 'gray.400'} borderBottom={tab ? 'none' : '2px solid #000'} pb={2} cursor={'pointer'}>Selected Recipients {count > 0 && `(${count})`}</Text>
             </Flex>
         </Flex>
 
