@@ -139,3 +139,15 @@ export const setDetailsTabStatus = (payload) => {
     dispatch({ type: 'SET_DETAILS_TAB_STATUS', payload })
   }
 }
+
+export const setReviewTabStatus = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_REVIEW_TAB_STATUS', payload })
+  }
+}
+
+export const setPaymentTabStatus = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_PAYMENT_TAB_STATUS', payload })
+  }
+}

@@ -64,7 +64,7 @@ const ActivitiesNav1 = () => {
 
   const { activitiesTabReady, selectedActivities, postContent } = reduxPostState
   const reduxSelectedActivity = selectedActivities
-  console.log("postContent: ", postContent)
+  // console.log("postContent: ", postContent)
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)
@@ -86,17 +86,18 @@ const ActivitiesNav1 = () => {
           activity.activityDate === "" || activity.activityDate === undefined
       )
     // console.log("then activity.activityDates are: ", allDatesAreReady)
-    const activityTabStatus =
+    const activityTabStatus = reduxSelectedActivity.length > 0 &&
       allAmountsAreReady &&
       allDatesAreReady &&
       allAmountsAreReady === allDatesAreReady
-    console.log("allAmountsAreReady: ", allAmountsAreReady)
-    console.log("allDatesAreReady: ", allDatesAreReady)
-    console.log("activityTabStatus: ", activityTabStatus)
-    if (reduxSelectedActivity.length > 0)
+      console.log('activityTabStatus: ', activityTabStatus)
+    // console.log("allAmountsAreReady: ", allAmountsAreReady)
+    // console.log("allDatesAreReady: ", allDatesAreReady)
+    // console.log("activityTabStatus: ", activityTabStatus)
+    // if (reduxSelectedActivity.length > 0)
       dispatch(setActivityTabStatus(activityTabStatus))
   }, [reduxSelectedActivity, tab])
-  console.log("reduxSelectedActivity: ", reduxSelectedActivity)
+  // console.log("reduxSelectedActivity: ", reduxSelectedActivity)
 
   const [activeActivity, setActiveActivity] = useState([])
   const handleActiveActivityClick = (id) => {
@@ -169,7 +170,7 @@ const ActivitiesNav1 = () => {
 
   // console.log("inputs: ", inputs)
   useEffect(() => {
-    console.log('inputs: ', inputs)
+    // console.log('inputs: ', inputs)
     const hasNoInput = Object.keys(inputs).length === 0
     // console.log('hasNoInput: ', hasNoInput)
     !hasNoInput && dispatch(updateSelectedActivities(inputs))

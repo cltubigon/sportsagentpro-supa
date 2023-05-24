@@ -27,8 +27,9 @@ const DetailsV1 = () => {
   
   const [availableCharacters, setAvailableCharacters] = useState(2000)
   const [isCompleted, setIsCompleted] = useState(null)
-
+  const [rawDataParsed, setRawDataParsed] = useState(null)
   const [toggleDate, setToggleDate] = useState(false)
+  const [rawDataString, setRawDataString] = useState(null)
 
   const handleToggleClick = () => {
     setToggleDate(() => true)
@@ -55,34 +56,34 @@ const DetailsV1 = () => {
   }
   const borderRadius = "6px"
   const height = "200px"
-
-  const reactHookRegister = {
-    ...register("postDescription", { required: true }),
-  }
   
   useEffect(()=> {
+    console.log('availableCharacters: ', availableCharacters)
       setIsCompleted(availableCharacters <= 1949 && availableCharacters >= 0 && postTitle ? true : false)
   }, [availableCharacters, reduxPosts])
+  console.log('isCompleted: ', isCompleted)
   
   useEffect(()=> {
     if (availableCharacters !== 2000) {
+      console.log('I am dispatched', isCompleted)
       dispatch(setDetailsTabStatus(isCompleted))
     }
   }, [isCompleted])
 
   // ------------ RICH TEXT SAVE ------------
-  const [rawDataString, setRawDataString] = useState(null)
+  
   useEffect(()=> {
     availableCharacters >= -1 && dispatch(setContent(rawDataString))
 
     return
   }, [rawDataString])
   // ------------ RICH TEXT GET ------------
-  const [rawDataParsed, setRawDataParsed] = useState(null)
+  
   useEffect(()=> {
     if (postContent) {
       setRawDataParsed(JSON.parse(postContent))
     }
+    
   }, [])
   return (
     <>

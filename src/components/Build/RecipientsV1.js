@@ -33,14 +33,14 @@ const RecipientsV1 = () => {
 
     useEffect(()=> {
         if (!localRecipients && localAthletes || localRecipients && localAthletes && localRecipients.length !== localAthletes.length) {
-            console.log('triggered localAthletes: ', localAthletes)
+            // console.log('triggered localAthletes: ', localAthletes)
             dispatch(setInitialFilteredAthletes(localAthletes))
         }
     }, [localAthletes])
     
     useEffect(()=> {
         if ((firestoreAthletes && localAthletes && firestoreAthletes.length !== localAthletes.length) || firestoreAthletes && localAthletes === null) {
-            console.log('triggered firestoreAthletes: ', firestoreAthletes)
+            // console.log('triggered firestoreAthletes: ', firestoreAthletes)
         dispatch(saveAthletesToStorage(firestoreAthletes))
         }
     },[firestoreAthletes])

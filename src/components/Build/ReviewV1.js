@@ -21,7 +21,11 @@ import {
   BsTwitter,
 } from "react-icons/bs"
 import { TfiClose, TfiMenuAlt } from "react-icons/tfi"
-import { setActiveStep, setContent } from "../../store/actions/PostActions"
+import {
+  setActiveStep,
+  setContent,
+  setReviewTabStatus,
+} from "../../store/actions/PostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { useEffect } from "react"
@@ -62,26 +66,33 @@ const ReviewV1 = () => {
     selectedActivities,
     postTitle,
     postExpirationDate,
+    detailsTabReady,
+    activitiesTabReady,
+    selectedRecipientsCount,
   } = reduxPosts
 
   const [viewMore, setViewMore] = useState(false)
-  console.log("postExpirationDate: ", postExpirationDate)
+  const [hasBrief, setHasBrief] = useState(null)
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
-  console.log("recipients: ", recipients)
+  const isoExpDate =
+    postExpirationDate && new Date(postExpirationDate).toISOString()
+  const utcExpDate =
+    postExpirationDate &&
+    new Date(isoExpDate).toUTCString().replace("GMT", "UTC")
 
   const selectedRecipients =
     recipients && recipients.filter((recipient) => recipient.isChecked)
 
-  console.log("selectedActivities: ", selectedActivities)
-
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [hasBrief, setHasBrief] = useState(null)
-  console.log("editorState: ", editorState)
+  useEffect(() => {
+    (selectedRecipientsCount > 0 ||
+      activitiesTabReady ||
+      detailsTabReady) ? dispatch(setReviewTabStatus(true)) : dispatch(setReviewTabStatus(false))
+  }, [selectedRecipientsCount, activitiesTabReady, detailsTabReady])
 
   useEffect(() => {
     if (postContent) {
       const rawDataParsed = postContent && JSON.parse(postContent)
-      console.log("rawDataParsed: ", rawDataParsed)
       const hasBrief = rawDataParsed.blocks[0].text
       setHasBrief(hasBrief)
       const contentState = convertFromRaw(rawDataParsed)
@@ -486,7 +497,7 @@ const ReviewV1 = () => {
               </Box>
             </Box>
 
-            <Box
+            {postType === 'offer' && <Box
               borderColor={"gray.200"}
               borderStyle={"solid"}
               borderWidth={"1px"}
@@ -542,7 +553,7 @@ const ReviewV1 = () => {
                   <NoSelected category={"Recipients"} />
                 )}
               </Box>
-            </Box>
+            </Box>}
 
             <Box
               borderColor={"gray.200"}
@@ -722,13 +733,13 @@ const ReviewV1 = () => {
               <Box py={4}>
                 {/* ------ Content ------ */}
                 {hasBrief || postTitle ? (
-                  <Flex flexDirection={'column'} gap={4}>
+                  <Flex flexDirection={"column"} gap={4}>
                     {postTitle && (
-                        <Box>
-                          <Text fontWeight={"semibold"}>Deal Name</Text>
-                          <Text>{postTitle}</Text>
-                        </Box>
-                      )}
+                      <Box>
+                        <Text fontWeight={"semibold"}>Deal Name</Text>
+                        <Text>{postTitle}</Text>
+                      </Box>
+                    )}
                     <Box
                       maxHeight={!viewMore && "270px"}
                       overflow={"hidden"}
@@ -765,10 +776,10 @@ const ReviewV1 = () => {
                         {!viewMore ? "View more" : "View less"}
                       </Text>
                     </Box>
-                    {postExpirationDate && (
+                    {utcExpDate && (
                       <Box>
                         <Text fontWeight={"semibold"}>Expiration date</Text>
-                        <Text>{postExpirationDate}</Text>
+                        <Text>{utcExpDate}</Text>
                       </Box>
                     )}
                   </Flex>

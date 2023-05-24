@@ -4,17 +4,31 @@ import {BsCircleFill} from 'react-icons/bs'
 import { useDispatch, useSelector } from "react-redux"
 import { setActiveStep } from "../../store/actions/PostActions"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
 
 const BuildLeftNav = () => {
     const dispatch = useDispatch()
     // const activeStep = useSelector(state => state.post.activeStep)
     const statePost = useSelector(state => state.post)
-    const { selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount, detailsTabReady } = statePost
+    const { postType, selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount, detailsTabReady, reviewTabReady, paymentTabReady } = statePost
     
     const countActivities = selectedActivities.length
     // const selectedRecipientsCount = useSelector(state => state.post.selectedRecipientsCount)
 
     const stepTwoCompleted = statePost.recipients && statePost.recipients.some(recipient => recipient.isChecked)
+    
+    const [paymentReady, setPaymentReady] = useState(null)
+    useEffect(()=> {
+        (postType === 'offer' &&
+        selectedRecipientsCount > 0 &&
+        activitiesTabReady &&
+        detailsTabReady ||
+        postType === 'opportunity' &&
+        activitiesTabReady &&
+        detailsTabReady) ?
+        setPaymentReady(true) :
+        setPaymentReady(false)
+    }, [statePost])
     
     const menuTitleStyle = {
         fontSize: 'md',
@@ -126,22 +140,22 @@ const BuildLeftNav = () => {
 
 
             <Flex sx={menuContainer} gap={5} onClick={()=> dispatch(setActiveStep('review'))}>
-                <Flex sx={activeStep === 'review' ? selectedcircleContainerStyle : (statePost.review ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: '46px', width: '3px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
-                    {activeStep === 'review' ? <Icon as={CheckIcon} boxSize={3} /> : (statePost.review ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '5' : '4'}</Text>)}
+                <Flex sx={activeStep === 'review' ? selectedcircleContainerStyle : (reviewTabReady ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: '46px', width: '3px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
+                    {activeStep === 'review' ? <Icon as={CheckIcon} boxSize={3} /> : (reviewTabReady ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '5' : '4'}</Text>)}
                 </Flex>
                 <Box>
                     <Text sx={activeStep === 'review' ? selectedMenuTitleStyle : menuTitleStyle}>Review</Text>
-                    <Text sx={activeStep === 'review' ? selectedMenuDescStyle : menuDescStyle}>{statePost.review ? 'Completed' : 'Incomplete'}</Text>
+                    <Text sx={activeStep === 'review' ? selectedMenuDescStyle : menuDescStyle}>{reviewTabReady ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>
 
             <Flex sx={menuContainer} gap={5} onClick={()=> dispatch(setActiveStep('payment'))}>
-                <Flex sx={activeStep === 'payment' ? selectedcircleContainerStyle : (statePost.payment ? completedCircleStyle : circleContainerStyle)}>
-                    {activeStep === 'payment' ? <Icon as={CheckIcon} boxSize={3} /> : (statePost.payment ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '6' : '5'}</Text>)}
+                <Flex sx={activeStep === 'payment' ? selectedcircleContainerStyle : (paymentReady ? completedCircleStyle : circleContainerStyle)}>
+                    {activeStep === 'payment' ? <Icon as={CheckIcon} boxSize={3} /> : (paymentReady ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '6' : '5'}</Text>)}
                 </Flex>
                 <Box>
                     <Text sx={activeStep === 'payment' ? selectedMenuTitleStyle : menuTitleStyle}>Payment</Text>
-                    <Text sx={activeStep === 'payment' ? selectedMenuDescStyle : menuDescStyle}>{statePost.payment ? 'Completed' : 'Incomplete'}</Text>
+                    <Text sx={activeStep === 'payment' ? selectedMenuDescStyle : menuDescStyle}>{paymentReady ? 'Completed' : 'Incomplete'}</Text>
                 </Box>
             </Flex>
 

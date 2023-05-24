@@ -10,10 +10,26 @@ const initState = {
     postTitle: null,
     postExpirationDate: null,
     detailsTabReady: false,
+    reviewTabReady: false,
+    paymentTabReady: false,
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_PAYMENT_TAB_STATUS":
+          console.log('SET_PAYMENT_TAB_STATUS', action.payload)
+
+          return {
+            ...state,
+            paymentTabReady: action.payload,
+          }
+      case "SET_REVIEW_TAB_STATUS":
+          console.log('SET_REVIEW_TAB_STATUS', action.payload)
+
+          return {
+            ...state,
+            reviewTabReady: action.payload,
+          }
       case "SET_DETAILS_TAB_STATUS":
           console.log('SET_DETAILS_TAB_STATUS', action.payload)
 
