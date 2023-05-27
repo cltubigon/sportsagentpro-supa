@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 const SignedOutNavigation = () => {
   return (
-    <Flex gap={6} alignItems={"center"} >
+    <Flex gap={6} alignItems={"center"} flexGrow={1} justifyContent={'flex-end'} >
       <Link to="/login">
         <Flex flexDirection={"column"}>
           <Avatar size={"xs"} alignSelf={"center"} />

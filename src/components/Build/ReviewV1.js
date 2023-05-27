@@ -55,6 +55,7 @@ import { BiRun, BiUserVoice } from "react-icons/bi"
 import { TbLicense } from "react-icons/tb"
 import moment from "moment/moment"
 import NoSelected from "./NoSelected"
+import { Link } from "react-router-dom"
 
 const ReviewV1 = () => {
   const dispatch = useDispatch()
@@ -424,7 +425,7 @@ const ReviewV1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Icon as={TfiClose} boxSize={4} />
+            <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
             </Flex>
           </Flex>
         </GridItem>

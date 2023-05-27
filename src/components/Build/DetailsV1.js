@@ -16,8 +16,9 @@ import { setActiveStep, setContent, setDetailsTabStatus, setPostContentLength, s
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
-import RichEditorExample from "../../utils/RichEditor/RichEditor"
 import { useEffect } from "react"
+import { Link } from "react-router-dom"
+import RichEditor from '../../utils/RichEditor/RichEditor'
 
 const DetailsV1 = () => {
   const dispatch = useDispatch()
@@ -113,7 +114,7 @@ const DetailsV1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Icon as={TfiClose} boxSize={4} />
+              <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
             </Flex>
           </Flex>
         </GridItem>
@@ -154,7 +155,7 @@ const DetailsV1 = () => {
                 campaign, and clear step-by-step instructions for how to
                 complete each activity in the deal.
               </Text>
-              <RichEditorExample
+              <RichEditor
                 borderColorWidthStyle={borderColorWidthStyle}
                 borderRadius={borderRadius}
                 height={height}

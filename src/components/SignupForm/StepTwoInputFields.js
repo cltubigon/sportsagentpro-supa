@@ -28,6 +28,7 @@ import PhoneInput from 'react-phone-input-2'
 const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   console.log('signup rerendered')
   const navigate = useNavigate()
+  const toast = useToast()
   const dispatch = useDispatch()
   const { register, handleSubmit, formState, control, watch } = useForm()
   const { errors } = formState
@@ -38,8 +39,9 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   
   const [creatingAccount, setCreatingAccount] = useState(false)
   const [displayError, setDisplayError] = useState(null)
+  const [show, setShow] = useState(false)
 
-  const toast = useToast()
+  const showPassword = () => setShow(!show)
 
   useEffect(() => {
     if (authError) {
@@ -77,12 +79,9 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   useEffect(() => {
     if (auth.uid && profile) {
       setCreatingAccount(()=> !creatingAccount)
-      navigate('/')
+      navigate('/network')
     }
   }, [profile])
-
-  const [show, setShow] = useState(false)
-  const showPassword = () => setShow(!show)
 
   const validatePassword = (value) => {
     if (!value) {

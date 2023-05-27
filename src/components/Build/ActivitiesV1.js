@@ -57,6 +57,7 @@ import {
 } from "react-icons/bi"
 import { MdOutlineCoPresent } from "react-icons/md"
 import { AiOutlineEye } from "react-icons/ai"
+import { Link } from "react-router-dom"
 
 const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
@@ -513,7 +514,7 @@ const ActivitiesNav1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Icon as={TfiClose} boxSize={4} />
+              <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
             </Flex>
           </Flex>
 

@@ -7,7 +7,7 @@ import Footer from "../components/layouts/Footer"
 const MyProfile = () => {
   const navigate = useNavigate()
 
-  const uid = useSelector((state)=> state.firebase.auth.uid)
+  // const uid = useSelector((state)=> state.firebase.auth.uid)
   const isLoggedIn = useSelector(state => state.auth.profile)
   
   const containerStyle = {

@@ -10,6 +10,7 @@ import { saveAthletesToStorage } from '../../store/actions/athleteActions'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { firestoreConnect } from "react-redux-firebase"
 import { useForm } from "react-hook-form"
+import { Link } from "react-router-dom"
 
 const RecipientsV1 = () => {
     const dispatch = useDispatch()
@@ -72,7 +73,7 @@ const RecipientsV1 = () => {
                     <Text color={"gray.500"} fontSize={'sm'}>Select which sender you will be sending this for</Text>
                 </Flex>
                 <Flex>
-                    <Icon as={TfiClose} boxSize={4} />
+                    <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
                 </Flex>
             </Flex>
 

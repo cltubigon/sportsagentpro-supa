@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux"
 import { setContent } from "../../store/actions/PostActions"
 import { useEffect } from "react"
 
-const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height, setRawDataString, rawDataParsed, setAvailableCharacters }) => {
+const RichEditor = ({ borderColorWidthStyle, borderRadius, height, setRawDataString, rawDataParsed, setAvailableCharacters }) => {
     const dispatch = useDispatch()
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editorRef = useRef(null)
@@ -212,4 +212,4 @@ const RichEditorExample = ({ borderColorWidthStyle, borderRadius, height, setRaw
   )
 }
 
-export default RichEditorExample
+export default RichEditor

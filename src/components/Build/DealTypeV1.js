@@ -69,7 +69,7 @@ const DealTypeV1 = () => {
                     <Text color={"gray.500"} fontSize={'sm'}>Select what type of deal you will be building out</Text>
                 </Flex>
                 <Flex>
-                    <Icon as={TfiClose} boxSize={4} />
+                    <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
                 </Flex>
             </Flex>
         </GridItem>

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { Flex } from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { createPost } from "../store/actions/PostActions"
@@ -11,27 +11,27 @@ import DetailsV1 from "../components/Build/DetailsV1"
 import ReviewV1 from "../components/Build/ReviewV1"
 import Paymentv1 from "../components/Build/PaymentV1"
 import DealTypeV1 from "../components/Build/DealTypeV1"
+import { useNavigate } from "react-router-dom"
 
 const Build = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const activeStep = useSelector(state => state.post.activeStep)
-  const { register, handleSubmit, formState, reset, control } = useForm()
-  const { errors, isSubmitSuccessful } = formState
+  const isLoggedIn = useSelector((state) => state.auth.profile)
 
-  const onSubmit = (data) => {
-    dispatch(createPost(data))
-  }
-
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({ team: "", team: "", firstName: "", lastName: "", sports: "" })
+  useEffect(()=> {
+    if (!isLoggedIn) {
+      navigate('/login')
     }
-  }, [formState, reset])
+  },[])
 
   return (
     <>
       <Flex maxW={"100%"} height={"100vh"}>
-        <BuildLeftNav />
+        <Box maxW={'290px'}>
+          <BuildLeftNav />
+        </Box>
         <Flex flexGrow={1} flexDirection={'column'} justifyContent={'flex-start'} >
           {/* <BuildNav /> */}
           {activeStep === 'deal_type' && <DealTypeV1 />}

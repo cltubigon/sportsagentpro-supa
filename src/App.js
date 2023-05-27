@@ -13,8 +13,6 @@ import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
 import Dashboard from "./pages/Dashboard"
 import Build from "./pages/Build"
-import Test from "./pages/Test"
-import RichEditorExample from "./utils/RichEditor/RichEditor"
 
 
 function App() {
@@ -34,8 +32,6 @@ function App() {
             <Route path="/user-type" element={<UserType />}></Route>
             <Route path="/network" element={<Dashboard />}></Route>
             <Route path="/build" element={<Build />}></Route>
-            <Route path="/test" element={<Test />}></Route>
-            <Route path="/rich" element={<RichEditorExample />}></Route>
           </Routes>
         <ColorMode />
       </BrowserRouter>

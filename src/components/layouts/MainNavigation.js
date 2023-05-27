@@ -55,16 +55,16 @@ const MainNavigation = () => {
   return (
     <>
       {location.pathname !== "/signup" && location.pathname !== "/login" && location.pathname !== "/build" && (
-        <Flex sx={flexContainer}>
+        <Flex sx={flexContainer} gap={6}>
           <Flex alignItems={"center"} gap={6}>
             <Heading as={"h3"} fontSize={"3xl"}>
               <Link to="/" onClick={myConsole}>Sports Agent Pros</Link>
             </Heading>
-            <Link to={'/build'}><Button colorScheme="twitter" borderRadius={'100px'} leftIcon={<FaFileContract />}>
+            {/* <Link to={'/build'}><Button colorScheme="twitter" borderRadius={'100px'} leftIcon={<FaFileContract />}>
               Build
-            </Button></Link>
+            </Button></Link> */}
           </Flex>
-          <Flex>
+          <Flex flexGrow={1}>
             {isLoggedIn ? <SignedInNavigation /> : <SignedOutNavigation />}
           </Flex>
         </Flex>

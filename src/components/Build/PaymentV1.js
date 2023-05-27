@@ -11,9 +11,13 @@ import {
 import { useDispatch, useSelector } from "react-redux"
 import { BsCheck, BsChevronLeft, BsPlus } from "react-icons/bs"
 import { TfiClose } from "react-icons/tfi"
-import { setActiveStep, setPaymentTabStatus } from "../../store/actions/PostActions"
+import {
+  setActiveStep,
+  setPaymentTabStatus,
+} from "../../store/actions/PostActions"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { Link } from "react-router-dom"
 
 const PaymentV1 = () => {
   const dispatch = useDispatch()
@@ -45,17 +49,17 @@ const PaymentV1 = () => {
 
   useEffect(() => {
     if (
-      postType &&
-      selectedRecipientsCount > 0 &&
-      activitiesTabReady &&
-      detailsTabReady &&
-      agree
+      (postType === "offer" &&
+        selectedRecipientsCount > 0 &&
+        activitiesTabReady &&
+        detailsTabReady) && agree ||
+      (postType === "opportunity" && activitiesTabReady && detailsTabReady && agree)
     ) {
-      console.log('activitiesTabReady: ', activitiesTabReady)
+      console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => true)
       dispatch(setPaymentTabStatus(true))
     } else {
-      console.log('activitiesTabReady: ', activitiesTabReady)
+      console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => false)
       dispatch(setPaymentTabStatus(false))
     }
@@ -64,7 +68,7 @@ const PaymentV1 = () => {
   }, [selectedRecipientsCount, activitiesTabReady, detailsTabReady, agree])
 
   const handleSubmit = () => {
-    isReadyToPost && alert("Hi, I am ready")
+    alert("Hi, I am ready")
   }
 
   console.log("agree: ", agree)
@@ -97,7 +101,7 @@ const PaymentV1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Icon as={TfiClose} boxSize={4} />
+              <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
             </Flex>
           </Flex>
         </GridItem>
