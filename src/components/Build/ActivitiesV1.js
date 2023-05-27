@@ -91,7 +91,7 @@ const ActivitiesNav1 = () => {
       allAmountsAreReady &&
       allDatesAreReady &&
       allAmountsAreReady === allDatesAreReady
-      console.log('activityTabStatus: ', activityTabStatus)
+      // console.log('activityTabStatus: ', activityTabStatus)
     // console.log("allAmountsAreReady: ", allAmountsAreReady)
     // console.log("allDatesAreReady: ", allDatesAreReady)
     // console.log("activityTabStatus: ", activityTabStatus)

@@ -55,11 +55,11 @@ const PaymentV1 = () => {
         detailsTabReady) && agree ||
       (postType === "opportunity" && activitiesTabReady && detailsTabReady && agree)
     ) {
-      console.log("activitiesTabReady: ", activitiesTabReady)
+      // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => true)
       dispatch(setPaymentTabStatus(true))
     } else {
-      console.log("activitiesTabReady: ", activitiesTabReady)
+      // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => false)
       dispatch(setPaymentTabStatus(false))
     }
@@ -70,9 +70,6 @@ const PaymentV1 = () => {
   const handleSubmit = () => {
     alert("Hi, I am ready")
   }
-
-  console.log("agree: ", agree)
-  console.log("isReadyToPost: ", isReadyToPost)
 
   return (
     <>

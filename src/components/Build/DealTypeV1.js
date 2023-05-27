@@ -10,18 +10,33 @@ import { TfiPencilAlt } from "react-icons/tfi"
 import { CgMenuGridO } from "react-icons/cg"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { savePostType, setActiveStep } from "../../store/actions/PostActions"
+import { resetPostState, savePostType, setActiveStep, setPostOwner } from "../../store/actions/PostActions"
 import { useEffect } from "react"
 import { BsChevronRight } from "react-icons/bs"
 
 const DealTypeV1 = () => {
     const dispatch = useDispatch()
-    const statePostType = useSelector((state) => state.post.postType)
+    const posts = useSelector(state => state.post)
+    const auth = useSelector(state => state.auth)
 
-    const postType = useSelector(state => state.post.postType)
+    const { profile } = auth
+    const { postType, postOwner } = posts
+
+    console.log('postOwner: ', postOwner)
+
+    useEffect(()=> {
+        console.log('postOwner: ', postOwner)
+        console.log('profile.email: ', profile.email)
+        if (postOwner !== profile.email) {
+            dispatch(resetPostState())
+            dispatch(setPostOwner(profile.email))
+        }
+    }, [])
+    console.log('posts: ', posts)
+    
     const [nextButton, setNextButton] = useState('recipients')  
     useEffect(()=> {
-        console.log('new type is: ', postType)
+        // console.log('new type is: ', postType)
         postType !== 'opportunity' ? setNextButton('recipients') : setNextButton('activities')
     }, [postType])
 
@@ -79,7 +94,7 @@ const DealTypeV1 = () => {
             <Flex gap={6} flexDirection={'column'}>
                 {typeOfUsers.map((type) => {
                     return (
-                    <Flex sx={statePostType === type.value && selected} cursor={"pointer"} border={"1px solid #B8BFC5"} pr={6} py={5} key={type.id} borderRadius={4} onClick={() => dispatch(savePostType(type.value))}>
+                    <Flex sx={postType === type.value && selected} cursor={"pointer"} border={"1px solid #B8BFC5"} pr={6} py={5} key={type.id} borderRadius={4} onClick={() => dispatch(savePostType(type.value))}>
                         <Flex alignItems={"center"} justifyContent={"center"} w={"64px"}>
                         <Icon color={"gray.500"} boxSize={6} as={type.icon} />
                         </Flex>

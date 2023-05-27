@@ -6,7 +6,7 @@ import DiscoverMainMenu from "./Discover/DiscoverMainMenu"
 const DashboardMenu = () => {
   
   return (
-    <Stack>
+    <Stack pt={5} pb={3}>
         <DiscoverMainMenu />
     </Stack>
   )

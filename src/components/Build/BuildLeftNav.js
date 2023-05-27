@@ -22,6 +22,12 @@ const BuildLeftNav = () => {
 
     const [collapse, setCollapse] = useState(false)
     const [paymentReady, setPaymentReady] = useState(null)
+    const [reviewReady, setReviewReady] = useState(null)
+
+    useEffect(()=> {
+        console.log('I will set the Active step')
+        dispatch(setActiveStep('deal_type'))
+    }, [])
 
     useEffect(()=> {
         (postType === 'offer' &&
@@ -34,6 +40,20 @@ const BuildLeftNav = () => {
         setPaymentReady(true) :
         setPaymentReady(false)
     }, [statePost])
+
+    useEffect(()=> {
+        (postType === 'offer' &&
+        selectedRecipientsCount > 0 ||
+        activitiesTabReady ||
+        detailsTabReady ||
+        postType === 'opportunity' &&
+        activitiesTabReady ||
+        detailsTabReady) ?
+        setReviewReady(true) :
+        setReviewReady(false)
+    }, [statePost])
+    // console.log('reviewReady: ', reviewReady)
+    // console.log('BLNav: ', reviewTabReady)
     
     const menuTitleStyle = {
         fontSize: 'md',
@@ -156,12 +176,12 @@ const BuildLeftNav = () => {
 
 
                 <Flex sx={menuContainer} gap={5} onClick={()=> dispatch(setActiveStep('review'))}>
-                    <Flex sx={activeStep === 'review' ? selectedcircleContainerStyle : (reviewTabReady ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: !collapse ? '46px' : '40px', width: '2px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
-                        {activeStep === 'review' ? <Icon as={CheckIcon} boxSize={3} /> : (reviewTabReady ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '5' : '4'}</Text>)}
+                    <Flex sx={activeStep === 'review' ? selectedcircleContainerStyle : (reviewReady ? completedCircleStyle : circleContainerStyle)} _before={{ position: 'absolute !important', height: !collapse ? '46px' : '40px', width: '2px', top: '24px', backgroundColor: '#D0D4D9', content: '""', zIndex: 9,}} >
+                        {activeStep === 'review' ? <Icon as={CheckIcon} boxSize={3} /> : (reviewReady ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>{statePost.postType !== 'opportunity' ? '5' : '4'}</Text>)}
                     </Flex>
                     {!collapse && <Box>
                         <Text sx={activeStep === 'review' ? selectedMenuTitleStyle : menuTitleStyle}>Review</Text>
-                        <Text sx={activeStep === 'review' ? selectedMenuDescStyle : menuDescStyle}>{reviewTabReady ? 'Completed' : 'Incomplete'}</Text>
+                        <Text sx={activeStep === 'review' ? selectedMenuDescStyle : menuDescStyle}>{reviewReady ? 'Completed' : 'Incomplete'}</Text>
                     </Box>}
                 </Flex>
 

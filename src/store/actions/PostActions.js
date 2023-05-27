@@ -102,11 +102,11 @@ export const updateSelectedActivities = (data) => {
   }
 }
 
-export const searchAthlete = (payload) => {
-  return (dispatch)=> {
-    dispatch({ type: 'SEARCH_ATHLETE', payload })
-  }
-}
+// export const searchAthlete = (payload) => {
+//   return (dispatch)=> {
+//     dispatch({ type: 'SEARCH_ATHLETE', payload })
+//   }
+// }
 
 export const setContent = (payload) => {
   return (dispatch) => {
@@ -140,14 +140,26 @@ export const setDetailsTabStatus = (payload) => {
   }
 }
 
-export const setReviewTabStatus = (payload) => {
-  return (dispatch) => {
-    dispatch({ type: 'SET_REVIEW_TAB_STATUS', payload })
-  }
-}
+// export const setReviewTabStatus = (payload) => {
+//   return (dispatch) => {
+//     dispatch({ type: 'SET_REVIEW_TAB_STATUS', payload })
+//   }
+// }
 
 export const setPaymentTabStatus = (payload) => {
   return (dispatch) => {
     dispatch({ type: 'SET_PAYMENT_TAB_STATUS', payload })
+  }
+}
+
+export const setPostOwner = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_POST_OWNER', payload })
+  }
+}
+
+export const resetPostState = () => {
+  return (dispatch) => {
+    dispatch({ type: 'RESET_POST_STATE' })
   }
 }

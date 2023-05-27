@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
-    console.log("Footer rendered")
   return (
     <>
         <Stack px={"var(--chakra-space-6)"} pb={12} pt={{base: 10, md: 20}}>

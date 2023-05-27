@@ -1,4 +1,5 @@
 const initState = {
+    postOwner: null,
     recipients: null,
     selectedRecipientsCount: 0,
     postType: null,
@@ -16,6 +17,18 @@ const initState = {
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+      case "RESET_POST_STATE":
+          console.log('RESET_POST_STATE')
+          return {
+            ...initState
+          }
+      case "SET_POST_OWNER":
+          console.log('SET_POST_OWNER', action.payload)
+
+          return {
+            ...state,
+            postOwner: action.payload,
+          }
       case "SET_PAYMENT_TAB_STATUS":
           console.log('SET_PAYMENT_TAB_STATUS', action.payload)
 
@@ -23,13 +36,13 @@ const postReducer = (state = initState, action) => {
             ...state,
             paymentTabReady: action.payload,
           }
-      case "SET_REVIEW_TAB_STATUS":
-          console.log('SET_REVIEW_TAB_STATUS', action.payload)
+      // case "SET_REVIEW_TAB_STATUS":
+      //     console.log('SET_REVIEW_TAB_STATUS', action.payload)
 
-          return {
-            ...state,
-            reviewTabReady: action.payload,
-          }
+      //     return {
+      //       ...state,
+      //       reviewTabReady: action.payload,
+      //     }
       case "SET_DETAILS_TAB_STATUS":
           console.log('SET_DETAILS_TAB_STATUS', action.payload)
 
@@ -78,12 +91,12 @@ const postReducer = (state = initState, action) => {
               ...state,
               selectedActivities: action.payload,
             }
-        case "SEARCH_ATHLETE":
-            console.log('SEARCH_ATHLETE', action.payload)
-            return {
-              ...state,
-              searchRecipient: action.payload,
-            }
+        // case "SEARCH_ATHLETE":
+        //     console.log('SEARCH_ATHLETE', action.payload)
+        //     return {
+        //       ...state,
+        //       searchRecipient: action.payload,
+        //     }
         case "SET_CHECK_TRUE_OR_FALSE":
             console.log('SET_CHECK_TRUE_OR_FALSE', action.payload)
             return {

@@ -3,7 +3,7 @@ import { DummyImage } from 'react-simple-placeholder-image'
 import ProfileSocialMedia from '../Profile/ProfileSocialMedia'
 import { useDispatch, useSelector } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { HomeSkeleton } from '../Skeleton/Skeletons'
 import { useEffect } from 'react'
 import { saveAthletesToStorage } from '../../store/actions/athleteActions'
@@ -11,11 +11,17 @@ import { saveAthletesToStorage } from '../../store/actions/athleteActions'
 const Athletes = () => {
   console.log("-------------------Athletes")
   const dispatch = useDispatch()
+  const location = useLocation()
   const localAthletes = useSelector(state => state.athlete.athletes)
   const firestoreAthletes = useSelector((state)=> state.firestore.ordered.athlete)
+  // console.log('location: ', location)
+
+  const isNetworkPage = location.pathname === '/network'
+  // console.log('isNetworkPage: ', isNetworkPage)
   
   useEffect(()=> {
     if (firestoreAthletes && !localAthletes || firestoreAthletes && localAthletes && firestoreAthletes.length !== localAthletes.length) {
+      console.log('I will dispatch saveAthletesToStorage')
       dispatch(saveAthletesToStorage(firestoreAthletes))
     }
   },[firestoreAthletes])
@@ -44,7 +50,7 @@ const Athletes = () => {
   return (
     <>
       {localAthletes ? 
-        <SimpleGrid minChildWidth={{base: "100%", sm:"290px", md: "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
+        <SimpleGrid minChildWidth={{base: "100%", sm: "290px", md: isNetworkPage ? '250px' : "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
           {localAthletes.map((athlete)=> {
               return (
                 <div key={athlete.id}>

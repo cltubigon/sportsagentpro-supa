@@ -85,11 +85,13 @@ const ReviewV1 = () => {
   const selectedRecipients =
     recipients && recipients.filter((recipient) => recipient.isChecked)
 
-  useEffect(() => {
-    (selectedRecipientsCount > 0 ||
-      activitiesTabReady ||
-      detailsTabReady) ? dispatch(setReviewTabStatus(true)) : dispatch(setReviewTabStatus(false))
-  }, [selectedRecipientsCount, activitiesTabReady, detailsTabReady])
+  // useEffect(() => {
+  //   ((postType === 'offer' && selectedRecipientsCount > 0 ||
+  //     activitiesTabReady ||
+  //     detailsTabReady) ||
+  //     (postType === 'opportunity' && activitiesTabReady ||
+  //     detailsTabReady)) ? dispatch(setReviewTabStatus(true)) : dispatch(setReviewTabStatus(false))
+  // }, [selectedRecipientsCount, activitiesTabReady, detailsTabReady])
 
   useEffect(() => {
     if (postContent) {

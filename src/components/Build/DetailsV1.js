@@ -59,14 +59,14 @@ const DetailsV1 = () => {
   const height = "200px"
   
   useEffect(()=> {
-    console.log('availableCharacters: ', availableCharacters)
+    // console.log('availableCharacters: ', availableCharacters)
       setIsCompleted(availableCharacters <= 1949 && availableCharacters >= 0 && postTitle ? true : false)
   }, [availableCharacters, reduxPosts])
-  console.log('isCompleted: ', isCompleted)
+  // console.log('isCompleted: ', isCompleted)
   
   useEffect(()=> {
     if (availableCharacters !== 2000) {
-      console.log('I am dispatched', isCompleted)
+      // console.log('I am dispatched', isCompleted)
       dispatch(setDetailsTabStatus(isCompleted))
     }
   }, [isCompleted])

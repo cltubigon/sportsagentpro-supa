@@ -22,7 +22,7 @@ const DashboardLeftMenu = () => {
     }
     return (
         <>
-            <Box bg={'gray.200'} w={'155px'}>
+            <Box>
                 <Stack sx={stickyLeftMenu} gap={4}>
                     <Link to='/network'>
                         <Flex sx={leftNavStyle}>
