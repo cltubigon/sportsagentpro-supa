@@ -13,7 +13,7 @@ import {
   BsTypeUnderline,
 } from "react-icons/bs"
 import { useDispatch } from "react-redux"
-import { setContent } from "../../store/actions/PostActions"
+import { setContent } from "../../store/actions/buildPostActions"
 import { useEffect } from "react"
 
 const RichEditor = ({ borderColorWidthStyle, borderRadius, height, setRawDataString, rawDataParsed, setAvailableCharacters }) => {

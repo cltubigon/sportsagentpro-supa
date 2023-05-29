@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
 import { useDispatch } from 'react-redux'
-import { setActiveStep } from '../../store/actions/PostActions'
+import { setActiveStep } from '../../store/actions/buildPostActions'
 
 const NoSelected = ({ category }) => {
     const dispatch = useDispatch()

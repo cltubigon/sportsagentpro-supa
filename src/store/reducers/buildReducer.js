@@ -17,7 +17,7 @@ const initState = {
     activitiesListLayout: false,
 }
 
-const postReducer = (state = initState, action) => {
+const buildReducer = (state = initState, action) => {
     switch (action.type) {
       case "SET_RECIPIENTS_LIST_LAYOUT":
           console.log('SET_RECIPIENTS_LIST_LAYOUT')
@@ -147,4 +147,4 @@ const postReducer = (state = initState, action) => {
     }
 }
 
-export default postReducer
+export default buildReducer

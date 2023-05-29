@@ -4,13 +4,13 @@ import { combineReducers } from "redux"
 import { firestoreReducer } from "redux-firestore"
 import { firebaseReducer } from "react-redux-firebase"
 import athleteReducer from "./athleteReducer"
-import postReducer from "./postReducer"
+import buildReducer from "./buildReducer"
 
 const rootReducer = combineReducers({
   auth: authReducer,
   athlete: athleteReducer,
   team: teamReducer,
-  post: postReducer,
+  build: buildReducer,
   firestore: firestoreReducer,
   firebase: firebaseReducer
 })

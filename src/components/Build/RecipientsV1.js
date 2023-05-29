@@ -27,7 +27,7 @@ import {
   setCheckboxTrueOrFalse,
   setInitialFilteredAthletes,
   setRecipientsListLayout,
-} from "../../store/actions/PostActions"
+} from "../../store/actions/buildPostActions"
 import { saveAthletesToStorage } from "../../store/actions/athleteActions"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
 import { firestoreConnect } from "react-redux-firebase"
@@ -38,13 +38,13 @@ const RecipientsV1 = () => {
   const dispatch = useDispatch()
   const reduxState = useSelector((state) => state)
   const localAthletes = useSelector((state) => state.athlete.athletes)
-  const reduxPosts = useSelector(state => state.post)
+  const reduxPosts = useSelector(state => state.build)
   const {recipients, recipientsListLayout} = reduxPosts
-//   const recipients = useSelector((state) => state.post.recipients)
+//   const recipients = useSelector((state) => state.build.recipients)
   const firestoreAthletes = useSelector(
     (state) => state.firestore.ordered.athlete
   )
-  const count = useSelector((state) => state.post.selectedRecipientsCount)
+  const count = useSelector((state) => state.build.selectedRecipientsCount)
 
   const { register, watch } = useForm()
 

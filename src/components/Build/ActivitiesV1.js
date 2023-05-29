@@ -22,7 +22,7 @@ import {
   addOrRemoveActivities,
   setActivityTabStatus,
   setActivitiesListLayout,
-} from "../../store/actions/PostActions"
+} from "../../store/actions/buildPostActions"
 import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
 import { motion } from "framer-motion"
 import {
@@ -63,7 +63,7 @@ import { useForm } from "react-hook-form"
 
 const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
-  const reduxPostState = useSelector((state) => state.post)
+  const reduxPostState = useSelector((state) => state.build)
 
   const { register, watch } = useForm()
   const watchSearch = watch("searchActivity")
@@ -186,7 +186,7 @@ const ActivitiesNav1 = () => {
     !hasNoInput && dispatch(updateSelectedActivities(inputs))
   }, [inputs, tab])
 
-  const postType = useSelector((state) => state.post.postType) // Preious or Next Button
+  const postType = useSelector((state) => state.build.postType) // Preious or Next Button
   const [prevButton, setPrevButton] = useState("deal_type")
   useEffect(() => {
     postType === "opportunity"

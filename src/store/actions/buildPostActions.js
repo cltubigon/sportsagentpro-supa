@@ -44,7 +44,7 @@ export const setInitialFilteredAthletes = (data) => {
 export const setCheckboxTrueOrFalse = (id) => {
   return (dispatch, getState) => {
     const state = getState()
-    const athletes = state.post.recipients
+    const athletes = state.build.recipients
     
     const payload = athletes.map((athlete) => {
       const selectStatus = athlete.isChecked
@@ -66,7 +66,7 @@ export const addOrRemoveActivities = (activity) => {
   console.log('activity: ', activity)
   return (dispatch, getState) => {
     const state = getState()
-    const selectedActivities = state.post.selectedActivities
+    const selectedActivities = state.build.selectedActivities
     
     if (!selectedActivities.some(data=> data.id === activity.id)) {  // Add activity
       const filteredActivity = { ...activity, isChecked: true, activityAmount: '', activityDate: '' }
@@ -86,7 +86,7 @@ export const updateSelectedActivities = (data) => {
   console.log('data: ', data)
   return (dispatch, getState)=> {
     const state = getState()
-    const selectedActivities = state.post.selectedActivities
+    const selectedActivities = state.build.selectedActivities
     console.log('selectedActivities: ', selectedActivities)
 
     const payload = selectedActivities.map((activity)=> {

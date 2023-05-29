@@ -25,7 +25,7 @@ import {
   setActiveStep,
   setContent,
   setReviewTabStatus,
-} from "../../store/actions/PostActions"
+} from "../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { useEffect } from "react"
@@ -59,7 +59,7 @@ import { Link } from "react-router-dom"
 
 const ReviewV1 = () => {
   const dispatch = useDispatch()
-  const reduxPosts = useSelector((state) => state.post)
+  const reduxPosts = useSelector((state) => state.build)
   const {
     postContent,
     postType,

@@ -3,7 +3,6 @@ import {GiSettingsKnobs} from 'react-icons/gi'
 import {BsSearch, BsSortDownAlt} from 'react-icons/bs'
 import React from "react"
 import { useEffect } from "react"
-// import { searchAthlete } from "../../../../store/actions/PostActions"
 import { useDispatch } from "react-redux"
 import { useForm } from "react-hook-form"
 

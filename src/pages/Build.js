@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { Box, Flex } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { createPost } from "../store/actions/PostActions"
+import { createPost } from "../store/actions/buildPostActions"
 import BuildLeftNav from "../components/Build/BuildLeftNav"
 import { saveAthletesToStorage } from "../store/actions/athleteActions"
 import ActivitiesV1 from "../components/Build/ActivitiesV1"
@@ -17,7 +17,7 @@ const Build = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const activeStep = useSelector(state => state.post.activeStep)
+  const activeStep = useSelector(state => state.build.activeStep)
   const isLoggedIn = useSelector((state) => state.auth.profile)
 
   useEffect(()=> {

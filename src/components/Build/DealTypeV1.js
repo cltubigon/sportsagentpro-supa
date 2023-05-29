@@ -10,13 +10,13 @@ import { TfiPencilAlt } from "react-icons/tfi"
 import { CgMenuGridO } from "react-icons/cg"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { resetPostState, savePostType, setActiveStep, setPostOwner } from "../../store/actions/PostActions"
+import { resetPostState, savePostType, setActiveStep, setPostOwner } from "../../store/actions/buildPostActions"
 import { useEffect } from "react"
 import { BsChevronRight } from "react-icons/bs"
 
 const DealTypeV1 = () => {
     const dispatch = useDispatch()
-    const posts = useSelector(state => state.post)
+    const posts = useSelector(state => state.build)
     const auth = useSelector(state => state.auth)
 
     const { profile } = auth

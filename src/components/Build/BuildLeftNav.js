@@ -2,7 +2,7 @@ import { CheckIcon } from "@chakra-ui/icons"
 import { Stack, Heading, Text, Box, Icon, Flex, Tooltip} from "@chakra-ui/react"
 import {BsArrowBarLeft, BsArrowBarRight, BsCircleFill} from 'react-icons/bs'
 import { useDispatch, useSelector } from "react-redux"
-import { setActiveStep } from "../../store/actions/PostActions"
+import { setActiveStep } from "../../store/actions/buildPostActions"
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
@@ -11,12 +11,10 @@ import { duration } from "moment/moment"
 
 const BuildLeftNav = () => {
     const dispatch = useDispatch()
-    // const activeStep = useSelector(state => state.post.activeStep)
-    const statePost = useSelector(state => state.post)
+    const statePost = useSelector(state => state.build)
     const { postType, selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount, detailsTabReady, reviewTabReady, paymentTabReady } = statePost
     
     const countActivities = selectedActivities.length
-    // const selectedRecipientsCount = useSelector(state => state.post.selectedRecipientsCount)
 
     const stepTwoCompleted = statePost.recipients && statePost.recipients.some(recipient => recipient.isChecked)
 

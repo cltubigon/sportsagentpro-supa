@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { Flex, Box } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { createPost } from "../store/actions/PostActions"
+import { createPost } from "../store/actions/buildPostActions"
 import PostType from "../components/Build/PostType"
 import BuildNav from "../components/Build/BuildNav"
 import BuildLeftNav from "../components/Build/BuildLeftNav"
@@ -15,7 +15,7 @@ import { saveAthletesToStorage } from "../store/actions/athleteActions"
 
 const Build = () => {
   const dispatch = useDispatch()
-  const activeStep = useSelector(state => state.post.activeStep)
+  const activeStep = useSelector(state => state.build.activeStep)
   const { register, handleSubmit, formState, reset, control } = useForm()
   const { errors, isSubmitSuccessful } = formState
 

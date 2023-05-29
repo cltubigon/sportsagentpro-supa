@@ -14,14 +14,14 @@ import { TfiClose } from "react-icons/tfi"
 import {
   setActiveStep,
   setPaymentTabStatus,
-} from "../../store/actions/PostActions"
+} from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
 const PaymentV1 = () => {
   const dispatch = useDispatch()
-  const reduxPosts = useSelector((state) => state.post)
+  const reduxPosts = useSelector((state) => state.build)
   const {
     postContent,
     postType,

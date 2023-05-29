@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux"
 import { BsChevronLeft, BsChevronRight, BsPlus } from "react-icons/bs"
 import { TfiClose, TfiMenuAlt } from "react-icons/tfi"
-import { setActiveStep, setContent, setDetailsTabStatus, setPostContentLength, setPostExpirationDate, setPostTitle } from "../../store/actions/PostActions"
+import { setActiveStep, setContent, setDetailsTabStatus, setPostContentLength, setPostExpirationDate, setPostTitle } from "../../store/actions/buildPostActions"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
@@ -23,7 +23,7 @@ import RichEditor from '../../utils/RichEditor/RichEditor'
 const DetailsV1 = () => {
   const dispatch = useDispatch()
   const { register, watch } = useForm()
-  const reduxPosts = useSelector(state => state.post)
+  const reduxPosts = useSelector(state => state.build)
   const { postContent, postTitle, postExpirationDate } = reduxPosts
   
   const [availableCharacters, setAvailableCharacters] = useState(2000)
