@@ -22,17 +22,17 @@ const DealTypeV1 = () => {
     const { profile } = auth
     const { postType, postOwner } = posts
 
-    console.log('postOwner: ', postOwner)
+    // console.log('postOwner: ', postOwner)
 
     useEffect(()=> {
-        console.log('postOwner: ', postOwner)
-        console.log('profile.email: ', profile.email)
-        if (postOwner !== profile.email) {
-            dispatch(resetPostState())
-            dispatch(setPostOwner(profile.email))
+        if (profile) {
+            postOwner !== profile.email && dispatch(resetPostState())
+            postOwner !== profile.email && dispatch(setPostOwner(profile.email))
         }
+
+        return
     }, [])
-    console.log('posts: ', posts)
+    // console.log('posts: ', posts)
     
     const [nextButton, setNextButton] = useState('recipients')  
     useEffect(()=> {

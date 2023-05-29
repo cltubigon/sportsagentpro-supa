@@ -21,6 +21,7 @@ import {
   updateSelectedActivities,
   addOrRemoveActivities,
   setActivityTabStatus,
+  setActivitiesListLayout,
 } from "../../store/actions/PostActions"
 import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
 import { motion } from "framer-motion"
@@ -58,18 +59,32 @@ import {
 import { MdOutlineCoPresent } from "react-icons/md"
 import { AiOutlineEye } from "react-icons/ai"
 import { Link } from "react-router-dom"
+import { useForm } from "react-hook-form"
 
 const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
   const reduxPostState = useSelector((state) => state.post)
 
-  const { activitiesTabReady, selectedActivities, postContent } = reduxPostState
+  const { register, watch } = useForm()
+  const watchSearch = watch("searchActivity")
+
+  const { activitiesListLayout, activitiesTabReady, selectedActivities, postContent } = reduxPostState
   const reduxSelectedActivity = selectedActivities
   // console.log("postContent: ", postContent)
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)
   const [inputs, setInputs] = useState({})
+  // const [activitiesListLayout, setListLayout] = useState(true)
+
+  const handleListTrue = () => {
+    // setListLayout(() => true)
+    dispatch(setActivitiesListLayout(true))
+  }
+  const handleListFalse = () => {
+    // setListLayout(() => false)
+    dispatch(setActivitiesListLayout(false))
+  }
 
   useEffect(() => {
     const allAmountsAreReady =
@@ -86,19 +101,13 @@ const ActivitiesNav1 = () => {
         (activity) =>
           activity.activityDate === "" || activity.activityDate === undefined
       )
-    // console.log("then activity.activityDates are: ", allDatesAreReady)
-    const activityTabStatus = reduxSelectedActivity.length > 0 &&
+    const activityTabStatus =
+      reduxSelectedActivity.length > 0 &&
       allAmountsAreReady &&
       allDatesAreReady &&
       allAmountsAreReady === allDatesAreReady
-      // console.log('activityTabStatus: ', activityTabStatus)
-    // console.log("allAmountsAreReady: ", allAmountsAreReady)
-    // console.log("allDatesAreReady: ", allDatesAreReady)
-    // console.log("activityTabStatus: ", activityTabStatus)
-    // if (reduxSelectedActivity.length > 0)
-      dispatch(setActivityTabStatus(activityTabStatus))
+    dispatch(setActivityTabStatus(activityTabStatus))
   }, [reduxSelectedActivity, tab])
-  // console.log("reduxSelectedActivity: ", reduxSelectedActivity)
 
   const [activeActivity, setActiveActivity] = useState([])
   const handleActiveActivityClick = (id) => {
@@ -193,26 +202,36 @@ const ActivitiesNav1 = () => {
   const itemsIconStyle = {
     boxSize: 10,
     textAlign: "center",
-    mb: 2,
+    mb: !activitiesListLayout && 2,
   }
   const itemDescStyle = {
     fontSize: "xs",
     color: "gray.500",
-    textAlign: "center",
+    textAlign: !activitiesListLayout && "center",
   }
   const itemTitleStyle = {
     fontWeight: "semibold",
-    textAlign: "center",
+    textAlign: !activitiesListLayout && "center",
   }
   const itemContainerStyle = {
-    flexDirection: "column",
+    flexDirection: !activitiesListLayout && "column",
     alignContent: "center",
     alignItems: "center",
-    p: 3,
+    px: 3,
     borderRadius: "6px",
     _hover: {
       boxShadow: "md",
     },
+    gap: activitiesListLayout && 4,
+    width: !activitiesListLayout && "234px",
+    cursor: "pointer",
+    py: activitiesListLayout ? 5 : 3,
+    // bgColor: "blue.100",
+  }
+  const listContainer = {
+    flexDirection: activitiesListLayout && "column",
+    flexWrap: !activitiesListLayout && "wrap",
+    gap: activitiesListLayout ? 2 : 4,
   }
 
   const activities = {
@@ -482,6 +501,64 @@ const ActivitiesNav1 = () => {
     ],
   }
 
+  // const onlineOptionalCategory = activities.onlineOptionalCategory
+  // const onlineCategory = activities.onlineCategory
+  // const offlineCategory = activities.offlineCategory
+  // const mergedActivities = [...activities.onlineOptionalCategory, ...activities.onlineCategory, ...activities.offlineCategory]
+
+  const [searchedOptionalCategories, setSearchedOptionalCategories] = useState(
+    activities.onlineOptionalCategory
+  )
+  const [searchedOnlineCategories, setSearchedOnlineCategories] = useState(
+    activities.onlineCategory
+  )
+  const [searchedOfflineCategories, setSearchedOfflineCategories] = useState(
+    activities.offlineCategory
+  )
+  useEffect(() => {
+    console.log(
+      "activities.onlineOptionalCategory: ",
+      activities.onlineOptionalCategory
+    )
+    if (watchSearch && watchSearch.length > 0) {
+      console.log("I am triggered")
+      setSearchedOptionalCategories(
+        activities.onlineOptionalCategory.filter(
+          (activity) =>
+            watchSearch &&
+            activity.activityTitle
+              .toLowerCase()
+              .includes(watchSearch.toLowerCase())
+        )
+      )
+      setSearchedOnlineCategories(
+        activities.onlineCategory.filter(
+          (activity) =>
+            watchSearch &&
+            activity.activityTitle
+              .toLowerCase()
+              .includes(watchSearch.toLowerCase())
+        )
+      )
+      setSearchedOfflineCategories(
+        activities.offlineCategory.filter(
+          (activity) =>
+            watchSearch &&
+            activity.activityTitle
+              .toLowerCase()
+              .includes(watchSearch.toLowerCase())
+        )
+      )
+    } else {
+      setSearchedOptionalCategories(activities.onlineOptionalCategory)
+      setSearchedOnlineCategories(activities.onlineCategory)
+      setSearchedOfflineCategories(activities.offlineCategory)
+    }
+  }, [watchSearch])
+  console.log("searchedOptionalCategories: ", searchedOptionalCategories)
+  console.log("searchedOnlineCategories: ", searchedOnlineCategories)
+  console.log("searchedOfflineCategories: ", searchedOfflineCategories)
+
   const inputBorder = {
     borderColor: "gray.500",
     borderWidth: "1px",
@@ -514,7 +591,9 @@ const ActivitiesNav1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
+              <Link to={"/network"}>
+                <Icon as={TfiClose} boxSize={4} />
+              </Link>
             </Flex>
           </Flex>
 
@@ -556,6 +635,8 @@ const ActivitiesNav1 = () => {
                   placeholder="Search activities..."
                   border={"1px solid #89949F"}
                   borderRadius={"50px"}
+                  id="searchActivity"
+                  {...register("searchActivity")}
                 />
               </InputGroup>
             </Flex>
@@ -579,8 +660,20 @@ const ActivitiesNav1 = () => {
               position={"sticky"}
               top={"0"}
             >
-              <Icon as={RxDashboard} boxSize={6} />
-              <Icon as={TfiMenuAlt} boxSize={6} />
+              <Icon
+                as={RxDashboard}
+                cursor={"pointer"}
+                onClick={handleListFalse}
+                boxSize={6}
+                color={!activitiesListLayout && "blue.400"}
+              />
+              <Icon
+                as={TfiMenuAlt}
+                cursor={"pointer"}
+                onClick={handleListTrue}
+                boxSize={6}
+                color={activitiesListLayout && "blue.400"}
+              />
             </Flex>
           )}
 
@@ -591,109 +684,131 @@ const ActivitiesNav1 = () => {
                   ONLINE - Optional automated publishing available
                 </Text>
               </Flex>
-              <SimpleGrid minChildWidth="200px" spacing={4}>
-                {activities.onlineOptionalCategory.map((activity) => {
-                  const {id, icon, color, activityTitle, activityDescription} = activity
-                  return (
-                    <Flex
-                      cursor={"pointer"}
-                      key={id}
-                      sx={itemContainerStyle}
-                      onClick={() => dispatch(addOrRemoveActivities(activity))}
-                      bgColor={isSelected(id) && "blue.100"}
-                      border={
-                        isSelected(id)
-                          ? "1px solid #90CDF4"
-                          : "1px solid transparent"
-                      }
-                    >
-                      <Icon
-                        as={icon}
-                        color={color}
-                        sx={itemsIconStyle}
-                      />
-                      <Text sx={itemTitleStyle}>{activityTitle}</Text>
-                      <Text sx={itemDescStyle}>
-                        {activityDescription}
-                      </Text>
-                    </Flex>
-                  )
-                })}
-              </SimpleGrid>
+              {searchedOptionalCategories.length > 0 ? (
+                <Flex sx={listContainer}>
+                  {searchedOptionalCategories.map((activity) => {
+                    const {
+                      id,
+                      icon,
+                      color,
+                      activityTitle,
+                      activityDescription,
+                    } = activity
+                    return (
+                      <Flex
+                        key={id}
+                        sx={itemContainerStyle}
+                        onClick={() =>
+                          dispatch(addOrRemoveActivities(activity))
+                        }
+                        bgColor={isSelected(id) && "blue.100"}
+                        border={
+                          isSelected(id)
+                            ? "1px solid #90CDF4"
+                            : "1px solid transparent"
+                        }
+                        w={"236px"} //Additional, remove this after testing if doesn't work
+                        minW={"200px"} //Additional, remove this after testing if doesn't work
+                      >
+                        <Icon as={icon} color={color} sx={itemsIconStyle} />
+                        <Box>
+                          <Text sx={itemTitleStyle}>{activityTitle}</Text>
+                          <Text sx={itemDescStyle}>{activityDescription}</Text>
+                        </Box>
+                      </Flex>
+                    )
+                  })}
+                </Flex>
+              ) : (
+                <Text color={"gray.400"}>No activities found.</Text>
+              )}
             </Box>
           )}
           {tab && (
             <Box pb={6}>
               <Flex pb={3}>
-                <Text fontWeight={"semibold"}>
-                  ONLINE - Optional automated publishing available
-                </Text>
+                <Text fontWeight={"semibold"}>ONLINE</Text>
               </Flex>
-              <SimpleGrid minChildWidth="200px" spacing={4}>
-                {activities.onlineCategory.map((activity) => {
-                  const {id, icon, color,activityTitle, activityDescription} = activity
-                  return (
-                    <Flex
-                      cursor={"pointer"}
-                      key={id}
-                      sx={itemContainerStyle}
-                      onClick={() => dispatch(addOrRemoveActivities(activity))}
-                      bgColor={isSelected(activity.id) && "blue.100"}
-                      border={
-                        isSelected(id)
-                          ? "1px solid #90CDF4"
-                          : "1px solid transparent"
-                      }
-                    >
-                      <Icon as={icon} color={color}
-                        sx={itemsIconStyle} />
-                      <Text sx={itemTitleStyle}>{activityTitle}</Text>
-                      <Text sx={itemDescStyle}>
-                        {activityDescription}
-                      </Text>
-                    </Flex>
-                  )
-                })}
-              </SimpleGrid>
+              {searchedOnlineCategories.length > 0 ? (
+                <Flex sx={listContainer}>
+                  {searchedOnlineCategories.map((activity) => {
+                    const {
+                      id,
+                      icon,
+                      color,
+                      activityTitle,
+                      activityDescription,
+                    } = activity
+                    return (
+                      <Flex
+                        key={id}
+                        sx={itemContainerStyle}
+                        onClick={() =>
+                          dispatch(addOrRemoveActivities(activity))
+                        }
+                        bgColor={isSelected(id) && "blue.100"}
+                        border={
+                          isSelected(id)
+                            ? "1px solid #90CDF4"
+                            : "1px solid transparent"
+                        }
+                      >
+                        <Icon as={icon} color={color} sx={itemsIconStyle} />
+                        <Box>
+                          <Text sx={itemTitleStyle}>{activityTitle}</Text>
+                          <Text sx={itemDescStyle}>{activityDescription}</Text>
+                        </Box>
+                      </Flex>
+                    )
+                  })}
+                </Flex>
+              ) : (
+                <Text color={"gray.400"}>No activities found.</Text>
+              )}
             </Box>
           )}
 
           {tab && (
             <Box pb={6}>
               <Flex pb={3}>
-                <Text fontWeight={"semibold"}>
-                  ONLINE - Optional automated publishing available
-                </Text>
+                <Text fontWeight={"semibold"}>OFFLINE</Text>
               </Flex>
-              <SimpleGrid minChildWidth="200px" spacing={4}>
-                {activities.offlineCategory.map((activity) => {
-                  const {id, icon, color, activityTitle, activityDescription} = activity
-                  return (
-                    <Flex
-                      cursor={"pointer"}
-                      key={id}
-                      sx={itemContainerStyle}
-                      onClick={() => dispatch(addOrRemoveActivities(activity))}
-                      bgColor={isSelected(id) && "blue.100"}
-                      border={
-                        isSelected(id)
-                          ? "1px solid #90CDF4"
-                          : "1px solid transparent"
-                      }
-                    >
-                      <Icon
-                        as={icon}
-                        color={color}
-                        sx={itemsIconStyle}
-                      />
-                      <Text sx={itemTitleStyle}>{activityTitle}</Text>
-                      <Text sx={itemDescStyle}>
-                        {activityDescription}
-                      </Text>
-                    </Flex>
-                  )
-                })}
-              </SimpleGrid>
+              {searchedOfflineCategories.length > 0 ? (
+                <Flex sx={listContainer}>
+                  {searchedOfflineCategories.map((activity) => {
+                    const {
+                      id,
+                      icon,
+                      color,
+                      activityTitle,
+                      activityDescription,
+                    } = activity
+                    return (
+                      <Flex
+                        key={id}
+                        sx={itemContainerStyle}
+                        onClick={() =>
+                          dispatch(addOrRemoveActivities(activity))
+                        }
+                        bgColor={isSelected(id) && "blue.100"}
+                        border={
+                          isSelected(id)
+                            ? "1px solid #90CDF4"
+                            : "1px solid transparent"
+                        }
+                      >
+                        <Icon as={icon} color={color} sx={itemsIconStyle} />
+                        <Box>
+                          <Text sx={itemTitleStyle}>{activityTitle}</Text>
+                          <Text sx={itemDescStyle}>{activityDescription}</Text>
+                        </Box>
+                      </Flex>
+                    )
+                  })}
+                </Flex>
+              ) : (
+                <Text color={"gray.400"}>No activities found.</Text>
+              )}
             </Box>
           )}
 

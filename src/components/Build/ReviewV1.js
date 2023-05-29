@@ -394,11 +394,14 @@ const ReviewV1 = () => {
       return { ...activity, activityAmount: activity.activityAmount }
     })
   const newSelectedActivities = filterSelectedActivities.map((obj, index) => {
+    console.log('selectedActivities: ', selectedActivities)
+    console.log('obj: ', obj)
     return {
       ...obj,
       ...selectedActivities[index],
     }
   })
+  console.log('newSelectedActivities: ', newSelectedActivities)
 
   return (
     <>

@@ -163,3 +163,13 @@ export const resetPostState = () => {
     dispatch({ type: 'RESET_POST_STATE' })
   }
 }
+export const setRecipientsListLayout = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_RECIPIENTS_LIST_LAYOUT', payload })
+  }
+}
+export const setActivitiesListLayout = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_ACTIVITIES_LIST_LAYOUT', payload })
+  }
+}

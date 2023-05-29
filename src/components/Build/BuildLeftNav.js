@@ -114,15 +114,16 @@ const BuildLeftNav = () => {
     const animateSidebar = () => {
         setCollapse(()=> !collapse)
     }
-    const parentContainer = {
+    const animationVariants = {
         initial: { width: '290px' },
-        animate: { width: !collapse ? '290px' : '80px', transition: { duration: 0.3 } },
+        collapse: { width: !collapse ? '290px' : '80px', transition: { duration: 0.3 } },
+        fontSize: { fontSize: !collapse ? '36px' : '22px', transition: { duration: 0.3 } },
     }
   return (
     <>
-      <Flex as={motion.div} variants={parentContainer} initial={'initial'} animate={'animate'} flexDirection={'column'} justifyContent={'space-between'} alignItems={collapse ? 'center' : 'flex-start'} bgColor={'gray.200'} height={'100vh'} px={5} pb={6} >
+      <Flex as={motion.div} variants={animationVariants} initial={'initial'} animate={'collapse'} flexDirection={'column'} justifyContent={'space-between'} alignItems={collapse ? 'center' : 'flex-start'} bgColor={'gray.200'} height={'100vh'} px={5} pb={6} >
         <Flex flexDirection={'column'} width={'100%'}>
-            <Link to={'/'}><Heading fontSize={!collapse ? '3xl' : 'xl'} pt={5} pb={!collapse ? 5 : 2} >SPA</Heading></Link>
+            <Link to={'/'}><Heading as={motion.h2} variants={animationVariants} animate={'fontSize'} fontSize={!collapse ? '3xl' : 'xl'} pt={5} pb={!collapse ? 5 : 2} >SPA</Heading></Link>
             {!collapse &&
             <Box py={5} borderBottom={'1px solid #D0D4D9'} borderTop={'1px solid #D0D4D9'}>
                 <Text fontWeight={'semibold'} fontSize={'sm'} >Current deal status</Text>

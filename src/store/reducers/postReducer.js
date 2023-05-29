@@ -13,10 +13,24 @@ const initState = {
     detailsTabReady: false,
     reviewTabReady: false,
     paymentTabReady: false,
+    recipientsListLayout: true,
+    activitiesListLayout: false,
 }
 
 const postReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_RECIPIENTS_LIST_LAYOUT":
+          console.log('SET_RECIPIENTS_LIST_LAYOUT')
+          return {
+            ...state,
+            recipientsListLayout: action.payload
+          }
+      case "SET_ACTIVITIES_LIST_LAYOUT":
+          console.log('SET_ACTIVITIES_LIST_LAYOUT')
+          return {
+            ...state,
+            activitiesListLayout: action.payload
+          }
       case "RESET_POST_STATE":
           console.log('RESET_POST_STATE')
           return {
