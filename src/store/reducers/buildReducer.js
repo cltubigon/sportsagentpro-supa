@@ -4,7 +4,7 @@ const initState = {
     selectedRecipientsCount: 0,
     postType: null,
     activeStep: 'deal_type',
-    searchRecipient: '',
+    selectedRecipients: [],
     selectedActivities: [],
     activitiesTabReady: false,
     postContent: null,
@@ -19,6 +19,12 @@ const initState = {
 
 const buildReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_SELECTED_RECIPIENTS":
+          console.log('SET_SELECTED_RECIPIENTS')
+          return {
+            ...state,
+            selectedRecipients: action.payload
+          }
       case "SET_RECIPIENTS_LIST_LAYOUT":
           console.log('SET_RECIPIENTS_LIST_LAYOUT')
           return {
@@ -105,12 +111,6 @@ const buildReducer = (state = initState, action) => {
               ...state,
               selectedActivities: action.payload,
             }
-        // case "SEARCH_ATHLETE":
-        //     console.log('SEARCH_ATHLETE', action.payload)
-        //     return {
-        //       ...state,
-        //       searchRecipient: action.payload,
-        //     }
         case "SET_CHECK_TRUE_OR_FALSE":
             console.log('SET_CHECK_TRUE_OR_FALSE', action.payload)
             return {

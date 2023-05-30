@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Button, Flex } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { createPost } from "../store/actions/buildPostActions"
+// import { createPost } from "../store/actions/buildPostActions"
 import BuildLeftNav from "../components/Build/BuildLeftNav"
 import { saveAthletesToStorage } from "../store/actions/athleteActions"
 import ActivitiesV1 from "../components/Build/ActivitiesV1"
@@ -17,30 +17,45 @@ const Build = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const activeStep = useSelector(state => state.build.activeStep)
+  const activeStep = useSelector((state) => state.build.activeStep)
   const isLoggedIn = useSelector((state) => state.auth.profile)
 
-  useEffect(()=> {
+  // const testData = {
+  //   postOwnerFirstName: 'Carlo',
+  //   postOwnerLastName: 'Tubigon',
+  //   postTitle: "This is the first Title",
+  //   postDescription: "lorem ipsum dolor samhet mapahet",
+  // }
+  const handleSubmit = () => {
+    // dispatch(createPost(testData))
+  }
+
+  useEffect(() => {
     if (!isLoggedIn) {
-      navigate('/login')
+      navigate("/login")
     }
-  },[])
+  }, [])
 
   return (
     <>
       <Flex maxW={"100%"} height={"100vh"}>
-        <Box maxW={'290px'}>
+        <Box maxW={"290px"}>
           <BuildLeftNav />
         </Box>
-        <Flex flexGrow={1} flexDirection={'column'} justifyContent={'flex-start'} >
+        <Flex
+          flexGrow={1}
+          flexDirection={"column"}
+          justifyContent={"flex-start"}
+        >
           {/* <BuildNav /> */}
-          {activeStep === 'deal_type' && <DealTypeV1 />}
-          {activeStep === 'recipients' && <RecipientsV1 />}
-          {activeStep === 'activities' && <ActivitiesV1 />}
-          {activeStep === 'details' && <DetailsV1 />}
-          {activeStep === 'review' && <ReviewV1 />}
-          {activeStep === 'payment' && <Paymentv1 />}
+          {activeStep === "deal_type" && <DealTypeV1 />}
+          {activeStep === "recipients" && <RecipientsV1 />}
+          {activeStep === "activities" && <ActivitiesV1 />}
+          {activeStep === "details" && <DetailsV1 />}
+          {activeStep === "review" && <ReviewV1 />}
+          {activeStep === "payment" && <Paymentv1 />}
         </Flex>
+        <Button onClick={handleSubmit}>Submit Now</Button>
       </Flex>
     </>
   )

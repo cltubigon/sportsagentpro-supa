@@ -1,14 +1,21 @@
 import { collection, addDoc } from "firebase/firestore"
 
-export const createPost = (post) => {
+export const setSelectedRecipients = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_SELECTED_RECIPIENTS', payload })
+  }
+}
+
+export const createPost = (data) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore()
+    console.log('getState(): ', getState())
     try {
       await addDoc(collection(firestore, "post"), {
-        ...post,
+        ...data,
         createdAt: new Date(),
       })
-      dispatch({ type: "CREATE_DEAL", post })
+      dispatch({ type: "CREATE_DEAL", data })
     } catch (err) {
       dispatch({ type: "CREATE_DEAL_ERROR", err })
     }
@@ -30,11 +37,12 @@ export const setActiveStep = (data) => {
 }
 
 export const setInitialFilteredAthletes = (data) => {
+  console.log('SET_INITIAL_FILTERED_ATHLETES')
   return (dispatch) => {
-    // console.log('data: ', data)
     const payload = data.map((athlete)=> {
       return (
-        {...athlete, isChecked: false}
+        {...athlete}
+        // {...athlete, isChecked: false}
       )
     })
     dispatch({ type:'SET_INITIAL_FILTERED_ATHLETES', payload})
@@ -101,12 +109,6 @@ export const updateSelectedActivities = (data) => {
     dispatch({ type: 'UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', payload})
   }
 }
-
-// export const searchAthlete = (payload) => {
-//   return (dispatch)=> {
-//     dispatch({ type: 'SEARCH_ATHLETE', payload })
-//   }
-// }
 
 export const setContent = (payload) => {
   return (dispatch) => {

@@ -23,16 +23,25 @@ const PaymentV1 = () => {
   const dispatch = useDispatch()
   const reduxPosts = useSelector((state) => state.build)
   const {
-    postContent,
     postType,
-    recipients,
     selectedActivities,
-    postTitle,
-    postExpirationDate,
     detailsTabReady,
     activitiesTabReady,
     selectedRecipientsCount,
+    postContent,
+    postTitle,
+    recipients,
+    postExpirationDate,
+    activeStep,
+    searchRecipient,
+    reviewTabReady,
+    paymentTabReady,
+    recipientsListLayout,
+    activitiesListLayout,
   } = reduxPosts
+
+  console.log('reduxPosts: ', reduxPosts)
+  // const dataToSubmit = { postType, selectedActivities,  }
 
   const allActivityAmount = selectedActivities
     .filter((activity) => activity.activityAmount !== "")

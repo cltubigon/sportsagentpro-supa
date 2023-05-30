@@ -27,6 +27,7 @@ import {
   setCheckboxTrueOrFalse,
   setInitialFilteredAthletes,
   setRecipientsListLayout,
+  setSelectedRecipients,
 } from "../../store/actions/buildPostActions"
 import { saveAthletesToStorage } from "../../store/actions/athleteActions"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
@@ -39,7 +40,7 @@ const RecipientsV1 = () => {
   const reduxState = useSelector((state) => state)
   const localAthletes = useSelector((state) => state.athlete.athletes)
   const reduxPosts = useSelector(state => state.build)
-  const {recipients, recipientsListLayout} = reduxPosts
+  const {recipients, recipientsListLayout, activeStep, selectedRecipients} = reduxPosts
 //   const recipients = useSelector((state) => state.build.recipients)
   const firestoreAthletes = useSelector(
     (state) => state.firestore.ordered.athlete
@@ -49,16 +50,45 @@ const RecipientsV1 = () => {
   const { register, watch } = useForm()
 
   const [tab, setTab] = useState(true)
-//   const [recipientsListLayout, setListLayout] = useState(true)
+  const [inputs, setInputs] = useState({})
 
   const handleListTrue = () => {
-    // setListLayout(() => true)
     dispatch(setRecipientsListLayout(true))
   }
   const handleListFalse = () => {
-    // setListLayout(() => false)
     dispatch(setRecipientsListLayout(false))
   }
+  
+  const handleChange = (e) => {
+    console.log('e.target: ', e)
+    setInputs({...inputs, [e.target.name]: e.target.checked})
+  }
+
+  const [newFiltered, setNewFiltered] = useState([])
+
+  useEffect(()=> {
+    console.log('inputs: ', inputs)
+    if (newFiltered.length > 0) {
+      console.log('This is triggered')
+      dispatch(setSelectedRecipients(inputs))
+    }
+  }, [inputs])
+
+  useEffect(()=> {
+    const mapKey = recipients && recipients.map((recipient)=> {
+      const getSelected = selectedRecipients && Object.keys(selectedRecipients).some(key => key === recipient.id && selectedRecipients[key] === true)
+      if (getSelected) {
+        return {...recipient, isChecked: true}
+      } else {
+        return {...recipient, isChecked: false}
+      }
+    })
+    setNewFiltered(mapKey)
+  }, [selectedRecipients])
+  console.log('newFiltered: ', newFiltered)
+
+  
+  console.log('selectedRecipients: ', selectedRecipients)
 
   const watched = watch("searchQuery")
   const filteredRecipients =
@@ -72,7 +102,12 @@ const RecipientsV1 = () => {
           )
         })
       : recipients
-
+  
+  useEffect(()=> {
+    const selectedRecipients = recipients && recipients.filter(recipient => recipient.isChecked)
+    dispatch(setSelectedRecipients(selectedRecipients))
+  }, [recipients])
+  
   useEffect(() => {
     if (
       (!recipients && localAthletes) ||
@@ -245,6 +280,21 @@ const RecipientsV1 = () => {
 
           {tab && (
             <Flex flexBasis={"100%"} flexDirection={"column"} flexGrow={1}>
+              {newFiltered && newFiltered.map((recipient)=> {
+                const { id, firstName, lastName, isChecked } = recipient
+                return (
+                  <Flex key={id}>
+                    <input type="checkbox" name={id} value={isChecked} id={`${id}`} onChange={(e)=> handleChange(e)} />
+                    <label htmlFor={`${id}`} >{`${firstName} ${lastName}`}</label>
+                  </Flex>
+                )
+              })
+              }
+            </Flex>
+          )}
+          
+          {/* {tab && (
+            <Flex flexBasis={"100%"} flexDirection={"column"} flexGrow={1}>
               <FormControl>
                 <InputGroup sx={itemsContainer}>
                   {filteredRecipients ? (
@@ -300,10 +350,10 @@ const RecipientsV1 = () => {
                 </InputGroup>
               </FormControl>
             </Flex>
-          )}
+          )} */}
 
           {/* -------------------------------------- Second Tab -------------------------------------- */}
-          {!tab && (
+          {/* {!tab && (
             <Flex flexBasis={"100%"} flexDirection={"column"} flexGrow={1}>
               {count > 0 ? (
                 <FormControl>
@@ -392,7 +442,7 @@ const RecipientsV1 = () => {
                 </Flex>
               )}
             </Flex>
-          )}
+          )} */}
         </GridItem>
 
         {/* -------------------------------------- Footer Section -------------------------------------- */}
