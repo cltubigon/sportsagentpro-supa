@@ -34,7 +34,7 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   const { errors } = formState
   
   const authError = useSelector((state)=> state.auth.authError)
-  const auth = useSelector((state)=> state.firebase.auth)
+  const firebase = useSelector((state)=> state.firebase)
   const profile = useSelector((state) => state.auth.profile)
   
   const [creatingAccount, setCreatingAccount] = useState(false)
@@ -77,9 +77,28 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   }
   
   useEffect(() => {
-    if (auth.uid && profile) {
+    if (firebase.auth.uid && profile) {
       setCreatingAccount(()=> !creatingAccount)
-      navigate('/network')
+      const userType = firebase.profile.userType
+      switch (userType) {
+        case "brand":
+          navigate("/network")
+          break
+        case "athlete":
+          navigate("/athlete-home")
+          break
+        case "athlete_representative":
+          navigate("/athlete_representative")
+          break
+        case "fan":
+          navigate("/fan")
+          break
+        case "coach_staff":
+          navigate("/coach_staff")
+          break
+        default:
+          break
+      }
     }
   }, [profile])
 

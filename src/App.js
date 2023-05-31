@@ -13,6 +13,7 @@ import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
 import Build from "./pages/Build"
 import Network from "./pages/Network"
+import AthleteHomepage from "./pages/AthleteHomePage"
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/user-type" element={<UserType />}></Route>
             <Route path="/build" element={<Build />}></Route>
             <Route path="/network" element={<Network />}></Route>
+            <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
           </Routes>
         <ColorMode />
       </BrowserRouter>
