@@ -1,26 +1,58 @@
 import { collection, addDoc } from "firebase/firestore"
 
 export const setSelectedRecipients = (payload) => {
+  console.log('SET_SELECTED_RECIPIENTS ', payload)
   return (dispatch) => {
-    dispatch({ type: 'SET_SELECTED_RECIPIENTS', payload })
+    dispatch({type: "SET_SELECTED_RECIPIENTS", payload})
   }
 }
 
-export const createPost = (data) => {
+export const createPost = () => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore()
-    console.log('getState(): ', getState())
+    const build = getState().build;
+    const firestore = getFirestore();
+    const uid = getState().firebase.auth.uid;
+    const { recipients, isSubmittedSuccessfully, ...newObject } = build;
+    const sanitizedObject = JSON.parse(JSON.stringify(newObject));
+
     try {
-      await addDoc(collection(firestore, "post"), {
-        ...data,
+      await addDoc(collection(firestore, "posts"), {
+        ...sanitizedObject,
+        ownerUID: uid,
         createdAt: new Date(),
-      })
-      dispatch({ type: "CREATE_DEAL", data })
+      });
+      dispatch({ type: "CREATE_POST", sanitizedObject });
     } catch (err) {
-      dispatch({ type: "CREATE_DEAL_ERROR", err })
+      console.log('err: ', err);
+      dispatch({ type: "CREATE_POST_ERROR", err });
     }
-  }
-}
+  };
+};
+
+
+// export const createPost = () => {
+//   return async (dispatch, getState, { getFirebase, getFirestore }) => {
+//     const build = getState().build
+//     const firestore = getFirestore()
+//     const uid = getState().firebase.auth.uid
+//     console.log('uid: ', uid)
+//     console.log('build: ', build)
+//     const { recipients, isSubmittedSuccessfully, ...newObject } = build
+//     console.log('newObject: ', newObject)
+
+//     try {
+//       await addDoc(collection(firestore, "posts"), {
+//         ...newObject,
+//         // // ownerID: uid && uid,
+//         createdAt: new Date(),
+//       })
+//       dispatch({ type: "CREATE_POST", newObject })
+//     } catch (err) {
+//       console.log('err: ', err)
+//       dispatch({ type: "CREATE_POST_ERROR", err })
+//     }
+//   }
+// }
 
 export const savePostType = (data) => {
   return (dispatch) => {
@@ -37,12 +69,11 @@ export const setActiveStep = (data) => {
 }
 
 export const setInitialFilteredAthletes = (data) => {
-  console.log('SET_INITIAL_FILTERED_ATHLETES')
   return (dispatch) => {
+    // console.log('data: ', data)
     const payload = data.map((athlete)=> {
       return (
-        {...athlete}
-        // {...athlete, isChecked: false}
+        {...athlete, isChecked: false}
       )
     })
     dispatch({ type:'SET_INITIAL_FILTERED_ATHLETES', payload})
@@ -64,9 +95,9 @@ export const setCheckboxTrueOrFalse = (id) => {
         return athlete
       }
     })
-    const count = payload.filter(athlete => athlete.isChecked === true)
-    const countPayload = count.length
-    dispatch({ type: 'SET_CHECK_TRUE_OR_FALSE', payload, countPayload })
+    // const count = payload.filter(athlete => athlete.isChecked === true)
+    // const countPayload = count.length
+    dispatch({ type: 'SET_CHECK_TRUE_OR_FALSE', payload })
   }
 }
 
@@ -109,6 +140,12 @@ export const updateSelectedActivities = (data) => {
     dispatch({ type: 'UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', payload})
   }
 }
+
+// export const searchAthlete = (payload) => {
+//   return (dispatch)=> {
+//     dispatch({ type: 'SEARCH_ATHLETE', payload })
+//   }
+// }
 
 export const setContent = (payload) => {
   return (dispatch) => {

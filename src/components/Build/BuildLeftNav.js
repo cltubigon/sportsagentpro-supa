@@ -12,11 +12,13 @@ import { duration } from "moment/moment"
 const BuildLeftNav = () => {
     const dispatch = useDispatch()
     const statePost = useSelector(state => state.build)
-    const { postType, selectedActivities, activitiesTabReady, activeStep, selectedRecipientsCount, detailsTabReady, reviewTabReady, paymentTabReady } = statePost
+    const { recipients, postType, selectedActivities, activitiesTabReady, activeStep, detailsTabReady, reviewTabReady, paymentTabReady } = statePost
     
     const countActivities = selectedActivities.length
 
     const stepTwoCompleted = statePost.recipients && statePost.recipients.some(recipient => recipient.isChecked)
+    const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)
+    const count = getSelectedRecpients && getSelectedRecpients.length
 
     const [collapse, setCollapse] = useState(false)
     const [paymentReady, setPaymentReady] = useState(null)
@@ -29,7 +31,7 @@ const BuildLeftNav = () => {
 
     useEffect(()=> {
         (postType === 'offer' &&
-        selectedRecipientsCount > 0 &&
+        count > 0 &&
         activitiesTabReady &&
         detailsTabReady ||
         postType === 'opportunity' &&
@@ -41,7 +43,7 @@ const BuildLeftNav = () => {
 
     useEffect(()=> {
         (postType === 'offer' &&
-        selectedRecipientsCount > 0 ||
+        count > 0 ||
         activitiesTabReady ||
         detailsTabReady ||
         postType === 'opportunity' &&
@@ -148,7 +150,7 @@ const BuildLeftNav = () => {
                         {activeStep === 'recipients' ? <Icon as={CheckIcon} boxSize={3} /> : (stepTwoCompleted ? <Icon as={CheckIcon} boxSize={3} /> : <Text sx={numberStyle}>2</Text>)}
                     </Flex>
                     {!collapse && <Box>
-                        <Text sx={activeStep === 'recipients' ? selectedMenuTitleStyle : menuTitleStyle}>Recipients {selectedRecipientsCount > 0 && `(${selectedRecipientsCount})`}</Text>
+                        <Text sx={activeStep === 'recipients' ? selectedMenuTitleStyle : menuTitleStyle}>Recipients {count > 0 && `(${count})`}</Text>
                         <Text sx={activeStep === 'recipients' ? selectedMenuDescStyle : menuDescStyle}>{stepTwoCompleted ? 'Completed' : 'Incomplete'}</Text>
                     </Box>}
                 </Flex>}

@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
-import { Box, Button, Flex } from "@chakra-ui/react"
+import { Box, Flex, Heading, Spinner } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react"
-// import { createPost } from "../store/actions/buildPostActions"
+import { useEffect, useRef, useState } from "react"
+import { createPost } from "../store/actions/buildPostActions"
 import BuildLeftNav from "../components/Build/BuildLeftNav"
 import { saveAthletesToStorage } from "../store/actions/athleteActions"
 import ActivitiesV1 from "../components/Build/ActivitiesV1"
@@ -16,19 +16,21 @@ import { useNavigate } from "react-router-dom"
 const Build = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const flexRef = useRef(null)
 
   const activeStep = useSelector((state) => state.build.activeStep)
   const isLoggedIn = useSelector((state) => state.auth.profile)
 
-  // const testData = {
-  //   postOwnerFirstName: 'Carlo',
-  //   postOwnerLastName: 'Tubigon',
-  //   postTitle: "This is the first Title",
-  //   postDescription: "lorem ipsum dolor samhet mapahet",
-  // }
-  const handleSubmit = () => {
-    // dispatch(createPost(testData))
-  }
+  const [gridHeight, setGridHeight] = useState(null)
+  const [gridWidth, setGridWidth] = useState(null)
+  const [spinner, setSpinner] = useState(false)
+
+  useEffect(() => {
+    if (flexRef.current) {
+      setGridHeight(flexRef.current.scrollHeight)
+      setGridWidth(flexRef.current.offsetWidth)
+    }
+  }, [])
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -46,6 +48,7 @@ const Build = () => {
           flexGrow={1}
           flexDirection={"column"}
           justifyContent={"flex-start"}
+          ref={flexRef}
         >
           {/* <BuildNav /> */}
           {activeStep === "deal_type" && <DealTypeV1 />}
@@ -53,9 +56,30 @@ const Build = () => {
           {activeStep === "activities" && <ActivitiesV1 />}
           {activeStep === "details" && <DetailsV1 />}
           {activeStep === "review" && <ReviewV1 />}
-          {activeStep === "payment" && <Paymentv1 />}
+          {activeStep === "payment" && <Paymentv1 setSpinner={setSpinner} />}
+          {spinner && (
+            <Flex
+              justifyContent={"center"}
+              position={"absolute"}
+              bgColor={"rgba(255, 255, 255, 0.7)"}
+              flexDirection={"column"}
+              alignItems={"center"}
+              gap={6}
+              height={`${gridHeight}px`}
+              width={`${gridWidth}px`}
+              zIndex={99}
+            >
+              <Heading>Please wait...</Heading>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            </Flex>
+          )}
         </Flex>
-        <Button onClick={handleSubmit}>Submit Now</Button>
       </Flex>
     </>
   )

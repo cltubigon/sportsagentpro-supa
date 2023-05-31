@@ -125,11 +125,12 @@ const RichEditor = ({ borderColorWidthStyle, borderRadius, height, setRawDataStr
   // ------------ RICH TEXT SAVE ------------
   useEffect(()=> {
       const rawData = convertToRaw(editorState.getCurrentContent())
-      setRawDataString(JSON.stringify(rawData))
+      // setRawDataString(JSON.stringify(rawData))
+      setRawDataString(rawData)
       setAvailableCharacters(remainingCharacters)
   }, [editorState])
 
-  // ------------ RICH TEXT GET ------------
+  // ------------ SET RICH TEXT ------------
   useEffect(()=> {
     if (rawDataParsed) {
         const theContentState = convertFromRaw(rawDataParsed)

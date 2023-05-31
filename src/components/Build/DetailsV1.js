@@ -59,14 +59,11 @@ const DetailsV1 = () => {
   const height = "200px"
   
   useEffect(()=> {
-    // console.log('availableCharacters: ', availableCharacters)
       setIsCompleted(availableCharacters <= 1949 && availableCharacters >= 0 && postTitle ? true : false)
   }, [availableCharacters, reduxPosts])
-  // console.log('isCompleted: ', isCompleted)
   
   useEffect(()=> {
     if (availableCharacters !== 2000) {
-      // console.log('I am dispatched', isCompleted)
       dispatch(setDetailsTabStatus(isCompleted))
     }
   }, [isCompleted])
@@ -74,6 +71,7 @@ const DetailsV1 = () => {
   // ------------ RICH TEXT SAVE ------------
   
   useEffect(()=> {
+    console.log('rawDataString: ', rawDataString)
     availableCharacters >= -1 && dispatch(setContent(rawDataString))
 
     return
@@ -82,7 +80,8 @@ const DetailsV1 = () => {
   
   useEffect(()=> {
     if (postContent) {
-      setRawDataParsed(JSON.parse(postContent))
+      setRawDataParsed(postContent)
+      // setRawDataParsed(JSON.parse(postContent))
     }
     
   }, [])

@@ -7,41 +7,50 @@ import {
   Text,
   Box,
   Checkbox,
+  useToast,
+  Spinner,
+  Heading,
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { BsCheck, BsChevronLeft, BsPlus } from "react-icons/bs"
 import { TfiClose } from "react-icons/tfi"
 import {
+  createPost,
+  resetPostState,
   setActiveStep,
   setPaymentTabStatus,
+  setSelectedRecipients,
 } from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useRef } from "react"
+// import { firestoreConnect } from "react-redux-firebase"
 
-const PaymentV1 = () => {
+const PaymentV1 = ({ setSpinner }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const toast = useToast()
+  const divRef = useRef()
   const reduxPosts = useSelector((state) => state.build)
   const {
+    postOwner,
+    recipients,
     postType,
+    activeStep,
+    selectedRecipients,
     selectedActivities,
-    detailsTabReady,
     activitiesTabReady,
-    selectedRecipientsCount,
     postContent,
     postTitle,
-    recipients,
     postExpirationDate,
-    activeStep,
-    searchRecipient,
+    detailsTabReady,
     reviewTabReady,
     paymentTabReady,
     recipientsListLayout,
     activitiesListLayout,
+    isSubmittedSuccessfully
   } = reduxPosts
-
-  console.log('reduxPosts: ', reduxPosts)
-  // const dataToSubmit = { postType, selectedActivities,  }
 
   const allActivityAmount = selectedActivities
     .filter((activity) => activity.activityAmount !== "")
@@ -52,6 +61,13 @@ const PaymentV1 = () => {
   )
   const marketplaceFee = recipientEarnings * 0.1
   const total = recipientEarnings + marketplaceFee
+  const getSelectedRecpients =
+    recipients && recipients.filter((data) => data.isChecked)
+  const count = getSelectedRecpients && getSelectedRecpients.length
+
+  useEffect(() => {
+    dispatch(setSelectedRecipients(getSelectedRecpients))
+  }, [])
 
   const [agree, setAgree] = useState(true)
   const [isReadyToPost, setIsReadyToPost] = useState(true)
@@ -59,10 +75,14 @@ const PaymentV1 = () => {
   useEffect(() => {
     if (
       (postType === "offer" &&
-        selectedRecipientsCount > 0 &&
+        count > 0 &&
         activitiesTabReady &&
-        detailsTabReady) && agree ||
-      (postType === "opportunity" && activitiesTabReady && detailsTabReady && agree)
+        detailsTabReady &&
+        agree) ||
+      (postType === "opportunity" &&
+        activitiesTabReady &&
+        detailsTabReady &&
+        agree)
     ) {
       // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => true)
@@ -74,11 +94,33 @@ const PaymentV1 = () => {
     }
 
     return
-  }, [selectedRecipientsCount, activitiesTabReady, detailsTabReady, agree])
+  }, [count, activitiesTabReady, detailsTabReady, agree])
+
+  // const { recipients, isSubmittedSuccessfully, ...filteredReduxPosts } = reduxPosts
+  // console.log('filteredReduxPosts: ', filteredReduxPosts)
 
   const handleSubmit = () => {
-    alert("Hi, I am ready")
+    dispatch(createPost())
+    setSpinner(()=> true)
   }
+  console.log('reduxPosts: ', reduxPosts)
+
+  useEffect(() => {
+    if (isSubmittedSuccessfully) {
+      console.log("dispatch reset is triggered")
+      dispatch(resetPostState())
+      setSpinner(()=> false)
+      toast({
+        title: "Success",
+        description: "Your post was successfully created",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom-right",
+      })
+      navigate("/network")
+    }
+  }, [isSubmittedSuccessfully])
 
   return (
     <>
@@ -107,7 +149,9 @@ const PaymentV1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
+              <Link to={"/network"}>
+                <Icon as={TfiClose} boxSize={4} />
+              </Link>
             </Flex>
           </Flex>
         </GridItem>
@@ -119,7 +163,9 @@ const PaymentV1 = () => {
           py={2}
           area={"main"}
           overflowY={"auto"}
+          overflowX={"hidden"}
           position={"relative"}
+          // bgColor={"blue"}
         >
           <Flex flexDirection={"column"} gap={4}>
             <Box
@@ -343,3 +389,8 @@ const PaymentV1 = () => {
 }
 
 export default PaymentV1
+// export default firestoreConnect([
+//   {
+//     collection: "post",
+//   },
+// ])(PaymentV1)

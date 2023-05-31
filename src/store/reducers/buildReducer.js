@@ -1,7 +1,6 @@
 const initState = {
     postOwner: null,
     recipients: null,
-    selectedRecipientsCount: 0,
     postType: null,
     activeStep: 'deal_type',
     selectedRecipients: [],
@@ -15,6 +14,7 @@ const initState = {
     paymentTabReady: false,
     recipientsListLayout: true,
     activitiesListLayout: false,
+    isSubmittedSuccessfully: false,
 }
 
 const buildReducer = (state = initState, action) => {
@@ -56,13 +56,6 @@ const buildReducer = (state = initState, action) => {
             ...state,
             paymentTabReady: action.payload,
           }
-      // case "SET_REVIEW_TAB_STATUS":
-      //     console.log('SET_REVIEW_TAB_STATUS', action.payload)
-
-      //     return {
-      //       ...state,
-      //       reviewTabReady: action.payload,
-      //     }
       case "SET_DETAILS_TAB_STATUS":
           console.log('SET_DETAILS_TAB_STATUS', action.payload)
 
@@ -116,7 +109,6 @@ const buildReducer = (state = initState, action) => {
             return {
               ...state,
               recipients: action.payload,
-              selectedRecipientsCount: action.countPayload,
             }
         case "SET_INITIAL_FILTERED_ATHLETES":
             console.log('SET_INITIAL_FILTERED_ATHLETES', action.payload)
@@ -137,8 +129,11 @@ const buildReducer = (state = initState, action) => {
                 postType: action.data
             }
         case "CREATE_POST":
-            console.log('CREATE_POST', action.post)
-            return state
+            console.log('CREATE_POST', action.sanitizedObject)
+            return {
+              ...state,
+              isSubmittedSuccessfully: true
+            }
         case 'CREATE_POST_ERROR':
             console.log('CREATE_POST_ERROR', action.err)
             return state

@@ -69,8 +69,10 @@ const ReviewV1 = () => {
     postExpirationDate,
     detailsTabReady,
     activitiesTabReady,
-    selectedRecipientsCount,
   } = reduxPosts
+
+  const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)
+  const count = getSelectedRecpients && getSelectedRecpients.length
 
   const [viewMore, setViewMore] = useState(false)
   const [hasBrief, setHasBrief] = useState(null)
@@ -86,16 +88,17 @@ const ReviewV1 = () => {
     recipients && recipients.filter((recipient) => recipient.isChecked)
 
   // useEffect(() => {
-  //   ((postType === 'offer' && selectedRecipientsCount > 0 ||
+  //   ((postType === 'offer' && count > 0 ||
   //     activitiesTabReady ||
   //     detailsTabReady) ||
   //     (postType === 'opportunity' && activitiesTabReady ||
   //     detailsTabReady)) ? dispatch(setReviewTabStatus(true)) : dispatch(setReviewTabStatus(false))
-  // }, [selectedRecipientsCount, activitiesTabReady, detailsTabReady])
+  // }, [count, activitiesTabReady, detailsTabReady])
 
   useEffect(() => {
     if (postContent) {
-      const rawDataParsed = postContent && JSON.parse(postContent)
+      // const rawDataParsed = postContent && JSON.parse(postContent)
+      const rawDataParsed = postContent && postContent
       const hasBrief = rawDataParsed.blocks[0].text
       setHasBrief(hasBrief)
       const contentState = convertFromRaw(rawDataParsed)
@@ -390,12 +393,9 @@ const ReviewV1 = () => {
       selectedActivities.some((someActivity) => someActivity.id === activity.id)
     )
     .map((activity) => {
-      //TODO: Get icons
       return { ...activity, activityAmount: activity.activityAmount }
     })
   const newSelectedActivities = filterSelectedActivities.map((obj, index) => {
-    console.log('selectedActivities: ', selectedActivities)
-    console.log('obj: ', obj)
     return {
       ...obj,
       ...selectedActivities[index],
