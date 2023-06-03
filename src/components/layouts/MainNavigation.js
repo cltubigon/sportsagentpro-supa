@@ -9,18 +9,21 @@ import {FaFileContract} from 'react-icons/fa'
 
 const MainNavigation = () => {
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const location = useLocation()
   
   const profile = useSelector((state) => state.firebase.profile)
   const auth = useSelector((state) => state.firebase.auth.uid)
   const isLoggedIn = useSelector((state) => state.auth.profile)
   console.log("MainNavigation")
+  console.log('auth: ', auth)
 
   const { firstName, initials, lastName, phoneNumber, userType } = profile
   const userProfile = { firstName, initials, lastName, phoneNumber, userType }
 
   useEffect(() => {
+    !isLoggedIn && navigate('/')
+    
     const runTimeout = setTimeout(() => {
       if (isLoggedIn && !auth) {
         console.log("signing out, bye2x")
@@ -56,9 +59,6 @@ const MainNavigation = () => {
             <Heading as={"h3"} fontSize={"3xl"}>
               <Link to="/">Sports Agent Pros</Link>
             </Heading>
-            {/* <Link to={'/build'}><Button colorScheme="twitter" borderRadius={'100px'} leftIcon={<FaFileContract />}>
-              Build
-            </Button></Link> */}
           </Flex>
           <Flex flexGrow={1}>
             {isLoggedIn ? <SignedInNavigation /> : <SignedOutNavigation />}

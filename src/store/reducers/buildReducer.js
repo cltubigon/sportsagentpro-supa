@@ -1,5 +1,7 @@
 const initState = {
     postOwner: null,
+    postOwnerFirstName: null,
+    postOwnerLastName: null,
     recipients: null,
     postType: null,
     activeStep: 'deal_type',
@@ -8,17 +10,31 @@ const initState = {
     activitiesTabReady: false,
     postContent: null,
     postTitle: null,
-    postExpirationDate: null,
+    postExpirationDate: {},
     detailsTabReady: false,
     reviewTabReady: false,
     paymentTabReady: false,
     recipientsListLayout: true,
     activitiesListLayout: false,
     isSubmittedSuccessfully: false,
+    totalPayment: null,
 }
 
 const buildReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_TOTAL_PAYMENT":
+          console.log('SET_TOTAL_PAYMENT')
+          return {
+            ...state,
+            totalPayment: action.payload,
+          }
+      case "SET_FIRSTNAME_AND_LASTNAME":
+          console.log('SET_FIRSTNAME_AND_LASTNAME')
+          return {
+            ...state,
+            postOwnerFirstName: action.payload.firstName,
+            postOwnerLastName: action.payload.lastName,
+          }
       case "SET_SELECTED_RECIPIENTS":
           console.log('SET_SELECTED_RECIPIENTS')
           return {
@@ -68,7 +84,7 @@ const buildReducer = (state = initState, action) => {
 
             return {
               ...state,
-              postExpirationDate: action.payload,
+              postExpirationDate: action.objPayload
             }
         case "SET_POST_TITLE":
             console.log('SET_POST_TITLE', action.payload)

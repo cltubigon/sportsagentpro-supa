@@ -1,5 +1,17 @@
 import { collection, addDoc } from "firebase/firestore"
 
+export const setTotalPayment = (payload) => {
+  console.log('SET_TOTAL_PAYMENT ', payload)
+  return (dispatch) => {
+    dispatch({type: "SET_TOTAL_PAYMENT", payload})
+  }
+}
+export const setFirstNameAndLastName = (payload) => {
+  console.log('SET_FIRSTNAME_AND_LASTNAME ', payload)
+  return (dispatch) => {
+    dispatch({type: "SET_FIRSTNAME_AND_LASTNAME", payload})
+  }
+}
 export const setSelectedRecipients = (payload) => {
   console.log('SET_SELECTED_RECIPIENTS ', payload)
   return (dispatch) => {
@@ -133,13 +145,52 @@ export const updateSelectedActivities = (data) => {
       const date = data[`activityDate${activity.id}`]
       console.log('date: ', date)
       console.log('amount: ', amount)
-      return {...activity, activityAmount: amount || "", ...(date !== undefined && { activityDate: date }) }
+      
+      if (date) {
+        const utcFormat = new Date(date).toUTCString().replace("GMT", "UTC")
+        const localeFormat = new Date(date).toLocaleString()
+        const objPayload = {calendarFormat: date || '', utcFormat: utcFormat || '', localeFormat: localeFormat || ''}
+        console.log('utcFormat: ', utcFormat)
+        console.log('localeFormat: ', localeFormat)
+        console.log('objPayload: ', objPayload)
+        return {...activity, activityAmount: amount || "", ...{ activityDate: objPayload } }
+      } else {
+        return {...activity, activityAmount: amount || "", activityDate: '' }
+      }
+
     })
 
     console.log('payload: ', payload)
     dispatch({ type: 'UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', payload})
   }
 }
+// export const updateSelectedActivities = (data) => {
+//   console.log('data: ', data)
+//   return (dispatch, getState)=> {
+//     const state = getState()
+//     const selectedActivities = state.build.selectedActivities
+//     console.log('selectedActivities: ', selectedActivities)
+
+//     const payload = selectedActivities.map((activity)=> {
+//       const amount = data[`activityAmount${activity.id}`]
+//       const date = data[`activityDate${activity.id}`]
+//       console.log('date: ', date)
+//       console.log('amount: ', amount)
+      
+//       const utcFormat = new Date(date).toUTCString().replace("GMT", "UTC")
+//       const localeFormat = new Date(date).toLocaleString()
+//       const objPayload = {calendarFormat: date || '', utcFormat: utcFormat || '', localeFormat: localeFormat || ''}
+//       console.log('utcFormat: ', utcFormat)
+//       console.log('localeFormat: ', localeFormat)
+//       console.log('objPayload: ', objPayload)
+
+//       return {...activity, activityAmount: amount || "", ...(date !== undefined && { activityDate: objPayload }) }
+//     })
+
+//     console.log('payload: ', payload)
+//     dispatch({ type: 'UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES', payload})
+//   }
+// }
 
 // export const searchAthlete = (payload) => {
 //   return (dispatch)=> {
@@ -161,9 +212,14 @@ export const setPostTitle = (payload) => {
 }
 
 export const setPostExpirationDate = (payload) => {
-  console.log('SET_POST_EXPIRATION_DATE action: ', payload)
+  console.log('SET_POST_EXPIRATION_DATE PH time: ', payload)
+
+  const utcFormat = new Date(payload).toUTCString().replace("GMT", "UTC")
+  const localeFormat = new Date(payload).toLocaleString()
+  const objPayload = {calendarFormat: payload, utcFormat: utcFormat, localeFormat: localeFormat}
+
   return (dispatch) => {
-    dispatch({ type: 'SET_POST_EXPIRATION_DATE', payload })
+    dispatch({ type: 'SET_POST_EXPIRATION_DATE', payload, objPayload })
   }
 }
 

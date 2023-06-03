@@ -70,7 +70,7 @@ const ActivitiesNav1 = () => {
 
   const { activitiesListLayout, activitiesTabReady, selectedActivities, postContent } = reduxPostState
   const reduxSelectedActivity = selectedActivities
-  // console.log("postContent: ", postContent)
+  console.log('reduxPostState: ', reduxPostState)
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)
@@ -119,7 +119,7 @@ const ActivitiesNav1 = () => {
       : setActiveActivity(filteredActivity)
   }
 
-  // console.log('inputs: ', inputs)
+  console.log('inputs: ', inputs)
   const activeChecker = (activity) => {
     const isActive = activeActivity.some((data) => data.id === activity.id)
     return isActive
@@ -169,9 +169,9 @@ const ActivitiesNav1 = () => {
           const amountPropertyName = `activityAmount${activity.id}`
           updatedInputs[amountPropertyName] = activity.activityAmount
         }
-        if (activity.activityDate) {
+        if (activity.activityDate.calendarFormat) {
           const datePropertyName = `activityDate${activity.id}`
-          updatedInputs[datePropertyName] = activity.activityDate
+          updatedInputs[datePropertyName] = activity.activityDate.calendarFormat
         }
       })
       return updatedInputs
@@ -180,7 +180,7 @@ const ActivitiesNav1 = () => {
 
   // console.log("inputs: ", inputs)
   useEffect(() => {
-    // console.log('inputs: ', inputs)
+    console.log('inputs important: ', inputs)
     const hasNoInput = Object.keys(inputs).length === 0
     // console.log('hasNoInput: ', hasNoInput)
     !hasNoInput && dispatch(updateSelectedActivities(inputs))
@@ -555,9 +555,6 @@ const ActivitiesNav1 = () => {
       setSearchedOfflineCategories(activities.offlineCategory)
     }
   }, [watchSearch])
-  console.log("searchedOptionalCategories: ", searchedOptionalCategories)
-  console.log("searchedOnlineCategories: ", searchedOnlineCategories)
-  console.log("searchedOfflineCategories: ", searchedOfflineCategories)
 
   const inputBorder = {
     borderColor: "gray.500",
@@ -816,10 +813,11 @@ const ActivitiesNav1 = () => {
           {!tab && (
             <Flex pb={6} flexDirection={"column"} gap={4}>
               {count ? (
-                reduxSelectedActivity.map((activity) => {
+                reduxSelectedActivity.map((activity, index) => {
+                  console.log('activity.activityDate: ', activity.activityDate)
                   return (
                     <Flex
-                      key={activity.id}
+                      key={index}
                       flexDirection={"column"}
                       borderColor={"gray.300"}
                       borderWidth={"1px"}
@@ -836,21 +834,21 @@ const ActivitiesNav1 = () => {
                           <Icon
                             as={
                               activity.activityDate &&
-                              activity.activityAmount > 0 &&
-                              activity.activityDate !== "0" &&
-                              activity.activityDate.length > 0 &&
-                              (activity.activityDate ||
-                                activity.activityDate !== undefined)
+                              activity.activityAmount > 0
+                              // activity.activityDate !== "0" &&
+                              // activity.activityDate.length > 0 &&
+                              // (activity.activityDate ||
+                              //   activity.activityDate !== undefined)
                                 ? BsCheckCircleFill
                                 : BsExclamationCircleFill
                             }
                             color={
                               activity.activityDate &&
-                              activity.activityAmount > 0 &&
-                              activity.activityDate !== "0" &&
-                              activity.activityDate.length > 0 &&
-                              (activity.activityDate ||
-                                activity.activityDate !== undefined)
+                              activity.activityAmount > 0
+                              // activity.activityDate !== "0" &&
+                              // activity.activityDate.length > 0 &&
+                              // (activity.activityDate ||
+                              //   activity.activityDate !== undefined)
                                 ? "green.500"
                                 : "gray.500"
                             }
@@ -997,7 +995,7 @@ const ActivitiesNav1 = () => {
                           <InputGroup>
                             <Input
                               maxW={"300px"}
-                              value={activity.activityDate}
+                              value={activity.activityDate && activity.activityDate.calendarFormat}
                               sx={inputBorder}
                               my={2}
                               placeholder="Select Date and Time"

@@ -78,11 +78,13 @@ const ReviewV1 = () => {
   const [hasBrief, setHasBrief] = useState(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
-  const isoExpDate =
-    postExpirationDate && new Date(postExpirationDate).toISOString()
-  const utcExpDate =
-    postExpirationDate &&
-    new Date(isoExpDate).toUTCString().replace("GMT", "UTC")
+  console.log('postExpirationDate: ', postExpirationDate)
+
+  // const isoExpDate =
+  //   postExpirationDate && new Date(postExpirationDate).toISOString()
+  // const utcExpDate =
+  //   postExpirationDate &&
+  //   new Date(isoExpDate).toUTCString().replace("GMT", "UTC")
 
   const selectedRecipients =
     recipients && recipients.filter((recipient) => recipient.isChecked)
@@ -162,7 +164,7 @@ const ReviewV1 = () => {
         activityTitle: "Instagram Post",
         activityDescription:
           "One photo, video, or carousel post shared to profile",
-        color: "#E4405F",
+        color: "#2596be",
         icon: BsInstagram,
         isChecked: false,
         value: "instagramPost",
@@ -412,6 +414,8 @@ const ReviewV1 = () => {
         gridTemplateRows={"auto 9fr auto"}
         gridTemplateColumns={"1fr"}
         h="100vh"
+        // bgColor={'#2596be'}
+        // bgColor={'#E4405F'}
       >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={"header"} pb={4}>
@@ -604,12 +608,12 @@ const ReviewV1 = () => {
                       activityDate,
                       activityAmount,
                     } = activity
-                    const isoDateAC =
-                      activityDate !== "" &&
-                      new Date(activityDate).toISOString()
-                    const utcDateAc =
-                      activityDate !== "" &&
-                      new Date(isoDateAC).toUTCString().replace("GMT", "UTC")
+                    // const isoDateAC =
+                    //   activityDate.utcFormat !== "" &&
+                    //   new Date(activityDate.utcFormat).toISOString().replace(':00 ', ' ')
+                    // const utcDateAc =
+                    //   activityDate.utcFormat !== "" &&
+                    //   new Date(isoDateAC).toUTCString().replace(':00 ', ' ').replace("GMT", "UTC")
                     return (
                       <Flex key={id} sx={recipientContainer}>
                         <Icon
@@ -668,13 +672,13 @@ const ReviewV1 = () => {
                                 Draft
                               </Text>
                             </Flex>
-                            {utcDateAc ? (
+                            {activityDate ? (
                               <Text
                                 fontSize={"sm"}
                                 color={"blue.500"}
                                 fontWeight={"semibold"}
                               >
-                                {utcDateAc}
+                                {activityDate.utcFormat}
                               </Text>
                             ) : (
                               <Flex alignItems={"center"} gap={1}>
@@ -782,10 +786,10 @@ const ReviewV1 = () => {
                         {!viewMore ? "View more" : "View less"}
                       </Text>
                     </Box>
-                    {utcExpDate && (
+                    {Object.keys(postExpirationDate).length > 0 && (
                       <Box>
                         <Text fontWeight={"semibold"}>Expiration date</Text>
-                        <Text>{utcExpDate}</Text>
+                        <Text>{postExpirationDate.utcFormat.replace(':00 ', ' ')}</Text>
                       </Box>
                     )}
                   </Flex>

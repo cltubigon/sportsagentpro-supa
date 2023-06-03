@@ -9,9 +9,9 @@ import {
   Box,
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
-import DashboardLeftMenu from "../components/Dashboard/DashboardLeftMenu"
-import DashboardMenu from "../components/Dashboard/BrandDashboard/DashboardMenu"
-import DashboardContent from "../components/Dashboard/DashboardContent"
+import DashboardLeftMenu from "../../components/Dashboard/DashboardLeftMenu"
+import DashboardMenu from "../../components/Dashboard/DashboardMenu"
+import NetworkContent from "../../components/Dashboard/Discover/NetworkContent"
 
 const AthleteHomepage = () => {
   const dispatch = useDispatch()
@@ -34,8 +34,8 @@ const AthleteHomepage = () => {
         <GridItem area={"m"} mx={4}>
             <DashboardMenu />
         </GridItem>
-        <GridItem area={"f"} overflow={'auto'} mx={4}>
-            <DashboardContent />
+        <GridItem area={"f"} overflow={'auto'} mx={4} mb={2}>
+            <NetworkContent />
         </GridItem>
       </Grid>
     </>

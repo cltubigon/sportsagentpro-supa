@@ -8,20 +8,27 @@ import {
   Box,
   Button,
   Checkbox,
+  Flex,
   FormControl,
+  FormErrorMessage,
+  Icon,
   Input,
   InputGroup,
   InputLeftElement,
   Menu,
   MenuButton,
+  MenuDivider,
   MenuItem,
+  MenuItemOption,
   MenuList,
+  MenuOptionGroup,
+  Text,
+  background,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { BiChevronRight } from "react-icons/bi"
 
-const FilterPreferences = () => {
+const FilterProfile = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const { register, handleSubmit, formState } = useForm()
@@ -48,119 +55,26 @@ const FilterPreferences = () => {
     },
   }
   return (
-    <>
+    <Box>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Menu boxShadow={'lg'} >
-          <MenuButton as={Button} sx={menuButton} onClick={toggleAccordion} rightIcon={<ChevronRightIcon />} >Preferences</MenuButton>
-          <MenuList w={"500px"} px={4}>
+        <Menu>
+          <MenuButton
+            as={Button}
+            sx={menuButton}
+            onClick={toggleAccordion}
+            rightIcon={<ChevronRightIcon />}
+          >
+            Profile
+          </MenuButton>
+          <MenuList w={"500px"} px={4} zIndex={99}>
             <InputGroup>
               <InputLeftElement
                 pointerEvents="none"
-                children={<SearchIcon color='gray.300' />}
+                children={<SearchIcon color="gray.300" />}
               />
-              <Input placeholder="Search..." border={'none'} />
+              <Input placeholder="Search..." border={"none"} />
             </InputGroup>
             <Accordion allowToggle>
-
-              <AccordionItem>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    Identifier
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-                <AccordionPanel pb={4} maxH={"330px"} overflowY={"scroll"}>
-                  <FormControl>
-                    <InputGroup display={"flex"} flexDirection={"column"}>
-                      <Checkbox
-                        value="professional-athlete"
-                        {...register("identifier")}
-                      >
-                        Professional athlete
-                      </Checkbox>
-                      <Checkbox
-                        value="student-athlete"
-                        {...register("identifier")}
-                      >
-                        Student athlete
-                      </Checkbox>
-                      <Checkbox
-                        value="retired-athlete"
-                        {...register("identifier")}
-                      >
-                        Retired athlete
-                      </Checkbox>
-                      <Checkbox value="coach" {...register("identifier")}>
-                        Coach
-                      </Checkbox>
-                      <Checkbox value="staff" {...register("identifier")}>
-                        Staff
-                      </Checkbox>
-                      <Checkbox value="trainer" {...register("identifier")}>
-                        Trainer
-                      </Checkbox>
-                      <Checkbox value="broadcaster" {...register("identifier")}>
-                        Broadcaster
-                      </Checkbox>
-                      <Checkbox value="sports-exec" {...register("identifier")}>
-                        Sports-exec
-                      </Checkbox>
-                      <Checkbox value="agent" {...register("identifier")}>
-                        Agent
-                      </Checkbox>
-                      <Checkbox
-                        value="talent agency"
-                        {...register("identifier")}
-                      >
-                        Talent agency
-                      </Checkbox>
-                      <Checkbox
-                        value="professional-athlete"
-                        {...register("identifier")}
-                      >
-                        Professional athlete
-                      </Checkbox>
-                      <Checkbox
-                        value="student-athlete"
-                        {...register("identifier")}
-                      >
-                        Student athlete
-                      </Checkbox>
-                      <Checkbox
-                        value="retired-athlete"
-                        {...register("identifier")}
-                      >
-                        Retired athlete
-                      </Checkbox>
-                      <Checkbox value="coach" {...register("identifier")}>
-                        Coach
-                      </Checkbox>
-                      <Checkbox value="staff" {...register("identifier")}>
-                        Staff
-                      </Checkbox>
-                      <Checkbox value="trainer" {...register("identifier")}>
-                        Trainer
-                      </Checkbox>
-                      <Checkbox value="broadcaster" {...register("identifier")}>
-                        Broadcaster
-                      </Checkbox>
-                      <Checkbox value="sports-exec" {...register("identifier")}>
-                        Sports-exec
-                      </Checkbox>
-                      <Checkbox value="agent" {...register("identifier")}>
-                        Agent
-                      </Checkbox>
-                      <Checkbox
-                        value="talent agency"
-                        {...register("identifier")}
-                      >
-                        Talent agency
-                      </Checkbox>
-                    </InputGroup>
-                  </FormControl>
-                </AccordionPanel>
-              </AccordionItem>
-
               <AccordionItem>
                 <AccordionButton>
                   <Box flex="1" textAlign="left">
@@ -188,6 +102,104 @@ const FilterPreferences = () => {
                 </AccordionPanel>
               </AccordionItem>
 
+              <AccordionItem>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Identifier
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+                <AccordionPanel pb={4} maxH={"330px"} overflowY={"auto"}>
+                  <FormControl>
+                    <InputGroup display={"flex"} flexDirection={"column"}>
+                      <Checkbox
+                        value="professional-athlete"
+                        {...register("identifier")}
+                      >
+                        Professional athlete
+                      </Checkbox>
+                      <Checkbox
+                        value="student-athlete"
+                        {...register("identifier")}
+                      >
+                        Student athlete
+                      </Checkbox>
+                      <Checkbox
+                        value="retired-athlete"
+                        {...register("identifier")}
+                      >
+                        Retired athlete
+                      </Checkbox>
+                      <Checkbox value="coach" {...register("identifier")}>
+                        Coach
+                      </Checkbox>
+                      <Checkbox value="staff" {...register("identifier")}>
+                        Staff
+                      </Checkbox>
+                      <Checkbox value="trainer" {...register("identifier")}>
+                        Trainer
+                      </Checkbox>
+                      <Checkbox value="broadcaster" {...register("identifier")}>
+                        Broadcaster
+                      </Checkbox>
+                      <Checkbox value="sports-exec" {...register("identifier")}>
+                        Sports-exec
+                      </Checkbox>
+                      <Checkbox value="agent" {...register("identifier")}>
+                        Agent
+                      </Checkbox>
+                      <Checkbox
+                        value="talent agency"
+                        {...register("identifier")}
+                      >
+                        Talent agency
+                      </Checkbox>
+                      <Checkbox
+                        value="professional-athlete"
+                        {...register("identifier")}
+                      >
+                        Professional athlete
+                      </Checkbox>
+                      <Checkbox
+                        value="student-athlete"
+                        {...register("identifier")}
+                      >
+                        Student athlete
+                      </Checkbox>
+                      <Checkbox
+                        value="retired-athlete"
+                        {...register("identifier")}
+                      >
+                        Retired athlete
+                      </Checkbox>
+                      <Checkbox value="coach" {...register("identifier")}>
+                        Coach
+                      </Checkbox>
+                      <Checkbox value="staff" {...register("identifier")}>
+                        Staff
+                      </Checkbox>
+                      <Checkbox value="trainer" {...register("identifier")}>
+                        Trainer
+                      </Checkbox>
+                      <Checkbox value="broadcaster" {...register("identifier")}>
+                        Broadcaster
+                      </Checkbox>
+                      <Checkbox value="sports-exec" {...register("identifier")}>
+                        Sports-exec
+                      </Checkbox>
+                      <Checkbox value="agent" {...register("identifier")}>
+                        Agent
+                      </Checkbox>
+                      <Checkbox
+                        value="talent agency"
+                        {...register("identifier")}
+                      >
+                        Talent agency
+                      </Checkbox>
+                    </InputGroup>
+                  </FormControl>
+                </AccordionPanel>
+              </AccordionItem>
             </Accordion>
             <Button mt={4} colorScheme="twitter" type="submit" w={"full"}>
               Apply
@@ -195,8 +207,8 @@ const FilterPreferences = () => {
           </MenuList>
         </Menu>
       </form>
-    </>
+    </Box>
   )
 }
 
-export default FilterPreferences
+export default FilterProfile

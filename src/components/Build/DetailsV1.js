@@ -25,6 +25,23 @@ const DetailsV1 = () => {
   const { register, watch } = useForm()
   const reduxPosts = useSelector(state => state.build)
   const { postContent, postTitle, postExpirationDate } = reduxPosts
+
+  console.log('reduxPosts: ', reduxPosts)
+  console.log('postExpirationDate: ', postExpirationDate)
+  
+  // console.log('postExpirationDate: ', postExpirationDate)
+  // const postDate = new Date(postExpirationDate)
+  // const timeOne = postDate.getTime()
+
+  // const localeDate = new Date(postExpirationDate).toLocaleString()
+  // const localD = new Date(localeDate)
+  // const timeTwo = localD.getTime()
+
+  // console.log('timeTwo: ', timeTwo)
+
+  // const diffTime = timeOne - timeTwo
+  // console.log('diffTime: ', diffTime)
+
   
   const [availableCharacters, setAvailableCharacters] = useState(2000)
   const [isCompleted, setIsCompleted] = useState(null)
@@ -87,7 +104,7 @@ const DetailsV1 = () => {
   }, [])
   return (
     <>
-      <Grid
+    <Grid
         templateAreas={`"header"
                             "main"
                             "footer"`}
@@ -175,7 +192,7 @@ const DetailsV1 = () => {
                 or accept your deal.
               </Text>
               <Flex alignItems={"center"}>
-                {!toggleDate && !postExpirationDate &&
+                {!toggleDate && !postExpirationDate.calendarFormat &&
                   (<Button
                     mt={2}
                     w={"300px"}
@@ -190,14 +207,14 @@ const DetailsV1 = () => {
                     Add deal expiration date
                   </Button>)}
                  
-                {(toggleDate || postExpirationDate) && (<Input
+                {(toggleDate || postExpirationDate.calendarFormat) && (<Input
                   maxW={"300px"}
                   sx={borderColorWidthStyle}
                   placeholder="Select Date and Time"
                   size="md"
                   type="datetime-local"
                   id="expirationDate"
-                  defaultValue={postExpirationDate && postExpirationDate}
+                  defaultValue={postExpirationDate.calendarFormat}
                   {...register('expirationDate')}
                   min={getTimeToUTCFromLocal()}
                 />)}
@@ -224,8 +241,10 @@ const DetailsV1 = () => {
           </Flex>
         </GridItem>
       </Grid>
+      
     </>
   )
 }
 
 export default DetailsV1
+

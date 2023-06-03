@@ -10,3 +10,7 @@ export const getTimeToUTCFromLocal = () => {
     const convertedToUTCTimeFromLocal = `${localYear}-${localMonth}-${localDate}T${localHour}:${localMinutes}`
     return convertedToUTCTimeFromLocal
 }
+
+export const convertUTCToLocal = (data) => {
+
+}

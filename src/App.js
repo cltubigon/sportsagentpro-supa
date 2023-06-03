@@ -12,8 +12,10 @@ import MyProfile from "./pages/MyProfile"
 import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
 import Build from "./pages/Build"
-import Network from "./pages/Network"
-import AthleteHomepage from "./pages/AthleteHomePage"
+import Network from "./pages/DashboardPages/Network"
+import AthleteHomepage from "./pages/DashboardPages/AthleteHomePage"
+import Media from "./pages/DashboardPages/Media"
+import Opportunities from "./pages/DashboardPages/Opportunities"
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
             <Route path="/build" element={<Build />}></Route>
             <Route path="/network" element={<Network />}></Route>
             <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
+            <Route path="/media" element={<Media />}></Route>
+            <Route path="/opportunities" element={<Opportunities />}></Route>
           </Routes>
         <ColorMode />
       </BrowserRouter>

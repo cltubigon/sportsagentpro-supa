@@ -16,7 +16,7 @@ import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { BsSortDown } from "react-icons/bs"
 
-const Sort = () => {
+const OppSort = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const { register, handleSubmit, formState } = useForm()
@@ -54,22 +54,26 @@ const Sort = () => {
           >
             Sort
           </MenuButton>
-          <MenuList w={"500px"} px={4}>
+          <MenuList w={"500px"} px={4} zIndex={99}>
             <InputGroup>
               <InputLeftElement
                 pointerEvents="none"
                 children={<SearchIcon color="gray.300" />}
               />
-              <Input placeholder="Search..." border={'none'} borderBottom={'1px solid #E4E7EB'} />
+              <Input
+                placeholder="Search..."
+                border={"none"}
+                borderBottom={"1px solid #E4E7EB"}
+              />
             </InputGroup>
 
             <FormControl py={4}>
               <InputGroup display={"flex"} flexDirection={"column"}>
                 <RadioGroup name="sort">
                   <Stack direction="column">
-                    <Radio value="1">First</Radio>
-                    <Radio value="2">Second</Radio>
-                    <Radio value="3">Third</Radio>
+                    <Radio value="1">Price</Radio>
+                    <Radio value="2">Created Date</Radio>
+                    <Radio value="3">Expiration Date</Radio>
                   </Stack>
                 </RadioGroup>
               </InputGroup>
@@ -81,4 +85,4 @@ const Sort = () => {
   )
 }
 
-export default Sort
+export default OppSort

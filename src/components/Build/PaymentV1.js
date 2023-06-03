@@ -18,8 +18,10 @@ import {
   createPost,
   resetPostState,
   setActiveStep,
+  setFirstNameAndLastName,
   setPaymentTabStatus,
   setSelectedRecipients,
+  setTotalPayment,
 } from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -32,7 +34,10 @@ const PaymentV1 = ({ setSpinner }) => {
   const navigate = useNavigate()
   const toast = useToast()
   const divRef = useRef()
+
+  const auth = useSelector((state) => state.auth)
   const reduxPosts = useSelector((state) => state.build)
+
   const {
     postOwner,
     recipients,
@@ -49,7 +54,7 @@ const PaymentV1 = ({ setSpinner }) => {
     paymentTabReady,
     recipientsListLayout,
     activitiesListLayout,
-    isSubmittedSuccessfully
+    isSubmittedSuccessfully,
   } = reduxPosts
 
   const allActivityAmount = selectedActivities
@@ -59,13 +64,36 @@ const PaymentV1 = ({ setSpinner }) => {
     (accumulator, activity) => accumulator + activity,
     0
   )
-  const marketplaceFee = recipientEarnings * 0.1
-  const total = recipientEarnings + marketplaceFee
-  const getSelectedRecpients =
-    recipients && recipients.filter((data) => data.isChecked)
-  const count = getSelectedRecpients && getSelectedRecpients.length
+  console.log("allActivityAmount: ", allActivityAmount)
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [count, setCount] = useState(0)
 
   useEffect(() => {
+    auth.profile &&
+      dispatch(
+        setFirstNameAndLastName({
+          firstName: auth.profile.firstName,
+          lastName: auth.profile.lastName,
+        })
+      )
+  }, [auth])
+
+  const marketplaceFee = recipientEarnings * 0.1
+  useEffect(() => {
+    setTotalAmount(recipientEarnings + marketplaceFee)
+  }, [recipientEarnings])
+
+  useEffect(()=> {
+    dispatch(setTotalPayment(totalAmount))
+  }, [totalAmount])
+
+  console.log("totalAmount: ", totalAmount)
+
+  useEffect(() => {
+    const getSelectedRecpients =
+      recipients && recipients.filter((data) => data.isChecked)
+    setCount(getSelectedRecpients && getSelectedRecpients.length)
+
     dispatch(setSelectedRecipients(getSelectedRecpients))
   }, [])
 
@@ -101,15 +129,15 @@ const PaymentV1 = ({ setSpinner }) => {
 
   const handleSubmit = () => {
     dispatch(createPost())
-    setSpinner(()=> true)
+    setSpinner(() => true)
   }
-  console.log('reduxPosts: ', reduxPosts)
+  console.log("reduxPosts: ", reduxPosts)
 
   useEffect(() => {
     if (isSubmittedSuccessfully) {
       console.log("dispatch reset is triggered")
       dispatch(resetPostState())
-      setSpinner(()=> false)
+      setSpinner(() => false)
       toast({
         title: "Success",
         description: "Your post was successfully created",
@@ -232,7 +260,7 @@ const PaymentV1 = ({ setSpinner }) => {
                       fontSize={"xl"}
                       fontWeight={"semibold"}
                     >
-                      ${total.toFixed(2)}
+                      ${totalAmount.toFixed(2)}
                     </Text>
                   </Flex>
                 </Flex>
