@@ -11,12 +11,14 @@ import DetailsV1 from "../components/Build/DetailsV1"
 import ReviewV1 from "../components/Build/ReviewV1"
 import Paymentv1 from "../components/Build/PaymentV1"
 import DealTypeV1 from "../components/Build/DealTypeV1"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 const Build = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const flexRef = useRef(null)
+  const { id } = useParams()
+  console.log('id: ', id)
 
   const activeStep = useSelector((state) => state.build.activeStep)
   const isLoggedIn = useSelector((state) => state.auth.profile)

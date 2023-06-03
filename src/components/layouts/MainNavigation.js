@@ -51,9 +51,10 @@ const MainNavigation = () => {
     width: "100%",
     zIndex: "999",
   }
+  
   return (
     <>
-      {location.pathname !== "/signup" && location.pathname !== "/login" && location.pathname !== "/build" && (
+      {location.pathname !== "/signup" && location.pathname !== "/login" && !location.pathname.includes("/build") && (
         <Flex sx={flexContainer} gap={6}>
           <Flex alignItems={"center"} gap={6}>
             <Heading as={"h3"} fontSize={"3xl"}>

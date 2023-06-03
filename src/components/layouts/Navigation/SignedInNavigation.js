@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { resetAuthState, signOut } from "../../../store/actions/authActions"
 import { Link, useNavigate } from "react-router-dom"
 import { FaFileContract } from "react-icons/fa"
+import { resetB, resetBuildState } from "../../../store/actions/buildPostActions"
+import { resetPostState } from "../../../store/actions/postActions"
 
 const SignedInNavigation = () => {
   const dispatch = useDispatch()
@@ -17,6 +19,8 @@ const SignedInNavigation = () => {
   
   const handleSignOut = () => {
     dispatch(signOut())
+    dispatch(resetBuildState())
+    dispatch(resetPostState())
   }
 
   return (

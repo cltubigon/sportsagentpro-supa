@@ -33,7 +33,8 @@ function App() {
             <Route path="/add-deal" element={<CreateDeal />}></Route>
             <Route path="/my-profile" element={<MyProfile />}></Route>
             <Route path="/user-type" element={<UserType />}></Route>
-            <Route path="/build" element={<Build />}></Route>
+            <Route path="/build/" element={<Build />}></Route>
+            <Route path="/build/:id" element={<Build />}></Route>
             <Route path="/network" element={<Network />}></Route>
             <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
             <Route path="/media" element={<Media />}></Route>

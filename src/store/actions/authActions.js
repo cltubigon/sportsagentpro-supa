@@ -57,7 +57,6 @@ export const signUp = (newUser) => {
       )
 
       const addUser = await setDoc(doc(firestore, "users", userCredential.user.uid), {
-      // const addUser = await setDoc(doc(firestore, "users", userCredential.user.uid), {
         // add to users table
         firstName: newUser.firstName,
         lastName: newUser.lastName,

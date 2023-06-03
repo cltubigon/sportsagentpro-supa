@@ -7,6 +7,7 @@ import Footer from "../components/layouts/Footer"
 const Profile = () => {
   console.log("Profile rendered")
   const { id } = useParams()
+  console.log('id: ', id)
   const containerStyle = {
     maxW: "1440px",
     px: 0,

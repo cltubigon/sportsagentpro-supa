@@ -70,19 +70,15 @@ const ActivitiesNav1 = () => {
 
   const { activitiesListLayout, activitiesTabReady, selectedActivities, postContent } = reduxPostState
   const reduxSelectedActivity = selectedActivities
-  console.log('reduxPostState: ', reduxPostState)
 
   const [count, setCount] = useState(null)
   const [tab, setTab] = useState(true)
   const [inputs, setInputs] = useState({})
-  // const [activitiesListLayout, setListLayout] = useState(true)
 
   const handleListTrue = () => {
-    // setListLayout(() => true)
     dispatch(setActivitiesListLayout(true))
   }
   const handleListFalse = () => {
-    // setListLayout(() => false)
     dispatch(setActivitiesListLayout(false))
   }
 
@@ -119,7 +115,6 @@ const ActivitiesNav1 = () => {
       : setActiveActivity(filteredActivity)
   }
 
-  console.log('inputs: ', inputs)
   const activeChecker = (activity) => {
     const isActive = activeActivity.some((data) => data.id === activity.id)
     return isActive
@@ -158,8 +153,6 @@ const ActivitiesNav1 = () => {
     })
   }
 
-  // console.log("inputs: ", inputs)
-
   useEffect(() => {
     setInputs((prevInputs) => {
       const updatedInputs = { ...prevInputs }
@@ -178,11 +171,8 @@ const ActivitiesNav1 = () => {
     })
   }, [])
 
-  // console.log("inputs: ", inputs)
   useEffect(() => {
-    console.log('inputs important: ', inputs)
     const hasNoInput = Object.keys(inputs).length === 0
-    // console.log('hasNoInput: ', hasNoInput)
     !hasNoInput && dispatch(updateSelectedActivities(inputs))
   }, [inputs, tab])
 
@@ -516,12 +506,7 @@ const ActivitiesNav1 = () => {
     activities.offlineCategory
   )
   useEffect(() => {
-    console.log(
-      "activities.onlineOptionalCategory: ",
-      activities.onlineOptionalCategory
-    )
     if (watchSearch && watchSearch.length > 0) {
-      console.log("I am triggered")
       setSearchedOptionalCategories(
         activities.onlineOptionalCategory.filter(
           (activity) =>
@@ -814,7 +799,6 @@ const ActivitiesNav1 = () => {
             <Flex pb={6} flexDirection={"column"} gap={4}>
               {count ? (
                 reduxSelectedActivity.map((activity, index) => {
-                  console.log('activity.activityDate: ', activity.activityDate)
                   return (
                     <Flex
                       key={index}

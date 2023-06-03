@@ -1,5 +1,13 @@
 import { collection, addDoc } from "firebase/firestore"
 
+export const setBuildState = (data) => {
+  console.log('SET_BUILD_STATE ', data)
+    const {activeStep, ...payload} = data
+    console.log('payload: ', payload)
+  return (dispatch) => {
+    dispatch({type: "SET_BUILD_STATE", payload})
+  }
+}
 export const setTotalPayment = (payload) => {
   console.log('SET_TOTAL_PAYMENT ', payload)
   return (dispatch) => {
@@ -41,30 +49,6 @@ export const createPost = () => {
   };
 };
 
-
-// export const createPost = () => {
-//   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-//     const build = getState().build
-//     const firestore = getFirestore()
-//     const uid = getState().firebase.auth.uid
-//     console.log('uid: ', uid)
-//     console.log('build: ', build)
-//     const { recipients, isSubmittedSuccessfully, ...newObject } = build
-//     console.log('newObject: ', newObject)
-
-//     try {
-//       await addDoc(collection(firestore, "posts"), {
-//         ...newObject,
-//         // // ownerID: uid && uid,
-//         createdAt: new Date(),
-//       })
-//       dispatch({ type: "CREATE_POST", newObject })
-//     } catch (err) {
-//       console.log('err: ', err)
-//       dispatch({ type: "CREATE_POST_ERROR", err })
-//     }
-//   }
-// }
 
 export const savePostType = (data) => {
   return (dispatch) => {
@@ -253,9 +237,9 @@ export const setPostOwner = (payload) => {
   }
 }
 
-export const resetPostState = () => {
+export const resetBuildState = () => {
   return (dispatch) => {
-    dispatch({ type: 'RESET_POST_STATE' })
+    dispatch({ type: 'RESET_BUILD_STATE' })
   }
 }
 export const setRecipientsListLayout = (payload) => {

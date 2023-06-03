@@ -1,4 +1,13 @@
-import { Avatar, Box, Button, Flex, Icon, Image, Spinner, Text } from "@chakra-ui/react"
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Image,
+  Spinner,
+  Text,
+} from "@chakra-ui/react"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
@@ -6,6 +15,7 @@ import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { savePostsToStorage } from "../../../store/actions/postActions"
+import { Link } from "react-router-dom"
 
 const BrandOpportunities = () => {
   const dispatch = useDispatch()
@@ -17,15 +27,15 @@ const BrandOpportunities = () => {
   const firestore = useSelector((state) => state.firestore)
   const firebase = useSelector((state) => state.firebase)
   const post = useSelector((state) => state.post)
-  console.log("firebase: ", firebase)
 
   const { posts } = post
+  console.log('posts: ', posts)
   const firestorePost = firestore.ordered.posts
-  console.log("posts: ", posts)
 
   useEffect(() => {
     if (firestorePost && posts && firestorePost.length !== posts.length) {
-      dispatch(savePostsToStorage(firestorePost))
+      const filterToOwnerPosts = firestorePost && firebase.auth.uid && firestorePost.filter(post => post.ownerUID === firebase.auth.uid)
+      dispatch(savePostsToStorage(filterToOwnerPosts))
     }
   }, [firestorePost])
 
@@ -38,7 +48,7 @@ const BrandOpportunities = () => {
   return (
     <>
       {!firebase.auth.uid && (
-        <Flex justifyContent={'center'} height={'250px'} alignItems={'center'}>
+        <Flex justifyContent={"center"} height={"250px"} alignItems={"center"}>
           <Spinner
             thickness="4px"
             speed="0.65s"
@@ -58,6 +68,7 @@ const BrandOpportunities = () => {
             totalPayment,
             postExpirationDate,
             ownerUID,
+            id,
           } = post
           const isOwner = firebase.auth && firebase.auth.uid === ownerUID
           const activityTitles = selectedActivities.map(
@@ -65,12 +76,13 @@ const BrandOpportunities = () => {
           )
           const firstActivity = activityTitles[0]
           const activityCount = activityTitles.length
+          // console.log('index: ', index)
 
           return (
             postType === "opportunity" &&
             isOwner && (
               <Flex
-                key={index}
+                key={id}
                 flexDirection={"column"}
                 border={"1px solid #EDF0F2"}
                 borderRadius={"md"}
@@ -136,9 +148,11 @@ const BrandOpportunities = () => {
                   </Flex>
                 </Flex>
                 <Flex flexDirection={"column"} gap={2} px={4} pb={4} mt={10}>
-                  <Button sx={btnStyle} borderColor="gray.400">
-                    Edit
-                  </Button>
+                  <Link to={`/build/${id}`}>
+                    <Button sx={btnStyle} borderColor="gray.400" w={'100%'} >
+                      Edit
+                    </Button>
+                  </Link>
                 </Flex>
               </Flex>
             )

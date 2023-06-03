@@ -22,6 +22,12 @@ const initState = {
 
 const buildReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_BUILD_STATE":
+          console.log('SET_BUILD_STATE REDUCER', action.payload)
+          return {
+            ...state,
+            ...action.payload
+          }
       case "SET_TOTAL_PAYMENT":
           console.log('SET_TOTAL_PAYMENT')
           return {
@@ -53,8 +59,8 @@ const buildReducer = (state = initState, action) => {
             ...state,
             activitiesListLayout: action.payload
           }
-      case "RESET_POST_STATE":
-          console.log('RESET_POST_STATE')
+      case "RESET_BUILD_STATE":
+          console.log('RESET_BUILD_STATE')
           return {
             ...initState
           }

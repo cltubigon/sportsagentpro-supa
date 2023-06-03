@@ -16,7 +16,7 @@ import { BsCheck, BsChevronLeft, BsPlus } from "react-icons/bs"
 import { TfiClose } from "react-icons/tfi"
 import {
   createPost,
-  resetPostState,
+  resetBuildState,
   setActiveStep,
   setFirstNameAndLastName,
   setPaymentTabStatus,
@@ -136,7 +136,7 @@ const PaymentV1 = ({ setSpinner }) => {
   useEffect(() => {
     if (isSubmittedSuccessfully) {
       console.log("dispatch reset is triggered")
-      dispatch(resetPostState())
+      dispatch(resetBuildState())
       setSpinner(() => false)
       toast({
         title: "Success",

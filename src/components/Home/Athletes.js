@@ -14,8 +14,7 @@ const Athletes = () => {
   const location = useLocation()
   const localAthletes = useSelector(state => state.athlete.athletes)
   const firestoreAthletes = useSelector((state)=> state.firestore.ordered.athlete)
-  // console.log('location: ', location)
-
+  
   const isNetworkPage = location.pathname === '/network'
   // console.log('isNetworkPage: ', isNetworkPage)
   

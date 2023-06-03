@@ -9,34 +9,56 @@ import { FaRunning, FaUsers, FaCommentDollar, FaRegGrinHearts, FaUserTie, } from
 import { TfiPencilAlt } from "react-icons/tfi"
 import { CgMenuGridO } from "react-icons/cg"
 import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
-import { resetPostState, savePostType, setActiveStep, setPostOwner } from "../../store/actions/buildPostActions"
+import { Link, useParams } from "react-router-dom"
+import { resetBuildState, uildState, savePostType, setActiveStep, setBuildState, setPostOwner } from "../../store/actions/buildPostActions"
 import { useEffect } from "react"
 import { BsChevronRight } from "react-icons/bs"
+import { firestoreConnect } from "react-redux-firebase"
+import { savePostsToStorage } from "../../store/actions/postActions"
 
 const DealTypeV1 = () => {
     const dispatch = useDispatch()
-    const posts = useSelector(state => state.build)
+    const { id } = useParams()
+    const build = useSelector(state => state.build)
+    const post = useSelector(state => state.post)
     const auth = useSelector(state => state.auth)
+    const reduxState = useSelector(state => state)
+    const firestore = useSelector(state => state.firestore)
+    const firebase = useSelector((state) => state.firebase)
+    console.log('firestore: ', firestore)
+    console.log('reduxState: ', reduxState)
+    console.log('id: ', id)
 
     const { profile } = auth
-    const { postType, postOwner } = posts
-
-    // console.log('postOwner: ', postOwner)
+    const { postType, postOwner } = build
+    
+    const { posts } = post
+    const firestorePost = firestore.ordered.posts
 
     useEffect(()=> {
         if (profile) {
-            postOwner !== profile.email && dispatch(resetPostState())
+            postOwner !== profile.email && dispatch(resetBuildState())
             postOwner !== profile.email && dispatch(setPostOwner(profile.email))
         }
-
         return
     }, [])
-    // console.log('posts: ', posts)
+
+    useEffect(() => {
+        if (firestorePost && posts && firestorePost.length !== posts.length) {
+          const filterToOwnerPosts = firestorePost && firebase.auth.uid && firestorePost.filter(post => post.ownerUID === firebase.auth.uid)
+          dispatch(savePostsToStorage(filterToOwnerPosts))
+        }
+      }, [firestorePost])
+
+    useEffect(()=> {
+        const selectedPost = posts && posts.filter(post => post.id === id)
+        console.log('selectedPost: ', selectedPost)
+        selectedPost.length > 0 && dispatch(setBuildState(selectedPost[0]))
+        selectedPost.length === 0 && dispatch(resetBuildState())
+    }, [])
     
     const [nextButton, setNextButton] = useState('recipients')  
     useEffect(()=> {
-        // console.log('new type is: ', postType)
         postType !== 'opportunity' ? setNextButton('recipients') : setNextButton('activities')
     }, [postType])
 
@@ -119,4 +141,4 @@ const DealTypeV1 = () => {
   )
 }
 
-export default DealTypeV1
+export default firestoreConnect([{ collection: 'posts' }])(DealTypeV1)
