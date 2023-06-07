@@ -1,5 +1,11 @@
 import { collection, addDoc } from "firebase/firestore"
 
+export const setEditMode = (payload) => {
+  console.log('SET_EDIT_MODE ', payload)
+  return (dispatch) => {
+    dispatch({type: "SET_EDIT_MODE", payload})
+  }
+}
 export const setBuildState = (data) => {
   console.log('SET_BUILD_STATE ', data)
     const {activeStep, ...payload} = data
@@ -32,7 +38,7 @@ export const createPost = () => {
     const build = getState().build;
     const firestore = getFirestore();
     const uid = getState().firebase.auth.uid;
-    const { recipients, isSubmittedSuccessfully, ...newObject } = build;
+    const { recipients, isSubmittedSuccessfully, editMode, ...newObject } = build;
     const sanitizedObject = JSON.parse(JSON.stringify(newObject));
 
     try {
@@ -237,7 +243,8 @@ export const setPostOwner = (payload) => {
   }
 }
 
-export const resetBuildState = () => {
+export const resetBuildState = (sender) => {
+  console.log('sender get Edit Mode: ', sender)
   return (dispatch) => {
     dispatch({ type: 'RESET_BUILD_STATE' })
   }

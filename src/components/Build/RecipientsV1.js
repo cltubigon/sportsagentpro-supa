@@ -44,6 +44,7 @@ const RecipientsV1 = () => {
   const firestoreAthletes = useSelector(
     (state) => state.firestore.ordered.athlete
   )
+  console.log('reduxState vvv: ', reduxState)
 
   const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)
   const count = getSelectedRecpients && getSelectedRecpients.length
@@ -156,7 +157,7 @@ const RecipientsV1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Link to={"/network"}>
+              <Link to={"/opportunities"}>
                 <Icon as={TfiClose} boxSize={4} />
               </Link>
             </Flex>

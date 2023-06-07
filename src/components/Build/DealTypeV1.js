@@ -9,8 +9,8 @@ import { FaRunning, FaUsers, FaCommentDollar, FaRegGrinHearts, FaUserTie, } from
 import { TfiPencilAlt } from "react-icons/tfi"
 import { CgMenuGridO } from "react-icons/cg"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useParams } from "react-router-dom"
-import { resetBuildState, uildState, savePostType, setActiveStep, setBuildState, setPostOwner } from "../../store/actions/buildPostActions"
+import { Link, useLocation, useParams } from "react-router-dom"
+import { resetBuildState, uildState, savePostType, setActiveStep, setBuildState, setPostOwner, setEditMode } from "../../store/actions/buildPostActions"
 import { useEffect } from "react"
 import { BsChevronRight } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
@@ -19,29 +19,46 @@ import { savePostsToStorage } from "../../store/actions/postActions"
 const DealTypeV1 = () => {
     const dispatch = useDispatch()
     const { id } = useParams()
+    const location = useLocation()
+
     const build = useSelector(state => state.build)
     const post = useSelector(state => state.post)
     const auth = useSelector(state => state.auth)
     const reduxState = useSelector(state => state)
     const firestore = useSelector(state => state.firestore)
     const firebase = useSelector((state) => state.firebase)
-    console.log('firestore: ', firestore)
-    console.log('reduxState: ', reduxState)
-    console.log('id: ', id)
 
-    const { profile } = auth
-    const { postType, postOwner } = build
+    console.log('build: ', build)
+    console.log('reduxState: ', reduxState)
+
+    const { email } = auth
+    const { postType, postOwner, editMode } = build
     
     const { posts } = post
     const firestorePost = firestore.ordered.posts
 
     useEffect(()=> {
-        if (profile) {
-            postOwner !== profile.email && dispatch(resetBuildState())
-            postOwner !== profile.email && dispatch(setPostOwner(profile.email))
+        const selectedPost = posts && posts.find(post => post.id === id)
+        console.log('selectedPost out: ', selectedPost)
+        if (selectedPost && Object.keys(selectedPost).length > 0) {
+            console.log('This is running')
+            const isDifferent = selectedPost.id !== build.id
+            isDifferent && dispatch(setEditMode(false))
+            console.log('selectedPost.id: ', selectedPost.id)
+            console.log('build.id: ', build.id)
+            console.log('isDifferent: ', isDifferent)
+            console.log('editMode: ', editMode)
+            !editMode && isDifferent && dispatch(resetBuildState())
+            !editMode && isDifferent && dispatch(setBuildState(selectedPost))
+        } else {
+            console.log('selectedPost: ', selectedPost)
+            console.log('editMode: ', editMode)
+            console.log('location.pathname: ', location.pathname)
+            editMode && dispatch(resetBuildState('else'))
+            dispatch(setPostOwner(email))
+            // dispatch(setEditMode(false))
         }
-        return
-    }, [])
+    }, [posts])
 
     useEffect(() => {
         if (firestorePost && posts && firestorePost.length !== posts.length) {
@@ -51,11 +68,15 @@ const DealTypeV1 = () => {
       }, [firestorePost])
 
     useEffect(()=> {
-        const selectedPost = posts && posts.filter(post => post.id === id)
-        console.log('selectedPost: ', selectedPost)
-        selectedPost.length > 0 && dispatch(setBuildState(selectedPost[0]))
-        selectedPost.length === 0 && dispatch(resetBuildState())
-    }, [])
+        if (email) {
+            console.log('postOwner: ', postOwner)
+            console.log('email: ', email)
+            postOwner !== email && dispatch(resetBuildState('postOwner'))
+            postOwner !== email && console.log('I was reset')
+            postOwner !== email && dispatch(setPostOwner(email))
+        }
+        return
+    }, [email])
     
     const [nextButton, setNextButton] = useState('recipients')  
     useEffect(()=> {
@@ -106,7 +127,7 @@ const DealTypeV1 = () => {
                     <Text color={"gray.500"} fontSize={'sm'}>Select what type of deal you will be building out</Text>
                 </Flex>
                 <Flex>
-                    <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
+                    <Link to={'/opportunities'}><Icon as={TfiClose} boxSize={4} /></Link>
                 </Flex>
             </Flex>
         </GridItem>

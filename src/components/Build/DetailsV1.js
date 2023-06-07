@@ -130,7 +130,7 @@ const DetailsV1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
+              <Link to={'/opportunities'}><Icon as={TfiClose} boxSize={4} /></Link>
             </Flex>
           </Flex>
         </GridItem>

@@ -11,7 +11,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
   return (
     <>
-        <Stack px={"var(--chakra-space-6)"} pb={12} pt={{base: 10, md: 20}}>
+        <Stack px={4} pb={12} pt={{base: 10, md: 20}} maxW={'1440px'} mx={'auto'}>
             <Flex justifyContent={"space-between"} gap={{base: 8}} flexDirection={{base: "column", md: "row"}}>
                 <Flex gap={{base: 10, lg: 16}}>
                     <Stack color={"gray.500"} fontWeight={"semibold"} gap={3} flexGrow={1}>

@@ -573,7 +573,7 @@ const ActivitiesNav1 = () => {
               </Text>
             </Flex>
             <Flex>
-              <Link to={"/network"}>
+              <Link to={"/opportunities"}>
                 <Icon as={TfiClose} boxSize={4} />
               </Link>
             </Flex>

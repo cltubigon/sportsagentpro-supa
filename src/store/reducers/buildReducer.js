@@ -18,15 +18,23 @@ const initState = {
     activitiesListLayout: false,
     isSubmittedSuccessfully: false,
     totalPayment: null,
+    editMode: false,
 }
 
 const buildReducer = (state = initState, action) => {
     switch (action.type) {
+      case "SET_EDIT_MODE":
+          console.log('SET_EDIT_MODE REDUCER', action.payload)
+          return {
+            ...state,
+            editMode: action.payload,
+          }
       case "SET_BUILD_STATE":
           console.log('SET_BUILD_STATE REDUCER', action.payload)
           return {
             ...state,
-            ...action.payload
+            ...action.payload,
+            editMode: true,
           }
       case "SET_TOTAL_PAYMENT":
           console.log('SET_TOTAL_PAYMENT')

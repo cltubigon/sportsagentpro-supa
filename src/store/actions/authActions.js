@@ -84,8 +84,8 @@ export const signUp = (newUser) => {
   }
 }
 
-export const updateProfileState = (profileData) => {
+export const updateProfileState = (profileData, email) => {
   return (dispatch) => {
-    dispatch({type: 'UPDATE_PROFILE_STATE', profileData})
+    dispatch({type: 'UPDATE_PROFILE_STATE', profileData, email})
   }
 }

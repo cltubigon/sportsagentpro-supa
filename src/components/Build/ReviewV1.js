@@ -397,13 +397,13 @@ const ReviewV1 = () => {
     .map((activity) => {
       return { ...activity, activityAmount: activity.activityAmount }
     })
-  const newSelectedActivities = filterSelectedActivities.map((obj, index) => {
+  const newSelectedActivities = filterSelectedActivities.map((activity, index) => {
+    const filterSelected = selectedActivities.find(selected => selected.id === activity.id)
     return {
-      ...obj,
-      ...selectedActivities[index],
+      ...activity,
+      ...filterSelected,
     }
   })
-  console.log('newSelectedActivities: ', newSelectedActivities)
 
   return (
     <>
@@ -434,7 +434,7 @@ const ReviewV1 = () => {
               </Text>
             </Flex>
             <Flex>
-            <Link to={'/network'}><Icon as={TfiClose} boxSize={4} /></Link>
+            <Link to={'/opportunities'}><Icon as={TfiClose} boxSize={4} /></Link>
             </Flex>
           </Flex>
         </GridItem>

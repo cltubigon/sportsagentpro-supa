@@ -1,6 +1,7 @@
 const initialState = {
   authError: null,
   profile: null,
+  email: null,
   incrementThis: 0,
 }
 
@@ -42,7 +43,8 @@ const authReducer = (state = initialState, action) => {
         case "UPDATE_PROFILE_STATE":
           return {
             ...state,
-            profile: {...state.profile, ...action.profileData}
+            profile: {...state.profile, ...action.profileData},
+            email: action.email,
           }
         default:
           return state

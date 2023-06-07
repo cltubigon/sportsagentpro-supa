@@ -21,6 +21,7 @@ const SubNavigation = () => {
     position: 'fixed !important',
     top: '88px',
     bg: 'white',
+    maxW: '1440px',
   }
   return (
     <Flex sx={flexContainer}>

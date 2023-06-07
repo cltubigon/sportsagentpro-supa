@@ -123,7 +123,7 @@ const BuildLeftNav = () => {
     <>
       <Flex as={motion.div} variants={animationVariants} initial={'initial'} animate={'collapse'} flexDirection={'column'} justifyContent={'space-between'} alignItems={collapse ? 'center' : 'flex-start'} bgColor={'gray.200'} height={'100vh'} px={5} pb={6} >
         <Flex flexDirection={'column'} width={'100%'}>
-            <Link to={'/'}><Heading as={motion.h2} variants={animationVariants} animate={'fontSize'} fontSize={!collapse ? '3xl' : 'xl'} pt={5} pb={!collapse ? 5 : 2} >SPA</Heading></Link>
+            <Link to={'/opportunities'}><Heading as={motion.h2} variants={animationVariants} animate={'fontSize'} fontSize={!collapse ? '3xl' : 'xl'} pt={5} pb={!collapse ? 5 : 2} >SPA</Heading></Link>
             {!collapse &&
             <Box py={5} borderBottom={'1px solid #D0D4D9'} borderTop={'1px solid #D0D4D9'}>
                 <Text fontWeight={'semibold'} fontSize={'sm'} >Current deal status</Text>

@@ -12,11 +12,10 @@ const MainNavigation = () => {
   const navigate = useNavigate()
   const location = useLocation()
   
-  const profile = useSelector((state) => state.firebase.profile)
-  const auth = useSelector((state) => state.firebase.auth.uid)
+  const firebase = useSelector((state) => state.firebase)
   const isLoggedIn = useSelector((state) => state.auth.profile)
+  const { profile, auth } = firebase
   console.log("MainNavigation")
-  console.log('auth: ', auth)
 
   const { firstName, initials, lastName, phoneNumber, userType } = profile
   const userProfile = { firstName, initials, lastName, phoneNumber, userType }
@@ -25,7 +24,7 @@ const MainNavigation = () => {
     !isLoggedIn && navigate('/')
     
     const runTimeout = setTimeout(() => {
-      if (isLoggedIn && !auth) {
+      if (isLoggedIn && !auth.uid) {
         console.log("signing out, bye2x")
         dispatch(signOut())
       }
@@ -38,7 +37,7 @@ const MainNavigation = () => {
   }, [isLoggedIn])
 
   useEffect(() => {
-    profile.firstName && dispatch(updateProfileState(userProfile))
+    profile.firstName && auth && dispatch(updateProfileState(userProfile, auth.email))
   }, [profile.firstName])
 
   const flexContainer = {
