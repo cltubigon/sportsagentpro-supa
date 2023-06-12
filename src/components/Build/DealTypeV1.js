@@ -49,7 +49,7 @@ const DealTypeV1 = () => {
             console.log('isDifferent: ', isDifferent)
             console.log('editMode: ', editMode)
             !editMode && isDifferent && dispatch(resetBuildState())
-            !editMode && isDifferent && dispatch(setBuildState(selectedPost))
+            !editMode && isDifferent && dispatch(setBuildState(selectedPost, 'line152'))
         } else {
             console.log('selectedPost: ', selectedPost)
             console.log('editMode: ', editMode)

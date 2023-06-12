@@ -14,7 +14,7 @@ const BuildLeftNav = () => {
     const statePost = useSelector(state => state.build)
     const { recipients, postType, selectedActivities, activitiesTabReady, activeStep, detailsTabReady, reviewTabReady, paymentTabReady } = statePost
     
-    const countActivities = selectedActivities.length
+    const countActivities = selectedActivities && selectedActivities.length
 
     const stepTwoCompleted = statePost.recipients && statePost.recipients.some(recipient => recipient.isChecked)
     const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)

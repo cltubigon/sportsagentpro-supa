@@ -98,6 +98,7 @@ const ActivitiesNav1 = () => {
           activity.activityDate === "" || activity.activityDate === undefined
       )
     const activityTabStatus =
+      reduxSelectedActivity &&
       reduxSelectedActivity.length > 0 &&
       allAmountsAreReady &&
       allDatesAreReady &&
@@ -121,11 +122,11 @@ const ActivitiesNav1 = () => {
   }
 
   useEffect(() => {
-    if (reduxSelectedActivity.length !== count) {
+    if (reduxSelectedActivity && (reduxSelectedActivity.length !== count)) {
       setCount(reduxSelectedActivity.length)
     }
 
-    const selectedActivityIds = reduxSelectedActivity.map(
+    const selectedActivityIds = reduxSelectedActivity && reduxSelectedActivity.map(
       (activity) => activity.id
     )
     const notSelectedKeys = Object.keys(inputs).filter(
@@ -185,7 +186,7 @@ const ActivitiesNav1 = () => {
   }, [postType])
 
   const isSelected = (id) => {
-    const isSelected = reduxSelectedActivity.some((data) => data.id === id)
+    const isSelected = reduxSelectedActivity && reduxSelectedActivity.some((data) => data.id === id)
     return isSelected
   }
 

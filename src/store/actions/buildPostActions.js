@@ -1,4 +1,4 @@
-import { collection, addDoc } from "firebase/firestore"
+import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore"
 
 export const setEditMode = (payload) => {
   console.log('SET_EDIT_MODE ', payload)
@@ -6,8 +6,15 @@ export const setEditMode = (payload) => {
     dispatch({type: "SET_EDIT_MODE", payload})
   }
 }
-export const setBuildState = (data) => {
+export const setIsSubmittedSuccessfully = (payload) => {
+  console.log('SET_IS_SUBMITTED_SUCCESSFULLY ', payload)
+  return (dispatch) => {
+    dispatch({type: "SET_IS_SUBMITTED_SUCCESSFULLY", payload})
+  }
+}
+export const setBuildState = (data, sender) => {
   console.log('SET_BUILD_STATE ', data)
+  console.log('sender: ', sender)
     const {activeStep, ...payload} = data
     console.log('payload: ', payload)
   return (dispatch) => {
@@ -54,6 +61,41 @@ export const createPost = () => {
     }
   };
 };
+
+export const updatePost = () => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    const updatedData = getState().build;
+    const postId = updatedData.id;
+    const { auth } = getState().firebase;
+    const uid = auth.uid;
+    const sanitizedData = JSON.parse(JSON.stringify(updatedData));
+
+    try {
+      // Fetch the post document
+      const postRef = doc(firestore, "posts", postId);
+      const postSnapshot = await getDoc(postRef);
+      if (!postSnapshot.exists()) {
+        throw new Error("Post not found");
+      }
+      console.log('fetch complete');
+
+      // Verify the owner
+      const postData = postSnapshot.data();
+      if (postData.ownerUID !== uid) {
+        throw new Error("Unauthorized update");
+      }
+      console.log('verified owner');
+
+      // Update the post document
+      await updateDoc(postRef, sanitizedData);
+      dispatch({ type: "UPDATE_POST_SUCCESS" });
+    } catch (error) {
+      console.error("Error updating post:", error);
+      dispatch({ type: "UPDATE_POST_ERROR", error });
+    }
+  };
+}
 
 
 export const savePostType = (data) => {

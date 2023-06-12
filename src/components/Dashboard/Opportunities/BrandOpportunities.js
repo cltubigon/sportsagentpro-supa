@@ -32,11 +32,18 @@ const BrandOpportunities = () => {
   console.log('posts: ', posts)
   const firestorePost = firestore.ordered.posts
 
+  console.log('firebase.auth.email: ', firebase.auth.email)
+
   useEffect(() => {
     if (firestorePost && posts && firestorePost.length !== posts.length) {
-      const filterToOwnerPosts = firestorePost && firebase.auth.uid && firestorePost.filter(post => post.ownerUID === firebase.auth.uid)
+      const filterToOwnerPosts = firestorePost && firebase.auth.uid && firestorePost.filter(post => post.postOwner === firebase.auth.email).map((obj) => {
+        const { ownerUID, ...newObject } = obj
+        return newObject
+      })
+      console.log('filterToOwnerPosts: ', filterToOwnerPosts)
       dispatch(savePostsToStorage(filterToOwnerPosts))
     }
+    // firestorePost && firestorePost.length && dispatch(savePostsToStorage(firestorePost))
   }, [firestorePost])
 
   const btnStyle = {
@@ -62,15 +69,15 @@ const BrandOpportunities = () => {
         {posts.map((post, index) => {
           const {
             postType,
+            postOwner,
             postOwnerFirstName,
             postOwnerLastName,
             selectedActivities,
             totalPayment,
             postExpirationDate,
-            ownerUID,
             id,
           } = post
-          const isOwner = firebase.auth && firebase.auth.uid === ownerUID
+          const isOwner = firebase.auth && firebase.auth.email === postOwner
           const activityTitles = selectedActivities.map(
             (activity) => activity.activityTitle
           )

@@ -19,9 +19,11 @@ import {
   resetBuildState,
   setActiveStep,
   setFirstNameAndLastName,
+  setIsSubmittedSuccessfully,
   setPaymentTabStatus,
   setSelectedRecipients,
   setTotalPayment,
+  updatePost,
 } from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -42,6 +44,7 @@ const PaymentV1 = ({ setSpinner }) => {
     postOwner,
     recipients,
     postType,
+    editMode,
     activeStep,
     selectedRecipients,
     selectedActivities,
@@ -57,10 +60,12 @@ const PaymentV1 = ({ setSpinner }) => {
     isSubmittedSuccessfully,
   } = reduxPosts
 
-  const allActivityAmount = selectedActivities
+  console.log('editMode: ', editMode)
+
+  const allActivityAmount = selectedActivities && selectedActivities
     .filter((activity) => activity.activityAmount !== "")
     .map((activity) => parseFloat(activity.activityAmount))
-  const recipientEarnings = allActivityAmount.reduce(
+  const recipientEarnings = allActivityAmount && allActivityAmount.reduce(
     (accumulator, activity) => accumulator + activity,
     0
   )
@@ -127,8 +132,12 @@ const PaymentV1 = ({ setSpinner }) => {
   // const { recipients, isSubmittedSuccessfully, ...filteredReduxPosts } = reduxPosts
   // console.log('filteredReduxPosts: ', filteredReduxPosts)
 
-  const handleSubmit = () => {
+  const handleCreatePost = () => {
     dispatch(createPost())
+    setSpinner(() => true)
+  }
+  const handleUpdatePost = () => {
+    dispatch(updatePost())
     setSpinner(() => true)
   }
   console.log("reduxPosts: ", reduxPosts)
@@ -136,7 +145,8 @@ const PaymentV1 = ({ setSpinner }) => {
   useEffect(() => {
     if (isSubmittedSuccessfully) {
       console.log("dispatch reset is triggered")
-      dispatch(resetBuildState())
+      // dispatch(resetBuildState())
+      dispatch(setIsSubmittedSuccessfully(false))
       setSpinner(() => false)
       toast({
         title: "Success",
@@ -146,9 +156,13 @@ const PaymentV1 = ({ setSpinner }) => {
         isClosable: true,
         position: "bottom-right",
       })
-      navigate("/network")
+      navigate("/opportunities")
     }
+
+    return
   }, [isSubmittedSuccessfully])
+
+
 
   return (
     <>
@@ -224,7 +238,7 @@ const PaymentV1 = ({ setSpinner }) => {
                 <Flex py={2} borderRadius={4} gap={3} flexDirection={"column"}>
                   <Flex justifyContent={"space-between"} alignItems={"center"}>
                     <Text>Recipient earnings</Text>
-                    <Text>${recipientEarnings.toFixed(2)}</Text>
+                    <Text>${recipientEarnings && recipientEarnings.toFixed(2)}</Text>
                   </Flex>
                   <Flex justifyContent={"space-between"} alignItems={"center"}>
                     <Box>
@@ -234,7 +248,7 @@ const PaymentV1 = ({ setSpinner }) => {
                         provide support on your deal.
                       </Text>
                     </Box>
-                    <Text>${marketplaceFee.toFixed(2)}</Text>
+                    <Text>${marketplaceFee && marketplaceFee.toFixed(2)}</Text>
                   </Flex>
                   <Flex justifyContent={"space-between"} alignItems={"center"}>
                     <Text>Taxes</Text>
@@ -404,7 +418,7 @@ const PaymentV1 = ({ setSpinner }) => {
               opacity={!isReadyToPost && 0.5}
               pointerEvents={!isReadyToPost && "none"}
               colorScheme={"twitter"}
-              onClick={handleSubmit}
+              onClick={editMode ? handleUpdatePost : handleCreatePost}
             >
               {postType === "offer" ? "Send Offer" : "List Opportunity"}
               {!postType && "Select deal type"}
