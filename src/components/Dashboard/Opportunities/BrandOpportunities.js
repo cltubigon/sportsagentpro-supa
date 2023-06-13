@@ -5,6 +5,13 @@ import {
   Flex,
   Icon,
   Image,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Spinner,
   Text,
 } from "@chakra-ui/react"
@@ -13,11 +20,13 @@ import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { savePostsToStorage } from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
+import { deletePost } from "../../../store/actions/buildPostActions"
 
 const BrandOpportunities = () => {
+  const initRef = useRef()
   const dispatch = useDispatch()
 
   const auth = useSelector((state) => state.auth)
@@ -29,18 +38,28 @@ const BrandOpportunities = () => {
   const post = useSelector((state) => state.post)
 
   const { posts } = post
-  console.log('posts: ', posts)
+  console.log("posts: ", posts)
   const firestorePost = firestore.ordered.posts
 
-  console.log('firebase.auth.email: ', firebase.auth.email)
+  console.log("firebase.auth.email: ", firebase.auth.email)
+
+  const handleDelete = (post) => {
+    console.log("post: ", post)
+    dispatch(deletePost(post, 'BrandOpportunities'))
+  }
 
   useEffect(() => {
     if (firestorePost && posts && firestorePost.length !== posts.length) {
-      const filterToOwnerPosts = firestorePost && firebase.auth.uid && firestorePost.filter(post => post.postOwner === firebase.auth.email).map((obj) => {
-        const { ownerUID, ...newObject } = obj
-        return newObject
-      })
-      console.log('filterToOwnerPosts: ', filterToOwnerPosts)
+      const filterToOwnerPosts =
+        firestorePost &&
+        firebase.auth.uid &&
+        firestorePost
+          .filter((post) => post.postOwner === firebase.auth.email)
+          .map((obj) => {
+            const { ownerUID, ...newObject } = obj
+            return newObject
+          })
+      console.log("filterToOwnerPosts: ", filterToOwnerPosts)
       dispatch(savePostsToStorage(filterToOwnerPosts))
     }
     // firestorePost && firestorePost.length && dispatch(savePostsToStorage(firestorePost))
@@ -93,10 +112,13 @@ const BrandOpportunities = () => {
                 flexDirection={"column"}
                 border={"1px solid #EDF0F2"}
                 borderRadius={"md"}
+                w={"320px"}
+                h={"342px"}
+                position={"relative"}
               >
                 <Flex
                   gap={2}
-                  w={"310px"}
+                  // w={"310px"}
                   bgColor={"gray.100"}
                   p={4}
                   borderRadius={"md"}
@@ -131,9 +153,9 @@ const BrandOpportunities = () => {
                   </Flex>
                 </Flex>
                 <Flex flexDirection={"column"} p={4} gap={1}>
-                  <Flex gap={2}>
+                  <Flex gap={2} flexWrap={"wrap"}>
                     <Text color={"gray.400"}>Activities:</Text>
-                    <Text fontWeight={"semibold"}>
+                    <Text fontWeight={"semibold"} maxW={"190px"}>
                       {firstActivity} +{activityCount}
                     </Text>
                   </Flex>
@@ -146,7 +168,9 @@ const BrandOpportunities = () => {
                   <Flex gap={2}>
                     <Text color={"gray.400"}>Expires:</Text>
                     <Text fontWeight={"semibold"}>
-                      {postExpirationDate.utcFormat !== 'Invalid Date' && postExpirationDate.utcFormat || "-"}
+                      {(postExpirationDate.utcFormat !== "Invalid Date" &&
+                        postExpirationDate.utcFormat) ||
+                        "-"}
                     </Text>
                   </Flex>
                   <Flex gap={2}>
@@ -154,12 +178,46 @@ const BrandOpportunities = () => {
                     <Text fontWeight={"semibold"}>-</Text>
                   </Flex>
                 </Flex>
-                <Flex flexDirection={"column"} gap={2} px={4} pb={4} mt={10}>
-                  <Link to={`/build/${id}`}>
-                    <Button sx={btnStyle} borderColor="gray.400" w={'100%'} >
+                <Flex
+                  justifyContent={"center"}
+                  gap={2}
+                  px={4}
+                  position={"absolute"}
+                  bottom={4}
+                  w={"100%"}
+                >
+                  <Link to={`/build/${id}`} style={{ width: "100%" }}>
+                    <Button sx={btnStyle} borderColor="gray.400" w={"100%"}>
                       Edit
                     </Button>
                   </Link>
+                  <Popover initialFocusRef={initRef}>
+                    {({ isOpen, onClose }) => (
+                      <>
+                        <PopoverTrigger>
+                          <Button sx={btnStyle} borderColor="gray.400">
+                            Delete
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent bgColor={"gray.100"} p={2} boxShadow={'lg'} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} borderRadius={'md'} >
+                          <PopoverArrow arrowSize={10} bgColor={"gray.200"} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} />
+                          <PopoverCloseButton />
+                          <PopoverHeader fontWeight={'semibold'} fontSize={'lg'} >Confirm deletion</PopoverHeader>
+                          <PopoverBody>
+                            <Flex flexDirection={"column"} gap={2}>
+                              <Flex>Are you sure you want to delete this?</Flex>
+                              <Flex gap={2} justifyContent={"flex-start"}>
+                                <Button w={'90px'} onClick={onClose} >Cancel</Button>
+                                <Button w={'90px'} onClick={() => handleDelete(post)} colorScheme="twitter" >
+                                  Yes
+                                </Button>
+                              </Flex>
+                            </Flex>
+                          </PopoverBody>
+                        </PopoverContent>
+                      </>
+                    )}
+                  </Popover>
                 </Flex>
               </Flex>
             )

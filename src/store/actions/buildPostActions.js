@@ -60,7 +60,7 @@ export const deletePost = (post, sender) => {
         console.log('post.postOwner: ', post.postOwner)
         console.log('email: ', email)
         await deleteDoc(doc(firestore, "posts", post.id))
-        dispatch({ type: "DELETE_POST", post })
+        sender !== 'BrandOpportunities' && dispatch({ type: "DELETE_POST", post })
         console.log("Document successfully deleted!")
       } else {
         throw new Error("User not found")
