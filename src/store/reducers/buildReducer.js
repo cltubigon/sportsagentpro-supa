@@ -24,17 +24,17 @@ const initState = {
 
 const buildReducer = (state = initState, action) => {
     switch (action.type) {
-      case "SET_IS_SUBMITTED_SUCCESSFULLY":
-        console.log('SET_IS_SUBMITTED_SUCCESSFULLY')
-        return {
-          ...state,
-          isSubmittedSuccessfully: action.payload,
-        }
       case "SET_SUBMISSION_TYPE":
         console.log('SET_SUBMISSION_TYPE', action.payload)
         return {
           ...state,
           submissionType: action.payload,
+        }
+      case "SET_IS_SUBMITTED_SUCCESSFULLY":
+        console.log('SET_IS_SUBMITTED_SUCCESSFULLY')
+        return {
+          ...state,
+          isSubmittedSuccessfully: action.payload,
         }
       case "UPDATE_POST_SUCCESS":
         console.log('UPDATE_POST_SUCCESS')

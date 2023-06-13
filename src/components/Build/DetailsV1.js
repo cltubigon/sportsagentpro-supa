@@ -90,7 +90,7 @@ const DetailsV1 = () => {
   
   useEffect(()=> {
     console.log('rawDataString: ', rawDataString)
-    availableCharacters >= -1 && dispatch(setContent(rawDataString))
+    availableCharacters >= -1 && rawDataString && dispatch(setContent(rawDataString))
 
     return
   }, [rawDataString])

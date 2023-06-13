@@ -25,7 +25,6 @@ const Build = () => {
 
   const [gridHeight, setGridHeight] = useState(null)
   const [gridWidth, setGridWidth] = useState(null)
-  // const [submissionType, setSubmissionType] = useState(null)
   const [spinner, setSpinner] = useState(false)
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const Build = () => {
     <>
       <Flex maxW={"100%"} height={"100vh"}>
         <Box maxW={"290px"}>
-          <BuildLeftNav  setSpinner={setSpinner} />
+          <BuildLeftNav setSpinner={setSpinner} />
         </Box>
         <Flex
           flexGrow={1}

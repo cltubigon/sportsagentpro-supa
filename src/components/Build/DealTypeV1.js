@@ -42,18 +42,15 @@ const DealTypeV1 = () => {
         const selectedPost = posts && posts.find(post => post.id === id)
         console.log('selectedPost out: ', selectedPost)
         if (selectedPost && Object.keys(selectedPost).length > 0) {
-            console.log('selectedPost: ', selectedPost)
-            console.log('selectedPost.id: ', selectedPost.id)
-            console.log('build.id: ', build.id)
             console.log('This is running')
             const isDifferent = selectedPost.id !== build.id
             isDifferent && dispatch(setEditMode(false))
             console.log('selectedPost.id: ', selectedPost.id)
             console.log('build.id: ', build.id)
             console.log('isDifferent: ', isDifferent)
-            console.log('editMode: ', selectedPost.editMode)
+            console.log('editMode: ', editMode)
             !editMode && isDifferent && dispatch(resetBuildState())
-            !editMode && isDifferent && dispatch(setBuildState(selectedPost, 'line152'))
+            !editMode && isDifferent && dispatch(setBuildState(selectedPost, 'sender is DealType line53'))
         } else {
             console.log('selectedPost: ', selectedPost)
             console.log('editMode: ', editMode)
@@ -125,7 +122,7 @@ const DealTypeV1 = () => {
             >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={'header'} pb={4}>
-        <BuildMenu />
+            <BuildMenu />
         </GridItem>
 
         {/* -------------------------------------- Content section -------------------------------------- */}

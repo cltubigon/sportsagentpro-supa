@@ -1,11 +1,12 @@
 import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore"
 
-export const setSubmissionType = (payload) => {
+export const setSubmissionType = (payload, sender) => {
+  console.log('SET_SUBMISSION_TYPE ', payload)
+  console.log('sender: ', sender)
   return (dispatch) => {
-    dispatch({ type: 'SET_SUBMISSION_TYPE', payload })
+    dispatch({type: "SET_SUBMISSION_TYPE", payload})
   }
 }
-
 export const setEditMode = (payload) => {
   console.log('SET_EDIT_MODE ', payload)
   return (dispatch) => {
@@ -68,15 +69,15 @@ export const createPost = () => {
   };
 };
 
-export const updatePost = (uid) => {
+export const updatePost = () => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     const updatedData = getState().build;
     const postId = updatedData.id;
-    console.log('uid: ', uid)
-    // const { auth } = getState().firebase;
-    // const uid = auth.uid;
+    const { auth } = getState().firebase;
+    const uid = auth.uid;
     const sanitizedData = JSON.parse(JSON.stringify(updatedData));
+    console.log('sanitizedData: ', sanitizedData)
 
     try {
       // Fetch the post document

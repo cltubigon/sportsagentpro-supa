@@ -16,7 +16,7 @@ const BuildMenu = () => {
   const { activeStep, editMode } = build
 
   const handleUpdate = () => {
-    dispatch(setSubmissionType("update"))
+    dispatch(setSubmissionType("update", 'sender is BuildMenu line19'))
   }
 
   const stepDetails = [

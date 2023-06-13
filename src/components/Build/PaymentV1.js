@@ -23,7 +23,7 @@ import {
   setPaymentTabStatus,
   setSelectedRecipients,
   setSubmissionType,
-  setTotalPayment,
+  // setTotalPayment,
   updatePost,
 } from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
@@ -41,15 +41,12 @@ const PaymentV1 = ({ setSpinner }) => {
 
   const auth = useSelector((state) => state.auth)
   const reduxPosts = useSelector((state) => state.build)
-  
-  const [count, setCount] = useState(0)
 
   const {
     postOwner,
     recipients,
     postType,
     editMode,
-    totalPayment,
     activeStep,
     selectedRecipients,
     selectedActivities,
@@ -65,21 +62,18 @@ const PaymentV1 = ({ setSpinner }) => {
     isSubmittedSuccessfully,
   } = reduxPosts
 
-  console.log("editMode: ", editMode)
+  console.log('editMode: ', editMode)
 
-  const allActivityAmount =
-    selectedActivities &&
-    selectedActivities
-      .filter((activity) => activity.activityAmount !== "")
-      .map((activity) => parseFloat(activity.activityAmount))
-  const recipientEarnings =
-    allActivityAmount &&
-    allActivityAmount.reduce(
-      (accumulator, activity) => accumulator + activity,
-      0
-    )
-  const marketplaceFee = recipientEarnings * 0.1
+  const allActivityAmount = selectedActivities && selectedActivities
+    .filter((activity) => activity.activityAmount !== "")
+    .map((activity) => parseFloat(activity.activityAmount))
+  const recipientEarnings = allActivityAmount && allActivityAmount.reduce(
+    (accumulator, activity) => accumulator + activity,
+    0
+  )
   console.log("allActivityAmount: ", allActivityAmount)
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [count, setCount] = useState(0)
 
   useEffect(() => {
     auth.profile &&
@@ -90,6 +84,17 @@ const PaymentV1 = ({ setSpinner }) => {
         })
       )
   }, [auth])
+
+  const marketplaceFee = recipientEarnings * 0.1
+  useEffect(() => {
+    setTotalAmount(recipientEarnings + marketplaceFee)
+  }, [recipientEarnings])
+
+  // useEffect(()=> {
+  //   dispatch(setTotalPayment(totalAmount))
+  // }, [totalAmount])
+
+  console.log("totalAmount: ", totalAmount)
 
   useEffect(() => {
     const getSelectedRecpients =
@@ -114,9 +119,11 @@ const PaymentV1 = ({ setSpinner }) => {
         detailsTabReady &&
         agree)
     ) {
+      // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => true)
       dispatch(setPaymentTabStatus(true))
     } else {
+      // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => false)
       dispatch(setPaymentTabStatus(false))
     }
@@ -124,13 +131,39 @@ const PaymentV1 = ({ setSpinner }) => {
     return
   }, [count, activitiesTabReady, detailsTabReady, agree])
 
+  // const { recipients, isSubmittedSuccessfully, ...filteredReduxPosts } = reduxPosts
+  // console.log('filteredReduxPosts: ', filteredReduxPosts)
+
   const handleCreatePost = () => {
-    dispatch(setSubmissionType("create"))
+    dispatch(setSubmissionType('create', 'sender is Payment line138'))
   }
   const handleUpdatePost = () => {
-    dispatch(setSubmissionType("update"))
+    dispatch(setSubmissionType('update', 'sender is Payment line142'))
   }
   console.log("reduxPosts: ", reduxPosts)
+
+  // useEffect(() => {
+  //   if (isSubmittedSuccessfully) {
+  //     console.log("dispatch reset is triggered")
+  //     // dispatch(resetBuildState())
+  //     dispatch(setIsSubmittedSuccessfully(false))
+  //     setSpinner(() => false)
+  //     toast({
+  //       title: "Success",
+  //       description: "Your post was successfully created",
+  //       status: "success",
+  //       duration: 3000,
+  //       isClosable: true,
+  //       position: "bottom-right",
+  //     })
+  //     navigate("/opportunities")
+  //   }
+
+  //   return
+  // }, [isSubmittedSuccessfully])
+
+
+
   return (
     <>
       <Grid
@@ -145,6 +178,7 @@ const PaymentV1 = ({ setSpinner }) => {
         <GridItem area={"header"} pb={4}>
           <BuildMenu />
         </GridItem>
+
         {/* -------------------------------------- Content section -------------------------------------- */}
 
         <GridItem
@@ -185,9 +219,7 @@ const PaymentV1 = ({ setSpinner }) => {
                 <Flex py={2} borderRadius={4} gap={3} flexDirection={"column"}>
                   <Flex justifyContent={"space-between"} alignItems={"center"}>
                     <Text>Recipient earnings</Text>
-                    <Text>
-                      ${recipientEarnings && recipientEarnings.toFixed(2)}
-                    </Text>
+                    <Text>${recipientEarnings && recipientEarnings.toFixed(2)}</Text>
                   </Flex>
                   <Flex justifyContent={"space-between"} alignItems={"center"}>
                     <Box>
@@ -223,7 +255,7 @@ const PaymentV1 = ({ setSpinner }) => {
                       fontSize={"xl"}
                       fontWeight={"semibold"}
                     >
-                      ${totalPayment.toFixed(2)}
+                      ${totalAmount.toFixed(2)}
                     </Text>
                   </Flex>
                 </Flex>
@@ -369,9 +401,7 @@ const PaymentV1 = ({ setSpinner }) => {
               colorScheme={"twitter"}
               onClick={editMode ? handleUpdatePost : handleCreatePost}
             >
-              {postType === "offer"
-                ? "Send Offer"
-                : `${editMode ? "Update" : "List"} Opportunity`}
+              {postType === "offer" ? "Send Offer" : `${editMode ? 'Update' : 'List'} Opportunity`}
               {!postType && "Select deal type"}
             </Button>
           </Flex>

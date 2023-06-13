@@ -7,7 +7,6 @@ import {
   Icon,
   Flex,
   Tooltip,
-  Toast,
   useToast,
 } from "@chakra-ui/react"
 import { BsArrowBarLeft, BsArrowBarRight, BsCircleFill } from "react-icons/bs"
@@ -32,14 +31,9 @@ const BuildLeftNav = ({ setSpinner }) => {
   const navigate = useNavigate()
 
   const statePost = useSelector((state) => state.build)
-  const firebase = useSelector((state) => state)
-
-  const { auth } = firebase
-
   const {
-    submissionType,
     isSubmittedSuccessfully,
-    editMode,
+    submissionType,
     recipients,
     postType,
     selectedActivities,
@@ -59,57 +53,31 @@ const BuildLeftNav = ({ setSpinner }) => {
     recipients && recipients.filter((data) => data.isChecked)
   const count = getSelectedRecpients && getSelectedRecpients.length
 
-  const [collapse, setCollapse] = useState(false)
-  const [paymentReady, setPaymentReady] = useState(null)
-  const [reviewReady, setReviewReady] = useState(null)
-  const [totalAmount, setTotalAmount] = useState(0)
-
-  console.log("statePost: ", statePost)
-  console.log("editMode: ", editMode)
-
-  const allActivityAmount =
-    selectedActivities &&
-    selectedActivities
-      .filter((activity) => activity.activityAmount !== "")
-      .map((activity) => parseFloat(activity.activityAmount))
-  const recipientEarnings =
-    allActivityAmount &&
-    allActivityAmount.reduce(
-      (accumulator, activity) => accumulator + activity,
-      0
-    )
-  const marketplaceFee = recipientEarnings * 0.1
   useEffect(() => {
-    setTotalAmount(recipientEarnings + marketplaceFee)
-  }, [recipientEarnings])
-
-  useEffect(() => {
-    dispatch(setTotalPayment(totalAmount))
-  }, [totalAmount])
-
-  useEffect(() => {
+    console.log("submissionType: ", submissionType)
     if (submissionType === "create") {
+      console.log("submissionType: ", submissionType)
+      dispatch(setSubmissionType(null, "sender is BuildLeftNav line 60"))
       dispatch(createPost())
       setSpinner(() => true)
     } else if (submissionType === "update") {
-        console.log('I am going to send auth.uid: ', auth.uid)
-        auth && dispatch(updatePost(auth.uid))
+      console.log("submissionType: ", submissionType)
+      dispatch(setSubmissionType(null, "sender is BuildLeftNav line 65"))
+      dispatch(updatePost())
       setSpinner(() => true)
     }
-
-    return dispatch(setSubmissionType(null))
+    return
   }, [submissionType])
 
   useEffect(() => {
+    console.log("isSubmittedSuccessfully: ", isSubmittedSuccessfully)
     if (isSubmittedSuccessfully) {
-      console.log("dispatch reset is triggered")
+      console.log("set is submitted successfully")
       dispatch(setIsSubmittedSuccessfully(false))
       setSpinner(() => false)
       toast({
         title: "Success",
-        description: `Your post was successfully ${
-          editMode ? "updated" : "created"
-        }`,
+        description: "Your post was successfully created",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -120,6 +88,37 @@ const BuildLeftNav = ({ setSpinner }) => {
 
     return
   }, [isSubmittedSuccessfully])
+
+  const [totalAmount, setTotalAmount] = useState(0)
+  useEffect(() => {
+    const allActivityAmount =
+      selectedActivities &&
+      selectedActivities
+        .filter((activity) => activity.activityAmount !== "")
+        .map((activity) => parseFloat(activity.activityAmount))
+    const recipientEarnings =
+      allActivityAmount &&
+      allActivityAmount.reduce(
+        (accumulator, activity) => accumulator + activity,
+        0
+      )
+    console.log("allActivityAmount: ", allActivityAmount)
+    const marketplaceFee = recipientEarnings * 0.1
+    setTotalAmount(recipientEarnings + marketplaceFee)
+  }, [selectedActivities])
+
+  //   useEffect(() => {
+  //   }, [recipientEarnings])
+
+  useEffect(() => {
+    dispatch(setTotalPayment(totalAmount))
+  }, [totalAmount])
+
+  console.log("totalAmount: ", totalAmount)
+
+  const [collapse, setCollapse] = useState(false)
+  const [paymentReady, setPaymentReady] = useState(null)
+  const [reviewReady, setReviewReady] = useState(null)
 
   useEffect(() => {
     console.log("I will set the Active step")
@@ -145,6 +144,8 @@ const BuildLeftNav = ({ setSpinner }) => {
       ? setReviewReady(true)
       : setReviewReady(false)
   }, [statePost])
+  // console.log('reviewReady: ', reviewReady)
+  // console.log('BLNav: ', reviewTabReady)
 
   const menuTitleStyle = {
     fontSize: "md",
