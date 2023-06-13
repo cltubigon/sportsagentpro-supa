@@ -31,6 +31,7 @@ const BuildLeftNav = ({ setSpinner }) => {
   const navigate = useNavigate()
 
   const statePost = useSelector((state) => state.build)
+  const firebase = useSelector((state) => state.firebase)
   const {
     isSubmittedSuccessfully,
     submissionType,
@@ -53,6 +54,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     recipients && recipients.filter((data) => data.isChecked)
   const count = getSelectedRecpients && getSelectedRecpients.length
 
+  console.log("firebase: ", firebase)
   useEffect(() => {
     console.log("submissionType: ", submissionType)
     if (submissionType === "create") {
@@ -63,7 +65,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     } else if (submissionType === "update") {
       console.log("submissionType: ", submissionType)
       dispatch(setSubmissionType(null, "sender is BuildLeftNav line 65"))
-      dispatch(updatePost())
+      firebase.auth && dispatch(updatePost(firebase.auth.uid))
       setSpinner(() => true)
     }
     return

@@ -401,7 +401,7 @@ const PaymentV1 = ({ setSpinner }) => {
               colorScheme={"twitter"}
               onClick={editMode ? handleUpdatePost : handleCreatePost}
             >
-              {postType === "offer" ? "Send Offer" : `${editMode ? 'Update' : 'List'} Opportunity`}
+              {postType === "offer" ? "Send Offer" : (postType && `${editMode ? 'Update' : 'List'} Opportunity`)}
               {!postType && "Select deal type"}
             </Button>
           </Flex>

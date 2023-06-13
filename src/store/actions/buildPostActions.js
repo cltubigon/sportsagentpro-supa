@@ -69,13 +69,13 @@ export const createPost = () => {
   };
 };
 
-export const updatePost = () => {
+export const updatePost = (uid) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     const updatedData = getState().build;
     const postId = updatedData.id;
-    const { auth } = getState().firebase;
-    const uid = auth.uid;
+    // const { auth } = getState().firebase;
+    // const uid = auth.uid;
     const sanitizedData = JSON.parse(JSON.stringify(updatedData));
     console.log('sanitizedData: ', sanitizedData)
 
