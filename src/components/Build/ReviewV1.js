@@ -56,6 +56,7 @@ import { TbLicense } from "react-icons/tb"
 import moment from "moment/moment"
 import NoSelected from "./NoSelected"
 import { Link } from "react-router-dom"
+import BuildMenu from "./BuildMenu"
 
 const ReviewV1 = () => {
   const dispatch = useDispatch()
@@ -71,14 +72,15 @@ const ReviewV1 = () => {
     activitiesTabReady,
   } = reduxPosts
 
-  const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)
+  const getSelectedRecpients =
+    recipients && recipients.filter((data) => data.isChecked)
   const count = getSelectedRecpients && getSelectedRecpients.length
 
   const [viewMore, setViewMore] = useState(false)
   const [hasBrief, setHasBrief] = useState(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
-  console.log('postExpirationDate: ', postExpirationDate)
+  console.log("postExpirationDate: ", postExpirationDate)
 
   // const isoExpDate =
   //   postExpirationDate && new Date(postExpirationDate).toISOString()
@@ -397,13 +399,17 @@ const ReviewV1 = () => {
     .map((activity) => {
       return { ...activity, activityAmount: activity.activityAmount }
     })
-  const newSelectedActivities = filterSelectedActivities.map((activity, index) => {
-    const filterSelected = selectedActivities.find(selected => selected.id === activity.id)
-    return {
-      ...activity,
-      ...filterSelected,
+  const newSelectedActivities = filterSelectedActivities.map(
+    (activity, index) => {
+      const filterSelected = selectedActivities.find(
+        (selected) => selected.id === activity.id
+      )
+      return {
+        ...activity,
+        ...filterSelected,
+      }
     }
-  })
+  )
 
   return (
     <>
@@ -419,24 +425,7 @@ const ReviewV1 = () => {
       >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={"header"} pb={4}>
-          <Flex
-            px={20}
-            flexGrow={1}
-            alignItems={"center"}
-            borderBottom={"2px solid #EBEFF2"}
-          >
-            <Flex flexGrow={1} flexDirection={"column"} py={4}>
-              <Text fontSize={"xl"} fontWeight={"semibold"}>
-                Review
-              </Text>
-              <Text color={"gray.500"} fontSize={"sm"}>
-                Look over all the information you have provided
-              </Text>
-            </Flex>
-            <Flex>
-            <Link to={'/opportunities'}><Icon as={TfiClose} boxSize={4} /></Link>
-            </Flex>
-          </Flex>
+          <BuildMenu />
         </GridItem>
 
         {/* -------------------------------------- Content section -------------------------------------- */}
@@ -507,63 +496,65 @@ const ReviewV1 = () => {
               </Box>
             </Box>
 
-            {postType === 'offer' && <Box
-              borderColor={"gray.200"}
-              borderStyle={"solid"}
-              borderWidth={"1px"}
-              borderRadius={"6px"}
-              p={5}
-            >
-              <Flex
-                justifyContent={"space-between"}
+            {postType === "offer" && (
+              <Box
                 borderColor={"gray.200"}
                 borderStyle={"solid"}
-                borderBottomWidth={"1px"}
-                pb={4}
+                borderWidth={"1px"}
+                borderRadius={"6px"}
+                p={5}
               >
-                {/* ------ Label ------ */}
-                <Text
-                  fontSize={"xl"}
-                  fontWeight={"semibold"}
-                  color={"blue.500"}
+                <Flex
+                  justifyContent={"space-between"}
+                  borderColor={"gray.200"}
+                  borderStyle={"solid"}
+                  borderBottomWidth={"1px"}
+                  pb={4}
                 >
-                  Recipients
-                </Text>
-                <Text
-                  cursor={"pointer"}
-                  color={"blue.500"}
-                  fontWeight={"semibold"}
-                  onClick={() => dispatch(setActiveStep("recipients"))}
-                >
-                  Edit
-                </Text>
-              </Flex>
-              <Box py={4}>
-                {/* ------ Content ------ */}
-                {selectedRecipients && selectedRecipients.length > 0 ? (
-                  selectedRecipients.map((recipient) => {
-                    const { id, firstName, lastName } = recipient
-                    return (
-                      <Flex key={id} sx={recipientContainer}>
-                        <Avatar name={`${firstName} ${lastName}`}>
-                          <AvatarBadge boxSize="0.9em" bg="green.500" />
-                        </Avatar>
-                        <Box pl={2}>
-                          <Text
-                            fontWeight={"semibold"}
-                          >{`${firstName} ${lastName}`}</Text>
-                          <Text fontSize={"sm"} color={"gray.500"}>
-                            Student-Athlete • Tennis • Fresno State Bulldogs
-                          </Text>
-                        </Box>
-                      </Flex>
-                    )
-                  })
-                ) : (
-                  <NoSelected category={"Recipients"} />
-                )}
+                  {/* ------ Label ------ */}
+                  <Text
+                    fontSize={"xl"}
+                    fontWeight={"semibold"}
+                    color={"blue.500"}
+                  >
+                    Recipients
+                  </Text>
+                  <Text
+                    cursor={"pointer"}
+                    color={"blue.500"}
+                    fontWeight={"semibold"}
+                    onClick={() => dispatch(setActiveStep("recipients"))}
+                  >
+                    Edit
+                  </Text>
+                </Flex>
+                <Box py={4}>
+                  {/* ------ Content ------ */}
+                  {selectedRecipients && selectedRecipients.length > 0 ? (
+                    selectedRecipients.map((recipient) => {
+                      const { id, firstName, lastName } = recipient
+                      return (
+                        <Flex key={id} sx={recipientContainer}>
+                          <Avatar name={`${firstName} ${lastName}`}>
+                            <AvatarBadge boxSize="0.9em" bg="green.500" />
+                          </Avatar>
+                          <Box pl={2}>
+                            <Text
+                              fontWeight={"semibold"}
+                            >{`${firstName} ${lastName}`}</Text>
+                            <Text fontSize={"sm"} color={"gray.500"}>
+                              Student-Athlete • Tennis • Fresno State Bulldogs
+                            </Text>
+                          </Box>
+                        </Flex>
+                      )
+                    })
+                  ) : (
+                    <NoSelected category={"Recipients"} />
+                  )}
+                </Box>
               </Box>
-            </Box>}
+            )}
 
             <Box
               borderColor={"gray.200"}
@@ -789,7 +780,9 @@ const ReviewV1 = () => {
                     {Object.keys(postExpirationDate).length > 0 && (
                       <Box>
                         <Text fontWeight={"semibold"}>Expiration date</Text>
-                        <Text>{postExpirationDate.utcFormat.replace(':00 ', ' ')}</Text>
+                        <Text>
+                          {postExpirationDate.utcFormat.replace(":00 ", " ")}
+                        </Text>
                       </Box>
                     )}
                   </Flex>

@@ -19,6 +19,7 @@ import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import RichEditor from '../../utils/RichEditor/RichEditor'
+import BuildMenu from "./BuildMenu"
 
 const DetailsV1 = () => {
   const dispatch = useDispatch()
@@ -114,25 +115,7 @@ const DetailsV1 = () => {
       >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={"header"} pb={4}>
-          <Flex
-            px={20}
-            flexGrow={1}
-            alignItems={"center"}
-            borderBottom={"2px solid #EBEFF2"}
-          >
-            <Flex flexGrow={1} flexDirection={"column"} py={4}>
-              <Text fontSize={"xl"} fontWeight={"semibold"}>
-                Details
-              </Text>
-              <Text color={"gray.500"} fontSize={"sm"}>
-                Add information about your deal that will be shared with
-                recipients
-              </Text>
-            </Flex>
-            <Flex>
-              <Link to={'/opportunities'}><Icon as={TfiClose} boxSize={4} /></Link>
-            </Flex>
-          </Flex>
+          <BuildMenu />
         </GridItem>
 
         {/* -------------------------------------- Content section -------------------------------------- */}

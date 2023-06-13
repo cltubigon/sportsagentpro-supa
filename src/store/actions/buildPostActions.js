@@ -1,5 +1,11 @@
 import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore"
 
+export const setSubmissionType = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_SUBMISSION_TYPE', payload })
+  }
+}
+
 export const setEditMode = (payload) => {
   console.log('SET_EDIT_MODE ', payload)
   return (dispatch) => {
@@ -45,7 +51,7 @@ export const createPost = () => {
     const build = getState().build;
     const firestore = getFirestore();
     const uid = getState().firebase.auth.uid;
-    const { recipients, isSubmittedSuccessfully, editMode, ...newObject } = build;
+    const { submissionType, recipients, isSubmittedSuccessfully, editMode, ...newObject } = build;
     const sanitizedObject = JSON.parse(JSON.stringify(newObject));
 
     try {
@@ -62,13 +68,14 @@ export const createPost = () => {
   };
 };
 
-export const updatePost = () => {
+export const updatePost = (uid) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     const updatedData = getState().build;
     const postId = updatedData.id;
-    const { auth } = getState().firebase;
-    const uid = auth.uid;
+    console.log('uid: ', uid)
+    // const { auth } = getState().firebase;
+    // const uid = auth.uid;
     const sanitizedData = JSON.parse(JSON.stringify(updatedData));
 
     try {

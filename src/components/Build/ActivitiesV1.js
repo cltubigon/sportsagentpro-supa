@@ -60,6 +60,7 @@ import { MdOutlineCoPresent } from "react-icons/md"
 import { AiOutlineEye } from "react-icons/ai"
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
+import BuildMenu from "./BuildMenu"
 
 const ActivitiesNav1 = () => {
   const dispatch = useDispatch()
@@ -559,26 +560,7 @@ const ActivitiesNav1 = () => {
       >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={"header"} pb={4}>
-          <Flex
-            px={20}
-            flexGrow={1}
-            alignItems={"center"}
-            borderBottom={"2px solid #EBEFF2"}
-          >
-            <Flex flexGrow={1} flexDirection={"column"} py={4}>
-              <Text fontSize={"xl"} fontWeight={"semibold"}>
-                Activities
-              </Text>
-              <Text color={"gray.500"} fontSize={"sm"}>
-                Select which activities recipients will be required to complete
-              </Text>
-            </Flex>
-            <Flex>
-              <Link to={"/opportunities"}>
-                <Icon as={TfiClose} boxSize={4} />
-              </Link>
-            </Flex>
-          </Flex>
+          <BuildMenu />
 
           <Flex px={20}>
             <Flex

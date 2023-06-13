@@ -19,6 +19,7 @@ const initState = {
     isSubmittedSuccessfully: false,
     totalPayment: null,
     editMode: false,
+    submissionType: null,
 }
 
 const buildReducer = (state = initState, action) => {
@@ -26,7 +27,14 @@ const buildReducer = (state = initState, action) => {
       case "SET_IS_SUBMITTED_SUCCESSFULLY":
         console.log('SET_IS_SUBMITTED_SUCCESSFULLY')
         return {
+          ...state,
           isSubmittedSuccessfully: action.payload,
+        }
+      case "SET_SUBMISSION_TYPE":
+        console.log('SET_SUBMISSION_TYPE', action.payload)
+        return {
+          ...state,
+          submissionType: action.payload,
         }
       case "UPDATE_POST_SUCCESS":
         console.log('UPDATE_POST_SUCCESS')

@@ -15,6 +15,7 @@ import { useEffect } from "react"
 import { BsChevronRight } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
 import { savePostsToStorage } from "../../store/actions/postActions"
+import BuildMenu from "./BuildMenu"
 
 const DealTypeV1 = () => {
     const dispatch = useDispatch()
@@ -41,13 +42,16 @@ const DealTypeV1 = () => {
         const selectedPost = posts && posts.find(post => post.id === id)
         console.log('selectedPost out: ', selectedPost)
         if (selectedPost && Object.keys(selectedPost).length > 0) {
+            console.log('selectedPost: ', selectedPost)
+            console.log('selectedPost.id: ', selectedPost.id)
+            console.log('build.id: ', build.id)
             console.log('This is running')
             const isDifferent = selectedPost.id !== build.id
             isDifferent && dispatch(setEditMode(false))
             console.log('selectedPost.id: ', selectedPost.id)
             console.log('build.id: ', build.id)
             console.log('isDifferent: ', isDifferent)
-            console.log('editMode: ', editMode)
+            console.log('editMode: ', selectedPost.editMode)
             !editMode && isDifferent && dispatch(resetBuildState())
             !editMode && isDifferent && dispatch(setBuildState(selectedPost, 'line152'))
         } else {
@@ -121,15 +125,7 @@ const DealTypeV1 = () => {
             >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={'header'} pb={4}>
-            <Flex px={20} flexGrow={1} alignItems={'center'} borderBottom={"2px solid #EBEFF2"}>
-                <Flex flexGrow={1} flexDirection={'column'} py={4} >
-                    <Text fontSize={'xl'} fontWeight={'semibold'}>Deal type</Text>
-                    <Text color={"gray.500"} fontSize={'sm'}>Select what type of deal you will be building out</Text>
-                </Flex>
-                <Flex>
-                    <Link to={'/opportunities'}><Icon as={TfiClose} boxSize={4} /></Link>
-                </Flex>
-            </Flex>
+        <BuildMenu />
         </GridItem>
 
         {/* -------------------------------------- Content section -------------------------------------- */}
