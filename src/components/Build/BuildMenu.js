@@ -5,7 +5,7 @@ import { FiSave } from "react-icons/fi"
 import { TfiClose } from "react-icons/tfi"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { setSubmissionType } from "../../store/actions/buildPostActions"
+import { deletePost, setSubmissionType } from "../../store/actions/buildPostActions"
 
 const BuildMenu = () => {
   const dispatch = useDispatch()
@@ -13,10 +13,15 @@ const BuildMenu = () => {
   const build = useSelector((state) => state.build)
   console.log("build: ", build)
 
-  const { activeStep, editMode } = build
+  const { id, activeStep, editMode } = build
+
+  console.log('id: ', id)
 
   const handleUpdate = () => {
     dispatch(setSubmissionType("update", 'sender is BuildMenu line19'))
+  }
+  const handleDelete = () => {
+    dispatch(deletePost(build, 'sender is BuildMenu line 24'))
   }
 
   const stepDetails = [
@@ -81,7 +86,7 @@ const BuildMenu = () => {
         <Flex alignItems={"center"} gap={6}>
           {editMode && (
             <>
-              <Flex sx={iconHolder}>
+              <Flex sx={iconHolder} onClick={handleDelete}>
                 <Icon as={BsTrash} boxSize={4} />
                 <Text fontWeight={"semibold"}>Delete</Text>
               </Flex>

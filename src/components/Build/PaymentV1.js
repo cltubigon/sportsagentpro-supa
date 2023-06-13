@@ -142,28 +142,6 @@ const PaymentV1 = ({ setSpinner }) => {
   }
   console.log("reduxPosts: ", reduxPosts)
 
-  // useEffect(() => {
-  //   if (isSubmittedSuccessfully) {
-  //     console.log("dispatch reset is triggered")
-  //     // dispatch(resetBuildState())
-  //     dispatch(setIsSubmittedSuccessfully(false))
-  //     setSpinner(() => false)
-  //     toast({
-  //       title: "Success",
-  //       description: "Your post was successfully created",
-  //       status: "success",
-  //       duration: 3000,
-  //       isClosable: true,
-  //       position: "bottom-right",
-  //     })
-  //     navigate("/opportunities")
-  //   }
-
-  //   return
-  // }, [isSubmittedSuccessfully])
-
-
-
   return (
     <>
       <Grid

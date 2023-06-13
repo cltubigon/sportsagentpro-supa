@@ -33,6 +33,7 @@ const BuildLeftNav = ({ setSpinner }) => {
   const statePost = useSelector((state) => state.build)
   const firebase = useSelector((state) => state.firebase)
   const {
+    editMode,
     isSubmittedSuccessfully,
     submissionType,
     recipients,
@@ -79,7 +80,7 @@ const BuildLeftNav = ({ setSpinner }) => {
       setSpinner(() => false)
       toast({
         title: "Success",
-        description: "Your post was successfully created",
+        description: `Your post was successfully ${editMode ? 'updated' : 'created'}`,
         status: "success",
         duration: 3000,
         isClosable: true,

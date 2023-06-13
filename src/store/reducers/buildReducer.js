@@ -24,6 +24,14 @@ const initState = {
 
 const buildReducer = (state = initState, action) => {
     switch (action.type) {
+      case "DELETE_POST":
+        console.log('DELETE_POST successfully')
+        return {
+          ...state,
+          isSubmittedSuccessfully: true,
+        }
+      case "DELETE_POST_ERROR":
+        console.log('DELETE_POST_ERROR', action.error)
       case "SET_SUBMISSION_TYPE":
         console.log('SET_SUBMISSION_TYPE', action.payload)
         return {
