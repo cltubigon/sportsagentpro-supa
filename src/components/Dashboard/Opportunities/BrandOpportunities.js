@@ -146,7 +146,7 @@ const BrandOpportunities = () => {
                   <Flex gap={2}>
                     <Text color={"gray.400"}>Expires:</Text>
                     <Text fontWeight={"semibold"}>
-                      {postExpirationDate.utcFormat || "-"}
+                      {postExpirationDate.utcFormat !== 'Invalid Date' && postExpirationDate.utcFormat || "-"}
                     </Text>
                   </Flex>
                   <Flex gap={2}>

@@ -73,14 +73,14 @@ const BuildLeftNav = ({ setSpinner }) => {
   }, [submissionType])
 
   useEffect(() => {
-    console.log("isSubmittedSuccessfully: ", isSubmittedSuccessfully)
-    if (isSubmittedSuccessfully) {
+    console.log("isSubmittedSuccessfully.status: ", isSubmittedSuccessfully.status)
+    if (isSubmittedSuccessfully.status) {
       console.log("set is submitted successfully")
-      dispatch(setIsSubmittedSuccessfully(false))
+      dispatch(setIsSubmittedSuccessfully({ status: false, type: null }))
       setSpinner(() => false)
       toast({
         title: "Success",
-        description: `Your post was successfully ${editMode ? 'updated' : 'created'}`,
+        description: `Your post was successfully ${editMode ? isSubmittedSuccessfully.type : isSubmittedSuccessfully.type}`,
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -90,7 +90,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     }
 
     return
-  }, [isSubmittedSuccessfully])
+  }, [isSubmittedSuccessfully.status])
 
   const [totalAmount, setTotalAmount] = useState(0)
   useEffect(() => {
