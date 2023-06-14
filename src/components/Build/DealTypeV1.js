@@ -41,6 +41,7 @@ const DealTypeV1 = () => {
     useEffect(()=> {
         const selectedPost = posts && posts.find(post => post.id === id)
         console.log('selectedPost out: ', selectedPost)
+        console.log('id: ', id)
         if (selectedPost && Object.keys(selectedPost).length > 0) {
             console.log('This is running')
             const isDifferent = selectedPost.id !== build.id
@@ -50,14 +51,13 @@ const DealTypeV1 = () => {
             console.log('isDifferent: ', isDifferent)
             console.log('editMode: ', editMode)
             !editMode && isDifferent && dispatch(resetBuildState())
-            !editMode && isDifferent && dispatch(setBuildState(selectedPost, 'sender is DealType line53'))
+            !editMode && isDifferent && dispatch(setBuildState(selectedPost, 'sender is DealType line54'))
         } else {
             console.log('selectedPost: ', selectedPost)
             console.log('editMode: ', editMode)
             console.log('location.pathname: ', location.pathname)
             editMode && dispatch(resetBuildState('else'))
             dispatch(setPostOwner(email))
-            // dispatch(setEditMode(false))
         }
     }, [posts])
 
@@ -72,7 +72,7 @@ const DealTypeV1 = () => {
         if (email) {
             console.log('postOwner: ', postOwner)
             console.log('email: ', email)
-            postOwner !== email && dispatch(resetBuildState('postOwner'))
+            postOwner !== email && dispatch(resetBuildState('sender is DealType line76'))
             postOwner !== email && console.log('I was reset')
             postOwner !== email && dispatch(setPostOwner(email))
         }

@@ -193,7 +193,7 @@ const buildReducer = (state = initState, action) => {
     case "CREATE_POST":
       console.log("CREATE_POST", action.sanitizedObject)
       return {
-        ...state,
+        ...initState,
         isSubmittedSuccessfully: { status: true, type: "created" },
       }
     case "CREATE_POST_ERROR":
@@ -203,5 +203,5 @@ const buildReducer = (state = initState, action) => {
       return state
   }
 }
-
+//TODO: bug when adding new post and then creating new post again "Build"
 export default buildReducer

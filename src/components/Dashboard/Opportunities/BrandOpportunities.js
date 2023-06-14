@@ -200,7 +200,7 @@ const BrandOpportunities = () => {
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent bgColor={"gray.100"} p={2} boxShadow={'lg'} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} borderRadius={'md'} >
-                          <PopoverArrow arrowSize={10} bgColor={"gray.200"} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} />
+                          <PopoverArrow bgColor={"gray.200"} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} />
                           <PopoverCloseButton />
                           <PopoverHeader fontWeight={'semibold'} fontSize={'lg'} >Confirm deletion</PopoverHeader>
                           <PopoverBody>
