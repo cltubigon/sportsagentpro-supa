@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import AthleteOpportunities from "./AthleteOpportunities"
 import BrandOpportunities from "./BrandOpportunities"
+import AthleteOpportunities from "./AthleteOpportunities"
 
 const OpportunitiesContent = () => {
   const auth = useSelector((state) => state.auth)

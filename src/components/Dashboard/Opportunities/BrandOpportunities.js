@@ -24,6 +24,8 @@ import { useEffect, useRef } from "react"
 import { savePostsToStorage } from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
 import { deletePost } from "../../../store/actions/buildPostActions"
+import { Editor, EditorState, convertFromRaw } from "draft-js"
+import { useState } from "react"
 
 const BrandOpportunities = () => {
   const initRef = useRef()
@@ -35,9 +37,11 @@ const BrandOpportunities = () => {
 
   const firestore = useSelector((state) => state.firestore)
   const firebase = useSelector((state) => state.firebase)
+  const build = useSelector((state) => state.build)
   const post = useSelector((state) => state.post)
 
   const { posts } = post
+  const { postContent } = build
   console.log("posts: ", posts)
   const firestorePost = firestore.ordered.posts
 
@@ -45,8 +49,18 @@ const BrandOpportunities = () => {
 
   const handleDelete = (post) => {
     console.log("post: ", post)
-    dispatch(deletePost(post, 'BrandOpportunities'))
+    dispatch(deletePost(post, "BrandOpportunities"))
   }
+
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
+  // useEffect(() => {
+  //   if (postContent) {
+  //     const rawDataParsed = postContent && postContent
+  //     const contentState = convertFromRaw(rawDataParsed)
+  //     setEditorState(EditorState.createWithContent(contentState))
+  //   }
+  // }, [postContent])
 
   useEffect(() => {
     if (firestorePost && posts && firestorePost.length !== posts.length) {
@@ -89,6 +103,8 @@ const BrandOpportunities = () => {
           const {
             postType,
             postOwner,
+            postTitle,
+            postContent,
             postOwnerFirstName,
             postOwnerLastName,
             selectedActivities,
@@ -104,16 +120,22 @@ const BrandOpportunities = () => {
           const activityCount = activityTitles.length
           // console.log('index: ', index)
 
+          const rawDataParsed = postContent && postContent
+          const contentState = convertFromRaw(rawDataParsed)
+          const editorState = EditorState.createWithContent(contentState)
+
           return (
             postType === "opportunity" &&
             isOwner && (
               <Flex
                 key={id}
                 flexDirection={"column"}
-                border={"1px solid #EDF0F2"}
+                borderColor={'gray.200'}
+                borderWidth={'1px'}
+                borderStyle={'solid'}
                 borderRadius={"md"}
                 w={"320px"}
-                h={"342px"}
+                h={"428px"}
                 position={"relative"}
               >
                 <Flex
@@ -138,8 +160,8 @@ const BrandOpportunities = () => {
                       {postOwnerFirstName} {postOwnerLastName}
                     </Text>
                     <Flex alignItems={"center"} gap={3}>
-                      <Text fontSize={"sm"}>Open</Text>
-                      <Icon as={FaCircle} color={"green.400"} boxSize={2} />
+                      <Text fontSize={"sm"}>Draft</Text>
+                      <Icon as={FaCircle} color={"blue.400"} boxSize={2} />
                     </Flex>
                   </Flex>
                   <Flex
@@ -153,20 +175,26 @@ const BrandOpportunities = () => {
                   </Flex>
                 </Flex>
                 <Flex flexDirection={"column"} p={4} gap={1}>
+                  <Text fontWeight={"semibold"} maxW={"190px"}>
+                    {postTitle}
+                  </Text>
+                  <Text noOfLines={[1, 2]} mb={4} color={'gray.500'}>
+                    <Editor editorState={editorState} readOnly />
+                  </Text>
                   <Flex gap={2} flexWrap={"wrap"}>
-                    <Text color={"gray.400"}>Activities:</Text>
+                    <Text color={"gray.500"}>Activities:</Text>
                     <Text fontWeight={"semibold"} maxW={"190px"}>
                       {firstActivity} +{activityCount}
                     </Text>
                   </Flex>
                   <Flex gap={2}>
-                    <Text color={"gray.400"}>Total:</Text>
+                    <Text color={"gray.500"}>Total:</Text>
                     <Text fontWeight={"semibold"}>{`$${parseFloat(
                       totalPayment.toFixed(2)
                     ).toLocaleString()}`}</Text>
                   </Flex>
                   <Flex gap={2}>
-                    <Text color={"gray.400"}>Expires:</Text>
+                    <Text color={"gray.500"}>Expires:</Text>
                     <Text fontWeight={"semibold"}>
                       {(postExpirationDate.utcFormat !== "Invalid Date" &&
                         postExpirationDate.utcFormat) ||
@@ -174,7 +202,7 @@ const BrandOpportunities = () => {
                     </Text>
                   </Flex>
                   <Flex gap={2}>
-                    <Text color={"gray.400"}>Tags:</Text>
+                    <Text color={"gray.500"}>Tags:</Text>
                     <Text fontWeight={"semibold"}>-</Text>
                   </Flex>
                 </Flex>
@@ -199,16 +227,41 @@ const BrandOpportunities = () => {
                             Delete
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent bgColor={"gray.100"} p={2} boxShadow={'lg'} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} borderRadius={'md'} >
-                          <PopoverArrow bgColor={"gray.200"} borderColor={'gray.400'} borderWidth={'1px'} borderStyle={'solid'} />
+                        <PopoverContent
+                          bgColor={"gray.100"}
+                          p={2}
+                          boxShadow={"lg"}
+                          borderColor={"gray.400"}
+                          borderWidth={"1px"}
+                          borderStyle={"solid"}
+                          borderRadius={"md"}
+                        >
+                          <PopoverArrow
+                            boxShadow={"lg"}
+                            bgColor={"gray.200"}
+                            borderColor={"gray.400"}
+                            borderWidth={"1px"}
+                            borderStyle={"solid"}
+                          />
                           <PopoverCloseButton />
-                          <PopoverHeader fontWeight={'semibold'} fontSize={'lg'} >Confirm deletion</PopoverHeader>
+                          <PopoverHeader
+                            fontWeight={"semibold"}
+                            fontSize={"lg"}
+                          >
+                            Confirm deletion
+                          </PopoverHeader>
                           <PopoverBody>
                             <Flex flexDirection={"column"} gap={2}>
                               <Flex>Are you sure you want to delete this?</Flex>
                               <Flex gap={2} justifyContent={"flex-start"}>
-                                <Button w={'90px'} onClick={onClose} >Cancel</Button>
-                                <Button w={'90px'} onClick={() => handleDelete(post)} colorScheme="twitter" >
+                                <Button w={"90px"} onClick={onClose}>
+                                  Cancel
+                                </Button>
+                                <Button
+                                  w={"90px"}
+                                  onClick={() => handleDelete(post)}
+                                  colorScheme="twitter"
+                                >
                                   Yes
                                 </Button>
                               </Flex>
