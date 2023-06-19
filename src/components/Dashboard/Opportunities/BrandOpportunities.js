@@ -87,7 +87,7 @@ const BrandOpportunities = () => {
   }
   return (
     <>
-      {!firebase.auth.uid && (
+      {(posts.length < 1) && (
         <Flex justifyContent={"center"} height={"250px"} alignItems={"center"}>
           <Spinner
             thickness="4px"
@@ -178,9 +178,9 @@ const BrandOpportunities = () => {
                   <Text fontWeight={"semibold"} maxW={"190px"}>
                     {postTitle}
                   </Text>
-                  <Text noOfLines={[1, 2]} mb={4} color={'gray.500'}>
+                  <Box noOfLines={[1, 2]} mb={4} color={'gray.500'}>
                     <Editor editorState={editorState} readOnly />
-                  </Text>
+                  </Box>
                   <Flex gap={2} flexWrap={"wrap"}>
                     <Text color={"gray.500"}>Activities:</Text>
                     <Text fontWeight={"semibold"} maxW={"190px"}>

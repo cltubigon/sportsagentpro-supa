@@ -1,13 +1,34 @@
-import { Avatar, Box, Button, Flex, Icon, Image, Text } from "@chakra-ui/react"
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Image,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Spinner,
+  Text,
+} from "@chakra-ui/react"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { savePostsToStorage } from "../../../store/actions/postActions"
+import { Link } from "react-router-dom"
+import { deletePost } from "../../../store/actions/buildPostActions"
+import { Editor, EditorState, convertFromRaw } from "draft-js"
+import { useState } from "react"
 
 const AthleteOpportunities = () => {
+  const initRef = useRef()
   const dispatch = useDispatch()
 
   const auth = useSelector((state) => state.auth)
@@ -15,16 +36,53 @@ const AthleteOpportunities = () => {
   const userType = profile && profile.userType
 
   const firestore = useSelector((state) => state.firestore)
+  const firebase = useSelector((state) => state.firebase)
+  const build = useSelector((state) => state.build)
   const post = useSelector((state) => state.post)
 
+  console.log("firestore: ", firestore)
+  console.log("firebase: ", firebase)
+  console.log("post: ", post)
+
   const { posts } = post
-  const firestorePost = firestore.ordered.posts
+  const { postContent } = build
   console.log("posts: ", posts)
+  const firestorePost = firestore.ordered.posts
+
+  console.log("firebase.auth.email: ", firebase.auth.email)
+
+  const handleDelete = (post) => {
+    console.log("this is the post: ", post)
+    // dispatch(deletePost(post, "BrandOpportunities"))
+  }
+
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
+  // useEffect(() => {
+  //   if (postContent) {
+  //     const rawDataParsed = postContent && postContent
+  //     const contentState = convertFromRaw(rawDataParsed)
+  //     setEditorState(EditorState.createWithContent(contentState))
+  //   }
+  // }, [postContent])
 
   useEffect(() => {
+    console.log("firestorePost: ", firestorePost)
+    console.log("posts: ", posts)
     if (firestorePost && posts && firestorePost.length !== posts.length) {
-      dispatch(savePostsToStorage(firestorePost))
+      console.log("this is triggered")
+      console.log("firebase.auth.uid: ", firebase.auth.uid)
+      const filterToOwnerPosts =
+        firestorePost &&
+        firebase.auth.uid &&
+        firestorePost.map((obj) => {
+          const { ownerUID, ...newObject } = obj
+          return newObject
+        })
+      console.log("filterToOwnerPosts: ", filterToOwnerPosts)
+      dispatch(savePostsToStorage(filterToOwnerPosts))
     }
+    // firestorePost && firestorePost.length && dispatch(savePostsToStorage(firestorePost))
   }, [firestorePost])
 
   const btnStyle = {
@@ -35,24 +93,55 @@ const AthleteOpportunities = () => {
   }
   return (
     <>
+      {(posts.length < 1) && (
+        <Flex justifyContent={"center"} height={"250px"} alignItems={"center"}>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="lg"
+          />
+        </Flex>
+      )}
       <Flex gap={5} flexWrap={"wrap"}>
         {posts.map((post, index) => {
-          const { postType, postOwnerFirstName, postOwnerLastName } = post
+          const {
+            postType,
+            postTitle,
+            postContent,
+            postOwnerFirstName,
+            postOwnerLastName,
+            selectedActivities,
+            totalPayment,
+            postExpirationDate,
+            id,
+          } = post
+          const activityTitles = selectedActivities.map(
+            (activity) => activity.activityTitle
+          )
+          const firstActivity = activityTitles[0]
+          const activityCount = activityTitles.length
+          // console.log('index: ', index)
+
+          const rawDataParsed = postContent && postContent
+          const contentState = convertFromRaw(rawDataParsed)
+          const editorState = EditorState.createWithContent(contentState)
+
           return (
             postType === "opportunity" && (
               <Flex
-                key={index}
+                key={id}
                 flexDirection={"column"}
-                border={"1px solid #EDF0F2"}
+                borderColor={"gray.200"}
+                borderWidth={"1px"}
+                borderStyle={"solid"}
                 borderRadius={"md"}
+                w={"320px"}
+                h={"428px"}
+                position={"relative"}
               >
-                <Flex
-                  gap={2}
-                  w={"310px"}
-                  bgColor={"gray.100"}
-                  p={4}
-                  borderRadius={"md"}
-                >
+                <Flex gap={2} bgColor={"gray.100"} p={4} borderRadius={"md"}>
                   <Image
                     src={imageHolderRemovable}
                     maxW={"46px"}
@@ -83,35 +172,102 @@ const AthleteOpportunities = () => {
                   </Flex>
                 </Flex>
                 <Flex flexDirection={"column"} p={4} gap={1}>
-                  <Text>Coach - KM Elite Basketball Camp</Text>
-                  <Text>Job Title: -</Text>
-                  <Text fontSize={"sm"}>
-                    {"Duration: 2 weeks (6/19/23 - 6/30/23)..."}
+                  <Text noOfLines={[1]} fontWeight={"semibold"} maxW={"190px"}>
+                    {postTitle}
                   </Text>
-                  <Flex gap={2}>
-                    <Text color={"gray.400"}>Activities:</Text>
-                    <Text fontWeight={"semibold"}>Sport Demonstration +1</Text>
+                  <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
+                    <Editor editorState={editorState} readOnly />
+                  </Box>
+                  <Flex gap={2} flexWrap={"wrap"}>
+                    <Text color={"gray.500"}>Activities:</Text>
+                    <Text fontWeight={"semibold"} maxW={"190px"}>
+                      {firstActivity} +{activityCount}
+                    </Text>
                   </Flex>
                   <Flex gap={2}>
-                    <Text color={"gray.400"}>Compensation:</Text>
-                    <Text fontWeight={"semibold"}>$1,715.00</Text>
+                    <Text color={"gray.500"}>Total:</Text>
+                    <Text fontWeight={"semibold"}>{`$${parseFloat(
+                      totalPayment.toFixed(2)
+                    ).toLocaleString()}`}</Text>
                   </Flex>
                   <Flex gap={2}>
-                    <Text color={"gray.400"}>Expires:</Text>
+                    <Text color={"gray.500"}>Expires:</Text>
+                    <Text fontWeight={"semibold"}>
+                      {(postExpirationDate.utcFormat !== "Invalid Date" &&
+                        postExpirationDate.utcFormat) ||
+                        "-"}
+                    </Text>
+                  </Flex>
+                  <Flex gap={2}>
+                    <Text color={"gray.500"}>Tags:</Text>
                     <Text fontWeight={"semibold"}>-</Text>
                   </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.400"}>Tags:</Text>
-                    <Text fontWeight={"semibold"}>Basketball +2</Text>
-                  </Flex>
                 </Flex>
-                <Flex flexDirection={"column"} gap={2} px={4} pb={4}>
-                  <Button sx={btnStyle} borderColor="blue.400" color="blue.400">
-                    Apply Now
-                  </Button>
-                  <Button sx={btnStyle} borderColor="gray.400">
-                    Details
-                  </Button>
+                <Flex
+                  justifyContent={"center"}
+                  gap={2}
+                  px={4}
+                  position={"absolute"}
+                  bottom={4}
+                  w={"100%"}
+                >
+                  <Link to={`/build/${id}`} style={{ width: "100%" }}>
+                    <Button sx={btnStyle} borderColor="gray.400" w={"100%"}>
+                      Edit
+                    </Button>
+                  </Link>
+                  <Popover initialFocusRef={initRef}>
+                    {({ isOpen, onClose }) => (
+                      <>
+                        <PopoverTrigger>
+                          <Button sx={btnStyle} borderColor="gray.400">
+                            Delete
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          bgColor={"gray.100"}
+                          p={2}
+                          boxShadow={"lg"}
+                          borderColor={"gray.400"}
+                          borderWidth={"1px"}
+                          borderStyle={"solid"}
+                          borderRadius={"md"}
+                        >
+                          <PopoverArrow
+                            boxShadow={"lg"}
+                            bgColor={"gray.200"}
+                            borderColor={"gray.400"}
+                            borderWidth={"1px"}
+                            borderStyle={"solid"}
+                          />
+                          <PopoverCloseButton />
+                          <PopoverHeader
+                            fontWeight={"semibold"}
+                            fontSize={"lg"}
+                          >
+                            Confirm deletion
+                          </PopoverHeader>
+                          <PopoverBody>
+                            <Flex flexDirection={"column"} gap={2}>
+                              <Flex>Are you sure you want to delete this?</Flex>
+                              <Flex gap={2} justifyContent={"flex-start"}>
+                                <Button w={"90px"} onClick={onClose}>
+                                  Cancel
+                                </Button>
+                                <Button
+                                  w={"90px"}
+                                  onClick={() => handleDelete(post)}
+                                  colorScheme="twitter"
+                                >
+                                  Yes
+                                </Button>
+                              </Flex>
+                            </Flex>
+                          </PopoverBody>
+                        </PopoverContent>
+                      </>
+                    )}
+                  </Popover>
                 </Flex>
               </Flex>
             )
