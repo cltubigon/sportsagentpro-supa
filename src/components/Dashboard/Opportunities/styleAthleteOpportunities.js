@@ -74,13 +74,13 @@ export const comStyle = {
       secContainer: {
         flexDirection: "column",
         py: 2,
-        // maxHeight: "220px",
         flexGrow: 1,
         overflowY: "hidden",
       },
       postTitle: {
         fontWeight: "semibold",
-        color: "gray.700",
+        // color: "gray.700",
+        fontSize: 'lg',
       },
       viewMore: {
         cursor: "default",
