@@ -2,7 +2,15 @@ import {
   Avatar,
   Box,
   Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
+  Grid,
+  GridItem,
   Icon,
   Image,
   Popover,
@@ -14,6 +22,7 @@ import {
   PopoverTrigger,
   Spinner,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
@@ -21,7 +30,10 @@ import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
-import { savePostsToStorage } from "../../../store/actions/postActions"
+import {
+  applyToPost,
+  savePostsToStorage,
+} from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
 import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
@@ -30,60 +42,91 @@ import { useState } from "react"
 const AthleteOpportunities = () => {
   const initRef = useRef()
   const dispatch = useDispatch()
-
-  const auth = useSelector((state) => state.auth)
-  const { profile } = auth
-  const userType = profile && profile.userType
+  const flexRef = useRef(null)
+  const drawerRef = useRef(null)
 
   const firestore = useSelector((state) => state.firestore)
   const firebase = useSelector((state) => state.firebase)
   const build = useSelector((state) => state.build)
   const post = useSelector((state) => state.post)
+  const reduxState = useSelector((state) => state)
+  const auth = useSelector((state) => state.auth)
 
-  console.log("firestore: ", firestore)
-  console.log("firebase: ", firebase)
-  console.log("post: ", post)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [size, setSize] = useState("")
+  const [isloading, setIsloading] = useState(false)
 
   const { posts } = post
   const { postContent } = build
-  console.log("posts: ", posts)
+  const { profile, email } = auth
+
   const firestorePost = firestore.ordered.posts
+  const userType = profile && profile.userType
 
   console.log("firebase.auth.email: ", firebase.auth.email)
+  console.log("email: ", email)
+  console.log("post: ", post)
+  console.log("reduxState: ", reduxState)
 
-  const handleDelete = (post) => {
-    console.log("this is the post: ", post)
-    // dispatch(deletePost(post, "BrandOpportunities"))
+  const handleDrawer = (post) => {
+    console.log("post in drawer: ", post)
+    setSize("xl")
+    onOpen()
   }
 
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
-
-  // useEffect(() => {
-  //   if (postContent) {
-  //     const rawDataParsed = postContent && postContent
-  //     const contentState = convertFromRaw(rawDataParsed)
-  //     setEditorState(EditorState.createWithContent(contentState))
-  //   }
-  // }, [postContent])
+  const handleApply = (id, event) => {
+    console.log("id: ", id)
+    event.stopPropagation()
+    firebase.auth && dispatch(applyToPost(id, email))
+    setIsloading(true)
+  }
 
   useEffect(() => {
     console.log("firestorePost: ", firestorePost)
+
     console.log("posts: ", posts)
-    if (firestorePost && posts && firestorePost.length !== posts.length) {
-      console.log("this is triggered")
-      console.log("firebase.auth.uid: ", firebase.auth.uid)
-      const filterToOwnerPosts =
-        firestorePost &&
-        firebase.auth.uid &&
-        firestorePost.map((obj) => {
-          const { ownerUID, ...newObject } = obj
-          return newObject
-        })
-      console.log("filterToOwnerPosts: ", filterToOwnerPosts)
-      dispatch(savePostsToStorage(filterToOwnerPosts))
-    }
-    // firestorePost && firestorePost.length && dispatch(savePostsToStorage(firestorePost))
+    const filterToOwnerPosts =
+      firestorePost &&
+      firebase.auth.uid &&
+      firestorePost.map((obj) => {
+        const { ownerUID, ...newObject } = obj
+        return newObject
+      })
+    console.log("filterToOwnerPosts: ", filterToOwnerPosts)
+    filterToOwnerPosts && dispatch(savePostsToStorage(filterToOwnerPosts))
+    setIsloading(false)
   }, [firestorePost])
+
+  const [flexHeight, setFlexHeight] = useState(null)
+  const [flexWidth, setFlexWidth] = useState(null)
+  const [gridheight, setGridheight] = useState(null)
+  const [gridWidth, setGridWidth] = useState(null)
+
+  const handleResize = () => {
+    if (flexRef.current) {
+      setFlexHeight(flexRef.current.offsetWidth)
+      setFlexWidth(flexRef.current.offsetWidth)
+    }
+  }
+
+  useEffect(() => {
+    if (drawerRef.current) {
+      setGridheight(drawerRef.current.offsetWidth)
+      setGridWidth(drawerRef.current.offsetWidth)
+    }
+  }, [])
+
+  console.log("gridheight: ", gridheight)
+  console.log("gridWidth: ", gridWidth)
+
+  useEffect(() => {
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   const btnStyle = {
     colorScheme: "gray",
@@ -91,10 +134,26 @@ const AthleteOpportunities = () => {
     borderStyle: "solid",
     borderRadius: "sm",
   }
+
+  const btnVariant = {
+    applied: {
+      borderColor: "blue.400",
+      color: "blue.400",
+    },
+    notApplied: {
+      borderColor: "gray.400",
+    },
+  }
+  console.log("posts line95: ", posts)
   return (
     <>
-      {(posts.length < 1) && (
-        <Flex justifyContent={"center"} height={"250px"} alignItems={"center"}>
+      {posts.length < 1 && (
+        <Flex
+          justifyContent={"center"}
+          height={"429px"}
+          alignItems={"center"}
+          top={0}
+        >
           <Spinner
             thickness="4px"
             speed="0.65s"
@@ -104,9 +163,30 @@ const AthleteOpportunities = () => {
           />
         </Flex>
       )}
-      <Flex gap={5} flexWrap={"wrap"}>
+      {isloading && (
+        <Flex
+          justifyContent={"center"}
+          zIndex={801}
+          bgColor={"rgba(255, 255, 255, 0.5)"}
+          w={flexWidth + 15}
+          height={"100vh"}
+          alignItems={"center"}
+          position={"absolute"}
+          top={0}
+        >
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="lg"
+          />
+        </Flex>
+      )}
+      <Flex gap={5} flexWrap={"wrap"} ref={flexRef}>
         {posts.map((post, index) => {
           const {
+            postApplicants,
             postType,
             postTitle,
             postContent,
@@ -117,6 +197,11 @@ const AthleteOpportunities = () => {
             postExpirationDate,
             id,
           } = post
+          const hasApplied =
+            postApplicants &&
+            postApplicants.some((applicantUid) => {
+              return firebase.auth && email === applicantUid
+            })
           const activityTitles = selectedActivities.map(
             (activity) => activity.activityTitle
           )
@@ -140,6 +225,7 @@ const AthleteOpportunities = () => {
                 w={"320px"}
                 h={"428px"}
                 position={"relative"}
+                onClick={handleDrawer}
               >
                 <Flex gap={2} bgColor={"gray.100"} p={4} borderRadius={"md"}>
                   <Image
@@ -178,10 +264,17 @@ const AthleteOpportunities = () => {
                   <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
                     <Editor editorState={editorState} readOnly />
                   </Box>
-                  <Flex gap={2} flexWrap={"wrap"}>
+                  <Flex gap={2} flexWrap={"nowrap"}>
                     <Text color={"gray.500"}>Activities:</Text>
+                    <Text
+                      noOfLines={[1]}
+                      fontWeight={"semibold"}
+                      maxW={"190px"}
+                    >
+                      {firstActivity}
+                    </Text>
                     <Text fontWeight={"semibold"} maxW={"190px"}>
-                      {firstActivity} +{activityCount}
+                      +{activityCount}
                     </Text>
                   </Flex>
                   <Flex gap={2}>
@@ -210,69 +303,90 @@ const AthleteOpportunities = () => {
                   position={"absolute"}
                   bottom={4}
                   w={"100%"}
+                  flexDirection={"column"}
                 >
-                  <Link to={`/build/${id}`} style={{ width: "100%" }}>
-                    <Button sx={btnStyle} borderColor="gray.400" w={"100%"}>
-                      Edit
-                    </Button>
-                  </Link>
-                  <Popover initialFocusRef={initRef}>
-                    {({ isOpen, onClose }) => (
-                      <>
-                        <PopoverTrigger>
-                          <Button sx={btnStyle} borderColor="gray.400">
-                            Delete
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          bgColor={"gray.100"}
-                          p={2}
-                          boxShadow={"lg"}
-                          borderColor={"gray.400"}
-                          borderWidth={"1px"}
-                          borderStyle={"solid"}
-                          borderRadius={"md"}
-                        >
-                          <PopoverArrow
-                            boxShadow={"lg"}
-                            bgColor={"gray.200"}
-                            borderColor={"gray.400"}
-                            borderWidth={"1px"}
-                            borderStyle={"solid"}
-                          />
-                          <PopoverCloseButton />
-                          <PopoverHeader
-                            fontWeight={"semibold"}
-                            fontSize={"lg"}
-                          >
-                            Confirm deletion
-                          </PopoverHeader>
-                          <PopoverBody>
-                            <Flex flexDirection={"column"} gap={2}>
-                              <Flex>Are you sure you want to delete this?</Flex>
-                              <Flex gap={2} justifyContent={"flex-start"}>
-                                <Button w={"90px"} onClick={onClose}>
-                                  Cancel
-                                </Button>
-                                <Button
-                                  w={"90px"}
-                                  onClick={() => handleDelete(post)}
-                                  colorScheme="twitter"
-                                >
-                                  Yes
-                                </Button>
-                              </Flex>
-                            </Flex>
-                          </PopoverBody>
-                        </PopoverContent>
-                      </>
-                    )}
-                  </Popover>
+                  <Button
+                    sx={hasApplied ? btnVariant.applied : btnVariant.notApplied}
+                    w={"100%"}
+                    borderWidth="1px"
+                    borderStyle="solid"
+                    borderRadius="sm"
+                    onClick={(event) => handleApply(id, event)}
+                  >
+                    {hasApplied ? "Withdraw" : "Apply"}
+                  </Button>
+                  <Button
+                    sx={btnStyle}
+                    w={"100%"}
+                    onClick={() => handleDrawer(post)}
+                  >
+                    Details
+                  </Button>
                 </Flex>
               </Flex>
             )
           )
         })}
+        <Drawer onClose={onClose} isOpen={isOpen} size={size}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            {/* <DrawerHeader>{`${size} drawer contents`}</DrawerHeader> */}
+            <DrawerBody py={0} ref={drawerRef}>
+              <Grid
+                templateAreas={`"a a"
+                                "b b"
+                                "c c"
+                                "d d"
+                                "e e"
+                                `}
+                gridTemplateRows={"1fr 3fr 4fr 2fr 2fr"}
+                // gridTemplateRows={"120px auto auto auto auto"}
+                gridTemplateColumns={"150px 1fr"}
+                h="100vh"
+                gap="1"
+              >
+                <GridItem display={'flex'} alignItems={'center'} area={"a"}>
+                  <Flex alignItems={"center"} gap={4}>
+                    <Image
+                      src={imageHolderRemovable}
+                      maxW={"60px"}
+                      bgColor={"red"}
+                      alt="Dan Abramov"
+                      borderColor={"gray.300"}
+                      borderWidth={"1px"}
+                      borderStyle={"solid"}
+                      borderRadius={"md"}
+                    />
+                    <Flex flexDirection={"column"} gap={0}>
+                        <Text fontSize={"xl"} fontWeight={"semibold"}>
+                          MVPz
+                        </Text>
+                      <Flex alignItems={"center"} mt={-1} gap={3}>
+                        <Text fontSize={"sm"}>
+                          Open
+                        </Text>
+                        <Icon as={FaCircle} color={"green.400"} boxSize={2} />
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                </GridItem>
+                <GridItem pl="2" bg="pink.300" area={"b"}>
+                  Details
+                </GridItem>
+                <GridItem pl="2" bg="green.300" area={"c"}>
+                  Brief
+                </GridItem>
+                <GridItem pl="2" bg="blue.300" area={"d"}>
+                  Activities
+                </GridItem>
+                <GridItem pl="2" bg="blue.300" area={"e"}>
+                  Tags
+                </GridItem>
+              </Grid>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </Flex>
     </>
   )
