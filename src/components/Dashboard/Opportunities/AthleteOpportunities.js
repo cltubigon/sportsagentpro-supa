@@ -11,6 +11,7 @@ import {
   Flex,
   Grid,
   GridItem,
+  Heading,
   Icon,
   Image,
   Popover,
@@ -26,7 +27,7 @@ import {
 } from "@chakra-ui/react"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
-import { BsHeart, BsLink45Deg } from "react-icons/bs"
+import { BsHeart, BsInstagram, BsLink45Deg } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
@@ -38,6 +39,7 @@ import { Link } from "react-router-dom"
 import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
+import { comStyle } from "./styleAthleteOpportunities"
 
 const AthleteOpportunities = () => {
   const initRef = useRef()
@@ -55,10 +57,12 @@ const AthleteOpportunities = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [size, setSize] = useState("")
   const [isloading, setIsloading] = useState(false)
+  const [drawerViewMore, setDrawerViewMore] = useState(true)
 
   const { posts } = post
   const { postContent } = build
   const { profile, email } = auth
+  const { postContainer, sectionContainer, drawer } = comStyle
 
   const firestorePost = firestore.ordered.posts
   const userType = profile && profile.userType
@@ -128,6 +132,10 @@ const AthleteOpportunities = () => {
     }
   }, [])
 
+  const handleViewMore = () => {
+    setDrawerViewMore(prev => !prev)
+  }
+
   const btnStyle = {
     colorScheme: "gray",
     borderWidth: "1px",
@@ -144,7 +152,7 @@ const AthleteOpportunities = () => {
       borderColor: "gray.400",
     },
   }
-  console.log("posts line95: ", posts)
+
   return (
     <>
       {posts.length < 1 && (
@@ -215,18 +223,7 @@ const AthleteOpportunities = () => {
 
           return (
             postType === "opportunity" && (
-              <Flex
-                key={id}
-                flexDirection={"column"}
-                borderColor={"gray.200"}
-                borderWidth={"1px"}
-                borderStyle={"solid"}
-                borderRadius={"md"}
-                w={"320px"}
-                h={"428px"}
-                position={"relative"}
-                onClick={handleDrawer}
-              >
+              <Flex key={id} onClick={handleDrawer} sx={postContainer}>
                 <Flex gap={2} bgColor={"gray.100"} p={4} borderRadius={"md"}>
                   <Image
                     src={imageHolderRemovable}
@@ -337,51 +334,301 @@ const AthleteOpportunities = () => {
                 templateAreas={`"a a"
                                 "b b"
                                 "c c"
-                                "d d"
-                                "e e"
                                 `}
-                gridTemplateRows={"1fr 3fr 4fr 2fr 2fr"}
-                // gridTemplateRows={"120px auto auto auto auto"}
+                gridTemplateRows={"2fr 20fr 2fr"}
                 gridTemplateColumns={"150px 1fr"}
                 h="100vh"
-                gap="1"
+                py={2}
               >
-                <GridItem display={'flex'} alignItems={'center'} area={"a"}>
-                  <Flex alignItems={"center"} gap={4}>
-                    <Image
-                      src={imageHolderRemovable}
-                      maxW={"60px"}
-                      bgColor={"red"}
-                      alt="Dan Abramov"
-                      borderColor={"gray.300"}
-                      borderWidth={"1px"}
-                      borderStyle={"solid"}
-                      borderRadius={"md"}
-                    />
-                    <Flex flexDirection={"column"} gap={0}>
-                        <Text fontSize={"xl"} fontWeight={"semibold"}>
-                          MVPz
-                        </Text>
-                      <Flex alignItems={"center"} mt={-1} gap={3}>
-                        <Text fontSize={"sm"}>
-                          Open
-                        </Text>
-                        <Icon as={FaCircle} color={"green.400"} boxSize={2} />
+                <GridItem pl="2" area={"a"}>
+                  <Flex>
+                    <Flex alignItems={"center"} gap={4}>
+                      <Image
+                        sx={drawer.header.image}
+                        src={imageHolderRemovable}
+                        alt="Dan Abramov"
+                      />
+                      <Flex sx={drawer.header.textContainer}>
+                        <Text sx={drawer.header.companyName}>MVPz</Text>
+                        <Flex sx={drawer.header.statConainer}>
+                          <Text sx={drawer.header.statConainer.text}>Open</Text>
+                          <Icon
+                            as={FaCircle}
+                            sx={drawer.header.statConainer.icon}
+                          />
+                        </Flex>
                       </Flex>
                     </Flex>
                   </Flex>
                 </GridItem>
-                <GridItem pl="2" bg="pink.300" area={"b"}>
-                  Details
+                <GridItem
+                  display={"flex"}
+                  overflowY={"auto"}
+                  flexDirection={"column"}
+                  alignItems={"flex-start"}
+                  area={"b"}
+                >
+                  <Flex sx={sectionContainer}>
+                    <Flex sx={drawer.details.secContainer}>
+                      <Heading sx={drawer.secTitle} as={"h5"}>
+                        Details
+                      </Heading>
+                      <Flex sx={drawer.details.flexContainer}>
+                        <Text sx={drawer.details.label}>Activities</Text>
+                        <Text sx={drawer.details.data}>
+                          Instagram Post • Instagram Story
+                        </Text>
+                      </Flex>
+                      <Flex sx={drawer.details.flexContainer}>
+                        <Text sx={drawer.details.label}>Expires</Text>
+                        <Text sx={drawer.details.data}>
+                          7/7/23 @ 2:00AM CST
+                        </Text>
+                      </Flex>
+                      <Flex sx={drawer.details.flexContainer}>
+                        <Text sx={drawer.details.label}>Compensation</Text>
+                        <Text sx={drawer.details.data}>$70.00</Text>
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                  <Flex sx={sectionContainer}>
+                    <Flex sx={drawer.brief.secContainer} maxHeight={drawerViewMore && "220px"}>
+                      <Heading sx={drawer.secTitle} as={"h5"}>
+                        Brief
+                      </Heading>
+                      <Text sx={drawer.brief.postTitle}>
+                        Hybrid MVPz Sports Cards
+                      </Text>
+                      <Text>
+                        Hybrid MVPz Sports Cards. At MVPz we are building a
+                        sports fan ecosystem centered around our Hybrid MVPz
+                        Sports Cards. Our goal is to be the nations top NCAA
+                        sports card brand. We will get there by providing the
+                        easiest and most accessible NIL opportunity for D1
+                        student athletes. The entire business is built around a
+                        revenue sharing model. We make money when the athletes
+                        make money. Our athletes recieve 40% of revenue from the
+                        initial sale, and 7.5% from secondary sales. Plus a $100
+                        sign up bonus. All we require in return is the image you
+                        would prefer to have on your card. Each athlete will
+                        have 200 cards made, including a super rare 1 of 1.
+                      </Text>
+                      <Text>
+                        Hybrid MVPz Sports Cards. At MVPz we are building a
+                        sports fan ecosystem centered around our Hybrid MVPz
+                        Sports Cards. Our goal is to be the nations top NCAA
+                        sports card brand. We will get there by providing the
+                        easiest and most accessible NIL opportunity for D1
+                        student athletes. The entire business is built around a
+                        revenue sharing model. We make money when the athletes
+                        make money. Our athletes recieve 40% of revenue from the
+                        initial sale, and 7.5% from secondary sales. Plus a $100
+                        sign up bonus. All we require in return is the image you
+                        would prefer to have on your card. Each athlete will
+                        have 200 cards made, including a super rare 1 of 1.
+                      </Text>
+                      <Text>
+                        Hybrid MVPz Sports Cards. At MVPz we are building a
+                        sports fan ecosystem centered around our Hybrid MVPz
+                        Sports Cards. Our goal is to be the nations top NCAA
+                        sports card brand. We will get there by providing the
+                        easiest and most accessible NIL opportunity for D1
+                        student athletes. The entire business is built around a
+                        revenue sharing model. We make money when the athletes
+                        make money. Our athletes recieve 40% of revenue from the
+                        initial sale, and 7.5% from secondary sales. Plus a $100
+                        sign up bonus. All we require in return is the image you
+                        would prefer to have on your card. Each athlete will
+                        have 200 cards made, including a super rare 1 of 1.
+                      </Text>
+                      <Text>
+                        Hybrid MVPz Sports Cards. At MVPz we are building a
+                        sports fan ecosystem centered around our Hybrid MVPz
+                        Sports Cards. Our goal is to be the nations top NCAA
+                        sports card brand. We will get there by providing the
+                        easiest and most accessible NIL opportunity for D1
+                        student athletes. The entire business is built around a
+                        revenue sharing model. We make money when the athletes
+                        make money. Our athletes recieve 40% of revenue from the
+                        initial sale, and 7.5% from secondary sales. Plus a $100
+                        sign up bonus. All we require in return is the image you
+                        would prefer to have on your card. Each athlete will
+                        have 200 cards made, including a super rare 1 of 1.
+                      </Text>
+                    </Flex>
+                      <Text sx={drawer.brief.viewMore} onClick={handleViewMore}>{drawerViewMore ? 'View more' : 'View less'}</Text>
+                  </Flex>
+                  <Flex sx={sectionContainer}>
+                    <Flex sx={drawer.activities.secContainer}>
+                      <Heading sx={drawer.secTitle} as={"h5"}>
+                        Activities
+                      </Heading>
+                      <Flex sx={drawer.activities.tableContainer} maxH={drawerViewMore && "200px"}>
+                        <Flex
+                          sx={drawer.activities.rowContainer}
+                          flexGrow={1}
+                        >
+                          <Text>Activity</Text>
+                          <Flex sx={drawer.activities.tableData}>
+                            <Icon as={BsInstagram} />
+                            <Text>Instagram Post</Text>
+                          </Flex>
+                          <Flex sx={drawer.activities.tableData}>
+                            <Icon as={BsInstagram} />
+                            <Text>Instagram Post</Text>
+                          </Flex>
+                          <Flex sx={drawer.activities.tableData}>
+                            <Icon as={BsInstagram} />
+                            <Text>Instagram Post</Text>
+                          </Flex>
+                          <Flex sx={drawer.activities.tableData}>
+                            <Icon as={BsInstagram} />
+                            <Text>Instagram Post</Text>
+                          </Flex>
+                          <Flex sx={drawer.activities.tableData}>
+                            <Icon as={BsInstagram} />
+                            <Text>Instagram Post</Text>
+                          </Flex>
+                          <Flex sx={drawer.activities.tableData}>
+                            <Icon as={BsInstagram} />
+                            <Text>Instagram Post</Text>
+                          </Flex>
+                        </Flex>
+                        <Flex
+                          sx={drawer.activities.rowContainer}
+                          flexBasis={"200px"}
+                        >
+                          <Text>Fulfillment date</Text>
+                          <Text sx={drawer.activities.tableData}>
+                            7/7/23 @ 2:00AM CST
+                          </Text>
+                          <Text sx={drawer.activities.tableData}>
+                            7/7/23 @ 2:00AM CST
+                          </Text>
+                          <Text sx={drawer.activities.tableData}>
+                            7/7/23 @ 2:00AM CST
+                          </Text>
+                          <Text sx={drawer.activities.tableData}>
+                            7/7/23 @ 2:00AM CST
+                          </Text>
+                          <Text sx={drawer.activities.tableData}>
+                            7/7/23 @ 2:00AM CST
+                          </Text>
+                          <Text sx={drawer.activities.tableData}>
+                            7/7/23 @ 2:00AM CST
+                          </Text>
+                        </Flex>
+                        <Flex
+                          sx={drawer.activities.rowContainer}
+                          flexBasis={"150px"}
+                        >
+                          <Text>Value</Text>
+                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                        </Flex>
+                        <Flex
+                          sx={drawer.activities.rowContainer}
+                          flexBasis={"150px"}
+                        >
+                          <Text>Status</Text>
+                          <Flex
+                            sx={drawer.activities.tableData}
+                            flexGrow={"100%"}
+                            gap={2}
+                            alignItems={"center"}
+                          >
+                            <Text>Draft</Text>
+                            <Icon
+                              as={FaCircle}
+                              boxSize={2}
+                              color={"green.400"}
+                            />
+                          </Flex>
+                          <Flex
+                            sx={drawer.activities.tableData}
+                            flexGrow={"100%"}
+                            gap={2}
+                            alignItems={"center"}
+                          >
+                            <Text>Draft</Text>
+                            <Icon
+                              as={FaCircle}
+                              boxSize={2}
+                              color={"green.400"}
+                            />
+                          </Flex>
+                          <Flex
+                            sx={drawer.activities.tableData}
+                            flexGrow={"100%"}
+                            gap={2}
+                            alignItems={"center"}
+                          >
+                            <Text>Draft</Text>
+                            <Icon
+                              as={FaCircle}
+                              boxSize={2}
+                              color={"green.400"}
+                            />
+                          </Flex>
+                          <Flex
+                            sx={drawer.activities.tableData}
+                            flexGrow={"100%"}
+                            gap={2}
+                            alignItems={"center"}
+                          >
+                            <Text>Draft</Text>
+                            <Icon
+                              as={FaCircle}
+                              boxSize={2}
+                              color={"green.400"}
+                            />
+                          </Flex>
+                          <Flex
+                            sx={drawer.activities.tableData}
+                            flexGrow={"100%"}
+                            gap={2}
+                            alignItems={"center"}
+                          >
+                            <Text>Draft</Text>
+                            <Icon
+                              as={FaCircle}
+                              boxSize={2}
+                              color={"green.400"}
+                            />
+                          </Flex>
+                          <Flex
+                            sx={drawer.activities.tableData}
+                            flexGrow={"100%"}
+                            gap={2}
+                            alignItems={"center"}
+                          >
+                            <Text>Draft</Text>
+                            <Icon
+                              as={FaCircle}
+                              boxSize={2}
+                              color={"green.400"}
+                            />
+                          </Flex>
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                  <Flex>
+                    <Flex>
+                      <Heading sx={drawer.secTitle} as={"h5"}>
+                        Tags
+                      </Heading>
+                    </Flex>
+                  </Flex>
                 </GridItem>
-                <GridItem pl="2" bg="green.300" area={"c"}>
-                  Brief
-                </GridItem>
-                <GridItem pl="2" bg="blue.300" area={"d"}>
-                  Activities
-                </GridItem>
-                <GridItem pl="2" bg="blue.300" area={"e"}>
-                  Tags
+                <GridItem area={"c"} sx={drawer.applyGrid}>
+                  <Button colorScheme="twitter" w={"100%"}>
+                    Apply Now
+                  </Button>
                 </GridItem>
               </Grid>
             </DrawerBody>
