@@ -15,6 +15,35 @@ export const comStyle = {
     pr: 1,
   },
   drawer: {
+    btnHasApplied: {
+      w: "100%",
+      bgColor: 'transparent',
+      color: 'twitter.500',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'twitter.500',
+    },
+    btnNotApplied: {
+      w: "100%",
+      bgColor: 'twitter.500',
+      color: '#fff',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'twitter.500',
+      _hover: {
+        bgColor: 'twitter.500',
+      }
+    },
+    drawerSpinner: {
+      position: "absolute",
+      w: "calc(100% - 48px)",
+      h: "100vh",
+      bgColor: "rgba(255, 255, 255, 0.5)",
+      // bgColor: 'pink.200',
+      alignItems: "center",
+      zIndex: 802,
+      justifyContent: "center",
+    },
     secTitle: {
       fontSize: "xl",
       fontWeight: "semibold",
@@ -80,12 +109,12 @@ export const comStyle = {
       postTitle: {
         fontWeight: "semibold",
         // color: "gray.700",
-        fontSize: 'lg',
+        fontSize: "lg",
       },
       viewMore: {
         cursor: "default",
         color: "blue.400",
-        fontSize: 'sm',
+        fontSize: "sm",
         fontWeight: "semibold",
       },
     },

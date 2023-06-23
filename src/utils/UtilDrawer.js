@@ -15,6 +15,7 @@ import {
   Grid,
   Heading,
   Box,
+  Spinner,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { comStyle } from "../components/Dashboard/Opportunities/styleAthleteOpportunities"
@@ -22,6 +23,10 @@ import imageHolderRemovable from "../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
 import { BsInstagram } from "react-icons/bs"
 import { Editor } from "draft-js"
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react"
+import { applyToPost } from "../store/actions/postActions"
+import { useRef } from "react"
 
 const UtilDrawer = ({
   isOpen,
@@ -30,13 +35,44 @@ const UtilDrawer = ({
   drawerData,
   drawerViewMore,
   setDrawerViewMore,
-  handleApply,
 }) => {
+  const dispatch = useDispatch()
+  const flexRef = useRef(null)
+
+  const auth = useSelector((state) => state.auth)
+  const firebase = useSelector((state) => state.firebase)
+  const firestore = useSelector((state) => state.firestore)
+
+  const [isLoading, setIsloading] = useState(false)
+  const [hasApplied, setHasAhasApplied] = useState(false)
+
+  console.log("firebase: ", firebase)
+  console.log("firestore: ", firestore)
+
+  const { email } = auth
   const { postContainer, sectionContainer, drawer } = comStyle
+
+  const firestorePost = firestore.ordered.posts
 
   const handleViewMore = () => {
     setDrawerViewMore((prev) => !prev)
   }
+
+  const handleApply = (id) => {
+    console.log("id: ", id)
+    firebase.auth && dispatch(applyToPost(id, email))
+    setIsloading(true)
+  }
+
+  useEffect(() => {
+    const selectedPost = firestorePost && drawerData && firestorePost.find(post => post.id === drawerData.id)
+    console.log('selectedPost: ', selectedPost)
+    const applied = selectedPost && selectedPost.postApplicants && selectedPost.postApplicants.some(applicant => applicant === email)
+    applied ? setHasAhasApplied(true) : setHasAhasApplied(false)
+    setIsloading(false)
+  }, [firestorePost, drawerData])
+
+  console.log('hasApplied: ', hasApplied)
 
   console.log("drawerData: ", drawerData)
 
@@ -46,18 +82,29 @@ const UtilDrawer = ({
         <Drawer onClose={onClose} isOpen={isOpen} size={"xl"}>
           <DrawerOverlay />
           <DrawerContent>
-            <DrawerCloseButton />
-            {/* <DrawerHeader>{`${size} drawer contents`}</DrawerHeader> */}
-            <DrawerBody py={0}>
+            <DrawerCloseButton zIndex={810} />
+            <DrawerBody py={0} position={"relative"}>
+              {isLoading && (
+                <Flex sx={drawer.drawerSpinner}>
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="lg"
+                  />
+                </Flex>
+              )}
               <Grid
                 templateAreas={`"a a"
-                                "b b"
-                                "c c"
-                                `}
+                "b b"
+                "c c"
+                `}
                 gridTemplateRows={"2fr 20fr 2fr"}
                 gridTemplateColumns={"150px 1fr"}
                 h="100vh"
                 py={2}
+                ref={flexRef}
               >
                 <GridItem pl="2" area={"a"}>
                   <Flex>
@@ -136,7 +183,7 @@ const UtilDrawer = ({
                       <Text sx={drawer.brief.postTitle}>
                         {drawerData.postTitle}
                       </Text>
-                      <Flex noOfLines={drawerViewMore && [4]}>
+                      <Flex noOfLines={drawerViewMore && [3]}>
                         <Editor editorState={drawerData.editorState} readOnly />
                       </Flex>
                     </Flex>
@@ -312,8 +359,11 @@ const UtilDrawer = ({
                   </Flex>
                 </GridItem>
                 <GridItem area={"c"} sx={drawer.applyGrid}>
-                  <Button colorScheme="twitter" w={"100%"} onClick={(event)=> handleApply(drawerData.id, event)}>
-                    Apply Now
+                  <Button
+                    sx={hasApplied ? drawer.btnHasApplied : drawer.btnNotApplied}                   
+                    onClick={(event) => handleApply(drawerData.id)}
+                  >
+                    {hasApplied ? 'Withdraw' : 'Apply Now'}
                   </Button>
                 </GridItem>
               </Grid>
