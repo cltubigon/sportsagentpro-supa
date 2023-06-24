@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { applyToPost } from "../store/actions/postActions"
 import { useRef } from "react"
+import { activityList } from "../components/Build/activityList"
 
 const UtilDrawer = ({
   isOpen,
@@ -65,16 +66,43 @@ const UtilDrawer = ({
   }
 
   useEffect(() => {
-    const selectedPost = firestorePost && drawerData && firestorePost.find(post => post.id === drawerData.id)
-    console.log('selectedPost: ', selectedPost)
-    const applied = selectedPost && selectedPost.postApplicants && selectedPost.postApplicants.some(applicant => applicant === email)
+    const selectedPost =
+      firestorePost &&
+      drawerData &&
+      firestorePost.find((post) => post.id === drawerData.id)
+    console.log("selectedPost: ", selectedPost)
+    const applied =
+      selectedPost &&
+      selectedPost.postApplicants &&
+      selectedPost.postApplicants.some((applicant) => applicant === email)
     applied ? setHasAhasApplied(true) : setHasAhasApplied(false)
     setIsloading(false)
   }, [firestorePost, drawerData])
 
-  console.log('hasApplied: ', hasApplied)
+  console.log("hasApplied: ", hasApplied)
 
   console.log("drawerData: ", drawerData)
+
+  console.log("activityList: ", activityList)
+
+  const mergedCategories = [
+    ...activityList.onlineOptionalCategory,
+    ...activityList.onlineCategory,
+    ...activityList.offlineCategory,
+  ]
+  console.log("mergedCategories: ", mergedCategories)
+
+  // const [myData, setMyData] = useState(null)
+  // useEffect(() => {
+  //   const selectedCategoryActivity = mergedCategories.filter((activity)=> {
+  //     return (
+  //       drawerData.selectedActivities.some(data => data.id === activity.id)
+  //     )
+  //   }).map(mapped => mapped.icon)
+  //   console.log('selectedCategoryActivity: ', selectedCategoryActivity)
+  // }, [drawerData])
+
+
 
   return (
     <>
@@ -147,9 +175,7 @@ const UtilDrawer = ({
                         <Text sx={drawer.details.data} noOfLines={[1]}>
                           {drawerData.selectedActivities.length > 0 &&
                             drawerData.selectedActivities
-                              .map((activity) => {
-                                return activity.activityTitle
-                              })
+                              .map((activity) => activity.activityTitle)
                               .join(" • ")}
                         </Text>
                       </Flex>
@@ -165,9 +191,10 @@ const UtilDrawer = ({
                       <Flex sx={drawer.details.flexContainer}>
                         <Text sx={drawer.details.label}>Compensation</Text>
                         <Text sx={drawer.details.data}>
-                          {`$${parseFloat(
-                            drawerData.totalPayment.toFixed(2)
-                          ).toLocaleString()}`}
+                          {`$${new Intl.NumberFormat(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }).format(parseFloat(drawerData.totalAmount))}`}
                         </Text>
                       </Flex>
                     </Flex>
@@ -202,150 +229,93 @@ const UtilDrawer = ({
                       >
                         <Flex sx={drawer.activities.rowContainer} flexGrow={1}>
                           <Text>Activity</Text>
-                          <Flex sx={drawer.activities.tableData}>
-                            <Icon as={BsInstagram} />
-                            <Text>Instagram Post</Text>
-                          </Flex>
-                          <Flex sx={drawer.activities.tableData}>
-                            <Icon as={BsInstagram} />
-                            <Text>Instagram Post</Text>
-                          </Flex>
-                          <Flex sx={drawer.activities.tableData}>
-                            <Icon as={BsInstagram} />
-                            <Text>Instagram Post</Text>
-                          </Flex>
-                          <Flex sx={drawer.activities.tableData}>
-                            <Icon as={BsInstagram} />
-                            <Text>Instagram Post</Text>
-                          </Flex>
-                          <Flex sx={drawer.activities.tableData}>
-                            <Icon as={BsInstagram} />
-                            <Text>Instagram Post</Text>
-                          </Flex>
-                          <Flex sx={drawer.activities.tableData}>
-                            <Icon as={BsInstagram} />
-                            <Text>Instagram Post</Text>
-                          </Flex>
+                          {drawerData.selectedActivities.map((activity) => {
+                            const currentIcon = mergedCategories.filter(data=> data.id === activity.id).map((mapped) => {
+                              const {icon, color} = mapped
+                              const newObject = {icon, color}
+                              return newObject
+                            })
+                            console.log('currentIcon: ', currentIcon)
+                            return (
+                              <Flex
+                                key={activity.id}
+                                sx={drawer.activities.tableData}
+                              >
+                                <Icon
+                                  as={currentIcon[0].icon}
+                                  color={currentIcon[0].color}
+                                  boxSize={5}
+                                />
+                                <Text>{activity.activityTitle}</Text>
+                              </Flex>
+                            )
+                          })}
                         </Flex>
                         <Flex
                           sx={drawer.activities.rowContainer}
-                          flexBasis={"200px"}
+                          flexBasis={"230px"}
                         >
                           <Text>Fulfillment date</Text>
-                          <Text sx={drawer.activities.tableData}>
-                            7/7/23 @ 2:00AM CST
-                          </Text>
-                          <Text sx={drawer.activities.tableData}>
-                            7/7/23 @ 2:00AM CST
-                          </Text>
-                          <Text sx={drawer.activities.tableData}>
-                            7/7/23 @ 2:00AM CST
-                          </Text>
-                          <Text sx={drawer.activities.tableData}>
-                            7/7/23 @ 2:00AM CST
-                          </Text>
-                          <Text sx={drawer.activities.tableData}>
-                            7/7/23 @ 2:00AM CST
-                          </Text>
-                          <Text sx={drawer.activities.tableData}>
-                            7/7/23 @ 2:00AM CST
-                          </Text>
+                          {drawerData.selectedActivities.map((activity) => {
+                            return (
+                              <Text
+                                key={activity.id}
+                                sx={drawer.activities.tableData}
+                              >
+                                {(activity.activityDate.utcFormat !==
+                                  "Invalid Date" &&
+                                  activity.activityDate.utcFormat) ||
+                                  "-"}
+                              </Text>
+                            )
+                          })}
                         </Flex>
                         <Flex
                           sx={drawer.activities.rowContainer}
-                          flexBasis={"150px"}
+                          flexBasis={"135px"}
                         >
                           <Text>Value</Text>
-                          <Text sx={drawer.activities.tableData}>$50.00</Text>
-                          <Text sx={drawer.activities.tableData}>$50.00</Text>
-                          <Text sx={drawer.activities.tableData}>$50.00</Text>
-                          <Text sx={drawer.activities.tableData}>$50.00</Text>
-                          <Text sx={drawer.activities.tableData}>$50.00</Text>
-                          <Text sx={drawer.activities.tableData}>$50.00</Text>
+                          {drawerData.selectedActivities.map((activity) => {
+                            const formatter = new Intl.NumberFormat(undefined, {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })
+                            const formattedAmount = formatter.format(
+                              parseFloat(activity.activityAmount)
+                            )
+                            return (
+                              <Text
+                                key={activity.id}
+                                sx={drawer.activities.tableData}
+                              >
+                                {/* ${(parseFloat(activity.activityAmount).toFixed(2)).toLocaleString()} */}
+                                ${formattedAmount}
+                              </Text>
+                            )
+                          })}
                         </Flex>
                         <Flex
                           sx={drawer.activities.rowContainer}
-                          flexBasis={"150px"}
+                          flexBasis={"135px"}
                         >
                           <Text>Status</Text>
-                          <Flex
-                            sx={drawer.activities.tableData}
-                            flexGrow={"100%"}
-                            gap={2}
-                            alignItems={"center"}
-                          >
-                            <Text>Draft</Text>
-                            <Icon
-                              as={FaCircle}
-                              boxSize={2}
-                              color={"green.400"}
-                            />
-                          </Flex>
-                          <Flex
-                            sx={drawer.activities.tableData}
-                            flexGrow={"100%"}
-                            gap={2}
-                            alignItems={"center"}
-                          >
-                            <Text>Draft</Text>
-                            <Icon
-                              as={FaCircle}
-                              boxSize={2}
-                              color={"green.400"}
-                            />
-                          </Flex>
-                          <Flex
-                            sx={drawer.activities.tableData}
-                            flexGrow={"100%"}
-                            gap={2}
-                            alignItems={"center"}
-                          >
-                            <Text>Draft</Text>
-                            <Icon
-                              as={FaCircle}
-                              boxSize={2}
-                              color={"green.400"}
-                            />
-                          </Flex>
-                          <Flex
-                            sx={drawer.activities.tableData}
-                            flexGrow={"100%"}
-                            gap={2}
-                            alignItems={"center"}
-                          >
-                            <Text>Draft</Text>
-                            <Icon
-                              as={FaCircle}
-                              boxSize={2}
-                              color={"green.400"}
-                            />
-                          </Flex>
-                          <Flex
-                            sx={drawer.activities.tableData}
-                            flexGrow={"100%"}
-                            gap={2}
-                            alignItems={"center"}
-                          >
-                            <Text>Draft</Text>
-                            <Icon
-                              as={FaCircle}
-                              boxSize={2}
-                              color={"green.400"}
-                            />
-                          </Flex>
-                          <Flex
-                            sx={drawer.activities.tableData}
-                            flexGrow={"100%"}
-                            gap={2}
-                            alignItems={"center"}
-                          >
-                            <Text>Draft</Text>
-                            <Icon
-                              as={FaCircle}
-                              boxSize={2}
-                              color={"green.400"}
-                            />
-                          </Flex>
+                          {drawerData.selectedActivities.map((activity) => {
+                            return (
+                              <Flex
+                                sx={drawer.activities.tableData}
+                                flexGrow={"100%"}
+                                gap={2}
+                                alignItems={"center"}
+                              >
+                                <Text>Draft</Text>
+                                <Icon
+                                  as={FaCircle}
+                                  boxSize={2}
+                                  color={"green.400"}
+                                />
+                              </Flex>
+                            )
+                          })}
                         </Flex>
                       </Flex>
                     </Flex>
@@ -360,10 +330,12 @@ const UtilDrawer = ({
                 </GridItem>
                 <GridItem area={"c"} sx={drawer.applyGrid}>
                   <Button
-                    sx={hasApplied ? drawer.btnHasApplied : drawer.btnNotApplied}                   
+                    sx={
+                      hasApplied ? drawer.btnHasApplied : drawer.btnNotApplied
+                    }
                     onClick={(event) => handleApply(drawerData.id)}
                   >
-                    {hasApplied ? 'Withdraw' : 'Apply Now'}
+                    {hasApplied ? "Withdraw" : "Apply Now"}
                   </Button>
                 </GridItem>
               </Grid>

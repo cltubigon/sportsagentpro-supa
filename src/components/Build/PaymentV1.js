@@ -15,11 +15,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { BsCheck, BsChevronLeft, BsPlus } from "react-icons/bs"
 import { TfiClose } from "react-icons/tfi"
 import {
-  createPost,
-  resetBuildState,
+  // createPost,
+  // resetBuildState,
   setActiveStep,
   setFirstNameAndLastName,
-  setIsSubmittedSuccessfully,
+  // setIsSubmittedSuccessfully,
   setPaymentTabStatus,
   setSelectedRecipients,
   setSubmissionType,
@@ -43,23 +43,23 @@ const PaymentV1 = ({ setSpinner }) => {
   const reduxPosts = useSelector((state) => state.build)
 
   const {
-    postOwner,
+    // postOwner,
     recipients,
     postType,
     editMode,
-    activeStep,
-    selectedRecipients,
+    // activeStep,
+    // selectedRecipients,
     selectedActivities,
     activitiesTabReady,
-    postContent,
-    postTitle,
-    postExpirationDate,
+    // postContent,
+    // postTitle,
+    // postExpirationDate,
     detailsTabReady,
-    reviewTabReady,
-    paymentTabReady,
-    recipientsListLayout,
-    activitiesListLayout,
-    isSubmittedSuccessfully,
+    // reviewTabReady,
+    // paymentTabReady,
+    // recipientsListLayout,
+    // activitiesListLayout,
+    // isSubmittedSuccessfully,
   } = reduxPosts
 
   console.log('editMode: ', editMode)
@@ -72,6 +72,7 @@ const PaymentV1 = ({ setSpinner }) => {
     0
   )
   console.log("allActivityAmount: ", allActivityAmount)
+  console.log('recipientEarnings: ', recipientEarnings)
   const [totalAmount, setTotalAmount] = useState(0)
   const [count, setCount] = useState(0)
 

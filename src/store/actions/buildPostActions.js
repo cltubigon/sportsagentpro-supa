@@ -34,6 +34,12 @@ export const setTotalPayment = (payload) => {
     dispatch({ type: "SET_TOTAL_PAYMENT", payload })
   }
 }
+export const setTotalAmount = (payload) => {
+  console.log('SET_TOTAL_AMOUNT')
+  return (dispatch) => {
+    dispatch({ type: 'SET_TOTAL_AMOUNT', payload })
+  }
+}
 export const setFirstNameAndLastName = (payload) => {
   console.log("SET_FIRSTNAME_AND_LASTNAME ", payload)
   return (dispatch) => {

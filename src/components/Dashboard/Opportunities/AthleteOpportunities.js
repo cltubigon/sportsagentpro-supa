@@ -156,6 +156,7 @@ const AthleteOpportunities = () => {
       <Flex gap={5} flexWrap={"wrap"} ref={flexRef}>
         {posts.map((post, index) => {
           const {
+            totalAmount,
             postApplicants,
             postType,
             postTitle,
@@ -177,7 +178,12 @@ const AthleteOpportunities = () => {
           )
           const firstActivity = activityTitles[0]
           const activityCount = activityTitles.length
-          // console.log('index: ', index)
+          
+          const formatter = new Intl.NumberFormat(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
+          const formattedAmount = formatter.format(parseFloat(totalAmount))
 
           const rawDataParsed = postContent && postContent
           const contentState = convertFromRaw(rawDataParsed)
@@ -238,9 +244,7 @@ const AthleteOpportunities = () => {
                   </Flex>
                   <Flex gap={2}>
                     <Text color={"gray.500"}>Total:</Text>
-                    <Text fontWeight={"semibold"}>{`$${parseFloat(
-                      totalPayment.toFixed(2)
-                    ).toLocaleString()}`}</Text>
+                    <Text fontWeight={"semibold"}>${formattedAmount}</Text>
                   </Flex>
                   <Flex gap={2}>
                     <Text color={"gray.500"}>Expires:</Text>

@@ -17,6 +17,7 @@ const initState = {
   recipientsListLayout: true,
   activitiesListLayout: false,
   isSubmittedSuccessfully: {},
+  totalAmount: 0,
   totalPayment: null,
   editMode: false,
   submissionType: null,
@@ -24,6 +25,12 @@ const initState = {
 
 const buildReducer = (state = initState, action) => {
   switch (action.type) {
+    case "SET_TOTAL_AMOUNT":
+      console.log("SET_TOTAL_AMOUNT")
+      return {
+        ...state,
+        totalAmount: action.payload,
+      }
     case "DELETE_POST":
       console.log("DELETE_POST successfully")
       return {

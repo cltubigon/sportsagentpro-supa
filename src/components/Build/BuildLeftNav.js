@@ -16,6 +16,7 @@ import {
   setActiveStep,
   setIsSubmittedSuccessfully,
   setSubmissionType,
+  setTotalAmount,
   setTotalPayment,
   updatePost,
 } from "../../store/actions/buildPostActions"
@@ -92,7 +93,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     return
   }, [isSubmittedSuccessfully.status])
 
-  const [totalAmount, setTotalAmount] = useState(0)
+  const [setTotalAmountToPay, setSetTotalAmountToPay] = useState(0)
   useEffect(() => {
     const allActivityAmount =
       selectedActivities &&
@@ -105,19 +106,20 @@ const BuildLeftNav = ({ setSpinner }) => {
         (accumulator, activity) => accumulator + activity,
         0
       )
+    dispatch(setTotalAmount(recipientEarnings))
     console.log("allActivityAmount: ", allActivityAmount)
     const marketplaceFee = recipientEarnings * 0.1
-    setTotalAmount(recipientEarnings + marketplaceFee)
+    setSetTotalAmountToPay(recipientEarnings + marketplaceFee)
   }, [selectedActivities])
 
   //   useEffect(() => {
   //   }, [recipientEarnings])
 
   useEffect(() => {
-    dispatch(setTotalPayment(totalAmount))
-  }, [totalAmount])
+    dispatch(setTotalPayment(setTotalAmountToPay))
+  }, [setTotalAmountToPay])
 
-  console.log("totalAmount: ", totalAmount)
+  console.log("setTotalAmountToPay: ", setTotalAmountToPay)
 
   const [collapse, setCollapse] = useState(false)
   const [paymentReady, setPaymentReady] = useState(null)
