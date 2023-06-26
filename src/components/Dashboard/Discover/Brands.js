@@ -5,25 +5,18 @@ import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { saveBrandToStorage } from "../../../store/actions/brandActions"
 import { useEffect } from "react"
+import { SkeletonDiscover } from "../../Skeleton/SkeletonDiscover"
 
 const Brands = () => {
   const dispatch = useDispatch()
   const brand = useSelector((state) => state.brand)
   const firestore = useSelector((state) => state.firestore)
-  const auth = useSelector((state) => state.auth)
 
   const { brands } = brand
   const firestoreBrands = firestore.ordered.brand
-  console.log("firestoreBrands: ", firestoreBrands)
 
   useEffect(() => {
-    console.log("brands.length: ", brands && brands.length)
-    console.log(
-      "firestoreBrands.length: ",
-      firestoreBrands && firestoreBrands.length
-    )
     if (firestoreBrands && brands && firestoreBrands.length !== brands.length) {
-      console.log("I will dispatch")
       dispatch(saveBrandToStorage(firestoreBrands))
     }
   }, [firestoreBrands])
@@ -59,10 +52,10 @@ const Brands = () => {
     borderRadius: "md",
   }
   return (
-    <>
+    <>{!firestoreBrands && <SkeletonDiscover />}
       <Flex gap={5} flexWrap={"wrap"}>
-        {brands &&
-          brands.map((brand) => {
+        {firestoreBrands &&
+          firestoreBrands.map((brand) => {
             const { id, firstName, lastName } = brand
             return (
               <Flex key={id} sx={listContainer}>

@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { HomeSkeleton } from '../Skeleton/Skeletons'
 import { useEffect } from 'react'
 import { saveAthletesToStorage } from '../../store/actions/athleteActions'
+import { SkeletonDiscover } from '../Skeleton/SkeletonDiscover'
 
 const Athletes = () => {
   console.log("-------------------Athletes")
@@ -18,12 +19,12 @@ const Athletes = () => {
   const isNetworkPage = location.pathname === '/network'
   // console.log('isNetworkPage: ', isNetworkPage)
   
-  useEffect(()=> {
-    if (firestoreAthletes && !localAthletes || firestoreAthletes && localAthletes && firestoreAthletes.length !== localAthletes.length) {
-      console.log('I will dispatch saveAthletesToStorage')
-      dispatch(saveAthletesToStorage(firestoreAthletes))
-    }
-  },[firestoreAthletes])
+  // useEffect(()=> {
+  //   if (firestoreAthletes && !localAthletes || firestoreAthletes && localAthletes && firestoreAthletes.length !== localAthletes.length) {
+  //     console.log('I will dispatch saveAthletesToStorage')
+  //     dispatch(saveAthletesToStorage(firestoreAthletes))
+  //   }
+  // },[firestoreAthletes])
 
   const cardCOntainer = {
       flexDirection: "column",
@@ -48,9 +49,10 @@ const Athletes = () => {
   }
   return (
     <>
-      {localAthletes ? 
+      {!firestoreAthletes && <HomeSkeleton />}
+      {firestoreAthletes && 
         <SimpleGrid minChildWidth={{base: "100%", sm: "290px", md: isNetworkPage ? '250px' : "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
-          {localAthletes.map((athlete)=> {
+          {firestoreAthletes.map((athlete)=> {
               return (
                 <div key={athlete.id}>
                   <Link to={`/profile/${athlete.id}`}>
@@ -70,8 +72,6 @@ const Athletes = () => {
             })
           }
         </SimpleGrid>
-        :
-        <HomeSkeleton />
       }
     </>
   )

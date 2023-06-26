@@ -7,29 +7,26 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
-  useDisclosure,
   Image,
   Text,
   Icon,
   GridItem,
   Grid,
   Heading,
-  Box,
   Spinner,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { stylesOpportunity } from "./stylesOpportunity"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
-import { BsInstagram } from "react-icons/bs"
 import { Editor } from "draft-js"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { applyToPost } from "../../../store/actions/postActions"
 import { useRef } from "react"
+import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
+import { applyToPost } from "../../../store/actions/postActions"
 
-const DrawerOpp = ({
+const UtilDrawer = ({
   isOpen,
   onOpen,
   onClose,
@@ -47,11 +44,8 @@ const DrawerOpp = ({
   const [isLoading, setIsloading] = useState(false)
   const [hasApplied, setHasAhasApplied] = useState(false)
 
-  // console.log("firebase: ", firebase)
-  // console.log("firestore: ", firestore)
-
   const { email } = auth
-  const { postContainer, sectionContainer, drawer } = stylesOpportunity
+  const { sectionContainer, drawer } = comStyle
 
   const firestorePost = firestore.ordered.posts
 
@@ -60,7 +54,6 @@ const DrawerOpp = ({
   }
 
   const handleApply = (id) => {
-    // console.log("id: ", id)
     firebase.auth && dispatch(applyToPost(id, email))
     setIsloading(true)
   }
@@ -70,7 +63,7 @@ const DrawerOpp = ({
       firestorePost &&
       drawerData &&
       firestorePost.find((post) => post.id === drawerData.id)
-    // console.log("selectedPost: ", selectedPost)
+    console.log("selectedPost: ", selectedPost)
     const applied =
       selectedPost &&
       selectedPost.postApplicants &&
@@ -79,28 +72,11 @@ const DrawerOpp = ({
     setIsloading(false)
   }, [firestorePost, drawerData])
 
-  // console.log("hasApplied: ", hasApplied)
-
-  // console.log("drawerData: ", drawerData)
-
-  // console.log("activityList: ", activityList)
-
   const mergedCategories = [
     ...activityList.onlineOptionalCategory,
     ...activityList.onlineCategory,
     ...activityList.offlineCategory,
   ]
-  // console.log("mergedCategories: ", mergedCategories)
-
-  // const [myData, setMyData] = useState(null)
-  // useEffect(() => {
-  //   const selectedCategoryActivity = mergedCategories.filter((activity)=> {
-  //     return (
-  //       drawerData.selectedActivities.some(data => data.id === activity.id)
-  //     )
-  //   }).map(mapped => mapped.icon)
-  //   console.log('selectedCategoryActivity: ', selectedCategoryActivity)
-  // }, [drawerData])
 
   return (
     <>
@@ -228,14 +204,12 @@ const DrawerOpp = ({
                         <Flex sx={drawer.activities.rowContainer} flexGrow={1}>
                           <Text>Activity</Text>
                           {drawerData.selectedActivities.map((activity) => {
-                            const currentIcon = mergedCategories
-                              .filter((data) => data.id === activity.id)
-                              .map((mapped) => {
-                                const { icon, color } = mapped
-                                const newObject = { icon, color }
-                                return newObject
-                              })
-                            // console.log("currentIcon: ", currentIcon)
+                            const currentIcon = mergedCategories.filter(data=> data.id === activity.id).map((mapped) => {
+                              const {icon, color} = mapped
+                              const newObject = {icon, color}
+                              return newObject
+                            })
+                            console.log('currentIcon: ', currentIcon)
                             return (
                               <Flex
                                 key={activity.id}
@@ -346,4 +320,4 @@ const DrawerOpp = ({
   )
 }
 
-export default DrawerOpp
+export default UtilDrawer

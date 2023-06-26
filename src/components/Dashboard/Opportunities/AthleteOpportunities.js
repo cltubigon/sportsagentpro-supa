@@ -23,7 +23,7 @@ import { Link } from "react-router-dom"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
-import UtilDrawer from "../../../utils/UtilDrawer"
+import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
 
 const AthleteOpportunities = () => {
