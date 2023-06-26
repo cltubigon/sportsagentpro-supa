@@ -42,25 +42,22 @@ const BrandOpportunities = () => {
 
   const { posts } = post
   const { postContent } = build
-  console.log("posts: ", posts)
   const firestorePost = firestore.ordered.posts
 
+  console.log('posts: ', posts)
+  console.log('firebase: ', firebase)
+  console.log('build: ', build)
+  console.log('post: ', post)
+  console.log('postContent: ', postContent)
+  console.log('firestorePost: ', firestorePost)
   console.log("firebase.auth.email: ", firebase.auth.email)
+
+  const [newPost, setNewPost] = useState(null)
 
   const handleDelete = (post) => {
     console.log("post: ", post)
     dispatch(deletePost(post, "BrandOpportunities"))
   }
-
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
-
-  // useEffect(() => {
-  //   if (postContent) {
-  //     const rawDataParsed = postContent && postContent
-  //     const contentState = convertFromRaw(rawDataParsed)
-  //     setEditorState(EditorState.createWithContent(contentState))
-  //   }
-  // }, [postContent])
 
   useEffect(() => {
     if (firestorePost && posts && firestorePost.length !== posts.length) {
@@ -73,11 +70,13 @@ const BrandOpportunities = () => {
             const { ownerUID, ...newObject } = obj
             return newObject
           })
+      setNewPost(filterToOwnerPosts)
       console.log("filterToOwnerPosts: ", filterToOwnerPosts)
       dispatch(savePostsToStorage(filterToOwnerPosts))
     }
     // firestorePost && firestorePost.length && dispatch(savePostsToStorage(firestorePost))
   }, [firestorePost])
+  console.log('newPost: ', newPost)
 
   const btnStyle = {
     colorScheme: "gray",
@@ -87,7 +86,7 @@ const BrandOpportunities = () => {
   }
   return (
     <>
-      {(posts.length < 1) && (
+      {(!newPost) && (
         <Flex justifyContent={"center"} height={"250px"} alignItems={"center"}>
           <Spinner
             thickness="4px"
@@ -99,9 +98,11 @@ const BrandOpportunities = () => {
         </Flex>
       )}
       <Flex gap={5} flexWrap={"wrap"}>
-        {posts.map((post, index) => {
+        {newPost && newPost.map((post, index) => {
+          console.log('mapping started')
           const {
             postType,
+            totalAmount,
             postOwner,
             postTitle,
             postContent,
@@ -115,15 +116,22 @@ const BrandOpportunities = () => {
           const isOwner = firebase.auth && firebase.auth.email === postOwner
           const activityTitles = selectedActivities.map(
             (activity) => activity.activityTitle
-          )
-          const firstActivity = activityTitles[0]
+            )
+            const firstActivity = activityTitles[0]
           const activityCount = activityTitles.length
           // console.log('index: ', index)
 
+          const formatter = new Intl.NumberFormat(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
+          const formattedAmount = formatter.format(parseFloat(totalAmount))
+          
           const rawDataParsed = postContent && postContent
           const contentState = convertFromRaw(rawDataParsed)
           const editorState = EditorState.createWithContent(contentState)
-
+          
+          console.log('mapping finished')
           return (
             postType === "opportunity" &&
             isOwner && (
@@ -137,7 +145,7 @@ const BrandOpportunities = () => {
                 w={"320px"}
                 h={"428px"}
                 position={"relative"}
-              >
+                >
                 <Flex
                   gap={2}
                   // w={"310px"}
@@ -189,9 +197,7 @@ const BrandOpportunities = () => {
                   </Flex>
                   <Flex gap={2}>
                     <Text color={"gray.500"}>Total:</Text>
-                    <Text fontWeight={"semibold"}>{`$${parseFloat(
-                      totalPayment.toFixed(2)
-                    ).toLocaleString()}`}</Text>
+                    <Text fontWeight={"semibold"}>${formattedAmount}</Text>
                   </Flex>
                   <Flex gap={2}>
                     <Text color={"gray.500"}>Expires:</Text>
