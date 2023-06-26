@@ -26,31 +26,16 @@ import { Link } from "react-router-dom"
 import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
+import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
 
 const BrandOpportunities = () => {
   const initRef = useRef()
   const dispatch = useDispatch()
 
-  const auth = useSelector((state) => state.auth)
-  const { profile } = auth
-  const userType = profile && profile.userType
-
   const firestore = useSelector((state) => state.firestore)
   const firebase = useSelector((state) => state.firebase)
-  const build = useSelector((state) => state.build)
-  const post = useSelector((state) => state.post)
-
-  const { posts } = post
-  const { postContent } = build
+  
   const firestorePost = firestore.ordered.posts
-
-  console.log('posts: ', posts)
-  console.log('firebase: ', firebase)
-  console.log('build: ', build)
-  console.log('post: ', post)
-  console.log('postContent: ', postContent)
-  console.log('firestorePost: ', firestorePost)
-  console.log("firebase.auth.email: ", firebase.auth.email)
 
   const [newPost, setNewPost] = useState(null)
 
@@ -60,7 +45,6 @@ const BrandOpportunities = () => {
   }
 
   useEffect(() => {
-    if (firestorePost && posts && firestorePost.length !== posts.length) {
       const filterToOwnerPosts =
         firestorePost &&
         firebase.auth.uid &&
@@ -71,12 +55,8 @@ const BrandOpportunities = () => {
             return newObject
           })
       setNewPost(filterToOwnerPosts)
-      console.log("filterToOwnerPosts: ", filterToOwnerPosts)
-      dispatch(savePostsToStorage(filterToOwnerPosts))
-    }
-    // firestorePost && firestorePost.length && dispatch(savePostsToStorage(firestorePost))
   }, [firestorePost])
-  console.log('newPost: ', newPost)
+  console.log("newPost: ", newPost)
 
   const btnStyle = {
     colorScheme: "gray",
@@ -86,202 +66,192 @@ const BrandOpportunities = () => {
   }
   return (
     <>
-      {(!newPost) && (
-        <Flex justifyContent={"center"} height={"250px"} alignItems={"center"}>
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="lg"
-          />
-        </Flex>
-      )}
+      {!newPost && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
-        {newPost && newPost.map((post, index) => {
-          console.log('mapping started')
-          const {
-            postType,
-            totalAmount,
-            postOwner,
-            postTitle,
-            postContent,
-            postOwnerFirstName,
-            postOwnerLastName,
-            selectedActivities,
-            totalPayment,
-            postExpirationDate,
-            id,
-          } = post
-          const isOwner = firebase.auth && firebase.auth.email === postOwner
-          const activityTitles = selectedActivities.map(
-            (activity) => activity.activityTitle
+        {newPost &&
+          newPost.map((post, index) => {
+            console.log("mapping started")
+            const {
+              postType,
+              totalAmount,
+              postOwner,
+              postTitle,
+              postContent,
+              postOwnerFirstName,
+              postOwnerLastName,
+              selectedActivities,
+              postExpirationDate,
+              id,
+            } = post
+            const isOwner = firebase.auth && firebase.auth.email === postOwner
+            const activityTitles = selectedActivities.map(
+              (activity) => activity.activityTitle
             )
             const firstActivity = activityTitles[0]
-          const activityCount = activityTitles.length
-          // console.log('index: ', index)
+            const activityCount = activityTitles.length
 
-          const formatter = new Intl.NumberFormat(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          });
-          const formattedAmount = formatter.format(parseFloat(totalAmount))
-          
-          const rawDataParsed = postContent && postContent
-          const contentState = convertFromRaw(rawDataParsed)
-          const editorState = EditorState.createWithContent(contentState)
-          
-          console.log('mapping finished')
-          return (
-            postType === "opportunity" &&
-            isOwner && (
-              <Flex
-                key={id}
-                flexDirection={"column"}
-                borderColor={'gray.200'}
-                borderWidth={'1px'}
-                borderStyle={'solid'}
-                borderRadius={"md"}
-                w={"320px"}
-                h={"428px"}
-                position={"relative"}
-                >
+            const formatter = new Intl.NumberFormat(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
+            const formattedAmount = formatter.format(parseFloat(totalAmount))
+
+            const rawDataParsed = postContent && postContent
+            const contentState = convertFromRaw(rawDataParsed)
+            const editorState = EditorState.createWithContent(contentState)
+            
+            return (
+              postType === "opportunity" &&
+              isOwner && (
                 <Flex
-                  gap={2}
-                  // w={"310px"}
-                  bgColor={"gray.100"}
-                  p={4}
+                  key={id}
+                  flexDirection={"column"}
+                  borderColor={"gray.200"}
+                  borderWidth={"1px"}
+                  borderStyle={"solid"}
                   borderRadius={"md"}
+                  w={"320px"}
+                  h={"428px"}
+                  position={"relative"}
                 >
-                  <Image
-                    src={imageHolderRemovable}
-                    maxW={"46px"}
-                    bgColor={"red"}
-                    alt="Dan Abramov"
-                    borderColor={"gray.300"}
-                    borderWidth={"1px"}
-                    borderStyle={"solid"}
-                    borderRadius={"sm"}
-                  />
-                  <Flex flexDirection={"column"}>
-                    <Text fontSize={"lg"} fontWeight={"semibold"}>
-                      {postOwnerFirstName} {postOwnerLastName}
+                  <Flex
+                    gap={2}
+                    // w={"310px"}
+                    bgColor={"gray.100"}
+                    p={4}
+                    borderRadius={"md"}
+                  >
+                    <Image
+                      src={imageHolderRemovable}
+                      maxW={"46px"}
+                      bgColor={"red"}
+                      alt="Dan Abramov"
+                      borderColor={"gray.300"}
+                      borderWidth={"1px"}
+                      borderStyle={"solid"}
+                      borderRadius={"sm"}
+                    />
+                    <Flex flexDirection={"column"}>
+                      <Text fontSize={"lg"} fontWeight={"semibold"}>
+                        {postOwnerFirstName} {postOwnerLastName}
+                      </Text>
+                      <Flex alignItems={"center"} gap={3}>
+                        <Text fontSize={"sm"}>Draft</Text>
+                        <Icon as={FaCircle} color={"blue.400"} boxSize={2} />
+                      </Flex>
+                    </Flex>
+                    <Flex
+                      flexDirection={"column"}
+                      alignItems={"center"}
+                      gap={2}
+                      ml={"auto"}
+                    >
+                      <Icon as={BsHeart} boxSize={4} />
+                      <Icon as={BsLink45Deg} boxSize={6} />
+                    </Flex>
+                  </Flex>
+                  <Flex flexDirection={"column"} p={4} gap={1}>
+                    <Text fontWeight={"semibold"} maxW={"190px"}>
+                      {postTitle}
                     </Text>
-                    <Flex alignItems={"center"} gap={3}>
-                      <Text fontSize={"sm"}>Draft</Text>
-                      <Icon as={FaCircle} color={"blue.400"} boxSize={2} />
+                    <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
+                      <Editor editorState={editorState} readOnly />
+                    </Box>
+                    <Flex gap={2} flexWrap={"wrap"}>
+                      <Text color={"gray.500"}>Activities:</Text>
+                      <Text fontWeight={"semibold"} maxW={"190px"}>
+                        {firstActivity} +{activityCount}
+                      </Text>
+                    </Flex>
+                    <Flex gap={2}>
+                      <Text color={"gray.500"}>Total:</Text>
+                      <Text fontWeight={"semibold"}>${formattedAmount}</Text>
+                    </Flex>
+                    <Flex gap={2}>
+                      <Text color={"gray.500"}>Expires:</Text>
+                      <Text fontWeight={"semibold"}>
+                        {(postExpirationDate.utcFormat !== "Invalid Date" &&
+                          postExpirationDate.utcFormat) ||
+                          "-"}
+                      </Text>
+                    </Flex>
+                    <Flex gap={2}>
+                      <Text color={"gray.500"}>Tags:</Text>
+                      <Text fontWeight={"semibold"}>-</Text>
                     </Flex>
                   </Flex>
                   <Flex
-                    flexDirection={"column"}
-                    alignItems={"center"}
+                    justifyContent={"center"}
                     gap={2}
-                    ml={"auto"}
+                    px={4}
+                    position={"absolute"}
+                    bottom={4}
+                    w={"100%"}
                   >
-                    <Icon as={BsHeart} boxSize={4} />
-                    <Icon as={BsLink45Deg} boxSize={6} />
-                  </Flex>
-                </Flex>
-                <Flex flexDirection={"column"} p={4} gap={1}>
-                  <Text fontWeight={"semibold"} maxW={"190px"}>
-                    {postTitle}
-                  </Text>
-                  <Box noOfLines={[1, 2]} mb={4} color={'gray.500'}>
-                    <Editor editorState={editorState} readOnly />
-                  </Box>
-                  <Flex gap={2} flexWrap={"wrap"}>
-                    <Text color={"gray.500"}>Activities:</Text>
-                    <Text fontWeight={"semibold"} maxW={"190px"}>
-                      {firstActivity} +{activityCount}
-                    </Text>
-                  </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.500"}>Total:</Text>
-                    <Text fontWeight={"semibold"}>${formattedAmount}</Text>
-                  </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.500"}>Expires:</Text>
-                    <Text fontWeight={"semibold"}>
-                      {(postExpirationDate.utcFormat !== "Invalid Date" &&
-                        postExpirationDate.utcFormat) ||
-                        "-"}
-                    </Text>
-                  </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.500"}>Tags:</Text>
-                    <Text fontWeight={"semibold"}>-</Text>
-                  </Flex>
-                </Flex>
-                <Flex
-                  justifyContent={"center"}
-                  gap={2}
-                  px={4}
-                  position={"absolute"}
-                  bottom={4}
-                  w={"100%"}
-                >
-                  <Link to={`/build/${id}`} style={{ width: "100%" }}>
-                    <Button sx={btnStyle} borderColor="gray.400" w={"100%"}>
-                      Edit
-                    </Button>
-                  </Link>
-                  <Popover initialFocusRef={initRef}>
-                    {({ isOpen, onClose }) => (
-                      <>
-                        <PopoverTrigger>
-                          <Button sx={btnStyle} borderColor="gray.400">
-                            Delete
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          bgColor={"gray.100"}
-                          p={2}
-                          boxShadow={"lg"}
-                          borderColor={"gray.400"}
-                          borderWidth={"1px"}
-                          borderStyle={"solid"}
-                          borderRadius={"md"}
-                        >
-                          <PopoverArrow
+                    <Link to={`/build/${id}`} style={{ width: "100%" }}>
+                      <Button sx={btnStyle} borderColor="gray.400" w={"100%"}>
+                        Edit
+                      </Button>
+                    </Link>
+                    <Popover initialFocusRef={initRef}>
+                      {({ isOpen, onClose }) => (
+                        <>
+                          <PopoverTrigger>
+                            <Button sx={btnStyle} borderColor="gray.400">
+                              Delete
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            bgColor={"gray.100"}
+                            p={2}
                             boxShadow={"lg"}
-                            bgColor={"gray.200"}
                             borderColor={"gray.400"}
                             borderWidth={"1px"}
                             borderStyle={"solid"}
-                          />
-                          <PopoverCloseButton />
-                          <PopoverHeader
-                            fontWeight={"semibold"}
-                            fontSize={"lg"}
+                            borderRadius={"md"}
                           >
-                            Confirm deletion
-                          </PopoverHeader>
-                          <PopoverBody>
-                            <Flex flexDirection={"column"} gap={2}>
-                              <Flex>Are you sure you want to delete this?</Flex>
-                              <Flex gap={2} justifyContent={"flex-start"}>
-                                <Button w={"90px"} onClick={onClose}>
-                                  Cancel
-                                </Button>
-                                <Button
-                                  w={"90px"}
-                                  onClick={() => handleDelete(post)}
-                                  colorScheme="twitter"
-                                >
-                                  Yes
-                                </Button>
+                            <PopoverArrow
+                              boxShadow={"lg"}
+                              bgColor={"gray.200"}
+                              borderColor={"gray.400"}
+                              borderWidth={"1px"}
+                              borderStyle={"solid"}
+                            />
+                            <PopoverCloseButton />
+                            <PopoverHeader
+                              fontWeight={"semibold"}
+                              fontSize={"lg"}
+                            >
+                              Confirm deletion
+                            </PopoverHeader>
+                            <PopoverBody>
+                              <Flex flexDirection={"column"} gap={2}>
+                                <Flex>
+                                  Are you sure you want to delete this?
+                                </Flex>
+                                <Flex gap={2} justifyContent={"flex-start"}>
+                                  <Button w={"90px"} onClick={onClose}>
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    w={"90px"}
+                                    onClick={() => handleDelete(post)}
+                                    colorScheme="twitter"
+                                  >
+                                    Yes
+                                  </Button>
+                                </Flex>
                               </Flex>
-                            </Flex>
-                          </PopoverBody>
-                        </PopoverContent>
-                      </>
-                    )}
-                  </Popover>
+                            </PopoverBody>
+                          </PopoverContent>
+                        </>
+                      )}
+                    </Popover>
+                  </Flex>
                 </Flex>
-              </Flex>
+              )
             )
-          )
-        })}
+          })}
       </Flex>
     </>
   )
