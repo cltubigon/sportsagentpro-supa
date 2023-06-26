@@ -6,7 +6,7 @@ export const SkeletonOpportunities = () => {
     <>
       <Flex gap={5} wrap={'wrap'}>
         {number.map((id) => {
-          return <Skeleton key={id} w={"320px"} h={"429px"} />
+          return <Skeleton  startColor='#d9d9d9' endColor='#ededed' key={id} w={"320px"} h={"429px"} />
         })}
       </Flex>
     </>

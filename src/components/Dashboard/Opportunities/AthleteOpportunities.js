@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   Icon,
   Image,
   Spinner,
@@ -23,6 +24,7 @@ import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "../../../utils/UtilDrawer"
+import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
@@ -31,11 +33,11 @@ const AthleteOpportunities = () => {
   const firestore = useSelector((state) => state.firestore)
   const firebase = useSelector((state) => state.firebase)
   const build = useSelector((state) => state.build)
-  const post = useSelector((state) => state.post)
+  // const post = useSelector((state) => state.post)
   const reduxState = useSelector((state) => state)
   const auth = useSelector((state) => state.auth)
 
-  const { posts } = post
+  // const { posts } = post
   const { email } = auth
   const { postContainer } = comStyle
 
@@ -50,7 +52,7 @@ const AthleteOpportunities = () => {
 
   console.log("firebase.auth.email: ", firebase.auth.email)
   console.log("email: ", email)
-  console.log("post: ", post)
+  // console.log("post: ", post)
   console.log("reduxState: ", reduxState)
 
   const handleApply = (id, event) => {
@@ -82,10 +84,12 @@ const AthleteOpportunities = () => {
     }
   }, [])
 
+  const [newPost, setNewPost] = useState(null)
+
   useEffect(() => {
     console.log("firestorePost: ", firestorePost)
 
-    console.log("posts: ", posts)
+    // console.log("posts: ", posts)
     const filterToOwnerPosts =
       firestorePost &&
       firebase.auth.uid &&
@@ -93,8 +97,9 @@ const AthleteOpportunities = () => {
         const { ownerUID, ...newObject } = obj
         return newObject
       })
+    setNewPost(filterToOwnerPosts)
     console.log("filterToOwnerPosts: ", filterToOwnerPosts)
-    filterToOwnerPosts && dispatch(savePostsToStorage(filterToOwnerPosts))
+    // filterToOwnerPosts && dispatch(savePostsToStorage(filterToOwnerPosts))
     setIsloading(false)
   }, [firestorePost])
 
@@ -117,21 +122,8 @@ const AthleteOpportunities = () => {
 
   return (
     <>
-      {posts.length < 1 && (
-        <Flex
-          justifyContent={"center"}
-          height={"429px"}
-          alignItems={"center"}
-          top={0}
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="lg"
-          />
-        </Flex>
+      {!newPost && (
+        <SkeletonOpportunities />
       )}
       {isloading && (
         <Flex
@@ -154,7 +146,7 @@ const AthleteOpportunities = () => {
         </Flex>
       )}
       <Flex gap={5} flexWrap={"wrap"} ref={flexRef}>
-        {posts.map((post, index) => {
+        {newPost && newPost.map((post, index) => {
           const {
             totalAmount,
             postApplicants,
