@@ -34,33 +34,35 @@ import { firestoreConnect } from "react-redux-firebase"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import BuildMenu from "./BuildMenu"
+import { SkeletonBuildRecipientsTab, SkeletonBuildRecipientsTabColumn } from "../Skeleton/SkeletonBuildRecipientsTab"
 
 const RecipientsV1 = () => {
   const dispatch = useDispatch()
   const reduxState = useSelector((state) => state)
   const localAthletes = useSelector((state) => state.athlete.athletes)
-  const reduxPosts = useSelector(state => state.build)
-  const {recipients, recipientsListLayout} = reduxPosts
-//   const recipients = useSelector((state) => state.build.recipients)
+  const build = useSelector((state) => state.build)
+  const { recipients, recipientsListLayout } = build
   const firestoreAthletes = useSelector(
     (state) => state.firestore.ordered.athlete
   )
-  console.log('reduxState vvv: ', reduxState)
 
-  const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)
+  const getSelectedRecpients =
+    recipients && recipients.filter((data) => data.isChecked)
   const count = getSelectedRecpients && getSelectedRecpients.length
-  // console.log('countTwo: ', count)
 
   const { register, watch } = useForm()
 
   const [tab, setTab] = useState(true)
-//   const [recipientsListLayout, setListLayout] = useState(true)
 
   const handleListTrue = () => {
     dispatch(setRecipientsListLayout(true))
   }
   const handleListFalse = () => {
     dispatch(setRecipientsListLayout(false))
+  }
+
+  const handleItemClick = (id) => {
+    dispatch(setCheckboxTrueOrFalse(id))
   }
 
   const watched = watch("searchQuery")
@@ -94,10 +96,16 @@ const RecipientsV1 = () => {
         firestoreAthletes.length !== localAthletes.length) ||
       (firestoreAthletes && localAthletes === null)
     ) {
-      // console.log('triggered firestoreAthletes: ', firestoreAthletes)
       dispatch(saveAthletesToStorage(firestoreAthletes))
     }
   }, [firestoreAthletes])
+  console.log("firestoreAthletes: ", firestoreAthletes)
+
+  const [hasSelectedRecipient, setHasSelectedRecipient] = useState(false)
+  useEffect(()=> {
+    const hasChecked = recipients && recipients.some(athlete => athlete.isChecked === true)
+    hasChecked && setHasSelectedRecipient(true)
+  }, [recipients])
 
   const recipientContainer = {
     alignItems: "center",
@@ -110,7 +118,9 @@ const RecipientsV1 = () => {
     width: !recipientsListLayout && "234px",
     flexDirection: !recipientsListLayout && "column",
     cursor: "pointer",
-    border: !recipientsListLayout ? "1px solid #EBEFF2" : "1px solid transparent",
+    border: !recipientsListLayout
+      ? "1px solid #EBEFF2"
+      : "1px solid transparent",
   }
   const itemsContainer = {
     display: "flex",
@@ -230,17 +240,20 @@ const RecipientsV1 = () => {
             <Flex flexBasis={"100%"} flexDirection={"column"} flexGrow={1}>
               <FormControl>
                 <InputGroup sx={itemsContainer}>
-                  {filteredRecipients ? (
-                    filteredRecipients.map((athlete) => {
+                {!firestoreAthletes && (!recipientsListLayout ? <SkeletonBuildRecipientsTabColumn /> : <SkeletonBuildRecipientsTab />)}
+                  {firestoreAthletes &&
+                    firestoreAthletes.map((athlete) => {
+                      const thisRecipient =
+                        recipients &&
+                        recipients.find((data) => data.id === athlete.id)
+                      const isChecked = thisRecipient && thisRecipient.isChecked
                       return (
                         <Flex
                           key={athlete.id}
                           sx={recipientContainer}
-                          onClick={() =>
-                            dispatch(setCheckboxTrueOrFalse(athlete.id))
-                          }
+                          onClick={() => handleItemClick(athlete.id)}
                         >
-                          {athlete.isChecked ? (
+                          {isChecked ? (
                             <Icon sx={iconStyle} as={MdCheckBox} />
                           ) : (
                             <Icon as={MdCheckBoxOutlineBlank} sx={iconStyle} />
@@ -258,28 +271,12 @@ const RecipientsV1 = () => {
                           </Box>
                         </Flex>
                       )
-                    })
-                  ) : (
-                    <Flex
-                      height={"250px"}
-                      alignItems={"center"}
-                      justifyContent={"center"}
-                      flexGrow={1}
-                    >
-                      <Spinner
-                        thickness="4px"
-                        speed="0.65s"
-                        emptyColor="gray.200"
-                        color="blue.500"
-                        size="xl"
-                      />
-                    </Flex>
-                  )}
-                  {filteredRecipients && filteredRecipients.length == 0 && (
+                    })}
+                  {/* {filteredRecipients && filteredRecipients.length == 0 && (
                     <Flex>
                       <Text>No data found</Text>
                     </Flex>
-                  )}
+                  )} */}
                 </InputGroup>
               </FormControl>
             </Flex>
@@ -291,58 +288,39 @@ const RecipientsV1 = () => {
               {count > 0 ? (
                 <FormControl>
                   <InputGroup sx={itemsContainer}>
-                    {filteredRecipients ? (
-                      filteredRecipients
-                        .filter((athlete) => athlete.isChecked === true)
-                        .map((athlete) => {
-                          return (
-                            <Flex
-                              key={athlete.id}
-                              sx={recipientContainer}
-                              onClick={() =>
-                                dispatch(setCheckboxTrueOrFalse(athlete.id))
-                              }
-                            >
-                              {athlete.isChecked ? (
-                                <Icon as={MdCheckBox} sx={iconStyle} />
-                              ) : (
-                                <Icon
-                                  as={MdCheckBoxOutlineBlank}
-                                  sx={iconStyle}
-                                />
-                              )}
-                              <Avatar name={athlete.initials}>
-                                <AvatarBadge boxSize="0.9em" bg="green.500" />
-                              </Avatar>
-                              <Box pl={2}>
-                                <Text sx={athleteName}>
-                                  {athlete.firstName} {athlete.lastName}
-                                </Text>
-                                <Text sx={athleteDescription}>
-                                  Student-Athlete • Tennis • Fresno State
-                                  Bulldogs
-                                </Text>
-                              </Box>
-                            </Flex>
-                          )
-                        })
-                    ) : (
-                      <Flex
-                        height={"250px"}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                        flexGrow={1}
-                      >
-                        <Spinner
-                          thickness="4px"
-                          speed="0.65s"
-                          emptyColor="gray.200"
-                          color="blue.500"
-                          size="xl"
-                        />
-                      </Flex>
-                    )}
-                    {filteredRecipients && filteredRecipients.length == 0 && (
+                    {!firestoreAthletes && (!recipientsListLayout ? <SkeletonBuildRecipientsTabColumn /> : <SkeletonBuildRecipientsTab />)}
+                    {firestoreAthletes &&
+                      firestoreAthletes.map((athlete) => {
+                        const thisRecipient =
+                          recipients &&
+                          recipients.find((data) => data.id === athlete.id)
+                        const isChecked =
+                          thisRecipient && thisRecipient.isChecked
+                          if (isChecked) {
+                            return (
+                              <Flex
+                              bgColor={'gray.300'}
+                                key={athlete.id}
+                                sx={recipientContainer}
+                                onClick={() => handleItemClick(athlete.id)}
+                              >
+                                  <Icon as={MdCheckBox} sx={iconStyle} />
+                                <Avatar name={athlete.initials}>
+                                  <AvatarBadge boxSize="0.9em" bg="green.500" />
+                                </Avatar>
+                                <Box pl={2}>
+                                  <Text sx={athleteName}>
+                                    {athlete.firstName} {athlete.lastName}
+                                  </Text>
+                                  <Text sx={athleteDescription}>
+                                    Student-Athlete • Tennis • Fresno State Bulldogs
+                                  </Text>
+                                </Box>
+                              </Flex>
+                            )
+                          }
+                      })}
+                    {!hasSelectedRecipient && (
                       <Flex>
                         <Text>No data found</Text>
                       </Flex>

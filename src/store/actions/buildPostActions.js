@@ -179,8 +179,6 @@ export const setCheckboxTrueOrFalse = (id) => {
         return athlete
       }
     })
-    // const count = payload.filter(athlete => athlete.isChecked === true)
-    // const countPayload = count.length
     dispatch({ type: "SET_CHECK_TRUE_OR_FALSE", payload })
   }
 }

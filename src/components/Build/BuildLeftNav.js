@@ -169,6 +169,8 @@ const BuildLeftNav = ({ setSpinner }) => {
     alignItems: "center",
     borderRadius: "50px",
     border: "1px solid #1A202C",
+    bgColor: 'white',
+    zIndex: 10,
   }
   const selectedcircleContainerStyle = {
     w: "24px",
@@ -179,6 +181,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     border: "1px solid #1A202C",
     bg: "#1A202C",
     color: "#fff",
+    zIndex: 10,
   }
   const completedCircleStyle = {
     w: "24px",
@@ -189,6 +192,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     border: "1px solid #3182CE",
     bg: "#3182CE",
     color: "#fff",
+    zIndex: 10,
   }
   const selectedMenuTitleStyle = {
     fontSize: "md",
@@ -287,7 +291,6 @@ const BuildLeftNav = ({ setSpinner }) => {
                   top: "24px",
                   backgroundColor: "#D0D4D9",
                   content: '""',
-                  zIndex: 9,
                 }}
               >
                 {activeStep === "deal_type" ? (
