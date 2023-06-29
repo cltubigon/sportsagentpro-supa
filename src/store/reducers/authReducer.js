@@ -17,9 +17,9 @@ const authReducer = (state = initialState, action) => {
           console.log("login success")
           return {
             ...state,
-            authError: null,
+            // authError: null,
             isLoggedIn: true,
-            profile: {...state.profile, ...action.userData},
+            // profile: {...state.profile, ...action.userData},
           }
         case "LOGOUT_SUCCESS":
           console.log("logout success")
@@ -40,11 +40,11 @@ const authReducer = (state = initialState, action) => {
             ...state,
             authError: null
           }
-        case "UPDATE_PROFILE_STATE":
+        case "SET_PROFILE":
           return {
             ...state,
-            profile: {...state.profile, ...action.profileData},
             email: action.email,
+            profile: action.payload,
           }
         default:
           return state

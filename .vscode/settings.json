@@ -1,0 +1,5 @@
+{
+    "emmet.triggerExpansionOnTab": false,
+    "editor.tabCompletion": "off",
+    "workbench.editor.wrapTabs": true
+}

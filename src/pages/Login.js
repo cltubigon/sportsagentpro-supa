@@ -16,10 +16,11 @@ import {
   Spinner,
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
-import { setAuthError, signIn } from "../store/actions/authActions"
+import { setAuthError, setProfile, signIn } from "../store/actions/authActions"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/layouts/Footer"
+import { loginStyle } from "../styles/loginStyle"
 
 const LoginForm = () => {
   console.log("login rendered")
@@ -28,11 +29,11 @@ const LoginForm = () => {
   const toast = useToast()
 
   const authError = useSelector((state) => state.auth.authError)
-  const firebase = useSelector((state) => state.firebase)
-
+  const userType = useSelector((state) => state.firebase.profile.userType)
   const [loading, setLoading] = useState(false)
 
   const [displayError, setDisplayError] = useState(null)
+  const [show, setShow] = useState(false)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
 
@@ -41,21 +42,16 @@ const LoginForm = () => {
     dispatch(signIn(data))
   }
 
-  useEffect(() => {
-    if (authError) {
-      if (authError === "auth/user-not-found") {
-        setDisplayError("User not found")
-      } else {
-        setDisplayError("Incorrect username or password")
-      }
-    }
-  }, [authError])
+  const handleShowPassword = () => setShow((prev) => !prev)
 
   useEffect(() => {
     if (authError) {
       toast({
         title: "Login error",
-        description: displayError,
+        description:
+          authError === "auth/user-not-found"
+            ? "User not found"
+            : "Incorrect username or password",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -64,15 +60,14 @@ const LoginForm = () => {
     }
 
     return () => {
+      setLoading(false)
       dispatch(setAuthError())
-      setDisplayError(null)
     }
-  }, [displayError])
+  }, [authError])
 
   useEffect(() => {
-    if (firebase.profile.userType) {
-      setLoading(() => false)
-      const userType = firebase.profile.userType
+    if (userType) {
+      dispatch(setProfile())
       switch (userType) {
         case "brand":
           navigate("/network")
@@ -84,53 +79,28 @@ const LoginForm = () => {
           break
       }
     }
-  }, [firebase.profile])
+  }, [userType])
 
-  const [show, setShow] = useState(false)
-  const showPassword = () => setShow(!show)
-
-  const containerStyle = {
-    maxW: "500px",
-    p: 6,
-    my: 10,
-    border: "1px solid #B8BFC5",
-    borderRadius: "8px",
-    boxShadow: "md",
-    mx: "auto",
-  }
-
-  const formControlStyle = {
-    mb: 5,
-  }
-
-  const formLabelStyle = {
-    fontSize: "sm",
-    fontWeight: "normal",
-  }
+  const {
+    formControlStyle,
+    formLabelStyle,
+    containerStyle,
+    logoContainer,
+    userSigninText,
+    loginButton,
+    signupContainer,
+    signupBtn,
+  } = loginStyle
   return (
     <>
-      <Box justifyContent={"center"} textAlign={"center"} pt={"50px"}>
+      <Box sx={logoContainer}>
         <Heading>
           <Link to={"/"}>Sports Agent Pro</Link>
         </Heading>
       </Box>
 
       <Stack sx={containerStyle} gap={4}>
-        <Text fontSize={"3xl"} fontWeight={"semibold"} textAlign={"center"}>
-          User sign in
-        </Text>
-        {loading && (
-          <Flex justifyContent={"center"}>
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="lg"
-            />
-          </Flex>
-        )}
-
+        <Text sx={userSigninText}>User sign in</Text>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FormControl sx={formControlStyle} isInvalid={errors.email}>
             <FormLabel sx={formLabelStyle} htmlFor="email">
@@ -167,7 +137,7 @@ const LoginForm = () => {
                 })}
               />
               <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={showPassword}>
+                  <Button h="1.75rem" size="sm" onClick={handleShowPassword}>
                   {show ? "Hide" : "Show"}
                 </Button>
               </InputRightElement>
@@ -176,16 +146,24 @@ const LoginForm = () => {
               {errors.password && errors.password.message}
             </FormErrorMessage>
           </FormControl>
-          <Button mt={4} colorScheme="twitter" type="submit" w={"full"}>
-            Login
+          <Button mt={4} colorScheme="twitter" type="submit" sx={loginButton}>
+            {!loading ? (
+              "Login"
+            ) : (
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="md"
+              />
+            )}
           </Button>
 
-          <Flex alignItems={"center"} mt={5} justifyContent={"center"} gap={4}>
+          <Flex sx={signupContainer}>
             <Text>Dont have an account?</Text>
             <Link to={"/signup"}>
-              <Button colorScheme="gray" border={"1px solid #ccc"}>
-                Signup
-              </Button>
+              <Button sx={signupBtn}>Signup</Button>
             </Link>
           </Flex>
         </form>

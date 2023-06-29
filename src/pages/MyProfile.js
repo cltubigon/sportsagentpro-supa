@@ -8,18 +8,18 @@ const MyProfile = () => {
   const navigate = useNavigate()
 
   // const uid = useSelector((state)=> state.firebase.auth.uid)
-  const isLoggedIn = useSelector(state => state.auth.profile)
+  // const isLoggedIn = useSelector(state => state.auth.profile)
   
   const containerStyle = {
     maxW: "1440px", 
     px: 0,
   }
 
-  useEffect(()=> {
-    if (!isLoggedIn) {
-      navigate('/login')
-    }
-  },[])
+  // useEffect(()=> {
+  //   if (!isLoggedIn) {
+  //     navigate('/login')
+  //   }
+  // },[])
   return (
     <>
       <Container sx={containerStyle}>

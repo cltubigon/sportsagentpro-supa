@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom"
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import React from "react"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
@@ -16,14 +16,18 @@ import Network from "./pages/DashboardPages/Network"
 import AthleteHomepage from "./pages/DashboardPages/AthleteHomePage"
 import Media from "./pages/DashboardPages/Media"
 import Opportunities from "./pages/DashboardPages/Opportunities"
+import { useSelector } from "react-redux"
+import { useState } from "react"
+import Preloader from "./utils/Preloader"
 
 
 function App() {
-  
+  console.log('App is rendered')
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   return (
       <BrowserRouter>
       <ScrollToTop />
-        {/* <MainNavigation /> */}
+        <MainNavigation />
           <Routes>
             <Route exact path="/" element={<Home />}></Route>
             <Route path="/login" element={<Login />}></Route>
@@ -35,10 +39,10 @@ function App() {
             <Route path="/user-type" element={<UserType />}></Route>
             <Route path="/build/" element={<Build />}></Route>
             <Route path="/build/:id" element={<Build />}></Route>
-            <Route path="/network" element={<Network />}></Route>
+            <Route path="/network" element={isLoggedIn ? <Network /> : <Preloader />}></Route>
             <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
             <Route path="/media" element={<Media />}></Route>
-            <Route path="/opportunities" element={<Opportunities />}></Route>
+            <Route path="/opportunities" element={isLoggedIn ? <Opportunities /> : <Preloader />}></Route>
           </Routes>
         <ColorMode />
       </BrowserRouter>
