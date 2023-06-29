@@ -23,7 +23,7 @@ function App() {
   return (
       <BrowserRouter>
       <ScrollToTop />
-        <MainNavigation />
+        {/* <MainNavigation /> */}
           <Routes>
             <Route exact path="/" element={<Home />}></Route>
             <Route path="/login" element={<Login />}></Route>
