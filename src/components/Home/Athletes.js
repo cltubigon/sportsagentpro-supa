@@ -2,41 +2,64 @@ import { Text, Flex, SimpleGrid, Box } from "@chakra-ui/layout"
 import { DummyImage } from "react-simple-placeholder-image"
 import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 import { useDispatch, useSelector } from "react-redux"
-import { firestoreConnect } from "react-redux-firebase"
-import { Link, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { HomeSkeleton } from "../Skeleton/Skeletons"
-import { useEffect } from "react"
-import { saveAthletesToStorage } from "../../store/actions/athleteActions"
+import { useEffect, useState } from "react"
 import { SkeletonDiscover } from "../Skeleton/SkeletonDiscover"
+import { athletesStyle } from "../../styles/athletesStyle"
+import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
 
 const Athletes = () => {
-  const post = useSelector((state) => state.post)
-  const auth = useSelector((state) => state.auth)
-  console.log("post: ", post)
-  console.log("auth: ", auth)
+  const dispatch = useDispatch()
+  console.count("Athlete rendered")
+  const athleteList = useSelector((state) => state.athlete.athletes.data)
+  const currentTimeStamp = useSelector(state => state.athlete.athletes.lastUpdated)
+  const [isLoading, setIsLoading] = useState(true)
+  
 
+  // const startTimeRef = useRef(0);
+
+  // useEffect(() => {
+  //   startTimeRef.current = performance.now();
+  //   console.log("Initial render");
+
+  //   return () => {
+  //     console.log("Last re-render");
+  //     const endTime = performance.now();
+  //     const renderTime = endTime - startTimeRef.current;
+  //     console.log("Render time:", renderTime, "ms");
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    dispatch(startListeningToAthleteCollection("athlete", "Wks9w5h2ntpYzLihg9dW", currentTimeStamp))
+  }, [])
+
+  useEffect(() => {
+    athleteList && setIsLoading(false)
+  }, [athleteList])
   return (
     <>
-    <Flex>
-      <Text>Loading...</Text>
-    </Flex>
-      {/* {!firestoreAthletes && <HomeSkeleton />}
-      {firestoreAthletes && (
+      {isLoading && (
+        <HomeSkeleton />
+      )}
+      {athleteList && !isLoading && (
         <SimpleGrid
           minChildWidth={{
             base: "100%",
             sm: "290px",
-            md: isNetworkPage ? "250px" : "300px",
+            md: "300px",
           }}
           gap={{ base: 3, md: 6 }}
           tabIndex={0}
         >
-          {firestoreAthletes.map((athlete) => {
+          {athleteList && athleteList.map((athlete, index) => {
+            const { userId, lastName, firstName, sports, team } = athlete
             return (
-              <div key={athlete.id}>
-                <Link to={`/profile/${athlete.id}`}>
-                  <Flex sx={cardCOntainer}>
-                    <Flex sx={imageContainer}>
+              <Flex key={userId}>
+                <Link to={`/profile/${userId}`}>
+                  <Flex sx={athletesStyle.cardCOntainer}>
+                    <Flex sx={athletesStyle.imageContainer}>
                       <DummyImage
                         bgColor="transparent"
                         width={"330px"}
@@ -45,25 +68,25 @@ const Athletes = () => {
                       />
                     </Flex>
                     <Flex flexDirection={"column"} gap={1}>
-                      <Text sx={cardAthleteName}>
-                        {athlete.firstName} {athlete.lastName}
+                      <Text sx={athletesStyle.cardAthleteName}>
+                        {firstName} {lastName}
                       </Text>
-                      <Text sx={cardSportsType}>
-                        {athlete.sports} • {athlete.team}
+                      <Text sx={athletesStyle.cardSportsType}>
+                        {sports} • {team}
                       </Text>
-                      <Box sx={cardSocialMedia}>
+                      <Box sx={athletesStyle.cardSocialMedia}>
                         <ProfileSocialMedia />
                       </Box>
                     </Flex>
                   </Flex>
                 </Link>
-              </div>
+              </Flex>
             )
           })}
         </SimpleGrid>
-      )} */}
+      )}
     </>
   )
 }
 
-export default firestoreConnect([{ collection: "athlete" }])(Athletes)
+export default Athletes

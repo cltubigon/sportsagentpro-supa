@@ -25,6 +25,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { MdSupport } from "react-icons/md"
 import { duration } from "moment/moment"
+import { createNewPost } from "../../store/actions/postActions"
 
 const BuildLeftNav = ({ setSpinner }) => {
   const dispatch = useDispatch()
@@ -62,7 +63,7 @@ const BuildLeftNav = ({ setSpinner }) => {
     if (submissionType === "create") {
       console.log("submissionType: ", submissionType)
       dispatch(setSubmissionType(null, "sender is BuildLeftNav line 60"))
-      dispatch(createPost())
+      dispatch(createNewPost())
       setSpinner(() => true)
     } else if (submissionType === "update") {
       console.log("submissionType: ", submissionType)

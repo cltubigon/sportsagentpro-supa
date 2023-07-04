@@ -8,15 +8,13 @@ import {
   Input,
   Box,
 } from "@chakra-ui/react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import DashboardLeftMenu from "../../components/Dashboard/DashboardLeftMenu"
 import DashboardMenu from "../../components/Dashboard/DashboardMenu"
 import NetworkContent from "../../components/Dashboard/Discover/NetworkContent"
 
 const AthleteHomepage = () => {
   const dispatch = useDispatch()
-  const reduxState = useSelector(state => state)
-  console.log('reduxState: ', reduxState)
 
   return (
     <>

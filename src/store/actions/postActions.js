@@ -1,4 +1,41 @@
-import { collection, addDoc, deleteDoc, updateDoc, doc, getDoc } from "firebase/firestore"
+import { collection, addDoc, deleteDoc, updateDoc, doc, getDoc, Timestamp } from "firebase/firestore"
+
+export const createNewPost = () => {
+    return async (dispatch, getState, { getFirebase, getFirestore }) => {
+      const build = getState().build;
+      const firestore = getFirestore();
+      const uid = getState().firebase.auth.uid;
+      const {
+        submissionType,
+        recipients,
+        isSubmittedSuccessfully,
+        editMode,
+        ...newObject
+      } = build;
+      const sanitizedObject = JSON.parse(JSON.stringify(newObject));
+  
+      try {
+        // Add a new document
+        await addDoc(collection(firestore, "posts"), {
+          ...sanitizedObject,
+          ownerUID: uid,
+          createdAt: new Date(),
+        });
+  
+        // Update an existing document
+        const logId = "C0smjlIYwHzvfRMqPIZs";
+        const timestamp = Timestamp.fromDate(new Date())
+        const data = {posts_last_updated: timestamp}
+        await updateDoc(doc(firestore, "logs", logId), data);
+  
+        dispatch({ type: "CREATE_POST", sanitizedObject });
+      } catch (err) {
+        console.log("err: ", err);
+        dispatch({ type: "CREATE_POST_ERROR", err });
+      }
+    }
+  }
+  
 
 export const applyToPost = (postId, email) => {
     console.log('postId: ', postId)

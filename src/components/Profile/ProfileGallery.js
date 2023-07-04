@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux'
 
 const ProfileGallery = () => {
   console.log("--------------------------Gallery Rendered")
-  const localSelectedAthlete = useSelector(state => state.athlete.selectedAthlete)
+  // const localSelectedAthlete = useSelector(state => state.athlete.selectedAthlete)
+  const localSelectedAthlete = true
   return (
     <>
       {localSelectedAthlete ?
-      <Flex position={"relative"} gap={2} boxSizing='border-box' alignItems={"center"} justifyContent={"space-between"} px={"var(--chakra-space-4)"} >
+      <Flex position={"relative"} gap={2} boxSizing='border-box' alignItems={"center"} justifyContent={"space-between"} px={4} >
           <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
           <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>
           <Flex><DummyImage bgColor='#A0AEC0' width={280} height={280} placeholder='280x280' /></Flex>

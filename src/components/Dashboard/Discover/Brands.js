@@ -9,8 +9,8 @@ import { SkeletonDiscover } from "../../Skeleton/SkeletonDiscover"
 import { unstable_HistoryRouter } from "react-router-dom"
 
 const Brands = () => {
-  const history = unstable_HistoryRouter()
-  console.log('history: ', history)
+  // const history = unstable_HistoryRouter()
+  // console.log('history: ', history)
   const dispatch = useDispatch()
   const brand = useSelector((state) => state.brand)
   const firestore = useSelector((state) => state.firestore)

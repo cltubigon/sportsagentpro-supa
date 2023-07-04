@@ -29,10 +29,10 @@ const LoginForm = () => {
   const toast = useToast()
 
   const authError = useSelector((state) => state.auth.authError)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const userType = useSelector((state) => state.firebase.profile.userType)
   const [loading, setLoading] = useState(false)
 
-  const [displayError, setDisplayError] = useState(null)
   const [show, setShow] = useState(false)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
@@ -66,8 +66,10 @@ const LoginForm = () => {
   }, [authError])
 
   useEffect(() => {
-    if (userType) {
-      dispatch(setProfile())
+    if (userType && isLoggedIn) {
+        dispatch(setProfile())
+      console.log('userType: ', userType)
+      console.log('isLoggedIn: ', isLoggedIn)
       switch (userType) {
         case "brand":
           navigate("/network")
@@ -79,7 +81,9 @@ const LoginForm = () => {
           break
       }
     }
-  }, [userType])
+  }, [userType, isLoggedIn])
+  console.log('userType: ', userType)
+  console.log('isLoggedIn: ', isLoggedIn)
 
   const {
     formControlStyle,

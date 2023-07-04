@@ -5,6 +5,8 @@ import {
   setDoc,
   collection,
   addDoc,
+  Timestamp,
+  updateDoc,
 } from "firebase/firestore"
 
 export const signIn = (credentials) => {
@@ -45,11 +47,13 @@ export const setAuthError = () => {
 }
 
 export const signUp = (newUser) => {
+  console.log('newUser: ', newUser)
   return async (dispatch, getState) => {
     const auth = getAuth()
     const firestore = getFirestore()
 
     try {
+      console.log('signup action started')
       // Create the user account and add to the team
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -65,25 +69,43 @@ export const signUp = (newUser) => {
           lastName: newUser.lastName,
           phoneNumber: newUser.phone,
           userType: newUser.userType,
+          userId: userCredential.user.uid,
           initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
         }
       )
+      const addToCollection = await setDoc(
+        doc(firestore, newUser.userType, userCredential.user.uid),
+        {
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          phoneNumber: newUser.phone,
+          userType: newUser.userType,
+          userId: userCredential.user.uid,
+          initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
+        }
+      )
+      // Update an existing document
+      let name
+      let logId
+      if (newUser.userType === 'athlete') {
+        logId = "Wks9w5h2ntpYzLihg9dW";
+        name = "athlete"
+      } else if (newUser.userType === 'brand') {
+        logId = "yBE823UrrwlLQei7Uyry";
+        name = "brand"
+      } else {
+        console.log(newUser.userType)
+      }
+      console.log('add new Collection')
+      const timestamp = Timestamp.fromDate(new Date())
+      const data = {[`${name}_last_updated`]: timestamp}
+      console.log('data: ', data)
+      await updateDoc(doc(firestore, "logs", logId), data)
 
-      const memberRef = collection(firestore, newUser.userType)
-      await addDoc(memberRef, {
-        userId: userCredential.user.uid,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        phoneNumber: newUser.phone,
-        initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
-      })
       dispatch({ type: "SIGNUP_SUCCESS" })
     } catch (err) {
-      if (err.message.includes("Document already exists")) {
-        dispatch({ type: "SIGNUP_SUCCESS" })
-      } else {
-        dispatch({ type: "SIGNUP_ERROR", err })
-      }
+      dispatch({ type: "SIGNUP_ERROR", err })
+      console.error("Error during user signup:", err);
     }
   }
 }
@@ -98,3 +120,4 @@ export const setProfile = (data) => {
     }
   }
 }
+

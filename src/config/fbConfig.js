@@ -35,6 +35,8 @@ const fbConfig = {
 
 const app = firebase.initializeApp(fbConfig)
 
+export const db = firebase.firestore();
+
 export const rrfConfig = {
   userProfile: "users",
   useFirestoreForProfile: true,
@@ -42,5 +44,3 @@ export const rrfConfig = {
   attachAuthIsReady: true,
   firebaseStateName: "firebase",
 }
-
-export default app

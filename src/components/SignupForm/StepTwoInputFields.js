@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import "react-phone-input-2/lib/style.css";
 import './phonefield.css'
-import { setAuthError, signUp } from '../../store/actions/authActions'
+import { setAuthError, setProfile, signUp } from '../../store/actions/authActions'
 import PhoneInput from 'react-phone-input-2'
 
 const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
@@ -34,52 +34,48 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   const { errors } = formState
   
   const authError = useSelector((state)=> state.auth.authError)
-  const firebase = useSelector((state)=> state.firebase)
-  const profile = useSelector((state) => state.auth.profile)
+  console.log('authError: ', authError)
+  // const firebase = useSelector((state)=> state.firebase)
+  const fireBaseAuth = useSelector((state)=> state.firebase.auth)
+  const firebaseProfile = useSelector((state)=> state.firebase.profile)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   
-  const [creatingAccount, setCreatingAccount] = useState(false)
-  const [displayError, setDisplayError] = useState(null)
+  const [loading, setLoading] = useState(false)
   const [show, setShow] = useState(false)
 
   const showPassword = () => setShow(!show)
-
-  useEffect(() => {
-    if (authError) {
-      // setCreatingAccount(()=> !creatingAccount)
-      if (authError.includes('auth/email-already-in-use')) {
-        setDisplayError('email already in use')
-      }
-    }
-  }, [authError]);
   
   useEffect(()=> {
-    if (authError) {
-      setCreatingAccount(()=> !creatingAccount)
-      toast({
-        title: 'Signup error',
-        description: displayError,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right'
-      })
+    if (authError && authError.includes('auth/email-already-in-use')) {
+      setLoading(false)
+        toast({
+          title: 'Signup error',
+          description: 'email already in use',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          position: 'top-right'
+        })
     }
     return ()=> {
       dispatch(setAuthError())
-      setDisplayError(null)
     }
-  }, [displayError])
+  }, [authError])
   
 
   const onSubmit = (data) => {
-    setCreatingAccount(()=> !creatingAccount)
-    dispatch(signUp({...data, userType}))
+    setLoading(true)
+    const {confirmPassword, ...removedConfirmPassword} = data
+    dispatch(signUp({...removedConfirmPassword, userType}))
   }
   
   useEffect(() => {
-    if (firebase.auth.uid && profile) {
-      setCreatingAccount(()=> !creatingAccount)
-      const userType = firebase.profile.userType
+    if (firebaseProfile.userType && fireBaseAuth.uid && isLoggedIn) {
+      setLoading(false)
+      // setCreatingAccount(()=> !creatingAccount)
+      const userType = firebaseProfile.userType
+      console.log('userType: ', userType)
+      dispatch(setProfile())
       switch (userType) {
         case "brand":
           navigate("/network")
@@ -100,7 +96,7 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
           break
       }
     }
-  }, [profile])
+  }, [isLoggedIn])
 
   const validatePassword = (value) => {
     if (!value) {
@@ -134,16 +130,6 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
         {oneTwoToggle &&
           <Stack gap={4}>
             <Icon cursor={'pointer'} as={FaChevronLeft} onClick={()=> setOneTwoToggle((prev)=>!prev)} />
-            <Text fontSize={'3xl'} fontWeight={'semibold'} textAlign={'center'} >{creatingAccount ? 'Creating account...' : 'Create your account'}</Text>
-            {creatingAccount && <Flex justifyContent={'center'}>
-              <Spinner
-                thickness='4px'
-                speed='0.65s'
-                emptyColor='gray.200'
-                color='blue.500'
-                size='xl'
-              />
-            </Flex>}
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
             
             <FormControl sx={formControlStyle} isInvalid={errors.firstName} isRequired>
@@ -254,7 +240,17 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
             </FormControl>
 
             <Button my={4} colorScheme='twitter' type='submit' w={'full'} >
-                Continue
+            {!loading ? (
+              "Signup"
+            ) : (
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="md"
+              />
+            )}
             </Button>
             </form>
         </Stack>}

@@ -7,36 +7,36 @@ export const HomeSkeleton = () => {
       <>
         <SimpleGrid minChildWidth={{base: "100%", sm:"290px", md: "300px" }} gap={{base: 3, md: 6}} tabIndex={0}>
             <Stack mb={4}>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
             <Stack>
-                <Skeleton height="240px" my="4" borderRadius={"5px"} />
-                <SkeletonText skeletonHeight={'3'} noOfLines={3} spacing='3' />
+                <Skeleton startColor='#d9d9d9' endColor='#ededed' height="240px" my="4" borderRadius={"5px"} />
+                <SkeletonText startColor='#d9d9d9' endColor='#ededed' skeletonHeight={'3'} noOfLines={3} spacing='3' />
             </Stack>
         </SimpleGrid>
       </>

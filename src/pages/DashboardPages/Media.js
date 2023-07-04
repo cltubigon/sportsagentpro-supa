@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux"
 import DashboardLeftMenu from "../../components/Dashboard/DashboardLeftMenu"
 import DashboardMenu from "../../components/Dashboard/DashboardMenu"
 import NetworkContent from "../../components/Dashboard/Discover/NetworkContent"
+import MediaContent from "../../components/Dashboard/Media/MediaContent"
 
 const Media = () => {
   const dispatch = useDispatch()
@@ -33,7 +34,7 @@ const Media = () => {
             <DashboardMenu />
         </GridItem>
         <GridItem area={"f"} overflow={'auto'} mx={4} mb={2}>
-            <NetworkContent />
+            <MediaContent />
         </GridItem>
       </Grid>
     </>

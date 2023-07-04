@@ -2,7 +2,7 @@ const initialState = {
   authError: null,
   profile: null,
   email: null,
-  incrementThis: 0,
+  isLoggedIn: false,
 }
 
 const authReducer = (state = initialState, action) => {
@@ -17,7 +17,7 @@ const authReducer = (state = initialState, action) => {
           console.log("login success")
           return {
             ...state,
-            // authError: null,
+            authError: null,
             isLoggedIn: true,
             // profile: {...state.profile, ...action.userData},
           }
@@ -28,9 +28,11 @@ const authReducer = (state = initialState, action) => {
           console.log("signup success")
           return {
             ...state,
+            isLoggedIn: true,
             authError: null,
           }
         case "SIGNUP_ERROR":
+          console.log('action.err: ', action.err)
           return {
             ...state,
             authError: action.err.message
@@ -44,6 +46,7 @@ const authReducer = (state = initialState, action) => {
           return {
             ...state,
             email: action.email,
+            isLoggedIn: true,
             profile: action.payload,
           }
         default:

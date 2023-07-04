@@ -1,4 +1,12 @@
-import { collection, addDoc, deleteDoc, updateDoc, doc, getDoc } from "firebase/firestore"
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  doc,
+  getDoc,
+  Timestamp,
+} from "firebase/firestore"
 
 export const setSubmissionType = (payload, sender) => {
   console.log("SET_SUBMISSION_TYPE ", payload)
@@ -35,9 +43,9 @@ export const setTotalPayment = (payload) => {
   }
 }
 export const setTotalAmount = (payload) => {
-  console.log('SET_TOTAL_AMOUNT')
+  console.log("SET_TOTAL_AMOUNT")
   return (dispatch) => {
-    dispatch({ type: 'SET_TOTAL_AMOUNT', payload })
+    dispatch({ type: "SET_TOTAL_AMOUNT", payload })
   }
 }
 export const setFirstNameAndLastName = (payload) => {
@@ -55,18 +63,19 @@ export const setSelectedRecipients = (payload) => {
 
 export const deletePost = (post, sender) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    console.log('post.id: ', post.id)
-    console.log('sender: ', sender)
+    console.log("post.id: ", post.id)
+    console.log("sender: ", sender)
     const firestore = getFirestore()
-    console.log('firestore: ', firestore)
+    console.log("firestore: ", firestore)
     const email = getState().firebase.auth.email
 
     try {
       if (post.postOwner === email) {
-        console.log('post.postOwner: ', post.postOwner)
-        console.log('email: ', email)
+        console.log("post.postOwner: ", post.postOwner)
+        console.log("email: ", email)
         await deleteDoc(doc(firestore, "posts", post.id))
-        sender !== 'BrandOpportunities' && dispatch({ type: "DELETE_POST", post })
+        sender !== "BrandOpportunities" &&
+          dispatch({ type: "DELETE_POST", post })
         console.log("Document successfully deleted!")
       } else {
         throw new Error("User not found")
@@ -131,6 +140,13 @@ export const updatePost = (uid) => {
         throw new Error("Unauthorized update")
       }
       console.log("verified owner")
+
+      // Update an existing document
+      const timestamp = Timestamp.fromDate(new Date())
+      console.log("timestamp: ", timestamp)
+
+      const data = { posts_last_updated: timestamp }
+      await updateDoc(doc(firestore, "logs", "C0smjlIYwHzvfRMqPIZs"), data)
 
       // Update the post document
       await updateDoc(postRef, sanitizedData)
