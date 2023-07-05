@@ -68,8 +68,6 @@ const LoginForm = () => {
   useEffect(() => {
     if (userType && isLoggedIn) {
         dispatch(setProfile())
-      console.log('userType: ', userType)
-      console.log('isLoggedIn: ', isLoggedIn)
       switch (userType) {
         case "brand":
           navigate("/network")
@@ -82,8 +80,6 @@ const LoginForm = () => {
       }
     }
   }, [userType, isLoggedIn])
-  console.log('userType: ', userType)
-  console.log('isLoggedIn: ', isLoggedIn)
 
   const {
     formControlStyle,

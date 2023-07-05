@@ -13,7 +13,7 @@ const Profile = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchSelectedAthlete("athlete", "userId", id))
+    dispatch(fetchSelectedAthlete("athlete", "id", id))
   }, [])
 
   return (

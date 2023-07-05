@@ -54,10 +54,10 @@ const Athletes = () => {
           tabIndex={0}
         >
           {athleteList && athleteList.map((athlete, index) => {
-            const { userId, lastName, firstName, sports, team } = athlete
+            const { id, lastName, firstName, sports, team } = athlete
             return (
-              <Flex key={userId}>
-                <Link to={`/profile/${userId}`}>
+              <Flex key={id}>
+                <Link to={`/profile/${id}`}>
                   <Flex sx={athletesStyle.cardCOntainer}>
                     <Flex sx={athletesStyle.imageContainer}>
                       <DummyImage

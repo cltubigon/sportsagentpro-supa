@@ -16,9 +16,9 @@ const ProfileContentLeft = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (selectedProfile.userId === id) {
+    if (selectedProfile && selectedProfile.id === id) {
       console.log("id: ", id)
-      console.log("selectedProfile.userId: ", selectedProfile.userId)
+      console.log("selectedProfile.id: ", selectedProfile.id)
       selectedProfile && setIsLoading(false)
     }
   }, [selectedProfile])

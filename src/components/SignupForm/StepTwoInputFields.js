@@ -30,15 +30,13 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   const navigate = useNavigate()
   const toast = useToast()
   const dispatch = useDispatch()
+
   const { register, handleSubmit, formState, control, watch } = useForm()
   const { errors } = formState
   
-  const authError = useSelector((state)=> state.auth.authError)
-  console.log('authError: ', authError)
-  // const firebase = useSelector((state)=> state.firebase)
-  const fireBaseAuth = useSelector((state)=> state.firebase.auth)
   const firebaseProfile = useSelector((state)=> state.firebase.profile)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const authError = useSelector((state)=> state.auth.authError)
   
   const [loading, setLoading] = useState(false)
   const [show, setShow] = useState(false)
@@ -69,14 +67,13 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
     dispatch(signUp({...removedConfirmPassword, userType}))
   }
   
+  console.log('firebaseProfile.userType: ', firebaseProfile.userType)
+  console.log('isLoggedIn: ', isLoggedIn)
   useEffect(() => {
-    if (firebaseProfile.userType && fireBaseAuth.uid && isLoggedIn) {
+    if (firebaseProfile.userType && isLoggedIn) {
       setLoading(false)
-      // setCreatingAccount(()=> !creatingAccount)
-      const userType = firebaseProfile.userType
-      console.log('userType: ', userType)
       dispatch(setProfile())
-      switch (userType) {
+      switch (firebaseProfile.userType) {
         case "brand":
           navigate("/network")
           break

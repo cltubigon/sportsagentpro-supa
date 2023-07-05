@@ -7,7 +7,6 @@ import athleteReducer from "./athleteReducer"
 import buildReducer from "./buildReducer"
 import brandReducer from "./brandReducer"
 import postReducer from "./postReducer"
-import firestoreListenerReducers from "./firestoreListenerReducers"
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -16,7 +15,6 @@ const rootReducer = combineReducers({
   brand: brandReducer,
   team: teamReducer,
   build: buildReducer,
-  listener: firestoreListenerReducers,
   firestore: firestoreReducer,
   firebase: firebaseReducer
 })

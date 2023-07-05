@@ -11,16 +11,9 @@ import {
 
 export const signIn = (credentials) => {
   return (dispatch, getState, { getFirebase }) => {
-    const firebase = getFirebase()
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(credentials.email, credentials.password)
+    getFirebase().auth().signInWithEmailAndPassword(credentials.email, credentials.password)
       .then((res) => {
-        // console.log('res: ', res)
-        // const {email, metadata} = res.user.multiFactor.user
-        // const userData = {email, metadata}
         dispatch({ type: "LOGIN_SUCCESS" })
-        // console.log('userData: ', userData)
       })
       .catch((err) => {
         dispatch({ type: "LOGIN_ERROR", err })
@@ -47,13 +40,13 @@ export const setAuthError = () => {
 }
 
 export const signUp = (newUser) => {
-  console.log('newUser: ', newUser)
+  console.log("newUser: ", newUser)
   return async (dispatch, getState) => {
     const auth = getAuth()
     const firestore = getFirestore()
 
     try {
-      console.log('signup action started')
+      console.log("signup action started")
       // Create the user account and add to the team
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -69,7 +62,7 @@ export const signUp = (newUser) => {
           lastName: newUser.lastName,
           phoneNumber: newUser.phone,
           userType: newUser.userType,
-          userId: userCredential.user.uid,
+          id: userCredential.user.uid,
           initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
         }
       )
@@ -80,44 +73,44 @@ export const signUp = (newUser) => {
           lastName: newUser.lastName,
           phoneNumber: newUser.phone,
           userType: newUser.userType,
-          userId: userCredential.user.uid,
+          id: userCredential.user.uid,
           initials: `${newUser.firstName[0]} ${newUser.lastName[0]}`,
         }
       )
       // Update an existing document
       let name
       let logId
-      if (newUser.userType === 'athlete') {
-        logId = "Wks9w5h2ntpYzLihg9dW";
+      if (newUser.userType === "athlete") {
+        logId = "Wks9w5h2ntpYzLihg9dW"
         name = "athlete"
-      } else if (newUser.userType === 'brand') {
-        logId = "yBE823UrrwlLQei7Uyry";
+      } else if (newUser.userType === "brand") {
+        logId = "yBE823UrrwlLQei7Uyry"
         name = "brand"
       } else {
         console.log(newUser.userType)
       }
-      console.log('add new Collection')
+      console.log("add new Collection")
       const timestamp = Timestamp.fromDate(new Date())
-      const data = {[`${name}_last_updated`]: timestamp}
-      console.log('data: ', data)
+      const data = { [`${name}_last_updated`]: timestamp }
+      console.log("data: ", data)
       await updateDoc(doc(firestore, "logs", logId), data)
 
       dispatch({ type: "SIGNUP_SUCCESS" })
     } catch (err) {
       dispatch({ type: "SIGNUP_ERROR", err })
-      console.error("Error during user signup:", err);
+      console.error("Error during user signup:", err)
     }
   }
 }
 export const setProfile = (data) => {
   return (dispatch, getState) => {
-    const reduxState = getState()
-    if (reduxState.firebase.profile) {
-      console.log('reduxState: ', reduxState)
-      const email = reduxState.firebase.auth.email
-      const { token, isEmpty, isLoaded, ...payload } = reduxState.firebase.profile
+    const reduxFirebaseState = getState().firebase
+    if (reduxFirebaseState.profile) {
+      console.log("reduxFirebaseState: ", reduxFirebaseState)
+      const email = reduxFirebaseState.auth.email
+      const { token, isEmpty, isLoaded, ...payload } =
+        reduxFirebaseState.profile
       dispatch({ type: "SET_PROFILE", payload, email })
     }
   }
 }
-

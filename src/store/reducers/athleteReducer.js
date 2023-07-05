@@ -18,7 +18,7 @@ const athleteReducer = (state = initialState, action) => {
         ...state,
         selectedProfile: action.payload,
       }
-    case "ATHLETE_COLLECTION_UPDATED":
+    case "SET_ATHLETE_COLLECTION":
       console.log("collection is updated")
       return {
         ...state,

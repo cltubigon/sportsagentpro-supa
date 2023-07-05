@@ -11,12 +11,8 @@ import {
 } from "firebase/firestore"
 
 export const fetchSelectedAthlete = (collectionName, field, value) => {
-  console.log("collectionName: ", collectionName)
-  console.log("field: ", field)
-  console.log("value: ", value)
   return async (dispatch, getState) => {
-    const reduxSelectedProfileId = getState().athlete.selectedProfile.userId
-    console.log("reduxSelectedProfileId: ", reduxSelectedProfileId)
+    const reduxSelectedProfile = getState().athlete.selectedProfile
     try {
       // Fetch data from Firestore using query
       const collectionRef = collection(db, collectionName)
@@ -26,10 +22,12 @@ export const fetchSelectedAthlete = (collectionName, field, value) => {
 
       if (!querySnapshot.empty) {
         const payload = querySnapshot.docs[0].data()
-        if (payload.userId !== reduxSelectedProfileId) {
+        if (reduxSelectedProfile && payload.id !== reduxSelectedProfile.id) {
           dispatch({ type: "SET_SELECTED_PROFILE", payload })
-        } else {
-          console.log("both are equal.")
+        } else if (!reduxSelectedProfile) {
+          dispatch({ type: "SET_SELECTED_PROFILE", payload })
+        } else if (reduxSelectedProfile && payload.id === reduxSelectedProfile.id) {
+          return
         }
       } else {
         console.log("Document not found.")
@@ -74,7 +72,7 @@ export const startListeningToAthleteCollection = (
         })
         console.log("updatedData: ", updatedData)
         dispatch({
-          type: "ATHLETE_COLLECTION_UPDATED",
+          type: "SET_ATHLETE_COLLECTION",
           updatedData,
           timestamp,
         })
