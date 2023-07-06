@@ -22,8 +22,8 @@ import Preloader from "./utils/Preloader"
 
 
 function App() {
-  console.log('App is rendered')
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+  // console.log('App is rendered')
+  // const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   return (
       <BrowserRouter>
       <ScrollToTop />
@@ -39,10 +39,12 @@ function App() {
             <Route path="/user-type" element={<UserType />}></Route>
             <Route path="/build/" element={<Build />}></Route>
             <Route path="/build/:id" element={<Build />}></Route>
-            <Route path="/network" element={isLoggedIn ? <Network /> : <Preloader />}></Route>
+            {/* <Route path="/network" element={isLoggedIn ? <Network /> : <Preloader />}></Route> */}
+            <Route path="/network" element={<Network />}></Route>
             <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
             <Route path="/media" element={<Media />}></Route>
-            <Route path="/opportunities" element={isLoggedIn ? <Opportunities /> : <Preloader />}></Route>
+            <Route path="/opportunities" element={<Opportunities />}></Route>
+            {/* <Route path="/opportunities" element={isLoggedIn ? <Opportunities /> : <Preloader />}></Route> */}
           </Routes>
         <ColorMode />
       </BrowserRouter>

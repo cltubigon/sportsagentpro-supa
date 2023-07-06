@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, Container, Stack, Text } from '@chakra-ui/react'
-import Athletes from '../../Home/Athletes'
 import Brands from './Brands'
 import { useSelector } from 'react-redux'
+import DiscoverAthletes from './DiscoverAthletes'
 
 const NetworkContent = () => {
     const auth = useSelector(state => state.auth)
@@ -10,7 +10,7 @@ const NetworkContent = () => {
     const userType = profile && profile.userType
     return (
         <>
-            {userType && userType === 'brand' && <Athletes />}
+            {userType && userType === 'brand' && <DiscoverAthletes />}
             {userType && userType === 'athlete' && <Brands />}
         </>
     )

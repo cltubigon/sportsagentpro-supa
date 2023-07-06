@@ -27,36 +27,61 @@ import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
+import { fetchOpportunityPostsOfOwner, startListeningToPostsCollection } from "../../../store/actions/Fetch/fetchPostsAction"
 
 const BrandOpportunities = () => {
+  console.count('BrandOpportunities is rendered')
   const initRef = useRef()
   const dispatch = useDispatch()
 
-  const firestore = useSelector((state) => state.firestore)
-  const firebase = useSelector((state) => state.firebase)
+  // // const reduxState = useSelector((state) => state)
+  // // const firebaseUserType = useSelector(state => state.firebase.profile.userType)
+  // // const firebaseUid = useSelector(state => state.firebase.auth.uid)
+
+  const authEmail = useSelector(state => state.auth.email)
+  const myOpportunitiesPosts = useSelector((state) => state.post.myOpportunitiesPosts)
   
-  const firestorePost = firestore.ordered.posts
+  const [isLoading, setIsLoading] = useState(true)
+  const [deleting, setDeleting] = useState(null)
 
-  const [newPost, setNewPost] = useState(null)
 
+  // useEffect(() => {
+  //     console.count('will dispatch from component')
+  //     dispatch(fetchOpportunityPostsOfOwner(authEmail))
+  // }, [])
+
+  useEffect(()=> {
+    // console.count('will dispatch from component')
+    dispatch(fetchOpportunityPostsOfOwner(authEmail))
+  }, [authEmail])
+
+  useEffect(()=> {
+    myOpportunitiesPosts && setIsLoading(false)
+    setDeleting(null)
+  }, [myOpportunitiesPosts])
+  
+  // const firestorePost = firestore.ordered.posts
+  
+  // // const [newPost, setNewPost] = useState(null)
+  
   const handleDelete = (post) => {
-    console.log("post: ", post)
+    setDeleting(post.postTitle)
     dispatch(deletePost(post, "BrandOpportunities"))
   }
 
-  useEffect(() => {
-      const filterToOwnerPosts =
-        firestorePost &&
-        firebase.auth.uid &&
-        firestorePost
-          .filter((post) => post.postOwner === firebase.auth.email)
-          .map((obj) => {
-            const { ownerUID, ...newObject } = obj
-            return newObject
-          })
-      setNewPost(filterToOwnerPosts)
-  }, [firestorePost])
-  console.log("newPost: ", newPost)
+  // // useEffect(() => {
+  //     const filterToOwnerPosts =
+  //       firestorePost &&
+  //       firebase.auth.uid &&
+  //       firestorePost
+  //         .filter((post) => post.postOwner === firebase.auth.email)
+  //         .map((obj) => {
+  //           const { ownerUID, ...newObject } = obj
+  //           return newObject
+  //         })
+  //     setNewPost(filterToOwnerPosts)
+  // }, [firestorePost])
+  // console.log("newPost: ", newPost)
 
   const btnStyle = {
     colorScheme: "gray",
@@ -66,11 +91,10 @@ const BrandOpportunities = () => {
   }
   return (
     <>
-      {!newPost && <SkeletonOpportunities />}
+      {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
-        {newPost &&
-          newPost.map((post, index) => {
-            console.log("mapping started")
+        {!isLoading && myOpportunitiesPosts &&
+          myOpportunitiesPosts.map((post, index) => {
             const {
               postType,
               totalAmount,
@@ -83,7 +107,7 @@ const BrandOpportunities = () => {
               postExpirationDate,
               id,
             } = post
-            const isOwner = firebase.auth && firebase.auth.email === postOwner
+            // const isOwner = firebase.auth && firebase.auth.email === postOwner
             const activityTitles = selectedActivities.map(
               (activity) => activity.activityTitle
             )
@@ -99,12 +123,9 @@ const BrandOpportunities = () => {
             const rawDataParsed = postContent && postContent
             const contentState = convertFromRaw(rawDataParsed)
             const editorState = EditorState.createWithContent(contentState)
-            
             return (
-              postType === "opportunity" &&
-              isOwner && (
-                <Flex
-                  key={id}
+                deleting !== postTitle && <Flex
+                  key={index}
                   flexDirection={"column"}
                   borderColor={"gray.200"}
                   borderWidth={"1px"}
@@ -235,7 +256,10 @@ const BrandOpportunities = () => {
                                   </Button>
                                   <Button
                                     w={"90px"}
-                                    onClick={() => handleDelete(post)}
+                                    onClick={() => {
+                                      onClose()
+                                      handleDelete(post)
+                                    }}
                                     colorScheme="twitter"
                                   >
                                     Yes
@@ -249,7 +273,6 @@ const BrandOpportunities = () => {
                     </Popover>
                   </Flex>
                 </Flex>
-              )
             )
           })}
       </Flex>
@@ -257,4 +280,4 @@ const BrandOpportunities = () => {
   )
 }
 
-export default firestoreConnect([{ collection: "posts" }])(BrandOpportunities)
+export default BrandOpportunities

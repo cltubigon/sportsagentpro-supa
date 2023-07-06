@@ -32,7 +32,7 @@ const Athletes = () => {
   // }, []);
 
   useEffect(() => {
-    dispatch(startListeningToAthleteCollection("athlete", "Wks9w5h2ntpYzLihg9dW", currentTimeStamp))
+    dispatch(startListeningToAthleteCollection("athlete", currentTimeStamp))
   }, [])
 
   useEffect(() => {

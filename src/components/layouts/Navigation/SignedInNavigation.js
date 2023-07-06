@@ -33,15 +33,11 @@ const SignedInNavigation = ({handleSignOut}) => {
         <Link to="/my-profile">
           <Text>Profile</Text>
         </Link>
-        <Link to="/my-component">
-          <Text>MyComponent</Text>
-        </Link>
         <Text>Help Center</Text>
         <Text cursor={"pointer"} onClick={handleSignOut}>
           Logout
         </Text>
         <Avatar name={profile && profile.initials}>
-          {/* <Avatar name={'M M'}> */}
           <AvatarBadge boxSize="0.9em" bg="green.500" />
         </Avatar>
       </Flex>

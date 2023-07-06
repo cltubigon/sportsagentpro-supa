@@ -7,6 +7,7 @@ import {
   getDoc,
   Timestamp,
 } from "firebase/firestore"
+import { fetchOpportunityPostsOfOwner } from "./Fetch/fetchPostsAction"
 
 export const setSubmissionType = (payload, sender) => {
   console.log("SET_SUBMISSION_TYPE ", payload)
@@ -62,6 +63,8 @@ export const setSelectedRecipients = (payload) => {
 }
 
 export const deletePost = (post, sender) => {
+  console.log('post: ', post)
+  console.log('post.id: ', post.id)
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     console.log("post.id: ", post.id)
     console.log("sender: ", sender)
@@ -76,6 +79,7 @@ export const deletePost = (post, sender) => {
         await deleteDoc(doc(firestore, "posts", post.id))
         sender !== "BrandOpportunities" &&
           dispatch({ type: "DELETE_POST", post })
+          dispatch(fetchOpportunityPostsOfOwner(post.postOwner))
         console.log("Document successfully deleted!")
       } else {
         throw new Error("User not found")

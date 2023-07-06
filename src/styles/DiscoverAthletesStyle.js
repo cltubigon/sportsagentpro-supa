@@ -1,0 +1,70 @@
+export const disAthStyle = {
+  cardContainer: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    maxW: "196px",
+    h: "255px",
+    borderRadius: "sm",
+    boxShadow: "lg",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "gray.300",
+  },
+  cardTopContainer: {
+    h: "143px",
+    justifyContent: "space-between",
+    p: 4,
+    bgSize: "cover",
+    position: "relative",
+  },
+  cardTopContainerTwo: {
+    borderRadius: "sm",
+    bg: "linear-gradient(0deg, #2D4856 0%, rgba(255, 255, 255, 0) 100%)",
+    position: "absolute",
+    w: "100%",
+    top: 0,
+    left: 0,
+    height: "100%",
+  },
+  athleteName: {
+    color: "#fff",
+    fontWeight: "semibold",
+    zIndex: 10,
+  },
+  heartIconContainer: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
+  heartIcon: {
+    boxSize: 5,
+    color: "#fff",
+    zIndex: 10,
+    boxShadow: "lg",
+  },
+  socialIconsContainer: {
+    gap: 1,
+    position: "absolute",
+    bottom: "-26px",
+    right: "-10px",
+  },
+  socialLikes: {
+    fontSize: "xx-small",
+    textAlign: "center",
+    color: "#fff",
+  },
+  socialIcons: {
+    boxSize: 3,
+    color: "#fff",
+    boxShadow: "lg",
+  },
+  cardBottomContainer: {
+    flexGrow: 1,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+  },
+  athleteDetails: {
+    fontSize: "xx-small",
+    textAlign: "center",
+  },
+}

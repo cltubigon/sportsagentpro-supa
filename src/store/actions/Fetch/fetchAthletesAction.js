@@ -40,7 +40,6 @@ export const fetchSelectedAthlete = (collectionName, field, value) => {
 
 export const startListeningToAthleteCollection = (
   collectionName,
-  docId,
   timestamp
 ) => {
   return (dispatch) => {
@@ -48,14 +47,14 @@ export const startListeningToAthleteCollection = (
 
     if (collectionName === "athlete") {
       if (timestamp) {
-        const collectionLogref = db.collection("logs").doc(docId)
+        const collectionLogref = db.collection("logs").doc('Wks9w5h2ntpYzLihg9dW')
         collectionLogref.onSnapshot((doc) => {
           const data = doc.data()
           const areEqual = areObjectsEqual(timestamp, data.athlete_last_updated)
           !areEqual && saveData(data.athlete_last_updated)
         })
       } else if (!timestamp) {
-        const collectionLogref = db.collection("logs").doc(docId)
+        const collectionLogref = db.collection("logs").doc('Wks9w5h2ntpYzLihg9dW')
         collectionLogref.onSnapshot((doc) => {
           const data = doc.data()
           saveData(data.athlete_last_updated)
