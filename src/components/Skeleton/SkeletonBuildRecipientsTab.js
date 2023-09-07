@@ -10,8 +10,8 @@ export const SkeletonBuildRecipientsTab = () => {
             <Flex gap={4} key={id}>
                 <SkeletonCircle startColor='#d9d9d9' endColor='#ededed' size={14} fadeDuration={8} />
                 <Flex flexGrow={1} gap={2} flexDirection={'column'} justifyContent={'center'} >
-                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' key={id} w={"130px"} h={"15px"} />
-                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' key={id} w={"50%"} h={"8px"} />
+                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' w={"130px"} h={"15px"} />
+                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' w={"50%"} h={"8px"} />
                 </Flex>
             </Flex>
           )
@@ -32,8 +32,8 @@ export const SkeletonBuildRecipientsTabColumn = () => {
                   <SkeletonCircle startColor='#d9d9d9' endColor='#ededed' size={14} fadeDuration={8} />
                 </Flex>
                 <Flex flexDirection={'column'} alignItems={'center'} gap={2} justifyContent={'center'} >
-                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' key={id} w={"130px"} h={"15px"} />
-                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' key={id} w={"50%"} h={"8px"} />
+                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' w={"130px"} h={"15px"} />
+                    <Skeleton borderRadius={'md'} startColor='#d9d9d9' endColor='#ededed' w={"50%"} h={"8px"} />
                 </Flex>
             </Flex>
           )

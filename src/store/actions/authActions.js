@@ -105,6 +105,7 @@ export const signUp = (newUser) => {
 export const setProfile = (data) => {
   return (dispatch, getState) => {
     const reduxFirebaseState = getState().firebase
+    console.log('reduxFirebaseState: ', reduxFirebaseState)
     if (reduxFirebaseState.profile) {
       console.log("reduxFirebaseState: ", reduxFirebaseState)
       const email = reduxFirebaseState.auth.email

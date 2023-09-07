@@ -3,15 +3,23 @@ const initialState = {
   athletes: {
     data: null,
     lastUpdated: null,
-  }
+  },
+  buildAthletes: {
+    data: null,
+    lastUpdated: null,
+  },
 }
 
 const athleteReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SAVE_ATHLETE_TO_STORAGE":
+      console.log("buildAthletes collection is updated")
       return {
         ...state,
-        athletes: action.payload,
+        buildAthletes: {
+          data: action.objWithIsChecked,
+          lastUpdated: action.timestamp,
+        },
       }
     case "SET_SELECTED_PROFILE":
       return {
@@ -19,7 +27,7 @@ const athleteReducer = (state = initialState, action) => {
         selectedProfile: action.payload,
       }
     case "SET_ATHLETE_COLLECTION":
-      console.log("collection is updated")
+      console.log("athlete collection is updated")
       return {
         ...state,
         athletes: {

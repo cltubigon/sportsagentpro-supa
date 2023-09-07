@@ -1,4 +1,4 @@
-npm install --legacy-peer-deps react-redux-firebase redux-firestore
+npm install --legacy-peer-deps react-redux-firebase redux-firestore firebase
 npm install firebase@9.6.1 firebase/auth
 "react-redux-firebase": "^3.11.0",
 
@@ -15,9 +15,9 @@ git checkout <ID> .  or  git checkout <commit-ID> -- <file-name>
 
 ------------------------------- Import and Export -------------------------------
 
-To export firebase database:
+To export/export firebase database:
 npx -p node-firestore-import-export firestore-export -a appConfig.json -b backup.json
-npx -p node-firestore-import-export firestore-import -a spav01-a7366.json -b backup.json
+npx -p node-firestore-import-export firestore-import -a appConfigSportsAgentPro3.json -b backupFew.json
 
 To export Authentication:
 firebase login

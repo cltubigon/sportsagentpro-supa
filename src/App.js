@@ -22,6 +22,8 @@ import Preloader from "./utils/Preloader"
 
 
 function App() {
+  const reduxState = useSelector(state => state)
+  console.log('reduxState: ', reduxState)
   // console.log('App is rendered')
   // const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   return (

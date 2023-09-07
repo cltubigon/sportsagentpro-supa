@@ -7,18 +7,18 @@ import BuildLeftNav from "../components/Build/BuildLeftNav"
 import { saveAthletesToStorage } from "../store/actions/athleteActions"
 import ActivitiesV1 from "../components/Build/ActivitiesV1"
 import RecipientsV1 from "../components/Build/RecipientsV1"
-import DetailsV1 from "../components/Build/DetailsV1"
 import ReviewV1 from "../components/Build/ReviewV1"
 import Paymentv1 from "../components/Build/PaymentV1"
 import DealTypeV1 from "../components/Build/DealTypeV1"
 import { useNavigate, useParams } from "react-router-dom"
+import { motion } from "framer-motion"
+import DetailsV1 from "../components/Build/Details/DetailsV1"
 
 const Build = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const flexRef = useRef(null)
   const { id } = useParams()
-  console.log('id: ', id)
 
   const activeStep = useSelector((state) => state.build.activeStep)
   const isLoggedIn = useSelector((state) => state.auth.profile)
@@ -40,12 +40,35 @@ const Build = () => {
     }
   }, [])
 
+  const [collapse, setCollapse] = useState(false)
+  const leftNav = {
+    initialWidth: {
+      minWidth: '290px',
+      maxWidth: '290px',
+    },
+    fullWidth: {
+      width: '100%',
+      minWidth: '290px',
+      maxWidth: '290px',
+      transition: {
+        duration: 0.3,
+      }
+    },
+    minimizedWidth: {
+      width: '100%',
+      minWidth: '80px',
+      maxWidth: '80px',
+      transition: {
+        duration: 0.3,
+      }
+    }
+  }
   return (
     <>
       <Flex maxW={"100%"} height={"100vh"}>
-        <Box maxW={"290px"}>
-          <BuildLeftNav setSpinner={setSpinner} />
-        </Box>
+        <Flex as={motion.div} variants={leftNav} initial={'initialWidth'} animate={collapse ? "minimizedWidth" : "fullWidth"} >
+          <BuildLeftNav setSpinner={setSpinner} setCollapse={setCollapse} collapse={collapse} />
+        </Flex>
         <Flex
           flexGrow={1}
           flexDirection={"column"}

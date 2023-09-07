@@ -26,7 +26,10 @@ export const fetchSelectedAthlete = (collectionName, field, value) => {
           dispatch({ type: "SET_SELECTED_PROFILE", payload })
         } else if (!reduxSelectedProfile) {
           dispatch({ type: "SET_SELECTED_PROFILE", payload })
-        } else if (reduxSelectedProfile && payload.id === reduxSelectedProfile.id) {
+        } else if (
+          reduxSelectedProfile &&
+          payload.id === reduxSelectedProfile.id
+        ) {
           return
         }
       } else {
@@ -47,14 +50,18 @@ export const startListeningToAthleteCollection = (
 
     if (collectionName === "athlete") {
       if (timestamp) {
-        const collectionLogref = db.collection("logs").doc('Wks9w5h2ntpYzLihg9dW')
+        const collectionLogref = db
+          .collection("logs")
+          .doc("Wks9w5h2ntpYzLihg9dW")
         collectionLogref.onSnapshot((doc) => {
           const data = doc.data()
           const areEqual = areObjectsEqual(timestamp, data.athlete_last_updated)
           !areEqual && saveData(data.athlete_last_updated)
         })
       } else if (!timestamp) {
-        const collectionLogref = db.collection("logs").doc('Wks9w5h2ntpYzLihg9dW')
+        const collectionLogref = db
+          .collection("logs")
+          .doc("Wks9w5h2ntpYzLihg9dW")
         collectionLogref.onSnapshot((doc) => {
           const data = doc.data()
           saveData(data.athlete_last_updated)
@@ -77,22 +84,64 @@ export const startListeningToAthleteCollection = (
         })
       })
     }
+  }
+}
 
-    function areObjectsEqual(obj1, obj2) {
-      const keys1 = Object.keys(obj1)
-      const keys2 = Object.keys(obj2)
+export const listenAndSaveToBuildAthletes = (timestamp) => {
+  return (dispatch, getState) => {
+    const collectionRef = db.collection("athlete")
 
-      if (keys1.length !== keys2.length) {
-        return false
-      }
+    if (timestamp) {
+      const collectionLogref = db.collection("logs").doc("Wks9w5h2ntpYzLihg9dW")
+      collectionLogref.onSnapshot((doc) => {
+        const data = doc.data()
+        const areEqual = areObjectsEqual(timestamp, data.athlete_last_updated)
+        !areEqual && saveData(data.athlete_last_updated)
+      })
+    } else if (!timestamp) {
+      const collectionLogref = db.collection("logs").doc("Wks9w5h2ntpYzLihg9dW")
+      collectionLogref.onSnapshot((doc) => {
+        const data = doc.data()
+        saveData(data.athlete_last_updated)
+      })
+    }
 
-      for (const key of keys1) {
-        if (obj1[key] !== obj2[key]) {
-          return false
-        }
-      }
-
-      return true
+    function saveData(timestamp) {
+      collectionRef.onSnapshot((snapshot) => {
+        const updatedData = []
+        snapshot.forEach((doc) => {
+          const data = doc.data()
+          updatedData.push(data)
+        })
+        
+        const objWithIsChecked = updatedData.map((athlete)=> {
+          return (
+            {...athlete, isChecked: false}
+            )
+          })
+          dispatch({
+            type: "SAVE_ATHLETE_TO_STORAGE",
+            objWithIsChecked,
+            timestamp,
+          })
+      })
     }
   }
+}
+
+function areObjectsEqual(obj1, obj2) {
+  const keys1 = Object.keys(obj1)
+  const keys2 = Object.keys(obj2)
+
+  if (keys1.length !== keys2.length) {
+    return false
+  }
+
+  for (const key of keys1) {
+    if (obj1[key] !== obj2[key]) {
+      return false
+    }
+  }
+
+  return true
 }

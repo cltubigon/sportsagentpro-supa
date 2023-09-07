@@ -72,8 +72,10 @@ const ReviewV1 = () => {
     activitiesTabReady,
   } = reduxPosts
 
-  const getSelectedRecpients = recipients && recipients.filter(data => data.isChecked)
-  const count = getSelectedRecpients && getSelectedRecpients.length
+  // const reduxState = useSelector(state => state)
+  // console.log('reduxState: ', reduxState)
+  const selectedRecipients = useSelector(state => state.build.selectedRecipients)
+  const localAthletes = useSelector(state => state.athlete.buildAthletes.data)
 
   const [viewMore, setViewMore] = useState(false)
   const [hasBrief, setHasBrief] = useState(null)
@@ -87,8 +89,6 @@ const ReviewV1 = () => {
   //   postExpirationDate &&
   //   new Date(isoExpDate).toUTCString().replace("GMT", "UTC")
 
-  const selectedRecipients =
-    recipients && recipients.filter((recipient) => recipient.isChecked)
 
   // useEffect(() => {
   //   ((postType === 'offer' && count > 0 ||
@@ -524,8 +524,8 @@ const ReviewV1 = () => {
               </Flex>
               <Box py={4}>
                 {/* ------ Content ------ */}
-                {selectedRecipients && selectedRecipients.length > 0 ? (
-                  selectedRecipients.map((recipient) => {
+                {selectedRecipients.length > 0 ? (
+                  localAthletes.filter(athlete => selectedRecipients.includes(athlete.id)).map((recipient) => {
                     const { id, firstName, lastName } = recipient
                     return (
                       <Flex key={id} sx={recipientContainer}>

@@ -13,60 +13,88 @@ import { BsArrowBarLeft, BsArrowBarRight, BsCircleFill } from "react-icons/bs"
 import { useDispatch, useSelector } from "react-redux"
 import {
   createPost,
+  getSelectedPost,
+  resetBuildState,
   setActiveStep,
+  setEditMode,
   setIsSubmittedSuccessfully,
   setSubmissionType,
   setTotalAmount,
   setTotalPayment,
   updatePost,
 } from "../../store/actions/buildPostActions"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { MdSupport } from "react-icons/md"
 import { duration } from "moment/moment"
 import { createNewPost } from "../../store/actions/postActions"
+import { blns } from "../../styles/buildStyles/buildLeftNavStyle"
+import { SkeletonBuildLeftNav } from "../Skeleton/SkeletonBuildLeftNav"
 
-const BuildLeftNav = ({ setSpinner }) => {
+const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
+  console.log("BuildLeftNav is rendered")
   const dispatch = useDispatch()
+  const location = useLocation()
   const toast = useToast()
   const navigate = useNavigate()
 
-  const statePost = useSelector((state) => state.build)
+  const build = useSelector((state) => state.build)
+  console.log("build: ", build)
+  const editMode = useSelector((state) => state.build.editMode)
+  const id = useSelector((state) => state.build.id)
+  const isSubmittedSuccessfully = useSelector(
+    (state) => state.build.isSubmittedSuccessfully
+  )
+  const submissionType = useSelector((state) => state.build.submissionType)
+  const postType = useSelector((state) => state.build.postType)
+  const selectedActivities = useSelector(
+    (state) => state.build.selectedActivities
+  )
+  const activitiesTabReady = useSelector(
+    (state) => state.build.activitiesTabReady
+  )
+  const activeStep = useSelector((state) => state.build.activeStep)
+  const detailsTabReady = useSelector((state) => state.build.detailsTabReady)
   const firebase = useSelector((state) => state.firebase)
-  const {
-    editMode,
-    isSubmittedSuccessfully,
-    submissionType,
-    recipients,
-    postType,
-    selectedActivities,
-    activitiesTabReady,
-    activeStep,
-    detailsTabReady,
-    reviewTabReady,
-    paymentTabReady,
-  } = statePost
+  const selectedRecipients = useSelector(
+    (state) => state.build.selectedRecipients
+  )
 
-  const countActivities = selectedActivities && selectedActivities.length
+  const [isLoading, setIsLoading] = useState(true)
 
-  const stepTwoCompleted =
-    statePost.recipients &&
-    statePost.recipients.some((recipient) => recipient.isChecked)
-  const getSelectedRecpients =
-    recipients && recipients.filter((data) => data.isChecked)
-  const count = getSelectedRecpients && getSelectedRecpients.length
-
-  console.log("firebase: ", firebase)
+  // -------------------- INITIALIZATION --------------------
   useEffect(() => {
-    console.log("submissionType: ", submissionType)
+    dispatch(setActiveStep("deal_type"))
+
+    if (location.pathname === "/build") {
+      // dispatch(setEditMode(false))
+      setTimeout(() => {
+        editMode && dispatch(resetBuildState())
+      }, 200)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500)
+    } else if (
+      location.pathname !== "/build" &&
+      !location.pathname.includes(id)
+    ) {
+      dispatch(getSelectedPost(location.pathname.replace(/\/build\//, "")))
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1500)
+    }
+
+    
+  }, [])
+  // -------------------- END OF INITIALIZATION --------------------
+
+  useEffect(() => {
     if (submissionType === "create") {
-      console.log("submissionType: ", submissionType)
-      dispatch(setSubmissionType(null, "sender is BuildLeftNav line 60"))
       dispatch(createNewPost())
+      dispatch(setSubmissionType(null, "sender is BuildLeftNav line 60"))
       setSpinner(() => true)
     } else if (submissionType === "update") {
-      console.log("submissionType: ", submissionType)
       dispatch(setSubmissionType(null, "sender is BuildLeftNav line 65"))
       firebase.auth && dispatch(updatePost(firebase.auth.uid))
       setSpinner(() => true)
@@ -75,14 +103,14 @@ const BuildLeftNav = ({ setSpinner }) => {
   }, [submissionType])
 
   useEffect(() => {
-    console.log("isSubmittedSuccessfully.status: ", isSubmittedSuccessfully.status)
     if (isSubmittedSuccessfully.status) {
-      console.log("set is submitted successfully")
       dispatch(setIsSubmittedSuccessfully({ status: false, type: null }))
       setSpinner(() => false)
       toast({
         title: "Success",
-        description: `Your post was successfully ${editMode ? isSubmittedSuccessfully.type : isSubmittedSuccessfully.type}`,
+        description: `Your post was successfully ${
+          editMode ? isSubmittedSuccessfully.type : isSubmittedSuccessfully.type
+        }`,
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -94,10 +122,11 @@ const BuildLeftNav = ({ setSpinner }) => {
     return
   }, [isSubmittedSuccessfully.status])
 
-  const [setTotalAmountToPay, setSetTotalAmountToPay] = useState(0)
+  // -------------------- ACTIVITIES TAB --------------------
+  const [totalAmountToPay, setTotalAmountToPay] = useState(0)
   useEffect(() => {
     const allActivityAmount =
-      selectedActivities &&
+      selectedActivities.length > 0 &&
       selectedActivities
         .filter((activity) => activity.activityAmount !== "")
         .map((activity) => parseFloat(activity.activityAmount))
@@ -108,120 +137,51 @@ const BuildLeftNav = ({ setSpinner }) => {
         0
       )
     dispatch(setTotalAmount(recipientEarnings))
-    console.log("allActivityAmount: ", allActivityAmount)
     const marketplaceFee = recipientEarnings * 0.1
-    setSetTotalAmountToPay(recipientEarnings + marketplaceFee)
+    setTotalAmountToPay(recipientEarnings + marketplaceFee)
   }, [selectedActivities])
 
-  //   useEffect(() => {
-  //   }, [recipientEarnings])
-
   useEffect(() => {
-    dispatch(setTotalPayment(setTotalAmountToPay))
-  }, [setTotalAmountToPay])
+    dispatch(setTotalPayment(totalAmountToPay))
+  }, [totalAmountToPay])
+  // -------------------- END OF ACTIVITIES TAB --------------------
 
-  console.log("setTotalAmountToPay: ", setTotalAmountToPay)
-
-  const [collapse, setCollapse] = useState(false)
-  const [paymentReady, setPaymentReady] = useState(null)
+  // -------------------- REVIEW TAB --------------------
   const [reviewReady, setReviewReady] = useState(null)
-
   useEffect(() => {
-    console.log("I will set the Active step")
-    dispatch(setActiveStep("deal_type"))
-  }, [])
-
-  useEffect(() => {
-    ;(postType === "offer" &&
-      count > 0 &&
-      activitiesTabReady &&
-      detailsTabReady) ||
-    (postType === "opportunity" && activitiesTabReady && detailsTabReady)
-      ? setPaymentReady(true)
-      : setPaymentReady(false)
-  }, [statePost])
-
-  useEffect(() => {
-    ;(postType === "offer" && count > 0) ||
+    ;(postType === "offer" && selectedRecipients.length > 0) ||
     activitiesTabReady ||
     detailsTabReady ||
     (postType === "opportunity" && activitiesTabReady) ||
     detailsTabReady
       ? setReviewReady(true)
       : setReviewReady(false)
-  }, [statePost])
-  // console.log('reviewReady: ', reviewReady)
-  // console.log('BLNav: ', reviewTabReady)
+  }, [postType, selectedRecipients, activitiesTabReady, detailsTabReady])
+  // -------------------- END OF REVIEW TAB --------------------
 
-  const menuTitleStyle = {
-    fontSize: "md",
+  // -------------------- PAYMENT TAB --------------------
+  const [paymentReady, setPaymentReady] = useState(null)
+  useEffect(() => {
+    ;(postType === "offer" &&
+      selectedRecipients.length > 0 &&
+      activitiesTabReady &&
+      detailsTabReady) ||
+    (postType === "opportunity" && activitiesTabReady && detailsTabReady)
+      ? setPaymentReady(true)
+      : setPaymentReady(false)
+  }, [postType, selectedRecipients, activitiesTabReady, detailsTabReady])
+  // -------------------- END OF PAYMENT TAB --------------------
+
+  const handleAnimateSidebarClick = () => {
+    setCollapse((prev) => !prev)
   }
-  const menuDescStyle = {
-    fontSize: "xs",
-  }
-  const numberStyle = {
-    fontSize: "sm",
-    fontWeight: "semibold",
-  }
-  const circleContainerStyle = {
-    w: "24px",
-    h: "24px",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "50px",
-    border: "1px solid #1A202C",
-    bgColor: 'white',
-    zIndex: 10,
-  }
-  const selectedcircleContainerStyle = {
-    w: "24px",
-    h: "24px",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "50px",
-    border: "1px solid #1A202C",
-    bg: "#1A202C",
-    color: "#fff",
-    zIndex: 10,
-  }
-  const completedCircleStyle = {
-    w: "24px",
-    h: "24px",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "50px",
-    border: "1px solid #3182CE",
-    bg: "#3182CE",
-    color: "#fff",
-    zIndex: 10,
-  }
-  const selectedMenuTitleStyle = {
-    fontSize: "md",
-    fontWeight: "semibold",
-  }
-  const selectedMenuDescStyle = {
-    fontSize: "xs",
-    fontWeight: "semibold",
-  }
-  const menuContainer = {
-    cursor: "pointer",
-    position: "relative",
-  }
+
   const navContainer = {
     gap: collapse ? 8 : 5,
     py: 5,
     alignItems: collapse ? "center" : "flex-start",
   }
-
-  const animateSidebar = () => {
-    setCollapse(() => !collapse)
-  }
   const animationVariants = {
-    initial: { width: "290px" },
-    collapse: {
-      width: !collapse ? "290px" : "80px",
-      transition: { duration: 0.3 },
-    },
     fontSize: {
       fontSize: !collapse ? "36px" : "22px",
       transition: { duration: 0.3 },
@@ -230,37 +190,24 @@ const BuildLeftNav = ({ setSpinner }) => {
   return (
     <>
       <Flex
-        as={motion.div}
-        variants={animationVariants}
-        initial={"initial"}
-        animate={"collapse"}
-        flexDirection={"column"}
-        justifyContent={"space-between"}
+        sx={blns.mainContainer}
         alignItems={collapse ? "center" : "flex-start"}
-        bgColor={"gray.200"}
-        height={"100vh"}
-        px={5}
-        pb={6}
       >
         <Flex flexDirection={"column"} width={"100%"}>
           <Link to={"/opportunities"}>
             <Heading
               as={motion.h2}
               variants={animationVariants}
-              animate={"fontSize"}
               fontSize={!collapse ? "3xl" : "xl"}
-              pt={5}
               pb={!collapse ? 5 : 2}
+              animate={"fontSize"}
+              pt={5}
             >
               SPA
             </Heading>
           </Link>
           {!collapse && (
-            <Box
-              py={5}
-              borderBottom={"1px solid #D0D4D9"}
-              borderTop={"1px solid #D0D4D9"}
-            >
+            <Box sx={blns.secondRowContainer}>
               <Text fontWeight={"semibold"} fontSize={"sm"}>
                 Current deal status
               </Text>
@@ -271,19 +218,20 @@ const BuildLeftNav = ({ setSpinner }) => {
             </Box>
           )}
 
-          <Stack sx={navContainer}>
+          {isLoading && <SkeletonBuildLeftNav />}
+          {!isLoading && <Stack sx={navContainer}>
             <Flex
-              sx={menuContainer}
               gap={5}
               onClick={() => dispatch(setActiveStep("deal_type"))}
+              sx={blns.menuContainer}
             >
               <Flex
                 sx={
                   activeStep === "deal_type"
-                    ? selectedcircleContainerStyle
-                    : statePost.postType
-                    ? completedCircleStyle
-                    : circleContainerStyle
+                    ? blns.selectedcircleContainerStyle
+                    : postType
+                    ? blns.completedCircleStyle
+                    : blns.circleContainerStyle
                 }
                 _before={{
                   position: "absolute !important",
@@ -292,14 +240,15 @@ const BuildLeftNav = ({ setSpinner }) => {
                   top: "24px",
                   backgroundColor: "#D0D4D9",
                   content: '""',
+                  zIndex: 9,
                 }}
               >
                 {activeStep === "deal_type" ? (
                   <Icon as={CheckIcon} boxSize={3} />
-                ) : statePost.postType ? (
+                ) : postType ? (
                   <Icon as={CheckIcon} boxSize={3} />
                 ) : (
-                  <Text sx={numberStyle}>1</Text>
+                  <Text sx={blns.numberStyle}>1</Text>
                 )}
               </Flex>
               {!collapse && (
@@ -307,8 +256,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "deal_type"
-                        ? selectedMenuTitleStyle
-                        : menuTitleStyle
+                        ? blns.selectedMenuTitleStyle
+                        : blns.menuTitleStyle
                     }
                   >
                     Deal Type
@@ -316,29 +265,29 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "deal_type"
-                        ? selectedMenuDescStyle
-                        : menuDescStyle
+                        ? blns.selectedMenuDescStyle
+                        : blns.menuDescStyle
                     }
                   >
-                    {statePost.postType ? "Completed" : "Incomplete"}
+                    {postType ? "Completed" : "Incomplete"}
                   </Text>
                 </Box>
               )}
             </Flex>
 
-            {statePost.postType !== "opportunity" && (
+            {postType !== "opportunity" && (
               <Flex
-                sx={menuContainer}
+                sx={blns.menuContainer}
                 gap={5}
                 onClick={() => dispatch(setActiveStep("recipients"))}
               >
                 <Flex
                   sx={
                     activeStep === "recipients"
-                      ? selectedcircleContainerStyle
-                      : stepTwoCompleted
-                      ? completedCircleStyle
-                      : circleContainerStyle
+                      ? blns.selectedcircleContainerStyle
+                      : selectedRecipients.length > 0
+                      ? blns.completedCircleStyle
+                      : blns.circleContainerStyle
                   }
                   _before={{
                     position: "absolute !important",
@@ -352,10 +301,10 @@ const BuildLeftNav = ({ setSpinner }) => {
                 >
                   {activeStep === "recipients" ? (
                     <Icon as={CheckIcon} boxSize={3} />
-                  ) : stepTwoCompleted ? (
+                  ) : selectedRecipients.length > 0 ? (
                     <Icon as={CheckIcon} boxSize={3} />
                   ) : (
-                    <Text sx={numberStyle}>2</Text>
+                    <Text sx={blns.numberStyle}>2</Text>
                   )}
                 </Flex>
                 {!collapse && (
@@ -363,20 +312,24 @@ const BuildLeftNav = ({ setSpinner }) => {
                     <Text
                       sx={
                         activeStep === "recipients"
-                          ? selectedMenuTitleStyle
-                          : menuTitleStyle
+                          ? blns.selectedMenuTitleStyle
+                          : blns.menuTitleStyle
                       }
                     >
-                      Recipients {count > 0 && `(${count})`}
+                      Recipients{" "}
+                      {/* {selectedRecipients.length > 0 &&
+                        `(${selectedRecipients.length})`} */}
                     </Text>
                     <Text
                       sx={
                         activeStep === "recipients"
-                          ? selectedMenuDescStyle
-                          : menuDescStyle
+                          ? blns.selectedMenuDescStyle
+                          : blns.menuDescStyle
                       }
                     >
-                      {stepTwoCompleted ? "Completed" : "Incomplete"}
+                      {selectedRecipients.length > 0
+                        ? "Completed"
+                        : "Incomplete"}
                     </Text>
                   </Box>
                 )}
@@ -384,17 +337,17 @@ const BuildLeftNav = ({ setSpinner }) => {
             )}
 
             <Flex
-              sx={menuContainer}
+              sx={blns.menuContainer}
               gap={5}
               onClick={() => dispatch(setActiveStep("activities"))}
             >
               <Flex
                 sx={
                   activeStep === "activities"
-                    ? selectedcircleContainerStyle
+                    ? blns.selectedcircleContainerStyle
                     : activitiesTabReady
-                    ? completedCircleStyle
-                    : circleContainerStyle
+                    ? blns.completedCircleStyle
+                    : blns.circleContainerStyle
                 }
                 _before={{
                   position: "absolute !important",
@@ -411,8 +364,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                 ) : activitiesTabReady ? (
                   <Icon as={CheckIcon} boxSize={3} />
                 ) : (
-                  <Text sx={numberStyle}>
-                    {statePost.postType !== "opportunity" ? "3" : "2"}
+                  <Text sx={blns.numberStyle}>
+                    {postType !== "opportunity" ? "3" : "2"}
                   </Text>
                 )}
               </Flex>
@@ -421,17 +374,18 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "activities"
-                        ? selectedMenuTitleStyle
-                        : menuTitleStyle
+                        ? blns.selectedMenuTitleStyle
+                        : blns.menuTitleStyle
                     }
                   >
-                    Activities {countActivities > 0 && `(${countActivities})`}
+                    Activities
+                    {/* {selectedActivities.length > 0 && `(${selectedActivities.length})`} */}
                   </Text>
                   <Text
                     sx={
                       activeStep === "activities"
-                        ? selectedMenuDescStyle
-                        : menuDescStyle
+                        ? blns.selectedMenuDescStyle
+                        : blns.menuDescStyle
                     }
                   >
                     {activitiesTabReady ? "Completed" : "Incomplete"}
@@ -441,17 +395,17 @@ const BuildLeftNav = ({ setSpinner }) => {
             </Flex>
 
             <Flex
-              sx={menuContainer}
+              sx={blns.menuContainer}
               gap={5}
               onClick={() => dispatch(setActiveStep("details"))}
             >
               <Flex
                 sx={
                   activeStep === "details"
-                    ? selectedcircleContainerStyle
+                    ? blns.selectedcircleContainerStyle
                     : detailsTabReady
-                    ? completedCircleStyle
-                    : circleContainerStyle
+                    ? blns.completedCircleStyle
+                    : blns.circleContainerStyle
                 }
                 _before={{
                   position: "absolute !important",
@@ -468,8 +422,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                 ) : detailsTabReady ? (
                   <Icon as={CheckIcon} boxSize={3} />
                 ) : (
-                  <Text sx={numberStyle}>
-                    {statePost.postType !== "opportunity" ? "4" : "3"}
+                  <Text sx={blns.numberStyle}>
+                    {postType !== "opportunity" ? "4" : "3"}
                   </Text>
                 )}
               </Flex>
@@ -478,8 +432,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "details"
-                        ? selectedMenuTitleStyle
-                        : menuTitleStyle
+                        ? blns.selectedMenuTitleStyle
+                        : blns.menuTitleStyle
                     }
                   >
                     Details
@@ -487,8 +441,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "details"
-                        ? selectedMenuDescStyle
-                        : menuDescStyle
+                        ? blns.selectedMenuDescStyle
+                        : blns.menuDescStyle
                     }
                   >
                     {detailsTabReady ? "Completed" : "Incomplete"}
@@ -498,17 +452,17 @@ const BuildLeftNav = ({ setSpinner }) => {
             </Flex>
 
             <Flex
-              sx={menuContainer}
+              sx={blns.menuContainer}
               gap={5}
               onClick={() => dispatch(setActiveStep("review"))}
             >
               <Flex
                 sx={
                   activeStep === "review"
-                    ? selectedcircleContainerStyle
+                    ? blns.selectedcircleContainerStyle
                     : reviewReady
-                    ? completedCircleStyle
-                    : circleContainerStyle
+                    ? blns.completedCircleStyle
+                    : blns.circleContainerStyle
                 }
                 _before={{
                   position: "absolute !important",
@@ -525,8 +479,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                 ) : reviewReady ? (
                   <Icon as={CheckIcon} boxSize={3} />
                 ) : (
-                  <Text sx={numberStyle}>
-                    {statePost.postType !== "opportunity" ? "5" : "4"}
+                  <Text sx={blns.numberStyle}>
+                    {postType !== "opportunity" ? "5" : "4"}
                   </Text>
                 )}
               </Flex>
@@ -535,8 +489,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "review"
-                        ? selectedMenuTitleStyle
-                        : menuTitleStyle
+                        ? blns.selectedMenuTitleStyle
+                        : blns.menuTitleStyle
                     }
                   >
                     Review
@@ -544,8 +498,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "review"
-                        ? selectedMenuDescStyle
-                        : menuDescStyle
+                        ? blns.selectedMenuDescStyle
+                        : blns.menuDescStyle
                     }
                   >
                     {reviewReady ? "Completed" : "Incomplete"}
@@ -555,17 +509,17 @@ const BuildLeftNav = ({ setSpinner }) => {
             </Flex>
 
             <Flex
-              sx={menuContainer}
+              sx={blns.menuContainer}
               gap={5}
               onClick={() => dispatch(setActiveStep("payment"))}
             >
               <Flex
                 sx={
                   activeStep === "payment"
-                    ? selectedcircleContainerStyle
+                    ? blns.selectedcircleContainerStyle
                     : paymentReady
-                    ? completedCircleStyle
-                    : circleContainerStyle
+                    ? blns.completedCircleStyle
+                    : blns.circleContainerStyle
                 }
               >
                 {activeStep === "payment" ? (
@@ -573,8 +527,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                 ) : paymentReady ? (
                   <Icon as={CheckIcon} boxSize={3} />
                 ) : (
-                  <Text sx={numberStyle}>
-                    {statePost.postType !== "opportunity" ? "6" : "5"}
+                  <Text sx={blns.numberStyle}>
+                    {postType !== "opportunity" ? "6" : "5"}
                   </Text>
                 )}
               </Flex>
@@ -583,8 +537,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "payment"
-                        ? selectedMenuTitleStyle
-                        : menuTitleStyle
+                        ? blns.selectedMenuTitleStyle
+                        : blns.menuTitleStyle
                     }
                   >
                     Payment
@@ -592,8 +546,8 @@ const BuildLeftNav = ({ setSpinner }) => {
                   <Text
                     sx={
                       activeStep === "payment"
-                        ? selectedMenuDescStyle
-                        : menuDescStyle
+                        ? blns.selectedMenuDescStyle
+                        : blns.menuDescStyle
                     }
                   >
                     {paymentReady ? "Completed" : "Incomplete"}
@@ -601,7 +555,7 @@ const BuildLeftNav = ({ setSpinner }) => {
                 </Box>
               )}
             </Flex>
-          </Stack>
+          </Stack>}
         </Flex>
         <Flex
           gap={4}
@@ -615,23 +569,23 @@ const BuildLeftNav = ({ setSpinner }) => {
             </Box>
           </Tooltip>
           <Tooltip hasArrow label="Expand" color="gray.400">
-            <Box>
+            <Box zIndex={999}>
               {collapse && (
                 <Icon
                   as={BsArrowBarRight}
                   boxSize={6}
-                  onClick={animateSidebar}
+                  onClick={handleAnimateSidebarClick}
                 />
               )}
             </Box>
           </Tooltip>
           <Tooltip hasArrow label="Collapse" color="gray.400">
-            <Box>
+            <Box zIndex={999}>
               {!collapse && (
                 <Icon
                   as={BsArrowBarLeft}
                   boxSize={6}
-                  onClick={animateSidebar}
+                  onClick={handleAnimateSidebarClick}
                 />
               )}
             </Box>

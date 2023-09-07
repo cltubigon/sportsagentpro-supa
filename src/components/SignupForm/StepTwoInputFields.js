@@ -70,7 +70,7 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   console.log('firebaseProfile.userType: ', firebaseProfile.userType)
   console.log('isLoggedIn: ', isLoggedIn)
   useEffect(() => {
-    if (firebaseProfile.userType && isLoggedIn) {
+    if (firebaseProfile.userType) {
       setLoading(false)
       dispatch(setProfile())
       switch (firebaseProfile.userType) {
@@ -93,7 +93,7 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
           break
       }
     }
-  }, [isLoggedIn])
+  }, [firebaseProfile.userType, isLoggedIn])
 
   const validatePassword = (value) => {
     if (!value) {

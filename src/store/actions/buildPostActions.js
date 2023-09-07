@@ -8,79 +8,94 @@ import {
   Timestamp,
 } from "firebase/firestore"
 import { fetchOpportunityPostsOfOwner } from "./Fetch/fetchPostsAction"
+import { db } from "../../config/fbConfig"
+
+export const getSelectedPost = (postId) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore()
+    try {
+      const postRef = doc(firestore, "posts", postId)
+      const postSnapshot = await getDoc(postRef)
+      if (!postSnapshot.exists()) {
+        throw new Error("Post not found")
+      }
+      const data = postSnapshot.data()
+      const payload = {...data, selectedRecipients: []}
+      dispatch({ type: "SET_BUILD_STATE", payload })
+    } catch (error) {
+      console.log("Document does not exist!", error)
+    }
+  }
+}
 
 export const setSubmissionType = (payload, sender) => {
-  console.log("SET_SUBMISSION_TYPE ", payload)
-  console.log("sender: ", sender)
   return (dispatch) => {
     dispatch({ type: "SET_SUBMISSION_TYPE", payload })
   }
 }
 export const setEditMode = (payload) => {
-  console.log("SET_EDIT_MODE ", payload)
   return (dispatch) => {
     dispatch({ type: "SET_EDIT_MODE", payload })
   }
 }
 export const setIsSubmittedSuccessfully = (payload) => {
-  console.log("SET_IS_SUBMITTED_SUCCESSFULLY ", payload)
   return (dispatch) => {
     dispatch({ type: "SET_IS_SUBMITTED_SUCCESSFULLY", payload })
   }
 }
+
 export const setBuildState = (data, sender) => {
-  console.log("SET_BUILD_STATE ", data)
-  console.log("sender: ", sender)
   const { activeStep, ...payload } = data
-  console.log("payload: ", payload)
   return (dispatch) => {
     dispatch({ type: "SET_BUILD_STATE", payload })
   }
 }
 export const setTotalPayment = (payload) => {
-  console.log("SET_TOTAL_PAYMENT ", payload)
   return (dispatch) => {
     dispatch({ type: "SET_TOTAL_PAYMENT", payload })
   }
 }
 export const setTotalAmount = (payload) => {
-  console.log("SET_TOTAL_AMOUNT")
   return (dispatch) => {
     dispatch({ type: "SET_TOTAL_AMOUNT", payload })
   }
 }
 export const setFirstNameAndLastName = (payload) => {
-  console.log("SET_FIRSTNAME_AND_LASTNAME ", payload)
   return (dispatch) => {
     dispatch({ type: "SET_FIRSTNAME_AND_LASTNAME", payload })
   }
 }
-export const setSelectedRecipients = (payload) => {
-  console.log("SET_SELECTED_RECIPIENTS ", payload)
-  return (dispatch) => {
-    dispatch({ type: "SET_SELECTED_RECIPIENTS", payload })
+export const setSelectedRecipients = (id) => {
+  return (dispatch, getState) => {
+    const selectedRecipients = getState().build.selectedRecipients
+    const isPresent = selectedRecipients.includes(id)
+    if (isPresent) {
+      const getSelections = selectedRecipients.filter((data) => data !== id)
+      if (getSelections) {
+        const payload = getSelections
+        dispatch({ type: "SET_SELECTED_RECIPIENTS", payload })
+      } else if (!getSelections) {
+        const payload = []
+        dispatch({ type: "SET_SELECTED_RECIPIENTS", payload })
+      }
+    } else {
+      const payload = [...selectedRecipients, id]
+      dispatch({ type: "SET_SELECTED_RECIPIENTS", payload })
+    }
   }
 }
 
 export const deletePost = (post, sender) => {
-  console.log('post: ', post)
-  console.log('post.id: ', post.id)
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    console.log("post.id: ", post.id)
-    console.log("sender: ", sender)
     const firestore = getFirestore()
-    console.log("firestore: ", firestore)
     const email = getState().firebase.auth.email
 
     try {
       if (post.postOwner === email) {
-        console.log("post.postOwner: ", post.postOwner)
-        console.log("email: ", email)
         await deleteDoc(doc(firestore, "posts", post.id))
         sender !== "BrandOpportunities" &&
           dispatch({ type: "DELETE_POST", post })
-          dispatch(fetchOpportunityPostsOfOwner(post.postOwner))
-        console.log("Document successfully deleted!")
+        dispatch(fetchOpportunityPostsOfOwner(post.postOwner))
       } else {
         throw new Error("User not found")
       }
@@ -127,7 +142,6 @@ export const updatePost = (uid) => {
     // const { auth } = getState().firebase;
     // const uid = auth.uid;
     const sanitizedData = JSON.parse(JSON.stringify(updatedData))
-    console.log("sanitizedData: ", sanitizedData)
 
     try {
       // Fetch the post document
@@ -136,18 +150,15 @@ export const updatePost = (uid) => {
       if (!postSnapshot.exists()) {
         throw new Error("Post not found")
       }
-      console.log("fetch complete")
 
       // Verify the owner
       const postData = postSnapshot.data()
       if (postData.ownerUID !== uid) {
         throw new Error("Unauthorized update")
       }
-      console.log("verified owner")
 
       // Update an existing document
       const timestamp = Timestamp.fromDate(new Date())
-      console.log("timestamp: ", timestamp)
 
       const data = { posts_last_updated: timestamp }
       await updateDoc(doc(firestore, "logs", "C0smjlIYwHzvfRMqPIZs"), data)
@@ -165,20 +176,17 @@ export const updatePost = (uid) => {
 export const savePostType = (data) => {
   return (dispatch) => {
     dispatch({ type: "SAVE_POST_TYPE", data })
-    console.log("data reached post action: ", data)
   }
 }
 
 export const setActiveStep = (data) => {
   return (dispatch) => {
     dispatch({ type: "SET_ACTIVE_STEP", data })
-    console.log("setactivestep reached post action")
   }
 }
 
 export const setInitialFilteredAthletes = (data) => {
   return (dispatch) => {
-    // console.log('data: ', data)
     const payload = data.map((athlete) => {
       return { ...athlete, isChecked: false }
     })
@@ -204,7 +212,6 @@ export const setCheckboxTrueOrFalse = (id) => {
 }
 
 export const addOrRemoveActivities = (activity) => {
-  console.log("activity: ", activity)
   return (dispatch, getState) => {
     const state = getState()
     const selectedActivities = state.build.selectedActivities
@@ -217,14 +224,12 @@ export const addOrRemoveActivities = (activity) => {
         activityAmount: "",
         activityDate: "",
       }
-      console.log("filteredActivity yes: ", filteredActivity)
       const payload = [...selectedActivities, filteredActivity]
       dispatch({ type: "ADD_OR_REMOVE_ACTIVITIES", payload })
     } else {
       const filteredActivity = selectedActivities.filter(
         (data) => data.id !== activity.id
       ) // Remove activity
-      console.log("filteredActivity else: ", filteredActivity)
       const payload = filteredActivity
       dispatch({ type: "ADD_OR_REMOVE_ACTIVITIES", payload })
     }
@@ -232,17 +237,13 @@ export const addOrRemoveActivities = (activity) => {
 }
 
 export const updateSelectedActivities = (data) => {
-  console.log("data: ", data)
   return (dispatch, getState) => {
     const state = getState()
     const selectedActivities = state.build.selectedActivities
-    console.log("selectedActivities: ", selectedActivities)
 
     const payload = selectedActivities.map((activity) => {
       const amount = data[`activityAmount${activity.id}`]
       const date = data[`activityDate${activity.id}`]
-      console.log("date: ", date)
-      console.log("amount: ", amount)
 
       if (date) {
         const utcFormat = new Date(date).toUTCString().replace("GMT", "UTC")
@@ -252,9 +253,6 @@ export const updateSelectedActivities = (data) => {
           utcFormat: utcFormat || "",
           localeFormat: localeFormat || "",
         }
-        console.log("utcFormat: ", utcFormat)
-        console.log("localeFormat: ", localeFormat)
-        console.log("objPayload: ", objPayload)
         return {
           ...activity,
           activityAmount: amount || "",
@@ -265,7 +263,6 @@ export const updateSelectedActivities = (data) => {
       }
     })
 
-    console.log("payload: ", payload)
     dispatch({ type: "UPDATE_AMOUNT_AND_DATE_OF_SELECTED_ACTIVITIES", payload })
   }
 }
@@ -310,14 +307,12 @@ export const setContent = (payload) => {
 }
 
 export const setPostTitle = (payload) => {
-  console.log("SET_POST_TITLE action: ", payload)
   return (dispatch) => {
     dispatch({ type: "SET_POST_TITLE", payload })
   }
 }
 
 export const setPostExpirationDate = (payload) => {
-  console.log("SET_POST_EXPIRATION_DATE PH time: ", payload)
 
   const utcFormat = new Date(payload).toUTCString().replace("GMT", "UTC")
   const localeFormat = new Date(payload).toLocaleString()
@@ -356,14 +351,13 @@ export const setPaymentTabStatus = (payload) => {
   }
 }
 
-export const setPostOwner = (payload) => {
-  return (dispatch) => {
-    dispatch({ type: "SET_POST_OWNER", payload })
-  }
-}
+// export const setPostOwner = (payload) => {
+//   return (dispatch) => {
+//     dispatch({ type: "SET_POST_OWNER", payload })
+//   }
+// }
 
 export const resetBuildState = (sender) => {
-  console.log("sender get Edit Mode: ", sender)
   return (dispatch) => {
     dispatch({ type: "RESET_BUILD_STATE" })
   }

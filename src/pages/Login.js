@@ -66,8 +66,10 @@ const LoginForm = () => {
   }, [authError])
 
   useEffect(() => {
-    if (userType && isLoggedIn) {
-        dispatch(setProfile())
+    console.log('I am about to set the Profile')
+    console.log('userType: ', userType)
+    if (userType) {
+      dispatch(setProfile())
       switch (userType) {
         case "brand":
           navigate("/network")

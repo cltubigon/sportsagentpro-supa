@@ -6,7 +6,6 @@ import {
   AvatarBadge,
   Box,
   Button,
-  Center,
   Flex,
   FormControl,
   Icon,
@@ -14,45 +13,54 @@ import {
   Text,
   InputLeftElement,
   Input,
-  Spinner,
-  filter,
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs"
-import { TfiClose, TfiMenuAlt } from "react-icons/tfi"
+import { TfiMenuAlt } from "react-icons/tfi"
 import { RxDashboard } from "react-icons/rx"
 import React, { useEffect, useState } from "react"
 import {
   setActiveStep,
-  setCheckboxTrueOrFalse,
-  setInitialFilteredAthletes,
   setRecipientsListLayout,
+  setSelectedRecipients,
 } from "../../store/actions/buildPostActions"
-import { saveAthletesToStorage } from "../../store/actions/athleteActions"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
-import { firestoreConnect } from "react-redux-firebase"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
 import BuildMenu from "./BuildMenu"
-import { SkeletonBuildRecipientsTab, SkeletonBuildRecipientsTabColumn } from "../Skeleton/SkeletonBuildRecipientsTab"
+import {
+  SkeletonBuildRecipientsTab,
+  SkeletonBuildRecipientsTabColumn,
+} from "../Skeleton/SkeletonBuildRecipientsTab"
+import { listenAndSaveToBuildAthletes } from "../../store/actions/Fetch/fetchAthletesAction"
 
 const RecipientsV1 = () => {
+  console.count('RecipientsV1 is rendered')
   const dispatch = useDispatch()
-  const reduxState = useSelector((state) => state)
-  const localAthletes = useSelector((state) => state.athlete.athletes)
-  const build = useSelector((state) => state.build)
-  const { recipients, recipientsListLayout } = build
-  const firestoreAthletes = useSelector(
-    (state) => state.firestore.ordered.athlete
-  )
-
-  const getSelectedRecpients =
-    recipients && recipients.filter((data) => data.isChecked)
-  const count = getSelectedRecpients && getSelectedRecpients.length
-
   const { register, watch } = useForm()
 
+  // const reduxState = useSelector((state) => state)
+  // console.log('reduxState: ', reduxState)
+  const localAthletes = useSelector((state) => state.athlete.buildAthletes.data)
+  const build = useSelector((state) => state.build)
+  const currentTimeStamp = useSelector(
+    (state) => state.athlete.buildAthletes.lastUpdated
+  )
+  const selectedRecipients = useSelector(
+    (state) => state.build.selectedRecipients
+  )
+  
+  console.log('selectedRecipients: ', selectedRecipients)
+  const [isLoading, setIsloading] = useState(true)
   const [tab, setTab] = useState(true)
+
+  const { recipientsListLayout } = build
+
+  useEffect(() => {
+    dispatch(listenAndSaveToBuildAthletes(currentTimeStamp))
+  }, [])
+  useEffect(() => {
+    localAthletes && setIsloading(false)
+  }, [localAthletes])
 
   const handleListTrue = () => {
     dispatch(setRecipientsListLayout(true))
@@ -62,50 +70,8 @@ const RecipientsV1 = () => {
   }
 
   const handleItemClick = (id) => {
-    dispatch(setCheckboxTrueOrFalse(id))
+    dispatch(setSelectedRecipients(id))
   }
-
-  const watched = watch("searchQuery")
-  const filteredRecipients =
-    watched && watched !== ""
-      ? recipients &&
-        recipients.filter((athlete) => {
-          const fullName = `${athlete.firstName} ${athlete.lastName} ${athlete.firstName} `
-          return (
-            fullName.toLowerCase().includes(watched) ||
-            fullName.toLowerCase().includes(watched.toLowerCase())
-          )
-        })
-      : recipients
-
-  useEffect(() => {
-    if (
-      (!recipients && localAthletes) ||
-      (recipients &&
-        localAthletes &&
-        recipients.length !== localAthletes.length)
-    ) {
-      dispatch(setInitialFilteredAthletes(localAthletes))
-    }
-  }, [localAthletes])
-
-  useEffect(() => {
-    if (
-      (firestoreAthletes &&
-        localAthletes &&
-        firestoreAthletes.length !== localAthletes.length) ||
-      (firestoreAthletes && localAthletes === null)
-    ) {
-      dispatch(saveAthletesToStorage(firestoreAthletes))
-    }
-  }, [firestoreAthletes])
-  console.log("firestoreAthletes: ", firestoreAthletes)
-
-  const [hasSelectedRecipient, setHasSelectedRecipient] = useState(false)
-  useEffect(()=> {
-    const hasChecked = recipients && recipients.some(athlete => athlete.isChecked === true)
-    hasChecked && setHasSelectedRecipient(true)
-  }, [recipients])
 
   const recipientContainer = {
     alignItems: "center",
@@ -173,12 +139,14 @@ const RecipientsV1 = () => {
               </Text>
               <Text
                 onClick={() => setTab(() => false)}
-                color={count < 1 && "gray.400"}
+                color={selectedRecipients.length < 1 && "gray.400"}
                 borderBottom={tab ? "none" : "2px solid #000"}
                 pb={2}
                 cursor={"pointer"}
               >
-                Selected Recipients {count > 0 && `(${count})`}
+                Selected Recipients{" "}
+                {selectedRecipients.length > 0 &&
+                  `(${selectedRecipients.length})`}
               </Text>
             </Flex>
           </Flex>
@@ -240,13 +208,15 @@ const RecipientsV1 = () => {
             <Flex flexBasis={"100%"} flexDirection={"column"} flexGrow={1}>
               <FormControl>
                 <InputGroup sx={itemsContainer}>
-                {!firestoreAthletes && (!recipientsListLayout ? <SkeletonBuildRecipientsTabColumn /> : <SkeletonBuildRecipientsTab />)}
-                  {firestoreAthletes &&
-                    firestoreAthletes.map((athlete) => {
-                      const thisRecipient =
-                        recipients &&
-                        recipients.find((data) => data.id === athlete.id)
-                      const isChecked = thisRecipient && thisRecipient.isChecked
+                  {isLoading &&
+                    (!recipientsListLayout ? (
+                      <SkeletonBuildRecipientsTabColumn />
+                    ) : (
+                      <SkeletonBuildRecipientsTab />
+                    ))}
+                  {!isLoading &&
+                    localAthletes.map((athlete) => {
+                      const isChecked = selectedRecipients.includes(athlete.id)
                       return (
                         <Flex
                           key={athlete.id}
@@ -272,11 +242,6 @@ const RecipientsV1 = () => {
                         </Flex>
                       )
                     })}
-                  {/* {filteredRecipients && filteredRecipients.length == 0 && (
-                    <Flex>
-                      <Text>No data found</Text>
-                    </Flex>
-                  )} */}
                 </InputGroup>
               </FormControl>
             </Flex>
@@ -285,42 +250,45 @@ const RecipientsV1 = () => {
           {/* -------------------------------------- Second Tab -------------------------------------- */}
           {!tab && (
             <Flex flexBasis={"100%"} flexDirection={"column"} flexGrow={1}>
-              {count > 0 ? (
+              {selectedRecipients.length > 0 ? (
                 <FormControl>
                   <InputGroup sx={itemsContainer}>
-                    {!firestoreAthletes && (!recipientsListLayout ? <SkeletonBuildRecipientsTabColumn /> : <SkeletonBuildRecipientsTab />)}
-                    {firestoreAthletes &&
-                      firestoreAthletes.map((athlete) => {
-                        const thisRecipient =
-                          recipients &&
-                          recipients.find((data) => data.id === athlete.id)
-                        const isChecked =
-                          thisRecipient && thisRecipient.isChecked
-                          if (isChecked) {
-                            return (
-                              <Flex
-                              bgColor={'gray.300'}
-                                key={athlete.id}
-                                sx={recipientContainer}
-                                onClick={() => handleItemClick(athlete.id)}
-                              >
-                                  <Icon as={MdCheckBox} sx={iconStyle} />
-                                <Avatar name={athlete.initials}>
-                                  <AvatarBadge boxSize="0.9em" bg="green.500" />
-                                </Avatar>
-                                <Box pl={2}>
-                                  <Text sx={athleteName}>
-                                    {athlete.firstName} {athlete.lastName}
-                                  </Text>
-                                  <Text sx={athleteDescription}>
-                                    Student-Athlete • Tennis • Fresno State Bulldogs
-                                  </Text>
-                                </Box>
-                              </Flex>
-                            )
-                          }
-                      })}
-                    {!hasSelectedRecipient && (
+                    {isLoading &&
+                      (!recipientsListLayout ? (
+                        <SkeletonBuildRecipientsTabColumn />
+                      ) : (
+                        <SkeletonBuildRecipientsTab />
+                      ))}
+                    {!isLoading &&
+                      localAthletes
+                        .filter((athlete) =>
+                          selectedRecipients.includes(athlete.id)
+                        )
+                        .map((athlete) => {
+                          return (
+                            <Flex
+                              key={athlete.id}
+                              sx={recipientContainer}
+                              onClick={() => handleItemClick(athlete.id)}
+                            >
+                              <Icon as={MdCheckBox} sx={iconStyle} />
+                              <Avatar name={athlete.initials}>
+                                <AvatarBadge boxSize="0.9em" bg="green.500" />
+                              </Avatar>
+                              <Box pl={2}>
+                                <Text sx={athleteName}>
+                                  {athlete.firstName} {athlete.lastName}
+                                </Text>
+                                <Text sx={athleteDescription}>
+                                  Student-Athlete • Tennis • Fresno State
+                                  Bulldogs
+                                </Text>
+                              </Box>
+                            </Flex>
+                          )
+                          // }
+                        })}
+                    {selectedRecipients.length < 1 && (
                       <Flex>
                         <Text>No data found</Text>
                       </Flex>
@@ -379,8 +347,4 @@ const RecipientsV1 = () => {
   )
 }
 
-export default firestoreConnect([
-  {
-    collection: "athlete",
-  },
-])(RecipientsV1)
+export default RecipientsV1

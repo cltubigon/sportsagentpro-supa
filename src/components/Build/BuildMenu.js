@@ -15,11 +15,9 @@ const BuildMenu = () => {
   const dispatch = useDispatch()
 
   const build = useSelector((state) => state.build)
-  console.log("build: ", build)
 
   const { id, activeStep, editMode } = build
 
-  console.log("id: ", id)
 
   const handleUpdate = () => {
     dispatch(setSubmissionType("update", "sender is BuildMenu line19"))
@@ -109,7 +107,7 @@ const BuildMenu = () => {
                       borderRadius={"md"}
                     >
                       <PopoverArrow
-                        arrowSize={10}
+                        // arrowSize={10}
                         bgColor={"gray.200"}
                         borderColor={"gray.400"}
                         borderWidth={"1px"}

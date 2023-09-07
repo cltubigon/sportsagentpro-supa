@@ -1,26 +1,33 @@
 import { collection, addDoc, deleteDoc, updateDoc, doc, getDoc, Timestamp } from "firebase/firestore"
 
 export const createNewPost = () => {
+  console.log('Hi, I am creating new post')
     return async (dispatch, getState, { getFirebase, getFirestore }) => {
-      const build = getState().build;
-      const firestore = getFirestore();
-      const uid = getState().firebase.auth.uid;
+      const build = getState().build
+      const uid = getState().firebase.auth.uid
+      const email = getState().firebase.auth.email
+      const firestore = getFirestore()
       const {
+        activeStep,
         submissionType,
         recipients,
         isSubmittedSuccessfully,
         editMode,
         ...newObject
       } = build;
+      console.log('newObject: ', newObject)
       const sanitizedObject = JSON.parse(JSON.stringify(newObject));
   
+      console.log('sanitizedObject: ', sanitizedObject)
       try {
         // Add a new document
         await addDoc(collection(firestore, "posts"), {
           ...sanitizedObject,
           ownerUID: uid,
+          postOwner: email,
           createdAt: new Date(),
-        });
+        })
+        console.log('first stage', sanitizedObject)
   
         // Update an existing document
         const logId = "C0smjlIYwHzvfRMqPIZs";
@@ -28,7 +35,9 @@ export const createNewPost = () => {
         const data = {posts_last_updated: timestamp}
         await updateDoc(doc(firestore, "logs", logId), data);
   
+        console.log('second stage', sanitizedObject)
         dispatch({ type: "CREATE_POST", sanitizedObject });
+        console.log('dispatch stage')
       } catch (err) {
         console.log("err: ", err);
         dispatch({ type: "CREATE_POST_ERROR", err });

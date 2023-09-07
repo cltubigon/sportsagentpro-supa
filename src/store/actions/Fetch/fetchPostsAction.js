@@ -11,36 +11,36 @@ import {
   where,
 } from "firebase/firestore"
 
-export const fetchOpportunityPostsOfOwnerRealTime = (compEmail) => {
-  return async (dispatch, getState) => {
-    const firebaseEmail = getState().auth.email
+// export const fetchOpportunityPostsOfOwnerRealTime = (compEmail) => {
+//   return async (dispatch, getState) => {
+//     const firebaseEmail = getState().auth.email
 
-    if (firebaseEmail === compEmail) {
-      try {
-        const collectionRef = db.collection("posts")
-        const queryOpportunityPosts = collectionRef
-          .where("postOwner", "==", compEmail)
-          .where("postType", "==", "opportunity")
+//     if (firebaseEmail === compEmail) {
+//       try {
+//         const collectionRef = db.collection("posts")
+//         const queryOpportunityPosts = collectionRef
+//           .where("postOwner", "==", compEmail)
+//           .where("postType", "==", "opportunity")
 
-        const unsubscribe = queryOpportunityPosts.onSnapshot((snapshot) => {
-          if (!snapshot.empty) {
-            const updatedData = snapshot.docs.map((doc) => doc.data())
-            function runDispatch() {
-              console.log('I will dispatch now')
-              dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", updatedData })
-            }
-            const throttledFunction = throttle(runDispatch, 2000)
-            throttledFunction()
-          }
-        })
-      } catch (error) {
-        console.log("fetch error: ", error)
-      }
-    } else {
-      console.log("emails are NOT the same")
-    }
-  }
-}
+//         const unsubscribe = queryOpportunityPosts.onSnapshot((snapshot) => {
+//           if (!snapshot.empty) {
+//             const updatedData = snapshot.docs.map((doc) => doc.data())
+//             function runDispatch() {
+//               console.log('I will dispatch now')
+//               dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", updatedData })
+//             }
+//             const throttledFunction = throttle(runDispatch, 2000)
+//             throttledFunction()
+//           }
+//         })
+//       } catch (error) {
+//         console.log("fetch error: ", error)
+//       }
+//     } else {
+//       console.log("emails are NOT the same")
+//     }
+//   }
+// }
 
 
 export const fetchOpportunityPostsOfOwner = (compEmail) => {
@@ -59,7 +59,7 @@ export const fetchOpportunityPostsOfOwner = (compEmail) => {
         const querySnapshot = await getDocs(queryOpportunityPosts)
         const changes = querySnapshot.docChanges()
         const updatedData = changes.map((change) => change.doc.data())
-        console.log("updatedData: ", updatedData)
+        // console.log("updatedData: ", updatedData)
         dispatch({ type: 'SET_MY_OPPORTUNITIES_POSTS', updatedData })
       } catch (error) {
         console.log("fetch error: ", error)

@@ -39,28 +39,13 @@ const PaymentV1 = ({ setSpinner }) => {
   const toast = useToast()
   const divRef = useRef()
 
-  const auth = useSelector((state) => state.auth)
-  const reduxPosts = useSelector((state) => state.build)
-
-  const {
-    // postOwner,
-    recipients,
-    postType,
-    editMode,
-    // activeStep,
-    // selectedRecipients,
-    selectedActivities,
-    activitiesTabReady,
-    // postContent,
-    // postTitle,
-    // postExpirationDate,
-    detailsTabReady,
-    // reviewTabReady,
-    // paymentTabReady,
-    // recipientsListLayout,
-    // activitiesListLayout,
-    // isSubmittedSuccessfully,
-  } = reduxPosts
+  const profile = useSelector((state) => state.auth.profile)
+  const postType = useSelector((state) => state.build.postType)
+  const editMode = useSelector((state) => state.build.editMode)
+  const selectedRecipients = useSelector((state) => state.build.selectedRecipients)
+  const selectedActivities = useSelector((state) => state.build.selectedActivities)
+  const activitiesTabReady = useSelector((state) => state.build.activitiesTabReady)
+  const detailsTabReady = useSelector((state) => state.build.detailsTabReady)
 
   console.log('editMode: ', editMode)
 
@@ -74,17 +59,17 @@ const PaymentV1 = ({ setSpinner }) => {
   console.log("allActivityAmount: ", allActivityAmount)
   console.log('recipientEarnings: ', recipientEarnings)
   const [totalAmount, setTotalAmount] = useState(0)
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
 
   useEffect(() => {
-    auth.profile &&
+    profile &&
       dispatch(
         setFirstNameAndLastName({
-          firstName: auth.profile.firstName,
-          lastName: auth.profile.lastName,
+          firstName: profile.firstName,
+          lastName: profile.lastName,
         })
       )
-  }, [auth])
+  }, [profile])
 
   const marketplaceFee = recipientEarnings * 0.1
   useEffect(() => {
@@ -97,13 +82,13 @@ const PaymentV1 = ({ setSpinner }) => {
 
   console.log("totalAmount: ", totalAmount)
 
-  useEffect(() => {
-    const getSelectedRecpients =
-      recipients && recipients.filter((data) => data.isChecked)
-    setCount(getSelectedRecpients && getSelectedRecpients.length)
+  // useEffect(() => {
+  //   const getSelectedRecpients =
+  //     recipients && recipients.filter((data) => data.isChecked)
+  //   setCount(getSelectedRecpients && getSelectedRecpients.length)
 
-    dispatch(setSelectedRecipients(getSelectedRecpients))
-  }, [])
+  //   dispatch(setSelectedRecipients(getSelectedRecpients))
+  // }, [])
 
   const [agree, setAgree] = useState(true)
   const [isReadyToPost, setIsReadyToPost] = useState(true)
@@ -111,7 +96,7 @@ const PaymentV1 = ({ setSpinner }) => {
   useEffect(() => {
     if (
       (postType === "offer" &&
-        count > 0 &&
+      selectedRecipients.length > 0 &&
         activitiesTabReady &&
         detailsTabReady &&
         agree) ||
@@ -130,7 +115,7 @@ const PaymentV1 = ({ setSpinner }) => {
     }
 
     return
-  }, [count, activitiesTabReady, detailsTabReady, agree])
+  }, [selectedRecipients, activitiesTabReady, detailsTabReady, agree])
 
   // const { recipients, isSubmittedSuccessfully, ...filteredReduxPosts } = reduxPosts
   // console.log('filteredReduxPosts: ', filteredReduxPosts)
@@ -141,8 +126,9 @@ const PaymentV1 = ({ setSpinner }) => {
   const handleUpdatePost = () => {
     dispatch(setSubmissionType('update', 'sender is Payment line142'))
   }
-  console.log("reduxPosts: ", reduxPosts)
 
+  console.log('isReadyToPost: ', isReadyToPost)
+  console.log('editMode: ', editMode)
   return (
     <>
       <Grid
