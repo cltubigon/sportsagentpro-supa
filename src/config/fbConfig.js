@@ -3,13 +3,13 @@ import "firebase/compat/auth"
 import "firebase/compat/firestore"
 
 const fbConfig = {
-  //myfbConfig
-  apiKey: "AIzaSyDsBAQlLjW6HHhJNaV3nljsjeG1vFy9CQM",
-  authDomain: "sportsagent3-764e7.firebaseapp.com",
-  projectId: "sportsagent3-764e7",
-  storageBucket: "sportsagent3-764e7.appspot.com",
-  messagingSenderId: "350719115705",
-  appId: "1:350719115705:web:7a2e429be4a92d1f6e3668"
+  apiKey: "AIzaSyCUrJuu-jCcGdDzyGAAXUuAAImiSniZfIY",
+  authDomain: "sportsagentprov2.firebaseapp.com",
+  projectId: "sportsagentprov2",
+  storageBucket: "sportsagentprov2.appspot.com",
+  messagingSenderId: "1017413625568",
+  appId: "1:1017413625568:web:b97a78a0fd2dc724d8d285",
+  measurementId: "G-1S2KFJSJC6"
 }
 
 export const app = firebase.initializeApp(fbConfig)

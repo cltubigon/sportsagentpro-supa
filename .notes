@@ -5,6 +5,7 @@ npm install firebase@9.6.1 firebase/auth
 ---------- GIT COMMANDS ----------- //
 git status
 git add .
+git remote -v
 git commit -m "Commit message"
 git push -u origin main
 # git add . && git commit -m "your commit message" && git push -u origin main
@@ -15,17 +16,18 @@ git checkout <ID> .  or  git checkout <commit-ID> -- <file-name>
 
 ------------------------------- Import and Export -------------------------------
 
-To export/export firebase database:
-npx -p node-firestore-import-export firestore-export -a appConfig.json -b backup.json
-npx -p node-firestore-import-export firestore-import -a appConfigSportsAgentPro3.json -b backupFew.json
+To export/import firebase database:
+npx -p node-firestore-import-export firestore-export -a appConfigSportsAgentPro3.json -b backup_090723.json
+npx -p node-firestore-import-export firestore-import -a SportsAgentProv2.json -b backup_090723.json
 
 To export Authentication:
 firebase login
-firebase auth:export auth_backup.json --format=json --project=sports-agent-pro-5952a
+firebase auth:export auth_backup_090723.json --format=json --project=sportsagent3-764e7
 
 To import Authentication:
 firebase login
-firebase auth:import auth_backup.json --hash-algo=SCRYPT --rounds=8 --hash-key=VGVzdDEyMzQ1Njc4OUFCQkNEMTU2Nzg5NDA= --mem-cost=10 --project=spav01-a7366
+firebase auth:import auth_backup_090723.json --hash-algo=SCRYPT --rounds=8 --hash-key=VGVzdDEyMzQ1Njc4OUFCQkNEMTU2Nzg5NDA --mem-cost=10 --project=sportsagentprov2
 
 projectId: sports-agent-pro-5952a
 projectId: spav01-a7366
+projectId: sportsagentprov2
