@@ -30,7 +30,7 @@ const postReducer = (state = initialState, action) => {
       console.log("post collection is updated")
       return {
         ...state,
-        myOpportunitiesPosts: action.updatedData,
+        myOpportunitiesPosts: action.data,
       }
     default:
       return state

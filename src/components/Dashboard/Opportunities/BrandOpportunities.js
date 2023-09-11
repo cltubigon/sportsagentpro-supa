@@ -27,16 +27,13 @@ import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
-import { fetchOpportunityPostsOfOwner, startListeningToPostsCollection } from "../../../store/actions/Fetch/fetchPostsAction"
+import { fetchFirestoreData } from "../../../store/actions/Fetch/fetchPostsAction"
+
 
 const BrandOpportunities = () => {
   console.count('BrandOpportunities is rendered')
   const initRef = useRef()
   const dispatch = useDispatch()
-
-  // // const reduxState = useSelector((state) => state)
-  // // const firebaseUserType = useSelector(state => state.firebase.profile.userType)
-  // // const firebaseUid = useSelector(state => state.firebase.auth.uid)
 
   const authEmail = useSelector(state => state.auth.email)
   const myOpportunitiesPosts = useSelector((state) => state.post.myOpportunitiesPosts)
@@ -44,15 +41,8 @@ const BrandOpportunities = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [deleting, setDeleting] = useState(null)
 
-
-  // useEffect(() => {
-  //     console.count('will dispatch from component')
-  //     dispatch(fetchOpportunityPostsOfOwner(authEmail))
-  // }, [])
-
   useEffect(()=> {
-    // console.count('will dispatch from component')
-    dispatch(fetchOpportunityPostsOfOwner(authEmail))
+    dispatch(fetchFirestoreData(authEmail))
   }, [authEmail])
 
   useEffect(()=> {
@@ -60,28 +50,10 @@ const BrandOpportunities = () => {
     setDeleting(null)
   }, [myOpportunitiesPosts])
   
-  // const firestorePost = firestore.ordered.posts
-  
-  // // const [newPost, setNewPost] = useState(null)
-  
   const handleDelete = (post) => {
     setDeleting(post.postTitle)
     dispatch(deletePost(post, "BrandOpportunities"))
   }
-
-  // // useEffect(() => {
-  //     const filterToOwnerPosts =
-  //       firestorePost &&
-  //       firebase.auth.uid &&
-  //       firestorePost
-  //         .filter((post) => post.postOwner === firebase.auth.email)
-  //         .map((obj) => {
-  //           const { ownerUID, ...newObject } = obj
-  //           return newObject
-  //         })
-  //     setNewPost(filterToOwnerPosts)
-  // }, [firestorePost])
-  // console.log("newPost: ", newPost)
 
   const btnStyle = {
     colorScheme: "gray",

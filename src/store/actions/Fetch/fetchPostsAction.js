@@ -11,36 +11,36 @@ import {
   where,
 } from "firebase/firestore"
 
-// export const fetchOpportunityPostsOfOwnerRealTime = (compEmail) => {
-//   return async (dispatch, getState) => {
-//     const firebaseEmail = getState().auth.email
+export const fetchFirestoreData = (authEmail) => (dispatch) => {
+  const unsubscribe = db
+    .collection("posts")
+    .where("postOwner", "==", authEmail)
+    .where("postType", "==", "opportunity")
+    .onSnapshot(
+      (querySnapshot) => {
+        const data = []
+        querySnapshot.forEach((doc) => {
+          data.push({ id: doc.id, ...doc.data() })
+        })
 
-//     if (firebaseEmail === compEmail) {
-//       try {
-//         const collectionRef = db.collection("posts")
-//         const queryOpportunityPosts = collectionRef
-//           .where("postOwner", "==", compEmail)
-//           .where("postType", "==", "opportunity")
+        console.log("data: ", data)
 
-//         const unsubscribe = queryOpportunityPosts.onSnapshot((snapshot) => {
-//           if (!snapshot.empty) {
-//             const updatedData = snapshot.docs.map((doc) => doc.data())
-//             function runDispatch() {
-//               console.log('I will dispatch now')
-//               dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", updatedData })
-//             }
-//             const throttledFunction = throttle(runDispatch, 2000)
-//             throttledFunction()
-//           }
-//         })
-//       } catch (error) {
-//         console.log("fetch error: ", error)
-//       }
-//     } else {
-//       console.log("emails are NOT the same")
-//     }
-//   }
-// }
+        dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", data })
+      },
+      (error) => {
+        console.error("Error fetching data:", error)
+        dispatch({
+          type: "SET_USER_OPPORTUNITY_POSTS_ERROR",
+          payload: error.message,
+        })
+      }
+    )
+    
+  dispatch({
+    type: "SET_MY_OPPORTUNITIES_POSTS_UNSUBSCRIBE",
+    payload: unsubscribe,
+  })
+}
 
 
 export const fetchOpportunityPostsOfOwner = (compEmail) => {
@@ -58,7 +58,8 @@ export const fetchOpportunityPostsOfOwner = (compEmail) => {
 
         const querySnapshot = await getDocs(queryOpportunityPosts)
         const changes = querySnapshot.docChanges()
-        const updatedData = changes.map((change) => change.doc.data())
+        const updatedData = changes.map((change) => ({id: change.doc.id, ...change.doc.data()}))
+        console.log('updatedData: ', updatedData)
         // console.log("updatedData: ", updatedData)
         dispatch({ type: 'SET_MY_OPPORTUNITIES_POSTS', updatedData })
       } catch (error) {

@@ -32,7 +32,8 @@ const AthleteOpportunities = () => {
 
   const firestore = useSelector((state) => state.firestore)
   const firebase = useSelector((state) => state.firebase)
-  const build = useSelector((state) => state.build)
+  const state = useSelector((state) => state)
+  console.log('state: ', state)
   // const post = useSelector((state) => state.post)
   const reduxState = useSelector((state) => state)
   const auth = useSelector((state) => state.auth)

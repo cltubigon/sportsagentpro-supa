@@ -20,7 +20,7 @@ export const getSelectedPost = (postId) => {
         throw new Error("Post not found")
       }
       const data = postSnapshot.data()
-      const payload = {...data, selectedRecipients: []}
+      const payload = { ...data, selectedRecipients: [] }
       dispatch({ type: "SET_BUILD_STATE", payload })
     } catch (error) {
       console.log("Document does not exist!", error)
@@ -313,7 +313,6 @@ export const setPostTitle = (payload) => {
 }
 
 export const setPostExpirationDate = (payload) => {
-
   const utcFormat = new Date(payload).toUTCString().replace("GMT", "UTC")
   const localeFormat = new Date(payload).toLocaleString()
   const objPayload = {
@@ -358,6 +357,7 @@ export const setPaymentTabStatus = (payload) => {
 // }
 
 export const resetBuildState = (sender) => {
+  console.log('sender: ', sender)
   return (dispatch) => {
     dispatch({ type: "RESET_BUILD_STATE" })
   }

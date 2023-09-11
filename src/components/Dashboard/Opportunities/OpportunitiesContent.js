@@ -4,8 +4,7 @@ import BrandOpportunities from "./BrandOpportunities"
 import AthleteOpportunities from "./AthleteOpportunities"
 
 const OpportunitiesContent = () => {
-  const auth = useSelector((state) => state.auth)
-  const { profile } = auth
+  const profile = useSelector((state) => state.auth.profile)
   const userType = profile && profile.userType
   return (
     <>
