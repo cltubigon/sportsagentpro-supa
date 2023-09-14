@@ -8,6 +8,17 @@ const initialState = {
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_ALL_OPPORTUNITY_POSTS":
+      return {
+        ...state,
+        myOpportunitiesPosts: action.payload,
+      }
+      case "SET_USER_OPPORTUNITIES_POSTS":
+      console.log('opp 2 triggered')
+      return {
+        ...state,
+        myOpportunitiesPosts: action.data,
+      }
     case "RESET_POST_STATE":
       console.log("RESET_POST_STATE: ", action.payload)
       return initialState
@@ -25,12 +36,6 @@ const postReducer = (state = initialState, action) => {
           data: action.updatedData,
           lastUpdated: action.timestamp,
         },
-      }
-    case "SET_MY_OPPORTUNITIES_POSTS":
-      console.log("post collection is updated")
-      return {
-        ...state,
-        myOpportunitiesPosts: action.data,
       }
     default:
       return state

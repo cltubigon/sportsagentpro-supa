@@ -6,12 +6,45 @@ import {
   doc,
   getDoc,
   getDocs,
-  // onSnapshot,
+  orderBy,
+  onSnapshot,
   query,
   where,
 } from "firebase/firestore"
 
-export const fetchFirestoreData = (authEmail) => (dispatch) => {
+let unsubscribe = null // Declare a variable to store the unsubscribe function
+export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
+  const { currentPage, itemsPerPage } = getState().utils.pagination
+
+  try {
+    const q = query(
+      collection(db, "posts"),
+      where("postType", "==", "opportunity"),
+      orderBy("createdAt", "desc")
+    )
+
+    if (unsubscribe) {
+      unsubscribe()
+    }
+
+    // Subscribe to real-time updates for the new query
+    unsubscribe = onSnapshot(q, (querySnapshot) => {
+      
+      const start = (currentPage - 1) * itemsPerPage
+      const end = currentPage * itemsPerPage
+      const data = querySnapshot.docs.slice(start, end).map((doc) => doc.data())
+      dispatch({ type: "SET_ALL_OPPORTUNITY_POSTS", payload: data })
+      console.log("data: ", data)
+
+      const totalDocuments = querySnapshot.size
+      dispatch({ type: "SET_TOTAL_ITEMS", payload: totalDocuments })
+    })
+  } catch (error) {
+    console.error("Error fetching data:", error)
+  }
+}
+
+export const fetchUserOpportunityPosts = (authEmail) => (dispatch) => {
   const unsubscribe = db
     .collection("posts")
     .where("postOwner", "==", authEmail)
@@ -25,23 +58,52 @@ export const fetchFirestoreData = (authEmail) => (dispatch) => {
 
         console.log("data: ", data)
 
-        dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", data })
+        dispatch({ type: "SET_USER_OPPORTUNITIES_POSTS", data })
       },
       (error) => {
         console.error("Error fetching data:", error)
         dispatch({
-          type: "SET_USER_OPPORTUNITY_POSTS_ERROR",
+          type: "SET_USER_OPPORTUNITIES_POSTS_ERROR",
           payload: error.message,
         })
       }
     )
-    
+
   dispatch({
-    type: "SET_MY_OPPORTUNITIES_POSTS_UNSUBSCRIBE",
+    type: "SET_USER_OPPORTUNITIES_POSTS_UNSUBSCRIBE",
     payload: unsubscribe,
   })
 }
 
+// export const fetchAllOpportunityPosts = () => (dispatch) => {
+//   const unsubscribe = db
+//     .collection("posts")
+//     .where("postType", "==", "opportunity")
+//     .onSnapshot(
+//       (querySnapshot) => {
+//         const data = []
+//         querySnapshot.forEach((doc) => {
+//           data.push({ id: doc.id, ...doc.data() })
+//         })
+
+//         console.log("data: ", data)
+
+//         dispatch({ type: "SET_ALL_OPPORTUNITY_POSTS", data })
+//       },
+//       (error) => {
+//         console.error("Error fetching data:", error)
+//         dispatch({
+//           type: "SET_ALL_OPPORTUNITY_POSTS_ERROR",
+//           payload: error.message,
+//         })
+//       }
+//     )
+
+//   dispatch({
+//     type: "SET_ALL_OPPORTUNITY_POSTS_UNSUBSCRIBE",
+//     payload: unsubscribe,
+//   })
+// }
 
 export const fetchOpportunityPostsOfOwner = (compEmail) => {
   return async (dispatch, getState) => {
@@ -58,10 +120,13 @@ export const fetchOpportunityPostsOfOwner = (compEmail) => {
 
         const querySnapshot = await getDocs(queryOpportunityPosts)
         const changes = querySnapshot.docChanges()
-        const updatedData = changes.map((change) => ({id: change.doc.id, ...change.doc.data()}))
-        console.log('updatedData: ', updatedData)
+        const updatedData = changes.map((change) => ({
+          id: change.doc.id,
+          ...change.doc.data(),
+        }))
+        console.log("updatedData: ", updatedData)
         // console.log("updatedData: ", updatedData)
-        dispatch({ type: 'SET_MY_OPPORTUNITIES_POSTS', updatedData })
+        dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", updatedData })
       } catch (error) {
         console.log("fetch error: ", error)
       }
@@ -133,36 +198,36 @@ export const startListeningToPostsCollection = (collectionName, timestamp) => {
 }
 
 function throttle(func, delay) {
-  let isThrottled = false;
-  let lastArgs = null;
-  let lastContext = null;
+  let isThrottled = false
+  let lastArgs = null
+  let lastContext = null
 
   function throttledFunc() {
     if (isThrottled) {
       // Save the latest arguments and context
-      lastArgs = arguments;
-      lastContext = this;
-      return;
+      lastArgs = arguments
+      lastContext = this
+      return
     }
 
     // Invoke the function
-    func.apply(this, arguments);
+    func.apply(this, arguments)
 
     // Set throttling flag
-    isThrottled = true;
+    isThrottled = true
 
     // Reset the flag after the specified delay
     setTimeout(() => {
-      isThrottled = false;
+      isThrottled = false
 
       // If there were pending arguments, invoke the function again
       if (lastArgs) {
-        throttledFunc.apply(lastContext, lastArgs);
-        lastArgs = null;
-        lastContext = null;
+        throttledFunc.apply(lastContext, lastArgs)
+        lastArgs = null
+        lastContext = null
       }
-    }, delay);
+    }, delay)
   }
 
-  return throttledFunc;
+  return throttledFunc
 }

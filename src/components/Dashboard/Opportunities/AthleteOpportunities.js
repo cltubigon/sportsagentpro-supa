@@ -25,84 +25,61 @@ import { useState } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
+import {
+  fetchAllOpportunityPosts,
+  fetchPostsOfCurrentPage,
+} from "../../../store/actions/Fetch/fetchPostsAction"
+import Pagination from "../../../utils/Pagination"
+import { SET_IS_LOADING } from "../../../store/actions/utilsActions"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
   const flexRef = useRef(null)
 
-  const firestore = useSelector((state) => state.firestore)
-  const firebase = useSelector((state) => state.firebase)
+  // const firestore = useSelector((state) => state.firestore)
+  // const firebase = useSelector((state) => state.firebase)
+  const profile = useSelector((state) => state.auth.profile)
+  const { currentPage } = useSelector((state) => state.utils.pagination)
+  const isLoading = useSelector((state) => state.utils.isLoading)
   const state = useSelector((state) => state)
-  console.log('state: ', state)
+  console.log("state: ", state)
   // const post = useSelector((state) => state.post)
-  const reduxState = useSelector((state) => state)
+  const allOpportunityPosts = useSelector(
+    (state) => state.post.myOpportunitiesPosts
+  )
+  console.log("allOpportunityPosts: ", allOpportunityPosts)
   const auth = useSelector((state) => state.auth)
-
-  // const { posts } = post
   const { email } = auth
   const { postContainer } = comStyle
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isloading, setIsloading] = useState(false)
+  // const [isloading, setIsloading] = useState(false)
   const [drawerViewMore, setDrawerViewMore] = useState(true)
   const [drawerData, setDrawerData] = useState(null)
-  const [flexHeight, setFlexHeight] = useState(null)
-  const [flexWidth, setFlexWidth] = useState(null)
-
-  const firestorePost = firestore.ordered.posts
-
-  console.log("firebase.auth.email: ", firebase.auth.email)
-  console.log("email: ", email)
-  // console.log("post: ", post)
-  console.log("reduxState: ", reduxState)
 
   const handleApply = (id, event) => {
-    console.log("id: ", id)
     event.stopPropagation()
-    firebase.auth && dispatch(applyToPost(id, email))
-    setIsloading(true)
+    profile && dispatch(applyToPost(id, email))
+    // setIsloading(true)
+    dispatch(SET_IS_LOADING(true))
   }
-
+  
   const handleDrawer = (post, editorState) => {
-    setDrawerData({...post, editorState: editorState})
+    setDrawerData({ ...post, editorState: editorState })
     setDrawerViewMore(true)
     onOpen()
   }
-
-  const handleResize = () => {
+  
+  useEffect(() => {
+    dispatch(SET_IS_LOADING(true))
+    dispatch(fetchPostsOfCurrentPage())
+  }, [currentPage])
+  
+  useEffect(()=> {
     if (flexRef.current) {
-      setFlexHeight(flexRef.current.offsetWidth)
-      setFlexWidth(flexRef.current.offsetWidth)
+      console.log('flexRef.current.scrollTop: ', flexRef.current.scrollTop)
     }
-  }
-
-  useEffect(() => {
-    handleResize()
-    window.addEventListener("resize", handleResize)
-
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
-
-  const [newPost, setNewPost] = useState(null)
-
-  useEffect(() => {
-    console.log("firestorePost: ", firestorePost)
-
-    // console.log("posts: ", posts)
-    const filterToOwnerPosts =
-      firestorePost &&
-      firebase.auth.uid &&
-      firestorePost.map((obj) => {
-        const { ownerUID, ...newObject } = obj
-        return newObject
-      })
-    setNewPost(filterToOwnerPosts)
-    console.log("filterToOwnerPosts: ", filterToOwnerPosts)
-    // filterToOwnerPosts && dispatch(savePostsToStorage(filterToOwnerPosts))
-    setIsloading(false)
-  }, [firestorePost])
+  }, [flexRef.current])
 
   const btnStyle = {
     colorScheme: "gray",
@@ -121,17 +98,18 @@ const AthleteOpportunities = () => {
     },
   }
 
+  const isssss = true
   return (
     <>
-      {!newPost && (
-        <SkeletonOpportunities />
-      )}
-      {isloading && (
+      {!allOpportunityPosts && <SkeletonOpportunities />}
+      <Flex gap={5} flexWrap={"wrap"} ref={flexRef} w={'100%'} onLastScrollableAreaReached={handleLastScrollableAreaReached} >
+      {isLoading && (
         <Flex
           justifyContent={"center"}
           zIndex={801}
           bgColor={"rgba(255, 255, 255, 0.5)"}
-          w={flexWidth + 15}
+          // w={flexWidth + 15}
+          w={'calc(100% - 200px)'}
           height={"100vh"}
           alignItems={"center"}
           position={"absolute"}
@@ -146,147 +124,167 @@ const AthleteOpportunities = () => {
           />
         </Flex>
       )}
-      <Flex gap={5} flexWrap={"wrap"} ref={flexRef}>
-        {newPost && newPost.map((post, index) => {
-          const {
-            totalAmount,
-            postApplicants,
-            postType,
-            postTitle,
-            postContent,
-            postOwnerFirstName,
-            postOwnerLastName,
-            selectedActivities,
-            totalPayment,
-            postExpirationDate,
-            id,
-          } = post
-          const hasApplied =
-            postApplicants &&
-            postApplicants.some((applicantUid) => {
-              return firebase.auth && email === applicantUid
+        {allOpportunityPosts &&
+          allOpportunityPosts.map((post, index) => {
+            const {
+              totalAmount,
+              postApplicants,
+              postType,
+              postTitle,
+              postContent,
+              postOwnerFirstName,
+              postOwnerLastName,
+              selectedActivities,
+              totalPayment,
+              postExpirationDate,
+              id,
+            } = post
+
+            const hasApplied =
+              postApplicants &&
+              postApplicants.some((applicantEmail) => {
+                return profile && email === applicantEmail
+              })
+            const activityTitles = selectedActivities.map(
+              (activity) => activity.activityTitle
+            )
+            const firstActivity = activityTitles[0]
+            const activityCount = activityTitles.length
+
+            const formatter = new Intl.NumberFormat(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
             })
-          const activityTitles = selectedActivities.map(
-            (activity) => activity.activityTitle
-          )
-          const firstActivity = activityTitles[0]
-          const activityCount = activityTitles.length
-          
-          const formatter = new Intl.NumberFormat(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          });
-          const formattedAmount = formatter.format(parseFloat(totalAmount))
+            const formattedAmount = formatter.format(parseFloat(totalAmount))
 
-          const rawDataParsed = postContent && postContent
-          const contentState = convertFromRaw(rawDataParsed)
-          const editorState = EditorState.createWithContent(contentState)
+            const rawDataParsed = postContent && postContent
+            const contentState = convertFromRaw(rawDataParsed)
+            const editorState = EditorState.createWithContent(contentState)
 
-          return (
-            postType === "opportunity" && (
-              <Flex key={id} onClick={()=> handleDrawer(post, editorState)} sx={postContainer}>
-                <Flex gap={2} bgColor={"gray.100"} p={4} borderRadius={"md"}>
-                  <Image
-                    src={imageHolderRemovable}
-                    maxW={"46px"}
-                    bgColor={"red"}
-                    alt="Dan Abramov"
-                    borderColor={"gray.300"}
-                    borderWidth={"1px"}
-                    borderStyle={"solid"}
-                    borderRadius={"sm"}
-                  />
-                  <Flex flexDirection={"column"}>
-                    <Text fontSize={"lg"} fontWeight={"semibold"}>
-                      {postOwnerFirstName} {postOwnerLastName}
-                    </Text>
-                    <Flex alignItems={"center"} gap={3}>
-                      <Text fontSize={"sm"}>Open</Text>
-                      <Icon as={FaCircle} color={"green.400"} boxSize={2} />
+            return (
+              postType === "opportunity" && (
+                <Flex
+                  key={id}
+                  onClick={() => handleDrawer(post, editorState)}
+                  sx={postContainer}
+                >
+                  <Flex gap={2} bgColor={"gray.100"} p={4} borderRadius={"md"}>
+                    <Image
+                      src={imageHolderRemovable}
+                      maxW={"46px"}
+                      bgColor={"red"}
+                      alt="Dan Abramov"
+                      borderColor={"gray.300"}
+                      borderWidth={"1px"}
+                      borderStyle={"solid"}
+                      borderRadius={"sm"}
+                    />
+                    <Flex flexDirection={"column"}>
+                      <Text fontSize={"lg"} fontWeight={"semibold"}>
+                        {postOwnerFirstName} {postOwnerLastName}
+                      </Text>
+                      <Flex alignItems={"center"} gap={3}>
+                        <Text fontSize={"sm"}>Open</Text>
+                        <Icon as={FaCircle} color={"green.400"} boxSize={2} />
+                      </Flex>
+                    </Flex>
+                    <Flex
+                      flexDirection={"column"}
+                      alignItems={"center"}
+                      gap={2}
+                      ml={"auto"}
+                    >
+                      <Icon as={BsHeart} boxSize={4} />
+                      <Icon as={BsLink45Deg} boxSize={6} />
                     </Flex>
                   </Flex>
-                  <Flex
-                    flexDirection={"column"}
-                    alignItems={"center"}
-                    gap={2}
-                    ml={"auto"}
-                  >
-                    <Icon as={BsHeart} boxSize={4} />
-                    <Icon as={BsLink45Deg} boxSize={6} />
-                  </Flex>
-                </Flex>
-                <Flex flexDirection={"column"} p={4} gap={1}>
-                  <Text noOfLines={[1]} fontWeight={"semibold"} maxW={"190px"}>
-                    {postTitle}
-                  </Text>
-                  <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
-                    <Editor editorState={editorState} readOnly />
-                  </Box>
-                  <Flex gap={2} flexWrap={"nowrap"}>
-                    <Text color={"gray.500"}>Activities:</Text>
+                  <Flex flexDirection={"column"} p={4} gap={1}>
                     <Text
                       noOfLines={[1]}
                       fontWeight={"semibold"}
                       maxW={"190px"}
                     >
-                      {firstActivity}
+                      {postTitle}
                     </Text>
-                    <Text fontWeight={"semibold"} maxW={"190px"}>
-                      +{activityCount}
-                    </Text>
+                    <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
+                      <Editor editorState={editorState} readOnly />
+                    </Box>
+                    <Flex gap={2} flexWrap={"nowrap"}>
+                      <Text color={"gray.500"}>Activities:</Text>
+                      <Text
+                        noOfLines={[1]}
+                        fontWeight={"semibold"}
+                        maxW={"190px"}
+                      >
+                        {firstActivity}
+                      </Text>
+                      <Text fontWeight={"semibold"} maxW={"190px"}>
+                        +{activityCount}
+                      </Text>
+                    </Flex>
+                    <Flex gap={2}>
+                      <Text color={"gray.500"}>Total:</Text>
+                      <Text fontWeight={"semibold"}>${formattedAmount}</Text>
+                    </Flex>
+                    <Flex gap={2}>
+                      <Text color={"gray.500"}>Expires:</Text>
+                      <Text fontWeight={"semibold"}>
+                        {(postExpirationDate.utcFormat !== "Invalid Date" &&
+                          postExpirationDate.utcFormat) ||
+                          "-"}
+                      </Text>
+                    </Flex>
+                    <Flex gap={2}>
+                      <Text color={"gray.500"}>Tags:</Text>
+                      <Text fontWeight={"semibold"}>-</Text>
+                    </Flex>
                   </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.500"}>Total:</Text>
-                    <Text fontWeight={"semibold"}>${formattedAmount}</Text>
-                  </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.500"}>Expires:</Text>
-                    <Text fontWeight={"semibold"}>
-                      {(postExpirationDate.utcFormat !== "Invalid Date" &&
-                        postExpirationDate.utcFormat) ||
-                        "-"}
-                    </Text>
-                  </Flex>
-                  <Flex gap={2}>
-                    <Text color={"gray.500"}>Tags:</Text>
-                    <Text fontWeight={"semibold"}>-</Text>
+                  <Flex
+                    justifyContent={"center"}
+                    gap={2}
+                    px={4}
+                    position={"absolute"}
+                    bottom={4}
+                    w={"100%"}
+                    flexDirection={"column"}
+                  >
+                    <Button
+                      sx={
+                        hasApplied ? btnVariant.applied : btnVariant.notApplied
+                      }
+                      w={"100%"}
+                      borderWidth="1px"
+                      borderStyle="solid"
+                      borderRadius="sm"
+                      onClick={(event) => handleApply(id, event)}
+                    >
+                      {hasApplied ? "Withdraw" : "Apply"}
+                    </Button>
+                    <Button
+                      sx={btnStyle}
+                      w={"100%"}
+                      onClick={() => handleDrawer(post, editorState)}
+                    >
+                      Details
+                    </Button>
                   </Flex>
                 </Flex>
-                <Flex
-                  justifyContent={"center"}
-                  gap={2}
-                  px={4}
-                  position={"absolute"}
-                  bottom={4}
-                  w={"100%"}
-                  flexDirection={"column"}
-                >
-                  <Button
-                    sx={hasApplied ? btnVariant.applied : btnVariant.notApplied}
-                    w={"100%"}
-                    borderWidth="1px"
-                    borderStyle="solid"
-                    borderRadius="sm"
-                    onClick={(event) => handleApply(id, event)}
-                  >
-                    {hasApplied ? "Withdraw" : "Apply"}
-                  </Button>
-                  <Button
-                    sx={btnStyle}
-                    w={"100%"}
-                    onClick={() => handleDrawer(post, editorState)}
-                  >
-                    Details
-                  </Button>
-                </Flex>
-              </Flex>
+              )
             )
-          )
-        })}
-        <UtilDrawer isOpen={isOpen} onOpen={onOpen} onClose={onClose} drawerViewMore={drawerViewMore} handleApply={handleApply} setDrawerViewMore={setDrawerViewMore} drawerData={drawerData} />
+          })}
+        <UtilDrawer
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          drawerViewMore={drawerViewMore}
+          handleApply={handleApply}
+          setDrawerViewMore={setDrawerViewMore}
+          drawerData={drawerData}
+        />
+        <Pagination />
       </Flex>
     </>
   )
 }
 
-export default firestoreConnect([{ collection: "posts" }])(AthleteOpportunities)
+export default AthleteOpportunities

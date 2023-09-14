@@ -16,7 +16,7 @@ const SignedInNavigation = ({handleSignOut}) => {
         flexGrow={1}
         justifyContent={"flex-end"}
       >
-        {/* {userType && userType === "brand" && ( */}
+        {profile && profile.userType === "brand" && (
         <Box mr={"auto"}>
           <Link to={"/build"}>
             <Button
@@ -28,7 +28,7 @@ const SignedInNavigation = ({handleSignOut}) => {
             </Button>
           </Link>
         </Box>
-        {/* )} */}
+        )}
         <Text>Deals</Text>
         <Link to="/my-profile">
           <Text>Profile</Text>

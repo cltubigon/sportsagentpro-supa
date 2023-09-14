@@ -27,7 +27,7 @@ import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
-import { fetchFirestoreData } from "../../../store/actions/Fetch/fetchPostsAction"
+import { fetchUserOpportunityPosts } from "../../../store/actions/Fetch/fetchPostsAction"
 
 
 const BrandOpportunities = () => {
@@ -42,7 +42,7 @@ const BrandOpportunities = () => {
   const [deleting, setDeleting] = useState(null)
 
   useEffect(()=> {
-    dispatch(fetchFirestoreData(authEmail))
+    dispatch(fetchUserOpportunityPosts(authEmail))
   }, [authEmail])
 
   useEffect(()=> {

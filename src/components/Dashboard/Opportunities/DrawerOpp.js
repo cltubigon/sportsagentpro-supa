@@ -25,6 +25,7 @@ import { useRef } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
 import { applyToPost } from "../../../store/actions/postActions"
+import { fetchAllOpportunityPosts, fetchPostsOfCurrentPage } from "../../../store/actions/Fetch/fetchPostsAction"
 
 const UtilDrawer = ({
   isOpen,
@@ -37,32 +38,36 @@ const UtilDrawer = ({
   const dispatch = useDispatch()
   const flexRef = useRef(null)
 
-  const auth = useSelector((state) => state.auth)
-  const firebase = useSelector((state) => state.firebase)
-  const firestore = useSelector((state) => state.firestore)
+  const email = useSelector((state) => state.auth.email)
+  const profile = useSelector((state) => state.auth.profile)
+  const { currentPage } = useSelector((state) => state.utils.pagination)
+  const allOpportunityPosts = useSelector(
+    (state) => state.post.myOpportunitiesPosts
+  )
 
   const [isLoading, setIsloading] = useState(false)
   const [hasApplied, setHasAhasApplied] = useState(false)
 
-  const { email } = auth
   const { sectionContainer, drawer } = comStyle
 
-  const firestorePost = firestore.ordered.posts
+  useEffect(() => {
+    dispatch(fetchPostsOfCurrentPage())
+  }, [currentPage])
 
   const handleViewMore = () => {
     setDrawerViewMore((prev) => !prev)
   }
 
   const handleApply = (id) => {
-    firebase.auth && dispatch(applyToPost(id, email))
+    profile && dispatch(applyToPost(id, email))
     setIsloading(true)
   }
 
   useEffect(() => {
     const selectedPost =
-      firestorePost &&
+      allOpportunityPosts &&
       drawerData &&
-      firestorePost.find((post) => post.id === drawerData.id)
+      allOpportunityPosts.find((post) => post.id === drawerData.id)
     console.log("selectedPost: ", selectedPost)
     const applied =
       selectedPost &&
@@ -70,7 +75,7 @@ const UtilDrawer = ({
       selectedPost.postApplicants.some((applicant) => applicant === email)
     applied ? setHasAhasApplied(true) : setHasAhasApplied(false)
     setIsloading(false)
-  }, [firestorePost, drawerData])
+  }, [allOpportunityPosts, drawerData])
 
   const mergedCategories = [
     ...activityList.onlineOptionalCategory,
@@ -204,12 +209,14 @@ const UtilDrawer = ({
                         <Flex sx={drawer.activities.rowContainer} flexGrow={1}>
                           <Text>Activity</Text>
                           {drawerData.selectedActivities.map((activity) => {
-                            const currentIcon = mergedCategories.filter(data=> data.id === activity.id).map((mapped) => {
-                              const {icon, color} = mapped
-                              const newObject = {icon, color}
-                              return newObject
-                            })
-                            console.log('currentIcon: ', currentIcon)
+                            const currentIcon = mergedCategories
+                              .filter((data) => data.id === activity.id)
+                              .map((mapped) => {
+                                const { icon, color } = mapped
+                                const newObject = { icon, color }
+                                return newObject
+                              })
+                            console.log("currentIcon: ", currentIcon)
                             return (
                               <Flex
                                 key={activity.id}
