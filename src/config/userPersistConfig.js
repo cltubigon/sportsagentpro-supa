@@ -12,7 +12,7 @@ import * as CryptoJS from 'crypto-js';
 const persistConfig = {
   key: 'user',
   storage,
-  blacklist: ['firebase', 'firestore'],
+  blacklist: ['firebase', 'firestore', 'utils'],
 }
 
 const middleware = [thunk.withExtraArgument({ getFirebase, getFirestore })]

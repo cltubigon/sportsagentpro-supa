@@ -14,7 +14,8 @@ import {
 
 let unsubscribe = null // Declare a variable to store the unsubscribe function
 export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
-  const { currentPage, itemsPerPage } = getState().utils.pagination
+  const myOpportunitiesPosts = getState().post.myOpportunitiesPosts
+  const { currentPage, itemsPerPage, totalItems } = getState().utils.pagination
 
   try {
     const q = query(
@@ -27,16 +28,30 @@ export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
       unsubscribe()
     }
 
+    const totalDocuments = querySnapshot.size
+    console.log('totalDocuments: ', totalDocuments)
+    console.log('myOpportunitiesPosts.length: ', myOpportunitiesPosts.length)
+    if (totalItems === myOpportunitiesPosts.length) {
+      dispatch({ type: "SET_LAST_ITEM_REACHED", payload: true })
+      return
+    }
+    console.log("total items are not equal, I will proceed")
+    
     // Subscribe to real-time updates for the new query
     unsubscribe = onSnapshot(q, (querySnapshot) => {
-      
+
       const start = (currentPage - 1) * itemsPerPage
       const end = currentPage * itemsPerPage
-      const data = querySnapshot.docs.slice(start, end).map((doc) => doc.data())
+      const getNumberOfItems =
+        end > totalDocuments
+          ? start + (itemsPerPage - (end % totalDocuments))
+          : end
+      const data = querySnapshot.docs
+        .slice(start, getNumberOfItems)
+        .map((doc) => doc.data())
       dispatch({ type: "SET_ALL_OPPORTUNITY_POSTS", payload: data })
       console.log("data: ", data)
 
-      const totalDocuments = querySnapshot.size
       dispatch({ type: "SET_TOTAL_ITEMS", payload: totalDocuments })
     })
   } catch (error) {

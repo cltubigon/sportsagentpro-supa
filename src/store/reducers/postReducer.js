@@ -3,7 +3,7 @@ const initialState = {
     data: null,
     lastUpdated: null,
   },
-  myOpportunitiesPosts: null,
+  myOpportunitiesPosts: [],
 }
 
 const postReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const postReducer = (state = initialState, action) => {
     case "SET_ALL_OPPORTUNITY_POSTS":
       return {
         ...state,
-        myOpportunitiesPosts: action.payload,
+        myOpportunitiesPosts: [...state.myOpportunitiesPosts, ...action.payload],
       }
       case "SET_USER_OPPORTUNITIES_POSTS":
       console.log('opp 2 triggered')
