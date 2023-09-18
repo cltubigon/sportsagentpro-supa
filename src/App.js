@@ -19,7 +19,6 @@ import Opportunities from "./pages/DashboardPages/Opportunities"
 import { useSelector } from "react-redux"
 import { useState } from "react"
 import Preloader from "./utils/Preloader"
-import { Test } from "./Test"
 
 
 function App() {
@@ -34,7 +33,6 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />}></Route>
             <Route path="/login" element={<Login />}></Route>
-            <Route path="/test" element={<Test />}></Route>
             <Route path="/signup" element={<SignUp />}></Route>
             <Route path="/profile/:id" element={<Profile />}></Route>
             <Route path="/register-team" element={<RegisterTeam />}></Route>

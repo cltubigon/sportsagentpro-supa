@@ -5,16 +5,16 @@ import { useState } from "react"
 export const Test = () => {
   const [items, setItems] = useState([])
   const observerRef = useRef(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoaddddd, setIsLoaddddd] = useState(false)
 
   useEffect(() => {
     // Simulated API call for fetching more items
     const fetchMoreItems = () => {
-      setIsLoading(true)
+      setIsLoaddddd(true)
       setTimeout(() => {
         const newItems = [...items, ...Array(10).fill(null)]
         setItems(newItems)
-        setIsLoading(false)
+        setIsLoaddddd(false)
       }, 1000)
     }
 
@@ -27,7 +27,7 @@ export const Test = () => {
     // Initialize the Intersection Observer
     observerRef.current = new IntersectionObserver((entries) => {
       const entry = entries[0]
-      if (entry.isIntersecting && !isLoading) {
+      if (entry.isIntersecting && !isLoaddddd) {
         fetchMoreItems()
       }
     }, options)
@@ -43,7 +43,7 @@ export const Test = () => {
         observerRef.current.disconnect()
       }
     }
-  }, [items, isLoading])
+  }, [items, isLoaddddd])
 
   const [totalItems, setTotalItems] = useState(null)
   useEffect(() => {
@@ -65,7 +65,7 @@ export const Test = () => {
         </Box>
       ))}
       <div className="sentinel" style={{ height: "10px" }}></div>
-      {isLoading && <p>Loading...</p>}
+      {isLoaddddd && <p>Loading...</p>}
     </Box>
   )
 }

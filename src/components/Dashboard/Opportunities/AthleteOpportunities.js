@@ -5,6 +5,8 @@ import {
   Heading,
   Icon,
   Image,
+  Skeleton,
+  SkeletonText,
   Spinner,
   Text,
   useDisclosure,
@@ -30,66 +32,17 @@ import {
   fetchPostsOfCurrentPage,
 } from "../../../store/actions/Fetch/fetchPostsAction"
 import Pagination from "../../../utils/Pagination"
-import {
-  SET_CURRENT_PAGE,
-  SET_IS_LOADING,
-} from "../../../store/actions/utilsActions"
+import { SET_IS_LOADING } from "../../../store/actions/utilsActions"
+import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
   const flexRef = useRef(null)
-  const { currentPage, lastItemReached } = useSelector(
-    (state) => state.utils.pagination
-  )
-
-  const [items, setItems] = useState([])
-  const observerRef = useRef(null)
-  const [isLoaddddd, setIsLoaddddd] = useState(false)
-
-  useEffect(() => {
-    // Simulated API call for fetching more items
-    const fetchMoreItems = () => {
-      if (!lastItemReached) {
-        setIsLoaddddd(true)
-        setTimeout(() => {
-          console.log("fetching more data")
-          dispatch(SET_CURRENT_PAGE(currentPage + 1)) &&
-            dispatch(fetchPostsOfCurrentPage())
-          setIsLoaddddd(false)
-        }, 1000)
-      }
-    }
-
-    const options = {
-      root: null, // Use the viewport as the root
-      rootMargin: "0px",
-      threshold: 0.3, // Trigger when 10% of the element is visible
-    }
-
-    // Initialize the Intersection Observer
-    observerRef.current = new IntersectionObserver((entries) => {
-      const entry = entries[0]
-      if (entry.isIntersecting && !isLoaddddd) {
-        fetchMoreItems()
-      }
-    }, options)
-
-    // Start observing the sentinel element
-    if (observerRef.current) {
-      observerRef.current.observe(document.querySelector(".sentinel"))
-    }
-
-    return () => {
-      // Clean up the observer when the component unmounts
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-      }
-    }
-  }, [items, isLoaddddd])
 
   // const firestore = useSelector((state) => state.firestore)
   // const firebase = useSelector((state) => state.firebase)
   const profile = useSelector((state) => state.auth.profile)
+  const { currentPage } = useSelector((state) => state.utils.pagination)
   const isLoading = useSelector((state) => state.utils.isLoading)
   const state = useSelector((state) => state)
   console.log("state: ", state)
@@ -121,21 +74,15 @@ const AthleteOpportunities = () => {
   }
 
   useEffect(() => {
-    // dispatch(SET_IS_LOADING(true))
+    dispatch(SET_IS_LOADING(true))
     dispatch(fetchPostsOfCurrentPage())
   }, [currentPage])
 
-  const handleScroll = () => {
-    console.log("scrolled")
-  }
-
   useEffect(() => {
-    const element = flexRef.current
-    if (element) {
-      element.addEventListener("scroll", handleScroll)
-      console.log("Scroll event listener attached")
+    if (flexRef.current) {
+      console.log("flexRef.current.scrollTop: ", flexRef.current.scrollTop)
     }
-  }, [])
+  }, [flexRef.current])
 
   const btnStyle = {
     colorScheme: "gray",
@@ -219,7 +166,7 @@ const AthleteOpportunities = () => {
             return (
               postType === "opportunity" && (
                 <Flex
-                  key={index}
+                  key={id}
                   onClick={() => handleDrawer(post, editorState)}
                   sx={postContainer}
                 >
@@ -327,7 +274,9 @@ const AthleteOpportunities = () => {
               )
             )
           })}
-        {/* <UtilDrawer
+        <SkeletonAthleteOppLoader />
+
+        <UtilDrawer
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
@@ -335,8 +284,7 @@ const AthleteOpportunities = () => {
           handleApply={handleApply}
           setDrawerViewMore={setDrawerViewMore}
           drawerData={drawerData}
-        /> */}
-        <div className="sentinel" style={{ height: "10px" }}></div>
+        />
         <Pagination />
       </Flex>
     </>
