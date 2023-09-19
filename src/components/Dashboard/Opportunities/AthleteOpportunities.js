@@ -28,29 +28,27 @@ import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
 import {
+  EMPTY_ALL_OPPORTUNITY_POSTS,
   fetchAllOpportunityPosts,
   fetchPostsOfCurrentPage,
 } from "../../../store/actions/Fetch/fetchPostsAction"
 import Pagination from "../../../utils/Pagination"
-import { SET_IS_LOADING } from "../../../store/actions/utilsActions"
+import { SET_CURRENT_PAGE, SET_IS_FETCHING, SET_IS_LOADING } from "../../../store/actions/utilsActions"
 import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
   const flexRef = useRef(null)
 
-  // const firestore = useSelector((state) => state.firestore)
-  // const firebase = useSelector((state) => state.firebase)
   const profile = useSelector((state) => state.auth.profile)
-  const { currentPage } = useSelector((state) => state.utils.pagination)
   const isLoading = useSelector((state) => state.utils.isLoading)
   const state = useSelector((state) => state)
   console.log("state: ", state)
   // const post = useSelector((state) => state.post)
-  const allOpportunityPosts = useSelector(
+  const myOpportunitiesPosts = useSelector(
     (state) => state.post.myOpportunitiesPosts
   )
-  console.log("allOpportunityPosts: ", allOpportunityPosts)
+  console.log("myOpportunitiesPosts: ", myOpportunitiesPosts)
   const auth = useSelector((state) => state.auth)
   const { email } = auth
   const { postContainer } = comStyle
@@ -60,10 +58,16 @@ const AthleteOpportunities = () => {
   const [drawerViewMore, setDrawerViewMore] = useState(true)
   const [drawerData, setDrawerData] = useState(null)
 
+  useEffect(()=> {
+    console.log('fetch posts triggered')
+    dispatch(SET_IS_FETCHING(true))
+    dispatch(fetchPostsOfCurrentPage('athOpp-line63'))
+  }, [])
+
   const handleApply = (id, event) => {
+    console.log('handle apply is triggered')
     event.stopPropagation()
     profile && dispatch(applyToPost(id, email))
-    // setIsloading(true)
     dispatch(SET_IS_LOADING(true))
   }
 
@@ -72,17 +76,6 @@ const AthleteOpportunities = () => {
     setDrawerViewMore(true)
     onOpen()
   }
-
-  useEffect(() => {
-    dispatch(SET_IS_LOADING(true))
-    dispatch(fetchPostsOfCurrentPage())
-  }, [currentPage])
-
-  useEffect(() => {
-    if (flexRef.current) {
-      console.log("flexRef.current.scrollTop: ", flexRef.current.scrollTop)
-    }
-  }, [flexRef.current])
 
   const btnStyle = {
     colorScheme: "gray",
@@ -103,7 +96,7 @@ const AthleteOpportunities = () => {
 
   return (
     <>
-      {!allOpportunityPosts && <SkeletonOpportunities />}
+      {!myOpportunitiesPosts && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"} ref={flexRef} w={"100%"}>
         {isLoading && (
           <Flex
@@ -126,8 +119,8 @@ const AthleteOpportunities = () => {
             />
           </Flex>
         )}
-        {allOpportunityPosts &&
-          allOpportunityPosts.map((post, index) => {
+        {myOpportunitiesPosts &&
+          myOpportunitiesPosts.map((post, index) => {
             const {
               totalAmount,
               postApplicants,
@@ -166,7 +159,7 @@ const AthleteOpportunities = () => {
             return (
               postType === "opportunity" && (
                 <Flex
-                  key={id}
+                  key={index}
                   onClick={() => handleDrawer(post, editorState)}
                   sx={postContainer}
                 >
@@ -274,8 +267,7 @@ const AthleteOpportunities = () => {
               )
             )
           })}
-        <SkeletonAthleteOppLoader />
-
+          <SkeletonAthleteOppLoader />
         <UtilDrawer
           isOpen={isOpen}
           onOpen={onOpen}
@@ -285,7 +277,7 @@ const AthleteOpportunities = () => {
           setDrawerViewMore={setDrawerViewMore}
           drawerData={drawerData}
         />
-        <Pagination />
+        {/* <Pagination /> */}
       </Flex>
     </>
   )

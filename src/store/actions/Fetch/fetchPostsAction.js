@@ -10,38 +10,79 @@ import {
   onSnapshot,
   query,
   where,
+  startAfter,
+  limit,
+  startAt,
 } from "firebase/firestore"
 
-let unsubscribe = null // Declare a variable to store the unsubscribe function
-export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
-  const { currentPage, itemsPerPage } = getState().utils.pagination
+let lastVisible = null
+export const fetchPostsOfCurrentPage = () => async (dispatch) => {
+  console.log('lastVisible: ', lastVisible)
+  const first = query(
+    collection(db, "posts"),
+    orderBy("createdAt" , "desc"),
+    startAt(lastVisible || null),
+    limit(10),
+  )
+  const querySnapshot = await getDocs(first)
+  const data = querySnapshot.docs.map((doc) => doc.data())
+  console.log('data: ', data)
+  
+  lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+  console.log("lastVisible", lastVisible)
+}
 
-  try {
-    const q = query(
-      collection(db, "posts"),
-      where("postType", "==", "opportunity"),
-      orderBy("createdAt", "desc")
-    )
+// export const fetchPostsOfCurrentPage =
+//   (sender) => async (dispatch, getState) => {
+//     const { currentPage, itemsPerPage, reachedLastItem, lastVisibleItemIndex } =
+//       getState().utils.pagination
+//     const myOpportunitiesPosts = getState().post.myOpportunitiesPosts
+//     console.log("myOpportunitiesPosts.length: ", myOpportunitiesPosts.length)
+//     const isFetching = getState().utils.isFetching
 
-    if (unsubscribe) {
-      unsubscribe()
-    }
+//     let lastDoc = null
+//     try {
+//       if (reachedLastItem) return
 
-    // Subscribe to real-time updates for the new query
-    unsubscribe = onSnapshot(q, (querySnapshot) => {
-      
-      const start = (currentPage - 1) * itemsPerPage
-      const end = currentPage * itemsPerPage
-      const data = querySnapshot.docs.slice(start, end).map((doc) => doc.data())
-      dispatch({ type: "SET_ALL_OPPORTUNITY_POSTS", payload: data })
-      console.log("data: ", data)
+//       console.log("itemsPerPage: ", itemsPerPage)
+//       console.log("lastDoc: ", lastDoc)
 
-      const totalDocuments = querySnapshot.size
-      dispatch({ type: "SET_TOTAL_ITEMS", payload: totalDocuments })
-    })
-  } catch (error) {
-    console.error("Error fetching data:", error)
-  }
+//       const q = query(
+//         collection(db, "posts"),
+//         where("postType", "==", "opportunity"),
+//         orderBy("createdAt", "desc"),
+//         limit(itemsPerPage), // Limit the query to fetch only 'itemsPerPage' documents
+//         startAfter(lastDoc || 0)
+//       )
+
+//       const querySnapshot = await getDocs(q)
+
+//       console.log("sender: ", sender)
+//       console.log("Data fetched")
+
+//       const data = querySnapshot.docs.map((doc) => doc.data())
+//       console.log("data: ", data)
+//       lastDoc = data[data.length - 1]
+//       console.log("lastDoc: ", lastDoc)
+//       console.log("isFetching: ", isFetching)
+//       isFetching &&
+//         dispatch({ type: "SET_ALL_OPPORTUNITY_POSTS", payload: data })
+//       dispatch({ type: "SET_IS_FETCHING", payload: false })
+
+//       // Determine if you've reached the last item based on the number of documents fetched
+//       if (data.length < itemsPerPage) {
+//         dispatch({ type: "SET_REACHED_LAST_ITEM", payload: true })
+//       }
+
+//       const totalDocuments = querySnapshot.size
+//       dispatch({ type: "SET_TOTAL_ITEMS", payload: totalDocuments })
+//     } catch (error) {
+//       console.error("Error fetching data:", error)
+//     }
+//   }
+
+export const EMPTY_ALL_OPPORTUNITY_POSTS = () => (dispatch) => {
+  dispatch({ type: "EMPTY_ALL_OPPORTUNITY_POSTS" })
 }
 
 export const fetchUserOpportunityPosts = (authEmail) => (dispatch) => {

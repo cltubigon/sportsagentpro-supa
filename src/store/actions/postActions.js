@@ -8,6 +8,7 @@ import {
   Timestamp,
   setDoc,
 } from "firebase/firestore"
+import { db } from "../../config/fbConfig"
 
 export const createNewPost = () => {
   console.log("Hi, I am creating new post")
@@ -66,12 +67,9 @@ export const createNewPost = () => {
 }
 
 export const applyToPost = (postId, email) => {
-  console.log('postId: ', postId)
-  console.log('email: ', email)
-  return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore()
+  return async () => {
     try {
-      const postRef = doc(firestore, "posts", postId)
+      const postRef = doc(db, "posts", postId)
       const postSnapshot = await getDoc(postRef)
       if (!postSnapshot.exists()) {
         throw new Error("Post not found")
@@ -83,27 +81,21 @@ export const applyToPost = (postId, email) => {
       if (currentApplicants) {
         const hasDuplicate = currentApplicants.includes(email)
         if (hasDuplicate) {
-          // const index = currentApplicants.indexOf(email)
-          // console.log("index: ", index)
           const filteredData =
             currentApplicants &&
             currentApplicants.length > 0 &&
             currentApplicants.filter((applicant) => applicant !== email)
           const updatedPost = { ...postData, postApplicants: filteredData }
           await updateDoc(postRef, updatedPost)
-          // dispatch({ type: 'SET_POST_LAST_UPDATED' })
         } else {
           const updatedApplicants = [...currentApplicants, email]
           const updatedPost = { ...postData, postApplicants: updatedApplicants }
           await updateDoc(postRef, updatedPost)
-          // dispatch({ type: 'SET_POST_LAST_UPDATED' })
         }
       } else if (!currentApplicants) {
         const updatedApplicants = [email]
         const updatedPost = { ...postData, postApplicants: updatedApplicants }
-        // console.log("updatedApplicants: ", updatedApplicants)
         await updateDoc(postRef, updatedPost)
-        // dispatch({ type: 'SET_POST_LAST_UPDATED' })
       }
 
       // await updateDoc(postRef, sanitizedData)

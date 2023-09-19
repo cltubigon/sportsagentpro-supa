@@ -3,18 +3,28 @@ const initialState = {
     data: null,
     lastUpdated: null,
   },
-  myOpportunitiesPosts: null,
+  myOpportunitiesPosts: [],
 }
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_ALL_OPPORTUNITY_POSTS":
+      console.log('action.payload: ', action.payload)
+      const firstID = action.payload.length > 0 && action.payload[0].id
+      const hasDuplicate = state.myOpportunitiesPosts.some(opp => opp.id === firstID)
+      console.log('hasDuplicate: ', hasDuplicate)
+      console.log('firstID: ', firstID)
       return {
         ...state,
-        myOpportunitiesPosts: action.payload,
+        myOpportunitiesPosts: hasDuplicate ? action.payload : [...state.myOpportunitiesPosts, ...action.payload],
       }
-      case "SET_USER_OPPORTUNITIES_POSTS":
-      console.log('opp 2 triggered')
+    case "EMPTY_ALL_OPPORTUNITY_POSTS":
+      return {
+        ...state,
+        myOpportunitiesPosts: [],
+      }
+    case "SET_USER_OPPORTUNITIES_POSTS":
+      console.log("opp 2 triggered")
       return {
         ...state,
         myOpportunitiesPosts: action.data,

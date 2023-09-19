@@ -50,9 +50,9 @@ const UtilDrawer = ({
 
   const { sectionContainer, drawer } = comStyle
 
-  useEffect(() => {
-    dispatch(fetchPostsOfCurrentPage())
-  }, [currentPage])
+  // useEffect(() => {
+  //   dispatch(fetchPostsOfCurrentPage())
+  // }, [currentPage])
 
   const handleViewMore = () => {
     setDrawerViewMore((prev) => !prev)
@@ -68,7 +68,6 @@ const UtilDrawer = ({
       allOpportunityPosts &&
       drawerData &&
       allOpportunityPosts.find((post) => post.id === drawerData.id)
-    console.log("selectedPost: ", selectedPost)
     const applied =
       selectedPost &&
       selectedPost.postApplicants &&
@@ -208,7 +207,7 @@ const UtilDrawer = ({
                       >
                         <Flex sx={drawer.activities.rowContainer} flexGrow={1}>
                           <Text>Activity</Text>
-                          {drawerData.selectedActivities.map((activity) => {
+                          {drawerData.selectedActivities.map((activity, index) => {
                             const currentIcon = mergedCategories
                               .filter((data) => data.id === activity.id)
                               .map((mapped) => {
@@ -216,10 +215,9 @@ const UtilDrawer = ({
                                 const newObject = { icon, color }
                                 return newObject
                               })
-                            console.log("currentIcon: ", currentIcon)
                             return (
                               <Flex
-                                key={activity.id}
+                                key={index}
                                 sx={drawer.activities.tableData}
                               >
                                 <Icon
@@ -237,10 +235,10 @@ const UtilDrawer = ({
                           flexBasis={"230px"}
                         >
                           <Text>Fulfillment date</Text>
-                          {drawerData.selectedActivities.map((activity) => {
+                          {drawerData.selectedActivities.map((activity, index) => {
                             return (
                               <Text
-                                key={activity.id}
+                                key={index}
                                 sx={drawer.activities.tableData}
                               >
                                 {(activity.activityDate.utcFormat !==
@@ -256,7 +254,7 @@ const UtilDrawer = ({
                           flexBasis={"135px"}
                         >
                           <Text>Value</Text>
-                          {drawerData.selectedActivities.map((activity) => {
+                          {drawerData.selectedActivities.map((activity, index) => {
                             const formatter = new Intl.NumberFormat(undefined, {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
@@ -266,7 +264,7 @@ const UtilDrawer = ({
                             )
                             return (
                               <Text
-                                key={activity.id}
+                                key={index}
                                 sx={drawer.activities.tableData}
                               >
                                 ${formattedAmount}
@@ -279,9 +277,10 @@ const UtilDrawer = ({
                           flexBasis={"135px"}
                         >
                           <Text>Status</Text>
-                          {drawerData.selectedActivities.map((activity) => {
+                          {drawerData.selectedActivities.map((activity, index) => {
                             return (
                               <Flex
+                              key={index}
                                 sx={drawer.activities.tableData}
                                 flexGrow={"100%"}
                                 gap={2}
