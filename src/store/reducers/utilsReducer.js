@@ -1,10 +1,17 @@
 const initialState = {
   pagination: {
-    currentPage: 1,
-    initialLimit: 8,
-    nextLimit: 4,
-    totalItems: null,
-    lastItemReached: false,
+    athletes: {
+      currentPage: 1,
+      initialLimit: 8,
+      nextLimit: 4,
+      lastItemReached: false,
+    },
+    athletePosts: {
+      currentPage: 1,
+      initialLimit: 8,
+      nextLimit: 4,
+      lastItemReached: false,
+    },
   },
   isLoading: false,
 }
@@ -14,18 +21,20 @@ const utilsReducer = (state = initialState, action) => {
     case "SET_LAST_ITEM_REACHED":
       return {
         ...state,
-        pagination: { ...state.pagination, lastItemReached: action.payload },
+        ...state.pagination,
+        athletePosts: {
+          ...state.pagination.athletePosts,
+          lastItemReached: action.payload,
+        },
       }
     case "SET_CURRENT_PAGE":
       return {
         ...state,
-        pagination: { ...state.pagination, currentPage: action.payload },
-      }
-    case "SET_TOTAL_ITEMS":
-      return {
-        ...state,
-        pagination: { ...state.pagination, totalItems: action.payload },
-        isLoading: false,
+        ...state.pagination,
+        athletePosts: {
+          ...state.pagination.athletePosts,
+          currentPage: action.payload,
+        },
       }
     case "SET_IS_LOADING":
       return {

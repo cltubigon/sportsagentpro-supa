@@ -16,7 +16,7 @@ import {
 
 let lastVisible = null
 export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
-  const { lastItemReached, initialLimit, nextLimit } = getState().utils.pagination
+  const { lastItemReached, initialLimit, nextLimit } = getState().utils.pagination.athletePosts
   try {
     if (lastItemReached) return
     let q

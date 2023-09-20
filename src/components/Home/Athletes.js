@@ -15,21 +15,6 @@ const Athletes = () => {
   const athleteList = useSelector((state) => state.athlete.athletes.data)
   const currentTimeStamp = useSelector(state => state.athlete.athletes.lastUpdated)
   const [isLoading, setIsLoading] = useState(true)
-  
-
-  // const startTimeRef = useRef(0);
-
-  // useEffect(() => {
-  //   startTimeRef.current = performance.now();
-  //   console.log("Initial render");
-
-  //   return () => {
-  //     console.log("Last re-render");
-  //     const endTime = performance.now();
-  //     const renderTime = endTime - startTimeRef.current;
-  //     console.log("Render time:", renderTime, "ms");
-  //   };
-  // }, []);
 
   useEffect(() => {
     dispatch(startListeningToAthleteCollection("athlete", currentTimeStamp))

@@ -4,10 +4,10 @@ import { SET_CURRENT_PAGE, SET_IS_LOADING } from "../store/actions/utilsActions"
 import { Flex, Text } from "@chakra-ui/react"
 import { useEffect } from "react"
 
-const Pagination = () => {
+const PaginationAthletePosts = () => {
   const dispatch = useDispatch()
   const { currentPage, nextLimit, totalItems } = useSelector(
-    (state) => state.utils.pagination
+    (state) => state.utils.pagination.athletePosts
   )
 
   const handlePageClick = (newPage) => {
@@ -33,4 +33,4 @@ const Pagination = () => {
   )
 }
 
-export default Pagination
+export default PaginationAthletePosts

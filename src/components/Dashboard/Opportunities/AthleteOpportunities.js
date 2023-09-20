@@ -24,31 +24,32 @@ import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
 import { fetchPostsOfCurrentPage } from "../../../store/actions/Fetch/fetchPostsAction"
-import Pagination from "../../../utils/Pagination"
 import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
-  
+
   const profile = useSelector((state) => state.auth.profile)
   const { currentPage, lastItemReached } = useSelector(
-    (state) => state.utils.pagination
+    (state) => state.utils.pagination.athletePosts
   )
   const myOpportunitiesPosts = useSelector(
     (state) => state.post.myOpportunitiesPosts
   )
-  // console.log('myOpportunitiesPosts: ', myOpportunitiesPosts)
+  // const state = useSelector((state) => state)
+  // console.log('state: ', state)
+  console.log('myOpportunitiesPosts: ', myOpportunitiesPosts)
   const isLoading = useSelector((state) => state.post.isLoading)
   const email = useSelector((state) => state.auth.email)
   const { postContainer } = comStyle
-  
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [drawerViewMore, setDrawerViewMore] = useState(true)
   const [drawerData, setDrawerData] = useState(null)
+  
   useEffect(() => {
     dispatch(fetchPostsOfCurrentPage())
   }, [currentPage])
-
 
   const handleApply = (id, event, hasApplied) => {
     event.stopPropagation()
@@ -56,7 +57,7 @@ const AthleteOpportunities = () => {
     hasApplied && dispatch(withdrawToPost(id, email))
     !hasApplied && dispatch(applyToPost(id, email))
   }
-  
+
   const handleDrawer = (post, editorState) => {
     setDrawerData({ ...post, editorState: editorState })
     setDrawerViewMore(true)
@@ -257,17 +258,18 @@ const AthleteOpportunities = () => {
           <SkeletonAthleteOppLoader />
         )}
 
-        {drawerViewMore && <UtilDrawer
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          drawerViewMore={drawerViewMore}
-          handleApply={handleApply}
-          setDrawerViewMore={setDrawerViewMore}
-          drawerData={drawerData}
-          isLoading={isLoading}
-        />}
-        <Pagination />
+        {drawerViewMore && (
+          <UtilDrawer
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            drawerViewMore={drawerViewMore}
+            handleApply={handleApply}
+            setDrawerViewMore={setDrawerViewMore}
+            drawerData={drawerData}
+            isLoading={isLoading}
+          />
+        )}
       </Flex>
     </>
   )
