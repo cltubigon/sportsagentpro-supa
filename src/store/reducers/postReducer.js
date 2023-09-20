@@ -4,24 +4,36 @@ const initialState = {
     lastUpdated: null,
   },
   myOpportunitiesPosts: [],
+  isLoading: false,
 }
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_ALL_OPPORTUNITY_POSTS":
-      console.log('action.payload: ', action.payload)
-      const firstID = action.payload.length > 0 && action.payload[0].id
-      const hasDuplicate = state.myOpportunitiesPosts.some(opp => opp.id === firstID)
-      console.log('hasDuplicate: ', hasDuplicate)
-      console.log('firstID: ', firstID)
+    case "SET_IS_LOADING":
+      console.log("triggered SET_IS_LOADING")
       return {
         ...state,
-        myOpportunitiesPosts: hasDuplicate ? action.payload : [...state.myOpportunitiesPosts, ...action.payload],
+        isLoading: action.payload,
       }
-    case "EMPTY_ALL_OPPORTUNITY_POSTS":
+    case "SET_ALL_OPPORTUNITY_POSTS":
+      console.log("triggered SET_ALL_OPPORTUNITY_POSTS")
+      const firstID = action.payload[0].id
+      const hasDuplicate = state.myOpportunitiesPosts.some(
+        (opp) => opp.id === firstID
+      )
+      console.log("firstID: ", firstID)
       return {
         ...state,
-        myOpportunitiesPosts: [],
+        myOpportunitiesPosts: hasDuplicate
+          ? [...state.myOpportunitiesPosts]
+          : [...state.myOpportunitiesPosts, ...action.payload],
+      }
+    case "UPDATED_ALL_OPPORTUNITY_POSTS":
+      console.log("triggered UPDATED_ALL_OPPORTUNITY_POSTS")
+      return {
+        ...state,
+        isLoading: false,
+        myOpportunitiesPosts: action.payload,
       }
     case "SET_USER_OPPORTUNITIES_POSTS":
       console.log("opp 2 triggered")

@@ -2,11 +2,8 @@ import {
   Box,
   Button,
   Flex,
-  Heading,
   Icon,
   Image,
-  Skeleton,
-  SkeletonText,
   Spinner,
   Text,
   useDisclosure,
@@ -14,61 +11,48 @@ import {
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
-import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
 import {
+  SET_IS_LOADING,
   applyToPost,
-  savePostsToStorage,
+  withdrawToPost,
 } from "../../../store/actions/postActions"
-import { Link } from "react-router-dom"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
-import {
-  EMPTY_ALL_OPPORTUNITY_POSTS,
-  fetchAllOpportunityPosts,
-  fetchPostsOfCurrentPage,
-} from "../../../store/actions/Fetch/fetchPostsAction"
+import { fetchPostsOfCurrentPage } from "../../../store/actions/Fetch/fetchPostsAction"
 import Pagination from "../../../utils/Pagination"
-import { SET_CURRENT_PAGE, SET_IS_FETCHING, SET_IS_LOADING } from "../../../store/actions/utilsActions"
 import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
   const flexRef = useRef(null)
 
+  // const state = useSelector((state) => state)
+  // console.log("state: ", state)
   const profile = useSelector((state) => state.auth.profile)
-  const isLoading = useSelector((state) => state.utils.isLoading)
-  const state = useSelector((state) => state)
-  console.log("state: ", state)
-  // const post = useSelector((state) => state.post)
+  const { currentPage, lastItemReached } = useSelector(
+    (state) => state.utils.pagination
+  )
   const myOpportunitiesPosts = useSelector(
     (state) => state.post.myOpportunitiesPosts
   )
-  console.log("myOpportunitiesPosts: ", myOpportunitiesPosts)
-  const auth = useSelector((state) => state.auth)
-  const { email } = auth
+  const isLoading = useSelector((state) => state.post.isLoading)
+  const email = useSelector((state) => state.auth.email)
   const { postContainer } = comStyle
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  // const [isloading, setIsloading] = useState(false)
   const [drawerViewMore, setDrawerViewMore] = useState(true)
   const [drawerData, setDrawerData] = useState(null)
 
-  useEffect(()=> {
-    console.log('fetch posts triggered')
-    dispatch(SET_IS_FETCHING(true))
-    dispatch(fetchPostsOfCurrentPage('athOpp-line63'))
-  }, [])
-
-  const handleApply = (id, event) => {
-    console.log('handle apply is triggered')
+  const handleApply = (id, event, hasApplied) => {
     event.stopPropagation()
-    profile && dispatch(applyToPost(id, email))
     dispatch(SET_IS_LOADING(true))
+    hasApplied && dispatch(withdrawToPost(id, email))
+    !hasApplied && dispatch(applyToPost(id, email))
   }
 
   const handleDrawer = (post, editorState) => {
@@ -76,6 +60,16 @@ const AthleteOpportunities = () => {
     setDrawerViewMore(true)
     onOpen()
   }
+
+  useEffect(() => {
+    dispatch(fetchPostsOfCurrentPage())
+  }, [currentPage])
+
+  useEffect(() => {
+    if (flexRef.current) {
+      console.log("flexRef.current.scrollTop: ", flexRef.current.scrollTop)
+    }
+  }, [flexRef.current])
 
   const btnStyle = {
     colorScheme: "gray",
@@ -136,7 +130,7 @@ const AthleteOpportunities = () => {
             } = post
 
             const hasApplied =
-              postApplicants &&
+              postApplicants.length > 0 &&
               postApplicants.some((applicantEmail) => {
                 return profile && email === applicantEmail
               })
@@ -159,7 +153,7 @@ const AthleteOpportunities = () => {
             return (
               postType === "opportunity" && (
                 <Flex
-                  key={index}
+                  key={id}
                   onClick={() => handleDrawer(post, editorState)}
                   sx={postContainer}
                 >
@@ -251,7 +245,7 @@ const AthleteOpportunities = () => {
                       borderWidth="1px"
                       borderStyle="solid"
                       borderRadius="sm"
-                      onClick={(event) => handleApply(id, event)}
+                      onClick={(event) => handleApply(id, event, hasApplied)}
                     >
                       {hasApplied ? "Withdraw" : "Apply"}
                     </Button>
@@ -267,7 +261,10 @@ const AthleteOpportunities = () => {
               )
             )
           })}
+        {myOpportunitiesPosts.length > 0 && !lastItemReached && (
           <SkeletonAthleteOppLoader />
+        )}
+
         <UtilDrawer
           isOpen={isOpen}
           onOpen={onOpen}
@@ -276,8 +273,9 @@ const AthleteOpportunities = () => {
           handleApply={handleApply}
           setDrawerViewMore={setDrawerViewMore}
           drawerData={drawerData}
+          isLoading={isLoading}
         />
-        {/* <Pagination /> */}
+        <Pagination />
       </Flex>
     </>
   )

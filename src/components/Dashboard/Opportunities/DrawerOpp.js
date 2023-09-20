@@ -24,8 +24,11 @@ import { useEffect } from "react"
 import { useRef } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
-import { applyToPost } from "../../../store/actions/postActions"
-import { fetchAllOpportunityPosts, fetchPostsOfCurrentPage } from "../../../store/actions/Fetch/fetchPostsAction"
+import { SET_IS_LOADING, applyToPost, withdrawToPost } from "../../../store/actions/postActions"
+import {
+  fetchAllOpportunityPosts,
+  fetchPostsOfCurrentPage,
+} from "../../../store/actions/Fetch/fetchPostsAction"
 
 const UtilDrawer = ({
   isOpen,
@@ -34,6 +37,7 @@ const UtilDrawer = ({
   drawerData,
   drawerViewMore,
   setDrawerViewMore,
+  isLoading,
 }) => {
   const dispatch = useDispatch()
   const flexRef = useRef(null)
@@ -45,22 +49,23 @@ const UtilDrawer = ({
     (state) => state.post.myOpportunitiesPosts
   )
 
-  const [isLoading, setIsloading] = useState(false)
+  // const [isLoading, setIsloading] = useState(false)
   const [hasApplied, setHasAhasApplied] = useState(false)
 
   const { sectionContainer, drawer } = comStyle
 
-  // useEffect(() => {
-  //   dispatch(fetchPostsOfCurrentPage())
-  // }, [currentPage])
+  useEffect(() => {
+    dispatch(fetchPostsOfCurrentPage())
+  }, [currentPage])
 
   const handleViewMore = () => {
     setDrawerViewMore((prev) => !prev)
   }
 
-  const handleApply = (id) => {
-    profile && dispatch(applyToPost(id, email))
-    setIsloading(true)
+  const handleApply = (id, hasApplied) => {
+    dispatch(SET_IS_LOADING(true))
+    hasApplied && dispatch(withdrawToPost(id, email))
+    !hasApplied && dispatch(applyToPost(id, email))
   }
 
   useEffect(() => {
@@ -68,12 +73,12 @@ const UtilDrawer = ({
       allOpportunityPosts &&
       drawerData &&
       allOpportunityPosts.find((post) => post.id === drawerData.id)
+    console.log("selectedPost: ", selectedPost)
     const applied =
       selectedPost &&
       selectedPost.postApplicants &&
       selectedPost.postApplicants.some((applicant) => applicant === email)
     applied ? setHasAhasApplied(true) : setHasAhasApplied(false)
-    setIsloading(false)
   }, [allOpportunityPosts, drawerData])
 
   const mergedCategories = [
@@ -207,94 +212,106 @@ const UtilDrawer = ({
                       >
                         <Flex sx={drawer.activities.rowContainer} flexGrow={1}>
                           <Text>Activity</Text>
-                          {drawerData.selectedActivities.map((activity, index) => {
-                            const currentIcon = mergedCategories
-                              .filter((data) => data.id === activity.id)
-                              .map((mapped) => {
-                                const { icon, color } = mapped
-                                const newObject = { icon, color }
-                                return newObject
-                              })
-                            return (
-                              <Flex
-                                key={index}
-                                sx={drawer.activities.tableData}
-                              >
-                                <Icon
-                                  as={currentIcon[0].icon}
-                                  color={currentIcon[0].color}
-                                  boxSize={5}
-                                />
-                                <Text>{activity.activityTitle}</Text>
-                              </Flex>
-                            )
-                          })}
+                          {drawerData.selectedActivities.map(
+                            (activity, index) => {
+                              const currentIcon = mergedCategories
+                                .filter((data) => data.id === activity.id)
+                                .map((mapped) => {
+                                  const { icon, color } = mapped
+                                  const newObject = { icon, color }
+                                  return newObject
+                                })
+                              console.log("currentIcon: ", currentIcon)
+                              return (
+                                <Flex
+                                  key={index}
+                                  sx={drawer.activities.tableData}
+                                >
+                                  <Icon
+                                    as={currentIcon[0].icon}
+                                    color={currentIcon[0].color}
+                                    boxSize={5}
+                                  />
+                                  <Text>{activity.activityTitle}</Text>
+                                </Flex>
+                              )
+                            }
+                          )}
                         </Flex>
                         <Flex
                           sx={drawer.activities.rowContainer}
                           flexBasis={"230px"}
                         >
                           <Text>Fulfillment date</Text>
-                          {drawerData.selectedActivities.map((activity, index) => {
-                            return (
-                              <Text
-                                key={index}
-                                sx={drawer.activities.tableData}
-                              >
-                                {(activity.activityDate.utcFormat !==
-                                  "Invalid Date" &&
-                                  activity.activityDate.utcFormat) ||
-                                  "-"}
-                              </Text>
-                            )
-                          })}
+                          {drawerData.selectedActivities.map(
+                            (activity, index) => {
+                              return (
+                                <Text
+                                  key={index}
+                                  sx={drawer.activities.tableData}
+                                >
+                                  {(activity.activityDate.utcFormat !==
+                                    "Invalid Date" &&
+                                    activity.activityDate.utcFormat) ||
+                                    "-"}
+                                </Text>
+                              )
+                            }
+                          )}
                         </Flex>
                         <Flex
                           sx={drawer.activities.rowContainer}
                           flexBasis={"135px"}
                         >
                           <Text>Value</Text>
-                          {drawerData.selectedActivities.map((activity, index) => {
-                            const formatter = new Intl.NumberFormat(undefined, {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })
-                            const formattedAmount = formatter.format(
-                              parseFloat(activity.activityAmount)
-                            )
-                            return (
-                              <Text
-                                key={index}
-                                sx={drawer.activities.tableData}
-                              >
-                                ${formattedAmount}
-                              </Text>
-                            )
-                          })}
+                          {drawerData.selectedActivities.map(
+                            (activity, index) => {
+                              const formatter = new Intl.NumberFormat(
+                                undefined,
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )
+                              const formattedAmount = formatter.format(
+                                parseFloat(activity.activityAmount)
+                              )
+                              return (
+                                <Text
+                                  key={index}
+                                  sx={drawer.activities.tableData}
+                                >
+                                  ${formattedAmount}
+                                </Text>
+                              )
+                            }
+                          )}
                         </Flex>
                         <Flex
                           sx={drawer.activities.rowContainer}
                           flexBasis={"135px"}
                         >
                           <Text>Status</Text>
-                          {drawerData.selectedActivities.map((activity, index) => {
-                            return (
-                              <Flex
-                              key={index}
-                                sx={drawer.activities.tableData}
-                                flexGrow={"100%"}
-                                gap={2}
-                                alignItems={"center"}
-                              >
-                                <Text>Draft</Text>
-                                <Icon
-                                  as={FaCircle}
-                                  boxSize={2}
-                                  color={"green.400"}
-                                />
-                              </Flex>
-                            )
-                          })}
+                          {drawerData.selectedActivities.map(
+                            (activity, index) => {
+                              return (
+                                <Flex
+                                  key={index}
+                                  sx={drawer.activities.tableData}
+                                  flexGrow={"100%"}
+                                  gap={2}
+                                  alignItems={"center"}
+                                >
+                                  <Text>Draft</Text>
+                                  <Icon
+                                    as={FaCircle}
+                                    boxSize={2}
+                                    color={"green.400"}
+                                  />
+                                </Flex>
+                              )
+                            }
+                          )}
                         </Flex>
                       </Flex>
                     </Flex>
@@ -312,7 +329,7 @@ const UtilDrawer = ({
                     sx={
                       hasApplied ? drawer.btnHasApplied : drawer.btnNotApplied
                     }
-                    onClick={(event) => handleApply(drawerData.id)}
+                    onClick={(event) => handleApply(drawerData.id, hasApplied)}
                   >
                     {hasApplied ? "Withdraw" : "Apply Now"}
                   </Button>

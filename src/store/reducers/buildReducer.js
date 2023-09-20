@@ -7,6 +7,7 @@ const initState = {
   postType: null,
   selectedRecipients: [],
   selectedActivities: [],
+  postApplicants: [],
   activitiesTabReady: false,
   postContent: null,
   postTitle: null,

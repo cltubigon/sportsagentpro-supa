@@ -1,25 +1,20 @@
 const initialState = {
   pagination: {
     currentPage: 1,
-    itemsPerPage: 8,
-    reachedLastItem: false,
-    totalItems: 4,
+    initialLimit: 8,
+    nextLimit: 4,
+    totalItems: null,
+    lastItemReached: false,
   },
-  isLoading: true,
-  isFetching: false,
+  isLoading: false,
 }
 
 const utilsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_REACHED_LAST_ITEM":
+    case "SET_LAST_ITEM_REACHED":
       return {
         ...state,
-        pagination: { ...state.pagination, reachedLastItem: action.payload },
-      }
-    case "SET_IS_FETCHING":
-      return {
-        ...state,
-        isFetching: action.payload,
+        pagination: { ...state.pagination, lastItemReached: action.payload },
       }
     case "SET_CURRENT_PAGE":
       return {

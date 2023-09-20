@@ -65,44 +65,65 @@ export const createNewPost = () => {
     }
   }
 }
-
-export const applyToPost = (postId, email) => {
-  return async () => {
-    try {
-      const postRef = doc(db, "posts", postId)
-      const postSnapshot = await getDoc(postRef)
-      if (!postSnapshot.exists()) {
-        throw new Error("Post not found")
+export const withdrawToPost = (postId, email) => async (dispatch, getState) => {
+  const myOpportunitiesPosts = getState().post.myOpportunitiesPosts
+  const updatedOpportunitiesPosts = (updatedPost) => {
+    const data = myOpportunitiesPosts.map((opp) => {
+      if (opp.id === updatedPost.id) {
+        return updatedPost
       }
-
-      const postData = postSnapshot.data()
-
-      const currentApplicants = postData.postApplicants
-      if (currentApplicants) {
-        const hasDuplicate = currentApplicants.includes(email)
-        if (hasDuplicate) {
-          const filteredData =
-            currentApplicants &&
-            currentApplicants.length > 0 &&
-            currentApplicants.filter((applicant) => applicant !== email)
-          const updatedPost = { ...postData, postApplicants: filteredData }
-          await updateDoc(postRef, updatedPost)
-        } else {
-          const updatedApplicants = [...currentApplicants, email]
-          const updatedPost = { ...postData, postApplicants: updatedApplicants }
-          await updateDoc(postRef, updatedPost)
-        }
-      } else if (!currentApplicants) {
-        const updatedApplicants = [email]
-        const updatedPost = { ...postData, postApplicants: updatedApplicants }
-        await updateDoc(postRef, updatedPost)
-      }
-
-      // await updateDoc(postRef, sanitizedData)
-    } catch (error) {
-      console.error("Error updating post:", error)
-    }
+      return opp
+    })
+    console.log("data: ", data)
+    dispatch({ type: "UPDATED_ALL_OPPORTUNITY_POSTS", payload: data })
   }
+  try {
+    const ref = doc(db, "posts", postId)
+    const postSnapshot = await getDoc(ref)
+    const postDoc = postSnapshot.data()
+    const currentApplicants = postDoc.postApplicants
+    const applicants = currentApplicants.filter(
+      (applicantEmail) => applicantEmail !== email
+    )
+    const updatedPost = { ...postDoc, postApplicants: applicants }
+    updatedOpportunitiesPosts(updatedPost)
+    await updateDoc(ref, updatedPost)
+    console.log("withdrawed successfully")
+  } catch (error) {
+    console.error("Error withrawing post:", error)
+  }
+}
+
+export const applyToPost = (postId, email) => async (dispatch, getState) => {
+  const myOpportunitiesPosts = getState().post.myOpportunitiesPosts
+  const updatedOpportunitiesPosts = (updatedPost) => {
+    const data = myOpportunitiesPosts.map((opp) => {
+      if (opp.id === updatedPost.id) {
+        return updatedPost
+      }
+      return opp
+    })
+    console.log("data: ", data)
+    dispatch({ type: "UPDATED_ALL_OPPORTUNITY_POSTS", payload: data })
+  }
+  try {
+    const ref = doc(db, "posts", postId)
+    const postSnapshot = await getDoc(ref)
+    const postDoc = postSnapshot.data()
+    const updatedPost = {
+      ...postDoc,
+      postApplicants: [...postDoc.postApplicants, email],
+    }
+    updatedOpportunitiesPosts(updatedPost)
+    await updateDoc(ref, updatedPost)
+    console.log("applied successfully")
+  } catch (error) {
+    console.error("Error withrawing post:", error)
+  }
+}
+
+export const SET_IS_LOADING = (payload) => (dispatch) => {
+  dispatch({ type: "SET_IS_LOADING", payload })
 }
 
 export const savePostsToStorage = (payload) => {

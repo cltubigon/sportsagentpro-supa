@@ -4,27 +4,16 @@ import { comStyle } from "../Dashboard/Opportunities/styleAthleteOpportunities"
 import { Waypoint } from "react-waypoint"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchPostsOfCurrentPage } from "../../store/actions/Fetch/fetchPostsAction"
-import { SET_CURRENT_PAGE, SET_IS_FETCHING } from "../../store/actions/utilsActions"
 
 const SkeletonAthleteOppLoader = () => {
   const dispatch = useDispatch()
-  const { currentPage, reachedLastItem } = useSelector((state) => state.utils.pagination)
-  const myOpportunitiesPosts = useSelector(
-    (state) => state.post.myOpportunitiesPosts
-  )
-  console.log("currentPage: ", currentPage)
-
   const { postContainer } = comStyle
+
   const handleWaypointEnter = () => {
-    if (myOpportunitiesPosts.length > 0 && !reachedLastItem) {
-      dispatch(SET_CURRENT_PAGE(currentPage + 1))
-      console.log("handleWaypointEnter is triggered")
-      dispatch(SET_IS_FETCHING(true))
-      dispatch(fetchPostsOfCurrentPage('skel-line22'))
-    }
+    dispatch(fetchPostsOfCurrentPage())
   }
   return (
-    <>
+    <Flex>
       <Waypoint onEnter={handleWaypointEnter}>
         <Flex sx={postContainer} p={4} gap={2}>
           <Skeleton
@@ -91,6 +80,7 @@ const SkeletonAthleteOppLoader = () => {
           </Flex>
         </Flex>
       </Waypoint>
+
       <Flex sx={postContainer} p={4} gap={2}>
         <Skeleton
           borderRadius={"md"}
@@ -283,7 +273,7 @@ const SkeletonAthleteOppLoader = () => {
           />
         </Flex>
       </Flex>
-    </>
+    </Flex>
   )
 }
 

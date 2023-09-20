@@ -6,7 +6,7 @@ import { useEffect } from "react"
 
 const Pagination = () => {
   const dispatch = useDispatch()
-  const { currentPage, itemsPerPage, totalItems } = useSelector(
+  const { currentPage, nextLimit, totalItems } = useSelector(
     (state) => state.utils.pagination
   )
 
@@ -15,7 +15,7 @@ const Pagination = () => {
     dispatch(SET_CURRENT_PAGE(newPage))
   }
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage)
+  const totalPages = Math.ceil(totalItems / nextLimit)
 
   const pageNumbers = []
   for (let i = 1; i <= totalPages; i++) {
