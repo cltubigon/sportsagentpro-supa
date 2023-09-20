@@ -4,7 +4,6 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
   Image,
@@ -25,14 +24,10 @@ import { useRef } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
 import { SET_IS_LOADING, applyToPost, withdrawToPost } from "../../../store/actions/postActions"
-import {
-  fetchAllOpportunityPosts,
-  fetchPostsOfCurrentPage,
-} from "../../../store/actions/Fetch/fetchPostsAction"
 
 const UtilDrawer = ({
   isOpen,
-  onOpen,
+  // onOpen,
   onClose,
   drawerData,
   drawerViewMore,
@@ -40,23 +35,15 @@ const UtilDrawer = ({
   isLoading,
 }) => {
   const dispatch = useDispatch()
-  const flexRef = useRef(null)
 
   const email = useSelector((state) => state.auth.email)
-  const profile = useSelector((state) => state.auth.profile)
-  const { currentPage } = useSelector((state) => state.utils.pagination)
   const allOpportunityPosts = useSelector(
     (state) => state.post.myOpportunitiesPosts
   )
 
-  // const [isLoading, setIsloading] = useState(false)
   const [hasApplied, setHasAhasApplied] = useState(false)
 
   const { sectionContainer, drawer } = comStyle
-
-  useEffect(() => {
-    dispatch(fetchPostsOfCurrentPage())
-  }, [currentPage])
 
   const handleViewMore = () => {
     setDrawerViewMore((prev) => !prev)
@@ -73,7 +60,7 @@ const UtilDrawer = ({
       allOpportunityPosts &&
       drawerData &&
       allOpportunityPosts.find((post) => post.id === drawerData.id)
-    console.log("selectedPost: ", selectedPost)
+    // console.log("selectedPost: ", selectedPost)
     const applied =
       selectedPost &&
       selectedPost.postApplicants &&
@@ -115,7 +102,6 @@ const UtilDrawer = ({
                 gridTemplateColumns={"150px 1fr"}
                 h="100vh"
                 py={2}
-                ref={flexRef}
               >
                 <GridItem pl="2" area={"a"}>
                   <Flex>
@@ -221,7 +207,6 @@ const UtilDrawer = ({
                                   const newObject = { icon, color }
                                   return newObject
                                 })
-                              console.log("currentIcon: ", currentIcon)
                               return (
                                 <Flex
                                   key={index}

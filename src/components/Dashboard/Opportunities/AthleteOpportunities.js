@@ -12,7 +12,7 @@ import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.pn
 import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import {
   SET_IS_LOADING,
   applyToPost,
@@ -29,10 +29,7 @@ import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
-  const flexRef = useRef(null)
-
-  // const state = useSelector((state) => state)
-  // console.log("state: ", state)
+  
   const profile = useSelector((state) => state.auth.profile)
   const { currentPage, lastItemReached } = useSelector(
     (state) => state.utils.pagination
@@ -40,13 +37,18 @@ const AthleteOpportunities = () => {
   const myOpportunitiesPosts = useSelector(
     (state) => state.post.myOpportunitiesPosts
   )
+  // console.log('myOpportunitiesPosts: ', myOpportunitiesPosts)
   const isLoading = useSelector((state) => state.post.isLoading)
   const email = useSelector((state) => state.auth.email)
   const { postContainer } = comStyle
-
+  
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [drawerViewMore, setDrawerViewMore] = useState(true)
   const [drawerData, setDrawerData] = useState(null)
+  useEffect(() => {
+    dispatch(fetchPostsOfCurrentPage())
+  }, [currentPage])
+
 
   const handleApply = (id, event, hasApplied) => {
     event.stopPropagation()
@@ -54,22 +56,12 @@ const AthleteOpportunities = () => {
     hasApplied && dispatch(withdrawToPost(id, email))
     !hasApplied && dispatch(applyToPost(id, email))
   }
-
+  
   const handleDrawer = (post, editorState) => {
     setDrawerData({ ...post, editorState: editorState })
     setDrawerViewMore(true)
     onOpen()
   }
-
-  useEffect(() => {
-    dispatch(fetchPostsOfCurrentPage())
-  }, [currentPage])
-
-  useEffect(() => {
-    if (flexRef.current) {
-      console.log("flexRef.current.scrollTop: ", flexRef.current.scrollTop)
-    }
-  }, [flexRef.current])
 
   const btnStyle = {
     colorScheme: "gray",
@@ -90,9 +82,9 @@ const AthleteOpportunities = () => {
 
   return (
     <>
-      {!myOpportunitiesPosts && <SkeletonOpportunities />}
-      <Flex gap={5} flexWrap={"wrap"} ref={flexRef} w={"100%"}>
-        {isLoading && (
+      {myOpportunitiesPosts.length < 1 && <SkeletonOpportunities />}
+      <Flex gap={5} flexWrap={"wrap"} w={"100%"}>
+        {isLoading && myOpportunitiesPosts.length >= 1 && (
           <Flex
             justifyContent={"center"}
             zIndex={801}
@@ -265,7 +257,7 @@ const AthleteOpportunities = () => {
           <SkeletonAthleteOppLoader />
         )}
 
-        <UtilDrawer
+        {drawerViewMore && <UtilDrawer
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
@@ -274,7 +266,7 @@ const AthleteOpportunities = () => {
           setDrawerViewMore={setDrawerViewMore}
           drawerData={drawerData}
           isLoading={isLoading}
-        />
+        />}
         <Pagination />
       </Flex>
     </>
