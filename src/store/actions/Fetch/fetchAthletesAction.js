@@ -6,7 +6,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
   query,
+  startAfter,
   where,
 } from "firebase/firestore"
 
@@ -41,7 +45,46 @@ export const fetchSelectedAthlete = (collectionName, field, value) => {
   }
 }
 
-export const startListeningToAthleteCollection = (
+// let lastVisible = null
+export const startListeningToAthleteCollection = (timestamp) => (dispatch, getState) => {
+  const { initialLimit, nextLimit, lastVisible } = getState().utils.pagination.athletes
+  console.log('lastVisible: ', lastVisible)
+  let q
+  if (!lastVisible) {
+    q = query(
+      collection(db, "athlete"),
+      orderBy("lastName", "asc"),
+      limit(initialLimit)
+    )
+  } else if (lastVisible) {
+    q = query(
+      collection(db, "athlete"),
+      orderBy("lastName", "asc"),
+      limit(nextLimit),
+      startAfter(lastVisible)
+    )
+  }
+  
+  const unsub = onSnapshot(q, (querySnapshot) => {
+    const updatedData = []
+    querySnapshot.forEach((doc) => {
+      updatedData.push(doc.data())
+    })
+    const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+    dispatch({ type: 'SET_LAST_VISIBLE', payload: setLastVisible })
+    dispatch({ type: 'SET_LAST_ATHLETE_ITEM_REACHED', payload: updatedData.length < nextLimit })
+    console.log('querySnapshot.docs.length: ', querySnapshot.docs.length)
+    console.log('setLastVisible: ', setLastVisible)
+    console.log('updatedData: ', updatedData)
+    dispatch({
+      type: "SET_ATHLETE_COLLECTION",
+      updatedData,
+      timestamp,
+    })
+  })
+}
+
+export const startListeningToAthleteCollectionssss = (
   collectionName,
   timestamp
 ) => {
@@ -113,17 +156,15 @@ export const listenAndSaveToBuildAthletes = (timestamp) => {
           const data = doc.data()
           updatedData.push(data)
         })
-        
-        const objWithIsChecked = updatedData.map((athlete)=> {
-          return (
-            {...athlete, isChecked: false}
-            )
-          })
-          dispatch({
-            type: "SAVE_ATHLETE_TO_STORAGE",
-            objWithIsChecked,
-            timestamp,
-          })
+
+        const objWithIsChecked = updatedData.map((athlete) => {
+          return { ...athlete, isChecked: false }
+        })
+        dispatch({
+          type: "SAVE_ATHLETE_TO_STORAGE",
+          objWithIsChecked,
+          timestamp,
+        })
       })
     }
   }

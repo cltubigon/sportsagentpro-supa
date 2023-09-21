@@ -3,13 +3,14 @@ const initialState = {
     athletes: {
       currentPage: 1,
       initialLimit: 8,
-      nextLimit: 4,
+      nextLimit: 8,
+      lastVisible: null,
       lastItemReached: false,
     },
     athletePosts: {
       currentPage: 1,
       initialLimit: 8,
-      nextLimit: 4,
+      nextLimit: 8,
       lastItemReached: false,
     },
   },
@@ -18,22 +19,48 @@ const initialState = {
 
 const utilsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_LAST_ITEM_REACHED":
+    case "SET_LAST_VISIBLE":
       return {
         ...state,
-        ...state.pagination,
-        athletePosts: {
-          ...state.pagination.athletePosts,
-          lastItemReached: action.payload,
+        pagination: {
+          ...state.pagination,
+          athletes: {
+            ...state.pagination.athletes,
+            lastVisible: action.payload,
+          },
+        },
+      }
+    case "SET_LAST_ATHLETE_ITEM_REACHED":
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          athletes: {
+            ...state.pagination.athletes,
+            lastItemReached: action.payload,
+          },
+        },
+      }
+    case "SET_LAST_POST_ITEM_REACHED":
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          athletePosts: {
+            ...state.pagination.athletePosts,
+            lastItemReached: action.payload,
+          },
         },
       }
     case "SET_CURRENT_PAGE":
       return {
         ...state,
-        ...state.pagination,
-        athletePosts: {
-          ...state.pagination.athletePosts,
-          currentPage: action.payload,
+        pagination: {
+          ...state.pagination,
+          athletePosts: {
+            ...state.pagination.athletePosts,
+            currentPage: action.payload,
+          },
         },
       }
     case "SET_IS_LOADING":

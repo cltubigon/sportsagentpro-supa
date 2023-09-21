@@ -1,11 +1,11 @@
 const initialState = {
   selectedProfile: null,
   athletes: {
-    data: null,
+    data: [],
     lastUpdated: null,
   },
   buildAthletes: {
-    data: null,
+    data: [],
     lastUpdated: null,
   },
 }
@@ -28,10 +28,14 @@ const athleteReducer = (state = initialState, action) => {
       }
     case "SET_ATHLETE_COLLECTION":
       console.log("athlete collection is updated")
+      const firstID = action.updatedData[0].id
+      console.log('firstID: ', firstID)
+      const hasDuplicate = state.athletes.data.some(athlete => athlete.id === firstID)
+      console.log('hasDuplicate: ', hasDuplicate)
       return {
         ...state,
         athletes: {
-          data: action.updatedData,
+          data: hasDuplicate ? state.athletes.data : [...state.athletes.data, ...action.updatedData],
           lastUpdated: action.timestamp,
         },
       }

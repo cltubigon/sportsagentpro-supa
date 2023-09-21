@@ -44,7 +44,7 @@ export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
     
     lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
     
-    dispatch({ type: 'SET_LAST_ITEM_REACHED', payload: data.length < nextLimit })
+    dispatch({ type: 'SET_LAST_POST_ITEM_REACHED', payload: data.length < nextLimit })
 
   } catch (error) {
     console.error("Error fetching data:", error)

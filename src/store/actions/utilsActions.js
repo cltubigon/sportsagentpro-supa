@@ -1,6 +1,9 @@
-export const SET_LAST_ITEM_REACHED = (payload) => (dispatch) => {
-  dispatch({ type: "SET_LAST_ITEM_REACHED", payload })
-}
+// export const SET_LAST_VISIBLE = (payload) => (dispatch) => {
+//   dispatch({ type: "SET_LAST_VISIBLE", payload })
+// }
+// export const SET_LAST_ITEM_REACHED = (payload) => (dispatch) => {
+//   dispatch({ type: "SET_LAST_POST_ITEM_REACHED", payload })
+// }
 export const SET_CURRENT_PAGE = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_CURRENT_PAGE", payload })

@@ -8,16 +8,17 @@ import { useEffect, useState } from "react"
 import { SkeletonDiscover } from "../Skeleton/SkeletonDiscover"
 import { athletesStyle } from "../../styles/athletesStyle"
 import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
+import { SkeletonLoaderAthlete } from "../Skeleton/SkeletonLoaderAthlete"
 
 const Athletes = () => {
   const dispatch = useDispatch()
-  console.count("Athlete rendered")
   const athleteList = useSelector((state) => state.athlete.athletes.data)
   const currentTimeStamp = useSelector(state => state.athlete.athletes.lastUpdated)
+  const { lastItemReached } = useSelector(state => state.utils.pagination.athletes)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(startListeningToAthleteCollection("athlete", currentTimeStamp))
+    dispatch(startListeningToAthleteCollection(currentTimeStamp))
   }, [])
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const Athletes = () => {
               </Flex>
             )
           })}
+          {athleteList && !lastItemReached && <SkeletonLoaderAthlete />}
         </SimpleGrid>
       )}
     </>
