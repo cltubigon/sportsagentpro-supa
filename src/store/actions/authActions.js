@@ -29,6 +29,7 @@ export const signOut = () => {
       .signOut()
       .then(() => {
         dispatch({ type: "LOGOUT_SUCCESS" })
+        dispatch({ type: "CLEAR_UTILS_SESSION" })
       })
   }
 }

@@ -33,6 +33,9 @@ const AthleteOpportunities = () => {
   const { currentPage, lastItemReached } = useSelector(
     (state) => state.utils.pagination.athletePosts
   )
+  console.log('lastItemReached: ', lastItemReached)
+  const state = useSelector(state => state)
+  console.log('state: ', state)
   const myOpportunitiesPosts = useSelector(
     (state) => state.post.myOpportunitiesPosts
   )
@@ -48,6 +51,7 @@ const AthleteOpportunities = () => {
   const [drawerData, setDrawerData] = useState(null)
   
   useEffect(() => {
+    console.log('fetch post is triggered')
     dispatch(fetchPostsOfCurrentPage())
   }, [currentPage])
 

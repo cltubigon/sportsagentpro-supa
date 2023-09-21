@@ -14,9 +14,12 @@ import {
   startAfter,
 } from "firebase/firestore"
 
-let lastVisible = null
 export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
-  const { lastItemReached, initialLimit, nextLimit } = getState().utils.pagination.athletePosts
+  const { lastItemReached, initialLimit, nextLimit, lastVisible } = getState().utils.pagination.athletePosts
+  console.log('lastItemReached: ', lastItemReached)
+  console.log('initialLimit: ', initialLimit)
+  console.log('nextLimit: ', nextLimit)
+  console.log('lastVisible: ', lastVisible)
   try {
     if (lastItemReached) return
     let q
@@ -42,8 +45,9 @@ export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
     // console.log('data: ', data)
     dispatch({ type: 'SET_ALL_OPPORTUNITY_POSTS', payload: data })
     
-    lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-    
+    const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+    dispatch({ type: 'SET_LAST_POST_VISIBLE', payload: setLastVisible })
+    console.log('data.length: ', data.length)
     dispatch({ type: 'SET_LAST_POST_ITEM_REACHED', payload: data.length < nextLimit })
 
   } catch (error) {

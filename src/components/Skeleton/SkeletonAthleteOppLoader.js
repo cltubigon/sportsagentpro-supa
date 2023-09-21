@@ -13,7 +13,7 @@ const SkeletonAthleteOppLoader = () => {
     dispatch(fetchPostsOfCurrentPage())
   }
   return (
-    <Flex>
+    <>
       <Waypoint onEnter={handleWaypointEnter}>
         <Flex sx={postContainer} p={4} gap={2}>
           <Skeleton
@@ -273,7 +273,7 @@ const SkeletonAthleteOppLoader = () => {
           />
         </Flex>
       </Flex>
-    </Flex>
+    </>
   )
 }
 

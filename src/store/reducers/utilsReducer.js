@@ -2,15 +2,16 @@ const initialState = {
   pagination: {
     athletes: {
       currentPage: 1,
-      initialLimit: 8,
-      nextLimit: 8,
+      initialLimit: 12,
+      nextLimit: 10,
       lastVisible: null,
       lastItemReached: false,
     },
     athletePosts: {
       currentPage: 1,
-      initialLimit: 8,
-      nextLimit: 8,
+      initialLimit: 12,
+      nextLimit: 10,
+      lastVisible: null,
       lastItemReached: false,
     },
   },
@@ -26,6 +27,17 @@ const utilsReducer = (state = initialState, action) => {
           ...state.pagination,
           athletes: {
             ...state.pagination.athletes,
+            lastVisible: action.payload,
+          },
+        },
+      }
+    case "SET_LAST_POST_VISIBLE":
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          athletePosts: {
+            ...state.pagination.athletePosts,
             lastVisible: action.payload,
           },
         },
@@ -66,8 +78,10 @@ const utilsReducer = (state = initialState, action) => {
     case "SET_IS_LOADING":
       return {
         ...state,
-        isLoading: action.payload,
+        initialState
       }
+    case "CLEAR_UTILS_SESSION":
+      return initialState
     default:
       return state
   }
