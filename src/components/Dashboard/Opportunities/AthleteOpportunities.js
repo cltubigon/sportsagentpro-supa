@@ -258,7 +258,7 @@ const AthleteOpportunities = () => {
               )
             )
           })}
-        {myOpportunitiesPosts.length > 0 && !lastItemReached && (
+        {myOpportunitiesPosts.length > 0 && !lastItemReached  && (
           <SkeletonAthleteOppLoader />
         )}
 

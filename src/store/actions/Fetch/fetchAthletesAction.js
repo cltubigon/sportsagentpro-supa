@@ -45,90 +45,130 @@ export const fetchSelectedAthlete = (collectionName, field, value) => {
   }
 }
 
-// let lastVisible = null
-export const startListeningToAthleteCollection = (timestamp) => (dispatch, getState) => {
-  const { initialLimit, nextLimit, lastVisible } = getState().utils.pagination.athletes
-  console.log('lastVisible: ', lastVisible)
-  let q
-  if (!lastVisible) {
-    q = query(
-      collection(db, "athlete"),
-      orderBy("lastName", "asc"),
-      limit(initialLimit)
-    )
-  } else if (lastVisible) {
-    q = query(
-      collection(db, "athlete"),
-      orderBy("lastName", "asc"),
-      limit(nextLimit),
-      startAfter(lastVisible)
-    )
-  }
-  
-  const unsub = onSnapshot(q, (querySnapshot) => {
-    const updatedData = []
-    querySnapshot.forEach((doc) => {
-      updatedData.push(doc.data())
-    })
-    const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-    dispatch({ type: 'SET_LAST_VISIBLE', payload: setLastVisible })
-    dispatch({ type: 'SET_LAST_ATHLETE_ITEM_REACHED', payload: updatedData.length < nextLimit })
-    console.log('querySnapshot.docs.length: ', querySnapshot.docs.length)
-    console.log('setLastVisible: ', setLastVisible)
-    console.log('updatedData: ', updatedData)
-    dispatch({
-      type: "SET_ATHLETE_COLLECTION",
-      updatedData,
-      timestamp,
-    })
-  })
-}
+export const startListeningToAthleteCollection =
+  (timestamp) => (dispatch, getState) => {
+    const { initialLimit, nextLimit, lastVisible, lastItemReached } =
+      getState().utils.pagination.athletes
+    console.log("lastVisible before: ", lastVisible)
 
-export const startListeningToAthleteCollectionssss = (
-  collectionName,
-  timestamp
-) => {
-  return (dispatch) => {
-    const collectionRef = db.collection(collectionName)
-
-    if (collectionName === "athlete") {
-      if (timestamp) {
-        const collectionLogref = db
-          .collection("logs")
-          .doc("Wks9w5h2ntpYzLihg9dW")
-        collectionLogref.onSnapshot((doc) => {
-          const data = doc.data()
-          const areEqual = areObjectsEqual(timestamp, data.athlete_last_updated)
-          !areEqual && saveData(data.athlete_last_updated)
-        })
-      } else if (!timestamp) {
-        const collectionLogref = db
-          .collection("logs")
-          .doc("Wks9w5h2ntpYzLihg9dW")
-        collectionLogref.onSnapshot((doc) => {
-          const data = doc.data()
-          saveData(data.athlete_last_updated)
-        })
-      }
+    //Check if timestamps of firstore and local storage are equal
+    if (timestamp) {
+      const collectionLogref = db.collection("logs").doc("Wks9w5h2ntpYzLihg9dW")
+      collectionLogref.onSnapshot((doc) => {
+        const data = doc.data()
+        const areEqual = areObjectsEqual(timestamp, data.athlete_last_updated)
+        !areEqual && fetchData(data.athlete_last_updated)
+        areEqual && !lastItemReached && fetchData(data.athlete_last_updated)
+        console.log("lastVisible in timestamp: ", lastVisible)
+        console.log("areEqual: ", areEqual)
+        console.log("lastItemReached: ", lastItemReached)
+      })
+    } else if (!timestamp) {
+      const collectionLogref = db.collection("logs").doc("Wks9w5h2ntpYzLihg9dW")
+      collectionLogref.onSnapshot((doc) => {
+        const data = doc.data()
+        fetchData(data.athlete_last_updated)
+      })
     }
 
-    function saveData(timestamp) {
-      collectionRef.onSnapshot((snapshot) => {
-        const updatedData = []
-        snapshot.forEach((doc) => {
-          const data = doc.data()
-          updatedData.push(data)
-        })
+    //Fetch the data
+    const fetchData = async (timestamp) => {
+      console.log("lastVisible in fetchData start: ", lastVisible)
+      console.log("fetching of data triggered")
+      try {
+
+        let q
+        if (!lastVisible) {
+          console.log("if statement triggered")
+          q = query(
+            collection(db, "athlete"),
+            orderBy("lastName", "asc"),
+            limit(initialLimit)
+          )
+          console.log("q:", q)
+          console.log("nextLimit: ", nextLimit)
+          console.log("lastVisible: ", lastVisible)
+        } else if (lastVisible) {
+          console.log("else if statement triggered")
+          q = query(
+            collection(db, "athlete"),
+            orderBy("lastName", "asc"),
+            limit(nextLimit),
+            startAfter(lastVisible)
+          )
+          console.log("q:", q)
+          console.log("nextLimit: ", nextLimit)
+          console.log("lastVisible: ", lastVisible)
+        }
+  
+        const querySnapshot = await getDocs(q)
+        const updatedData = querySnapshot.docs.map((doc) => doc.data())
+        const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+        console.log("querySnapshot: ", querySnapshot)
         console.log("updatedData: ", updatedData)
+        console.log("setLastVisible: ", setLastVisible)
+        dispatch({ type: "SET_LAST_VISIBLE", payload: setLastVisible })
+        console.log("lastVisible in fetchData bottom: ", lastVisible)
+        dispatch({
+          type: "SET_LAST_ATHLETE_ITEM_REACHED",
+          payload: updatedData.length < nextLimit && updatedData.length > 0,
+        })
         dispatch({
           type: "SET_ATHLETE_COLLECTION",
           updatedData,
           timestamp,
         })
-      })
+      } catch (error) {
+        console.log('Encountered an error:', error)
+      }
     }
   }
-}
+
+// export const startListeningToAthleteCollectionssss = (
+//   collectionName,
+//   timestamp
+// ) => {
+//   return (dispatch) => {
+//     const collectionRef = db.collection(collectionName)
+
+//     if (collectionName === "athlete") {
+//       if (timestamp) {
+//         const collectionLogref = db
+//           .collection("logs")
+//           .doc("Wks9w5h2ntpYzLihg9dW")
+//         collectionLogref.onSnapshot((doc) => {
+//           const data = doc.data()
+//           const areEqual = areObjectsEqual(timestamp, data.athlete_last_updated)
+//           !areEqual && saveData(data.athlete_last_updated)
+//         })
+//       } else if (!timestamp) {
+//         const collectionLogref = db
+//           .collection("logs")
+//           .doc("Wks9w5h2ntpYzLihg9dW")
+//         collectionLogref.onSnapshot((doc) => {
+//           const data = doc.data()
+//           saveData(data.athlete_last_updated)
+//         })
+//       }
+//     }
+
+//     function saveData(timestamp) {
+//       collectionRef.onSnapshot((snapshot) => {
+//         const updatedData = []
+//         snapshot.forEach((doc) => {
+//           const data = doc.data()
+//           updatedData.push(data)
+//         })
+//         console.log("updatedData: ", updatedData)
+//         dispatch({
+//           type: "SET_ATHLETE_COLLECTION",
+//           updatedData,
+//           timestamp,
+//         })
+//       })
+//     }
+//   }
+// }
 
 export const listenAndSaveToBuildAthletes = (timestamp) => {
   return (dispatch, getState) => {

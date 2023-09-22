@@ -21,6 +21,7 @@ const initialState = {
 const utilsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_LAST_VISIBLE":
+      console.log('setting last visible in reducer', action.payload)
       return {
         ...state,
         pagination: {

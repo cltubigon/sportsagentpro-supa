@@ -16,10 +16,6 @@ import {
 
 export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
   const { lastItemReached, initialLimit, nextLimit, lastVisible } = getState().utils.pagination.athletePosts
-  console.log('lastItemReached: ', lastItemReached)
-  console.log('initialLimit: ', initialLimit)
-  console.log('nextLimit: ', nextLimit)
-  console.log('lastVisible: ', lastVisible)
   try {
     if (lastItemReached) return
     let q
@@ -42,13 +38,11 @@ export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
 
     const querySnapshot = await getDocs(q)
     const data = querySnapshot.docs.map((doc) => doc.data())
-    // console.log('data: ', data)
     dispatch({ type: 'SET_ALL_OPPORTUNITY_POSTS', payload: data })
     
     const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
     dispatch({ type: 'SET_LAST_POST_VISIBLE', payload: setLastVisible })
-    console.log('data.length: ', data.length)
-    dispatch({ type: 'SET_LAST_POST_ITEM_REACHED', payload: data.length < nextLimit })
+    dispatch({ type: 'SET_LAST_POST_ITEM_REACHED', payload: data.length < nextLimit && data.length > 0 })
 
   } catch (error) {
     console.error("Error fetching data:", error)

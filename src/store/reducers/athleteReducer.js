@@ -30,6 +30,7 @@ const athleteReducer = (state = initialState, action) => {
       console.log("athlete collection is updated")
       const firstID =  action.updatedData.length > 0 && action.updatedData[0].id
       console.log('firstID: ', firstID)
+      console.log('action.updatedData: ', action.updatedData)
       const hasDuplicate = state.athletes.data.some(athlete => athlete.id === firstID)
       console.log('hasDuplicate: ', hasDuplicate)
       return {

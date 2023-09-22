@@ -30,18 +30,22 @@ import BuildMenu from "./BuildMenu"
 import {
   SkeletonBuildRecipientsTab,
   SkeletonBuildRecipientsTabColumn,
+  SkeletonLoaderBuildRecipientsTab,
+  SkeletonLoaderBuildRecipientsTabColumn,
 } from "../Skeleton/SkeletonBuildRecipientsTab"
-import { listenAndSaveToBuildAthletes } from "../../store/actions/Fetch/fetchAthletesAction"
+import { listenAndSaveToBuildAthletes, startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
 
 const RecipientsV1 = () => {
-  console.count('RecipientsV1 is rendered')
   const dispatch = useDispatch()
   const { register, watch } = useForm()
 
   // const reduxState = useSelector((state) => state)
   // console.log('reduxState: ', reduxState)
-  const localAthletes = useSelector((state) => state.athlete.buildAthletes.data)
-  const build = useSelector((state) => state.build)
+  const localAthletes = useSelector((state) => state.athlete.athletes.data)
+  // const localAthletes = useSelector((state) => state.athlete.buildAthletes.data)
+  const { lastItemReached } = useSelector(state => state.utils.pagination.athletes)
+  console.log('lastItemReached: ', lastItemReached)
+  const recipientsListLayout = useSelector((state) => state.build.recipientsListLayout)
   const currentTimeStamp = useSelector(
     (state) => state.athlete.buildAthletes.lastUpdated
   )
@@ -49,14 +53,12 @@ const RecipientsV1 = () => {
     (state) => state.build.selectedRecipients
   )
   
-  console.log('selectedRecipients: ', selectedRecipients)
   const [isLoading, setIsloading] = useState(true)
   const [tab, setTab] = useState(true)
 
-  const { recipientsListLayout } = build
-
   useEffect(() => {
-    dispatch(listenAndSaveToBuildAthletes(currentTimeStamp))
+    dispatch(startListeningToAthleteCollection(currentTimeStamp))
+    // dispatch(listenAndSaveToBuildAthletes(currentTimeStamp))
   }, [])
   useEffect(() => {
     localAthletes && setIsloading(false)
@@ -233,7 +235,7 @@ const RecipientsV1 = () => {
                           </Avatar>
                           <Box pl={2}>
                             <Text sx={athleteName}>
-                              {athlete.firstName} {athlete.lastName}
+                              {athlete.lastName}, {athlete.firstName}
                             </Text>
                             <Text sx={athleteDescription}>
                               Student-Athlete • Tennis • Fresno State Bulldogs
@@ -242,6 +244,12 @@ const RecipientsV1 = () => {
                         </Flex>
                       )
                     })}
+                    {!isLoading && !lastItemReached &&
+                    (!recipientsListLayout ? (
+                      <SkeletonLoaderBuildRecipientsTabColumn />
+                    ) : (
+                      <SkeletonLoaderBuildRecipientsTab />
+                    ))}
                 </InputGroup>
               </FormControl>
             </Flex>

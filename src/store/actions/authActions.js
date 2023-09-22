@@ -30,6 +30,7 @@ export const signOut = () => {
       .then(() => {
         dispatch({ type: "LOGOUT_SUCCESS" })
         dispatch({ type: "CLEAR_UTILS_SESSION" })
+        dispatch({ type: "RESET_POST_STATE" })
       })
   }
 }
