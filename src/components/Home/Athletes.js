@@ -16,13 +16,7 @@ const Athletes = () => {
   const currentTimeStamp = useSelector(state => state.athlete.athletes.lastUpdated)
   const { lastItemReached, lastVisible } = useSelector(state => state.utils.pagination.athletes)
   const [isLoading, setIsLoading] = useState(true)
-
-  // const state = useSelector(state => state)
-  // console.log('state: ', state)
-
-  console.log('athleteList: ', athleteList)
-  console.log('lastVisible: ', lastVisible)
-  console.log('lastItemReached: ', lastItemReached)
+  
   useEffect(() => {
     dispatch(startListeningToAthleteCollection(currentTimeStamp))
   }, [])
