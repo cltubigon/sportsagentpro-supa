@@ -1,5 +1,11 @@
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import React from "react"
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom"
+import React, { useEffect } from "react"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import RegisterTeam from "./pages/RegisterTeam"
@@ -16,40 +22,54 @@ import Network from "./pages/DashboardPages/Network"
 import AthleteHomepage from "./pages/DashboardPages/AthleteHomePage"
 import Media from "./pages/DashboardPages/Media"
 import Opportunities from "./pages/DashboardPages/Opportunities"
-import { useSelector } from "react-redux"
-import { useState } from "react"
-import Preloader from "./utils/Preloader"
-
+import { useDispatch, useSelector } from "react-redux"
+import { SUPABASE_SIGNOUT } from "./store/actions/authActions"
+import supabase from "./config/supabaseClient"
 
 function App() {
-  // const reduxState = useSelector(state => state)
-  // console.log('reduxState: ', reduxState)
-  // console.log('App is rendered')
-  // const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.auth.user)
+  // const state = useSelector(state => state)
+  // console.log('state: ', state)
+
+  // Check if user is authenticated
+  useEffect(() => {
+    if (user) {
+      const checkAuthState = async () => {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+
+        if (!user) {
+          dispatch(SUPABASE_SIGNOUT())
+        }
+      }
+      checkAuthState()
+    }
+  }, [])
+
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <ScrollToTop />
-        <MainNavigation />
-          <Routes>
-            <Route exact path="/" element={<Home />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/signup" element={<SignUp />}></Route>
-            <Route path="/profile/:id" element={<Profile />}></Route>
-            <Route path="/register-team" element={<RegisterTeam />}></Route>
-            <Route path="/add-deal" element={<CreateDeal />}></Route>
-            <Route path="/my-profile" element={<MyProfile />}></Route>
-            <Route path="/user-type" element={<UserType />}></Route>
-            <Route path="/build/" element={<Build />}></Route>
-            <Route path="/build/:id" element={<Build />}></Route>
-            {/* <Route path="/network" element={isLoggedIn ? <Network /> : <Preloader />}></Route> */}
-            <Route path="/network" element={<Network />}></Route>
-            <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
-            <Route path="/media" element={<Media />}></Route>
-            <Route path="/opportunities" element={<Opportunities />}></Route>
-            {/* <Route path="/opportunities" element={isLoggedIn ? <Opportunities /> : <Preloader />}></Route> */}
-          </Routes>
-        <ColorMode />
-      </BrowserRouter>
+      <MainNavigation />
+      <Routes>
+        <Route exact path="/" element={<Home />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/profile/:id" element={<Profile />}></Route>
+        <Route path="/register-team" element={<RegisterTeam />}></Route>
+        <Route path="/add-deal" element={<CreateDeal />}></Route>
+        <Route path="/my-profile" element={<MyProfile />}></Route>
+        <Route path="/user-type" element={<UserType />}></Route>
+        <Route path="/build/" element={user && <Build />}></Route>
+        <Route path="/build/:id" element={user && <Build />}></Route>
+        <Route path="/network" element={user && <Network />}></Route>
+        <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
+        <Route path="/media" element={<Media />}></Route>
+        <Route path="/opportunities" element={<Opportunities />}></Route>
+      </Routes>
+      <ColorMode />
+    </BrowserRouter>
   )
 }
 

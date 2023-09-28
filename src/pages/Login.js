@@ -17,10 +17,8 @@ import {
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import {
-  setAuthError,
-  setProfile,
-  signIn,
-  supabaseSignIn,
+  SET_DEFAULT_ERROR,
+  SUPABASE_SIGNIN,
 } from "../store/actions/authActions"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -33,20 +31,17 @@ const LoginForm = () => {
   const navigate = useNavigate()
   const toast = useToast()
 
-  const user = useSelector((state) => state.auth.user)
-  console.log("user: ", user)
-  const authError = useSelector((state) => state.auth.authError)
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
-  const [loading, setLoading] = useState(false)
-
-  const [show, setShow] = useState(false)
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
 
+  const user = useSelector((state) => state.auth.user)
+  const authError = useSelector((state) => state.auth.authError)
+  const [loading, setLoading] = useState(false)
+  const [show, setShow] = useState(false)
+
   const onSubmit = (data) => {
     setLoading(() => true)
-    dispatch(supabaseSignIn(data))
-    // dispatch(signIn(data))
+    dispatch(SUPABASE_SIGNIN(data))
   }
 
   const handleShowPassword = () => setShow((prev) => !prev)
@@ -55,10 +50,7 @@ const LoginForm = () => {
     if (authError) {
       toast({
         title: "Login error",
-        description:
-          authError === "auth/user-not-found"
-            ? "User not found"
-            : "Incorrect username or password",
+        description: authError,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -68,28 +60,21 @@ const LoginForm = () => {
 
     return () => {
       setLoading(false)
-      dispatch(setAuthError())
+      dispatch(SET_DEFAULT_ERROR())
     }
   }, [authError])
 
   useEffect(() => {
-    if (user) {
-      console.log("I am about to set the Profile")
-      console.log("user.userType: ", user.userType)
-
-      user.userType && navigate("/network")
-      if (user.userType) {
-        dispatch(setProfile())
-        switch (user.userType) {
-          case "brand":
-            navigate("/network")
-            break
-          case "athlete":
-            navigate("/athlete-home")
-            break
-          default:
-            break
-        }
+    if (user && user.userType) {
+      switch (user.userType) {
+        case "brand":
+          navigate("/network")
+          break
+        case "athlete":
+          navigate("/athlete-home")
+          break
+        default:
+          break
       }
     }
   }, [user])
@@ -123,6 +108,7 @@ const LoginForm = () => {
               type="email"
               id="email"
               placeholder="email"
+              autoComplete="email"
               {...register("email", {
                 required: "Enter your email address",
                 pattern: {
@@ -145,6 +131,7 @@ const LoginForm = () => {
                 type={show ? "text" : "password"}
                 id="password"
                 placeholder="Password"
+                autoComplete="password"
                 {...register("password", {
                   required: "Password is required",
                 })}

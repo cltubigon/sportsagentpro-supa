@@ -1,12 +1,18 @@
 import { Avatar, AvatarBadge, Box, Button, Flex, Text } from "@chakra-ui/react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { FaFileContract } from "react-icons/fa"
+import { SUPABASE_SIGNOUT } from "../../../store/actions/authActions"
 
-const SignedInNavigation = ({handleSignOut}) => {
+const SignedInNavigation = () => {
   console.log("SignedIn Navigation Rendered")
+  const dispatch = useDispatch()
 
-  const profile = useSelector((state) => state.auth.profile)
+  const handleSignOut = () => {
+    dispatch(SUPABASE_SIGNOUT())
+  }
+
+  const user = useSelector((state) => state.auth.user)
 
   return (
     <>
@@ -16,18 +22,18 @@ const SignedInNavigation = ({handleSignOut}) => {
         flexGrow={1}
         justifyContent={"flex-end"}
       >
-        {profile && profile.userType === "brand" && (
-        <Box mr={"auto"}>
-          <Link to={"/build"}>
-            <Button
-              colorScheme="twitter"
-              borderRadius={"100px"}
-              leftIcon={<FaFileContract />}
-            >
-              Build
-            </Button>
-          </Link>
-        </Box>
+        {user && user.userType === "brand" && (
+          <Box mr={"auto"}>
+            <Link to={"/build"}>
+              <Button
+                colorScheme="twitter"
+                borderRadius={"100px"}
+                leftIcon={<FaFileContract />}
+              >
+                Build
+              </Button>
+            </Link>
+          </Box>
         )}
         <Text>Deals</Text>
         <Link to="/my-profile">
@@ -37,7 +43,7 @@ const SignedInNavigation = ({handleSignOut}) => {
         <Text cursor={"pointer"} onClick={handleSignOut}>
           Logout
         </Text>
-        <Avatar name={profile && profile.initials}>
+        <Avatar name={user && `${user.firstName[0]} ${user.lastName[0]}`}>
           <AvatarBadge boxSize="0.9em" bg="green.500" />
         </Avatar>
       </Flex>

@@ -1,38 +1,24 @@
 import { Flex, Heading } from "@chakra-ui/react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import SignedOutNavigation from "./Navigation/SignedOutNavigation"
 import SignedInNavigation from "./Navigation/SignedInNavigation"
 import { MainNavigationStyle } from "../../styles/MainNavigationStyle"
 import { useEffect } from "react"
-import { useState } from "react"
-import { resetBuildState } from "../../store/actions/buildPostActions"
-import { resetPostState } from "../../store/actions/postActions"
-import { signOut } from "../../store/actions/authActions"
 
 const MainNavigation = () => {
   console.log("MainNavigation")
   const location = useLocation()
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
-
-  const [loggingOut, setIsLoggingOut] = useState(false)
-
-  const handleSignOut = () => {
-    dispatch(signOut())
-    setIsLoggingOut(true)
-  }
+  const user = useSelector((state) => state.auth.user)
 
   useEffect(() => {
-    if (loggingOut && !isLoggedIn) {
+    if (!user) {
       navigate("/")
-      dispatch(resetBuildState())
-      dispatch(resetPostState())
-      setIsLoggingOut(false)
     }
-  }, [loggingOut, isLoggedIn])
+  }, [user])
+
   return (
     <>
       {location.pathname !== "/signup" &&
@@ -45,11 +31,7 @@ const MainNavigation = () => {
               </Heading>
             </Flex>
             <Flex flexGrow={1}>
-              {isLoggedIn ? (
-                <SignedInNavigation handleSignOut={handleSignOut} />
-              ) : (
-                <SignedOutNavigation />
-              )}
+              {user ? <SignedInNavigation /> : <SignedOutNavigation />}
             </Flex>
           </Flex>
         )}

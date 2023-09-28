@@ -17,8 +17,6 @@ const athleteReducer = (state = initialState, action) => {
         ...state,
         athletes: hasDuplicate ? state.athletes : [...state.athletes, ...action.payload],
       }
-    case "CLEAR_ATHLETE_SESSION":
-      return initialState
     default:
       return state
   }
