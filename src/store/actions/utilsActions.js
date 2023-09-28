@@ -1,16 +1,5 @@
-// export const SET_LAST_VISIBLE = (payload) => (dispatch) => {
-//   dispatch({ type: "SET_LAST_VISIBLE", payload })
-// }
-// export const SET_LAST_ITEM_REACHED = (payload) => (dispatch) => {
-//   dispatch({ type: "SET_LAST_POST_ITEM_REACHED", payload })
-// }
-export const SET_CURRENT_PAGE = (payload) => {
-  return (dispatch) => {
-    dispatch({ type: "SET_CURRENT_PAGE", payload })
-  }
-}
-export const SET_IS_LOADING = (payload) => {
-  return (dispatch) => {
-    dispatch({ type: "SET_IS_LOADING", payload })
-  }
+export const SET_ATHLETE_CURRENT_PAGE = () => async (dispatch, getState) => {
+  const { currentPage } = getState().utils.pagination.athletes
+  dispatch({ type: "SET_ATHLETE_CURRENT_PAGE", payload: currentPage + 1 })
+  dispatch({ type: "SET_LOADING_STATUS", payload: true })
 }

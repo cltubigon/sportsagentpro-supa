@@ -8,10 +8,13 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore"
+import supabase from "../../config/supabaseClient"
 
 export const signIn = (credentials) => {
   return (dispatch, getState, { getFirebase }) => {
-    getFirebase().auth().signInWithEmailAndPassword(credentials.email, credentials.password)
+    getFirebase()
+      .auth()
+      .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then((res) => {
         dispatch({ type: "LOGIN_SUCCESS" })
       })
@@ -20,6 +23,39 @@ export const signIn = (credentials) => {
       })
   }
 }
+
+export const supabaseSignIn =
+  ({ email, password }) =>
+  async (dispatch) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    const getUserData = async (authData) => {
+      const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('uid', authData.user.id)
+
+      if (data) {
+        console.log('data: ', data)
+        const { firstName, lastName, phoneNumber, userType } = data[0]
+        const userData = { firstName, lastName, phoneNumber, userType }
+        const mergedData = { ...authData.user, ...userData }
+        dispatch({ type: "SET_USER", payload: mergedData })
+      } else if (error) {
+        console.log('error: ', error)
+      }
+    }
+
+    if (data) {
+      console.log("Supabase login successful", data)
+      getUserData(data)
+      // Dispatch an action to update Redux state or perform other actions
+    } else if (error) {
+      console.error("Error:", error)
+    }
+  }
 
 export const signOut = () => {
   return (dispatch, getState, { getFirebase }) => {
@@ -40,6 +76,49 @@ export const setAuthError = () => {
     dispatch({ type: "SET_ERROR_TO_DEFAULT" })
   }
 }
+
+export const supabaseSignup =
+  ({ firstName, lastName, email, password, userType, phone }) =>
+  async (dispatch) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+
+    const addUserToTable = async (authData) => {
+      // This will run second
+      const { data, error } = await supabase
+        .from("users")
+        .insert([
+          {
+            firstName,
+            lastName,
+            userType,
+            phoneNumber: phone,
+            uid: authData.user.id,
+          },
+        ])
+        .select()
+      if (data) {
+        console.log(`signup successfuly added`, data)
+        const { firstName, lastName, phoneNumber, userType } = data[0]
+        const userData = { firstName, lastName, phoneNumber, userType }
+        const mergedData = { ...authData.user, ...userData }
+        console.log("mergedData: ", mergedData)
+        dispatch({ type: "SET_USER", payload: mergedData })
+      } else if (error) {
+        console.log("error adding it to the table: ", error)
+      }
+    }
+
+    if (data) {
+      // This will run first
+      console.log(`signup successfuly added to auth users:`, data)
+      addUserToTable(data)
+    } else if (error) {
+      console.log("error: ", error)
+    }
+  }
 
 export const signUp = (newUser) => {
   console.log("newUser: ", newUser)
@@ -107,7 +186,7 @@ export const signUp = (newUser) => {
 export const setProfile = (data) => {
   return (dispatch, getState) => {
     const reduxFirebaseState = getState().firebase
-    console.log('reduxFirebaseState: ', reduxFirebaseState)
+    console.log("reduxFirebaseState: ", reduxFirebaseState)
     if (reduxFirebaseState.profile) {
       console.log("reduxFirebaseState: ", reduxFirebaseState)
       const email = reduxFirebaseState.auth.email

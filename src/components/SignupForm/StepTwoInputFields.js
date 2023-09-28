@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import "react-phone-input-2/lib/style.css";
 import './phonefield.css'
-import { setAuthError, setProfile, signUp } from '../../store/actions/authActions'
+import { setAuthError, setProfile, signUp, supabaseSignup } from '../../store/actions/authActions'
 import PhoneInput from 'react-phone-input-2'
 
 const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
@@ -64,7 +64,8 @@ const StepTwoInputFields = ({userType, oneTwoToggle, setOneTwoToggle})=> {
   const onSubmit = (data) => {
     setLoading(true)
     const {confirmPassword, ...removedConfirmPassword} = data
-    dispatch(signUp({...removedConfirmPassword, userType}))
+    // dispatch(signUp({...removedConfirmPassword, userType}))
+    dispatch(supabaseSignup({...removedConfirmPassword, userType}))
   }
   
   console.log('firebaseProfile.userType: ', firebaseProfile.userType)

@@ -2,84 +2,35 @@ const initialState = {
   pagination: {
     athletes: {
       currentPage: 1,
-      initialLimit: 12,
-      nextLimit: 10,
-      lastVisible: null,
-      lastItemReached: false,
-    },
-    athletePosts: {
-      currentPage: 1,
-      initialLimit: 12,
-      nextLimit: 10,
-      lastVisible: null,
-      lastItemReached: false,
+      itemsPerPage: 16,
+      isLoading: false,
     },
   },
-  isLoading: false,
 }
 
 const utilsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_LAST_VISIBLE":
-      console.log('setting last visible in reducer', action.payload)
+    case "SET_ATHLETE_CURRENT_PAGE":
       return {
         ...state,
         pagination: {
           ...state.pagination,
           athletes: {
             ...state.pagination.athletes,
-            lastVisible: action.payload,
-          },
-        },
-      }
-    case "SET_LAST_POST_VISIBLE":
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          athletePosts: {
-            ...state.pagination.athletePosts,
-            lastVisible: action.payload,
-          },
-        },
-      }
-    case "SET_LAST_ATHLETE_ITEM_REACHED":
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          athletes: {
-            ...state.pagination.athletes,
-            lastItemReached: action.payload,
-          },
-        },
-      }
-    case "SET_LAST_POST_ITEM_REACHED":
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          athletePosts: {
-            ...state.pagination.athletePosts,
-            lastItemReached: action.payload,
-          },
-        },
-      }
-    case "SET_CURRENT_PAGE":
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          athletePosts: {
-            ...state.pagination.athletePosts,
             currentPage: action.payload,
           },
         },
       }
-    case "SET_IS_LOADING":
+    case "SET_LOADING_STATUS":
       return {
         ...state,
-        initialState
+        pagination: {
+          ...state.pagination,
+          athletes: {
+            ...state.pagination.athletes,
+            isLoading: action.payload,
+          },
+        },
       }
     case "CLEAR_UTILS_SESSION":
       return initialState

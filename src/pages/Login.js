@@ -16,7 +16,12 @@ import {
   Spinner,
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
-import { setAuthError, setProfile, signIn } from "../store/actions/authActions"
+import {
+  setAuthError,
+  setProfile,
+  signIn,
+  supabaseSignIn,
+} from "../store/actions/authActions"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/layouts/Footer"
@@ -28,9 +33,10 @@ const LoginForm = () => {
   const navigate = useNavigate()
   const toast = useToast()
 
+  const user = useSelector((state) => state.auth.user)
+  console.log("user: ", user)
   const authError = useSelector((state) => state.auth.authError)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
-  const userType = useSelector((state) => state.firebase.profile.userType)
   const [loading, setLoading] = useState(false)
 
   const [show, setShow] = useState(false)
@@ -39,7 +45,8 @@ const LoginForm = () => {
 
   const onSubmit = (data) => {
     setLoading(() => true)
-    dispatch(signIn(data))
+    dispatch(supabaseSignIn(data))
+    // dispatch(signIn(data))
   }
 
   const handleShowPassword = () => setShow((prev) => !prev)
@@ -66,22 +73,26 @@ const LoginForm = () => {
   }, [authError])
 
   useEffect(() => {
-    console.log('I am about to set the Profile')
-    console.log('userType: ', userType)
-    if (userType) {
-      dispatch(setProfile())
-      switch (userType) {
-        case "brand":
-          navigate("/network")
-          break
-        case "athlete":
-          navigate("/athlete-home")
-          break
-        default:
-          break
+    if (user) {
+      console.log("I am about to set the Profile")
+      console.log("user.userType: ", user.userType)
+
+      user.userType && navigate("/network")
+      if (user.userType) {
+        dispatch(setProfile())
+        switch (user.userType) {
+          case "brand":
+            navigate("/network")
+            break
+          case "athlete":
+            navigate("/athlete-home")
+            break
+          default:
+            break
+        }
       }
     }
-  }, [userType, isLoggedIn])
+  }, [user])
 
   const {
     formControlStyle,
@@ -139,7 +150,7 @@ const LoginForm = () => {
                 })}
               />
               <InputRightElement width="4.5rem">
-                  <Button h="1.75rem" size="sm" onClick={handleShowPassword}>
+                <Button h="1.75rem" size="sm" onClick={handleShowPassword}>
                   {show ? "Hide" : "Show"}
                 </Button>
               </InputRightElement>

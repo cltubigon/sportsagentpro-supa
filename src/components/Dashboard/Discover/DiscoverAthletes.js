@@ -15,7 +15,7 @@ import { SkeletonDiscoverAthletes } from "../../Skeleton/SkeletonDiscoverAthlete
 
 const DiscoverAthletes = () => {
   const dispatch = useDispatch()
-  console.count("Athlete rendered")
+  console.count("Athlete network rendered")
   const athleteList = useSelector((state) => state.athlete.athletes.data)
   const currentTimeStamp = useSelector(
     (state) => state.athlete.athletes.lastUpdated

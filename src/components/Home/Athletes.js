@@ -1,48 +1,60 @@
 import { Text, Flex, SimpleGrid, Box } from "@chakra-ui/layout"
 import { DummyImage } from "react-simple-placeholder-image"
-import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
-import { useDispatch, useSelector } from "react-redux"
+// import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { HomeSkeleton } from "../Skeleton/Skeletons"
 import { useEffect, useState } from "react"
 import { SkeletonDiscover } from "../Skeleton/SkeletonDiscover"
-import { athletesStyle } from "../../styles/athletesStyle"
-import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
+// import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
 import { SkeletonLoaderAthlete } from "../Skeleton/SkeletonLoaderAthlete"
+import supabase from "../../config/supabaseClient"
+import { athletesStyle } from "../../styles/athletesStyle"
+import { useDispatch, useSelector } from "react-redux"
+import { SET_ATHLETES } from "../../store/actions/athleteActions"
+import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 
 const Athletes = () => {
   const dispatch = useDispatch()
-  const athleteList = useSelector((state) => state.athlete.athletes.data)
-  const currentTimeStamp = useSelector(state => state.athlete.athletes.lastUpdated)
-  const { lastItemReached, lastVisible } = useSelector(state => state.utils.pagination.athletes)
-  const [isLoading, setIsLoading] = useState(true)
-  
+  const {currentPage, itemsPerPage, isLoading} = useSelector(state => state.utils.pagination.athletes)
+  const athleteList = useSelector(state => state.athlete.athletes)
+  // const state = useSelector(state => state)
+  // console.log('state: ', state)
+
+  const [show, setShow] = useState(false)
   useEffect(() => {
-    dispatch(startListeningToAthleteCollection(currentTimeStamp))
+    const showTimeout = setTimeout(() => {
+      setShow(true)
+    }, 2000)
+
+    return () => clearTimeout(showTimeout)
   }, [])
 
   useEffect(() => {
-    athleteList && setIsLoading(false)
-  }, [athleteList])
+    console.log('initial athletes fetch')
+    dispatch(SET_ATHLETES())
+  }, [currentPage])
+  console.log('show: ', show)
+
   return (
     <>
-      {isLoading && (
+      {/* {isLoading && (
         <HomeSkeleton />
-      )}
-      {athleteList && !isLoading && (
-        <SimpleGrid
-          minChildWidth={{
-            base: "100%",
-            sm: "290px",
-            md: "300px",
-          }}
-          gap={{ base: 3, md: 6 }}
-          tabIndex={0}
-        >
-          {athleteList && athleteList.map((athlete, index) => {
+      )} */}
+      {/* {athleteList && !isLoading && ( */}
+      <SimpleGrid
+        minChildWidth={{
+          base: "100%",
+          sm: "290px",
+          md: "300px",
+        }}
+        gap={{ base: 3, md: 6 }}
+        tabIndex={0}
+      >
+        {athleteList &&
+          athleteList.map((athlete, index) => {
             const { id, lastName, firstName, sports, team } = athlete
             return (
-              <Flex key={id}>
+              <Flex key={index}>
                 <Link to={`/profile/${id}`}>
                   <Flex sx={athletesStyle.cardCOntainer}>
                     <Flex sx={athletesStyle.imageContainer}>
@@ -69,9 +81,11 @@ const Athletes = () => {
               </Flex>
             )
           })}
-          {athleteList && !lastItemReached && <SkeletonLoaderAthlete />}
-        </SimpleGrid>
-      )}
+        {athleteList && show && (
+          <SkeletonLoaderAthlete />
+        )}
+      </SimpleGrid>
+      {/* )} */}
     </>
   )
 }

@@ -3,10 +3,16 @@ const initialState = {
   profile: null,
   email: null,
   isLoggedIn: false,
+  user: null,
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
+        case "SET_USER":
+          return {
+            ...state,
+            user: action.payload,
+          }
         case "LOGIN_ERROR":
           console.log("login error")
           return {

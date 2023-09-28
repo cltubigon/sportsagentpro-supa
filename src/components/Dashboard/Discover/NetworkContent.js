@@ -5,13 +5,12 @@ import { useSelector } from 'react-redux'
 import DiscoverAthletes from './DiscoverAthletes'
 
 const NetworkContent = () => {
-    const auth = useSelector(state => state.auth)
-    const { profile } = auth
-    const userType = profile && profile.userType
+    const user = useSelector(state => state.auth.user)
+    const userType = user && user.userType
     return (
         <>
-            {/* {userType && userType === 'brand' && <DiscoverAthletes />}
-            {userType && userType === 'athlete' && <Brands />} */}
+            {userType && userType === 'athlete' && <DiscoverAthletes />}
+            {userType && userType === 'brand' && <Brands />}
         </>
     )
 }

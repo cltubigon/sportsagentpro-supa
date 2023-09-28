@@ -1,45 +1,24 @@
 const initialState = {
-  selectedProfile: null,
-  athletes: {
-    data: [],
-    lastUpdated: null,
-  },
-  buildAthletes: {
-    data: [],
-    lastUpdated: null,
-  },
+  athletes: [],
+  isLoading: false,
+  fetchError: null,
 }
 
 const athleteReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SAVE_ATHLETE_TO_STORAGE":
-      console.log("buildAthletes collection is updated")
-      return {
-        ...state,
-        buildAthletes: {
-          data: action.objWithIsChecked,
-          lastUpdated: action.timestamp,
-        },
-      }
-    case "SET_SELECTED_PROFILE":
-      return {
-        ...state,
-        selectedProfile: action.payload,
-      }
-    case "SET_ATHLETE_COLLECTION":
+    case "SET_ATHLETES":
       console.log("athlete collection is updated")
-      const firstID =  action.updatedData.length > 0 && action.updatedData[0].id
+      const firstID =  action.payload.length > 0 && action.payload[0].id
       console.log('firstID: ', firstID)
-      console.log('action.updatedData: ', action.updatedData)
-      const hasDuplicate = state.athletes.data.some(athlete => athlete.id === firstID)
+      console.log('action.payload: ', action.payload)
+      const hasDuplicate = state.athletes.some(athlete => athlete.id === firstID)
       console.log('hasDuplicate: ', hasDuplicate)
       return {
         ...state,
-        athletes: {
-          data: hasDuplicate ? state.athletes.data : [...state.athletes.data, ...action.updatedData],
-          lastUpdated: action.timestamp,
-        },
+        athletes: hasDuplicate ? state.athletes : [...state.athletes, ...action.payload],
       }
+    case "CLEAR_ATHLETE_SESSION":
+      return initialState
     default:
       return state
   }
