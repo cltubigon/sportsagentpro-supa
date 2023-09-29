@@ -33,33 +33,31 @@ import {
   SkeletonLoaderBuildRecipientsTab,
   SkeletonLoaderBuildRecipientsTabColumn,
 } from "../Skeleton/SkeletonBuildRecipientsTab"
-import { listenAndSaveToBuildAthletes, startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
+import { SET_ATHLETES } from "../../store/actions/athleteActions"
 
 const RecipientsV1 = () => {
   const dispatch = useDispatch()
   const { register, watch } = useForm()
-
-  // const reduxState = useSelector((state) => state)
-  // console.log('reduxState: ', reduxState)
-  const localAthletes = useSelector((state) => state.athlete.athletes.data)
-  // const localAthletes = useSelector((state) => state.athlete.buildAthletes.data)
-  const { lastItemReached } = useSelector(state => state.utils.pagination.athletes)
-  console.log('lastItemReached: ', lastItemReached)
-  const recipientsListLayout = useSelector((state) => state.build.recipientsListLayout)
-  const currentTimeStamp = useSelector(
-    (state) => state.athlete.buildAthletes.lastUpdated
+  
+  const localAthletes = useSelector((state) => state.athlete.athletes)
+  const { currentPage } = useSelector(
+    (state) => state.utils.pagination.athletes
+  )
+  
+  const recipientsListLayout = useSelector(
+    (state) => state.build.recipientsListLayout
   )
   const selectedRecipients = useSelector(
     (state) => state.build.selectedRecipients
   )
-  
+
   const [isLoading, setIsloading] = useState(true)
   const [tab, setTab] = useState(true)
 
   useEffect(() => {
-    dispatch(startListeningToAthleteCollection(currentTimeStamp))
-    // dispatch(listenAndSaveToBuildAthletes(currentTimeStamp))
-  }, [])
+    dispatch(SET_ATHLETES())
+  }, [currentPage])
+
   useEffect(() => {
     localAthletes && setIsloading(false)
   }, [localAthletes])
@@ -218,19 +216,19 @@ const RecipientsV1 = () => {
                     ))}
                   {!isLoading &&
                     localAthletes.map((athlete) => {
-                      const isChecked = selectedRecipients.includes(athlete.id)
+                      const isChecked = selectedRecipients.includes(athlete.uid)
                       return (
                         <Flex
-                          key={athlete.id}
+                          key={athlete.uid}
                           sx={recipientContainer}
-                          onClick={() => handleItemClick(athlete.id)}
+                          onClick={() => handleItemClick(athlete.uid)}
                         >
                           {isChecked ? (
                             <Icon sx={iconStyle} as={MdCheckBox} />
                           ) : (
                             <Icon as={MdCheckBoxOutlineBlank} sx={iconStyle} />
                           )}
-                          <Avatar name={athlete.initials}>
+                          <Avatar name={`${athlete.firstName[0]} ${athlete.lastName[0]}`}>
                             <AvatarBadge boxSize="0.9em" bg="green.500" />
                           </Avatar>
                           <Box pl={2}>
@@ -244,7 +242,7 @@ const RecipientsV1 = () => {
                         </Flex>
                       )
                     })}
-                    {!isLoading && !lastItemReached &&
+                  {!isLoading &&
                     (!recipientsListLayout ? (
                       <SkeletonLoaderBuildRecipientsTabColumn />
                     ) : (
@@ -270,14 +268,14 @@ const RecipientsV1 = () => {
                     {!isLoading &&
                       localAthletes
                         .filter((athlete) =>
-                          selectedRecipients.includes(athlete.id)
+                          selectedRecipients.includes(athlete.uid)
                         )
                         .map((athlete) => {
                           return (
                             <Flex
-                              key={athlete.id}
+                              key={athlete.uid}
                               sx={recipientContainer}
-                              onClick={() => handleItemClick(athlete.id)}
+                              onClick={() => handleItemClick(athlete.uid)}
                             >
                               <Icon as={MdCheckBox} sx={iconStyle} />
                               <Avatar name={athlete.initials}>

@@ -15,8 +15,10 @@ import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 
 const Athletes = () => {
   const dispatch = useDispatch()
-  const {currentPage, itemsPerPage, isLoading} = useSelector(state => state.utils.pagination.athletes)
-  const athleteList = useSelector(state => state.athlete.athletes)
+  const { currentPage } = useSelector(
+    (state) => state.utils.pagination.athletes
+  )
+  const athleteList = useSelector((state) => state.athlete.athletes)
   // const state = useSelector(state => state)
   // console.log('state: ', state)
 
@@ -30,10 +32,10 @@ const Athletes = () => {
   }, [])
 
   useEffect(() => {
-    console.log('initial athletes fetch')
+    console.log("initial athletes fetch")
     dispatch(SET_ATHLETES())
   }, [currentPage])
-  console.log('show: ', show)
+  console.log("show: ", show)
 
   return (
     <>
@@ -81,9 +83,7 @@ const Athletes = () => {
               </Flex>
             )
           })}
-        {athleteList && show && (
-          <SkeletonLoaderAthlete />
-        )}
+        {athleteList && show && <SkeletonLoaderAthlete />}
       </SimpleGrid>
       {/* )} */}
     </>

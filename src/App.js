@@ -2,8 +2,6 @@ import {
   BrowserRouter,
   Route,
   Routes,
-  useLocation,
-  useNavigate,
 } from "react-router-dom"
 import React, { useEffect } from "react"
 import Home from "./pages/Home"
@@ -25,12 +23,13 @@ import Opportunities from "./pages/DashboardPages/Opportunities"
 import { useDispatch, useSelector } from "react-redux"
 import { SUPABASE_SIGNOUT } from "./store/actions/authActions"
 import supabase from "./config/supabaseClient"
+import Test from "./Test"
 
 function App() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.user)
-  // const state = useSelector(state => state)
-  // console.log('state: ', state)
+  const state = useSelector(state => state)
+  console.log('state: ', state)
 
   // Check if user is authenticated
   useEffect(() => {
@@ -55,15 +54,16 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/test" element={<Test />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
         <Route path="/register-team" element={<RegisterTeam />}></Route>
         <Route path="/add-deal" element={<CreateDeal />}></Route>
         <Route path="/my-profile" element={<MyProfile />}></Route>
         <Route path="/user-type" element={<UserType />}></Route>
-        <Route path="/build/" element={user && <Build />}></Route>
-        <Route path="/build/:id" element={user && <Build />}></Route>
-        <Route path="/network" element={user && <Network />}></Route>
+        <Route path="/build/" element={!user ? <Login /> : <Build />}></Route>
+        <Route path="/build/:id" element={!user ? <Login /> : <Build />}></Route>
+        <Route path="/network" element={!user ? <Login /> : <Network />}></Route>
         <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
         <Route path="/media" element={<Media />}></Route>
         <Route path="/opportunities" element={<Opportunities />}></Route>

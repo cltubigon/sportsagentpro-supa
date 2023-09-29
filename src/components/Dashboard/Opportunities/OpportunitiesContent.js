@@ -9,7 +9,7 @@ const OpportunitiesContent = () => {
   return (
     <>
       {userType && userType === "athlete" && <AthleteOpportunities />}
-      {userType && userType === 'brand' && <BrandOpportunities />}
+      {/* {userType && userType === 'brand' && <BrandOpportunities />} */}
       {/* <BrandOpportunities /> */}
     </>
   )

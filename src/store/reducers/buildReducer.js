@@ -3,7 +3,6 @@ const initState = {
   postOwner: null,
   postOwnerFirstName: null,
   postOwnerLastName: null,
-  recipients: null,
   postType: null,
   selectedRecipients: [],
   selectedActivities: [],
@@ -17,7 +16,9 @@ const initState = {
   paymentTabReady: false,
   recipientsListLayout: true,
   activitiesListLayout: false,
-  isSubmittedSuccessfully: {},
+  isSubmitting: false,
+  isError: null,
+  isProcessedSuccesfully: false,
   totalAmount: 0,
   totalPayment: null,
   editMode: false,
@@ -26,19 +27,28 @@ const initState = {
 
 const buildReducer = (state = initState, action) => {
   switch (action.type) {
+    case "SET_IS_SUBMITTING":
+      return {
+        ...state,
+        isSubmitting: action.payload,
+      }
+    case "SET_ERROR":
+      return {
+        ...state,
+        isError: action.payload,
+      }
     case "SET_TOTAL_AMOUNT":
       return {
         ...state,
         totalAmount: action.payload,
       }
-    case "DELETE_POST":
+    case "SET_IS_PROCESSED_SUCCESSFULLY":
       return {
         ...state,
-        isSubmittedSuccessfully: { status: true, type: "deleted" },
+        isProcessedSuccesfully: action.payload,
       }
-    case "DELETE_POST_ERROR":
-      console.log("DELETE_POST_ERROR", action.error)
     case "SET_SUBMISSION_TYPE":
+      console.log("submission type triggered")
       return {
         ...state,
         submissionType: action.payload,
@@ -46,12 +56,12 @@ const buildReducer = (state = initState, action) => {
     case "SET_IS_SUBMITTED_SUCCESSFULLY":
       return {
         ...state,
-        isSubmittedSuccessfully: action.payload,
+        isProcessedSuccesfully: action.payload,
       }
     case "UPDATE_POST_SUCCESS":
       return {
         ...state,
-        isSubmittedSuccessfully: { status: true, type: "updated" },
+        isProcessedSuccesfully: action.payload,
       }
     case "UPDATE_POST_ERROR":
       console.log(action.error)
@@ -95,40 +105,33 @@ const buildReducer = (state = initState, action) => {
     case "RESET_BUILD_STATE":
       return {
         ...initState,
-        // activitiesTabReady: false,
       }
     case "SET_POST_OWNER":
-
       return {
         ...state,
         postOwner: action.payload,
       }
     case "SET_PAYMENT_TAB_STATUS":
-
       return {
         ...state,
         paymentTabReady: action.payload,
       }
     case "SET_DETAILS_TAB_STATUS":
-
       return {
         ...state,
         detailsTabReady: action.payload,
       }
     case "SET_POST_EXPIRATION_DATE":
-
       return {
         ...state,
         postExpirationDate: action.objPayload,
       }
     case "SET_POST_TITLE":
-
       return {
         ...state,
         postTitle: action.payload,
       }
     case "SET_CONTENT":
-
       return {
         ...state,
         postContent: action.payload,
@@ -168,13 +171,13 @@ const buildReducer = (state = initState, action) => {
         ...state,
         postType: action.data,
       }
-    case "CREATE_POST":
-      return {
-        ...initState,
-        isSubmittedSuccessfully: { status: true, type: "created" },
-      }
-    case "CREATE_POST_ERROR":
-      return state
+    // case "CREATE_POST":
+    //   return {
+    //     ...initState,
+    //     isProcessedSuccesfully: { status: true, type: "created" },
+    //   }
+    case "LOGOUT_SUCCESS":
+      return initState
     default:
       return state
   }

@@ -7,7 +7,6 @@ import { SET_ATHLETE_CURRENT_PAGE } from "../../store/actions/utilsActions"
 
 export const SkeletonLoaderAthlete = () => {
   const dispatch = useDispatch()
-  // const currentTimeStamp = useSelector(state => state.athlete.athletes.lastUpdated)
 
   const handleWaypointEnter = () => {
     console.log("entered waypoint")

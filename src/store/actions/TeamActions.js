@@ -6,7 +6,7 @@ export const createTeam = (team) => {
         try {
             await addDoc(collection(firestore, 'team'), {
                 ...team,
-                createdAt: new Date()
+                created_at: new Date()
             });
             dispatch({ type: "CREATE_TEAM", team });
         } catch (err) {

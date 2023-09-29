@@ -6,7 +6,7 @@ export const createDeal = (deal) => {
         try {
             await addDoc(collection(firestore, 'deal'), {
                 ...deal,
-                createdAt: new Date()
+                created_at: new Date()
             });
             dispatch({ type: "CREATE_DEAL", deal });
         } catch (err) {

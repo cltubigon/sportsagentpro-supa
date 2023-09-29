@@ -16,7 +16,6 @@ import { BsCheck, BsChevronLeft, BsPlus } from "react-icons/bs"
 import { TfiClose } from "react-icons/tfi"
 import {
   // createPost,
-  // resetBuildState,
   setActiveStep,
   setFirstNameAndLastName,
   // setIsSubmittedSuccessfully,
@@ -28,14 +27,13 @@ import {
 } from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useRef } from "react"
 import BuildMenu from "./BuildMenu"
 // import { firestoreConnect } from "react-redux-firebase"
 
 const PaymentV1 = ({ setSpinner }) => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const toast = useToast()
   const divRef = useRef()
 
@@ -117,7 +115,7 @@ const PaymentV1 = ({ setSpinner }) => {
     return
   }, [selectedRecipients, activitiesTabReady, detailsTabReady, agree])
 
-  // const { recipients, isSubmittedSuccessfully, ...filteredReduxPosts } = reduxPosts
+  // const { recipients, isProcessedSuccesfully, ...filteredReduxPosts } = reduxPosts
   // console.log('filteredReduxPosts: ', filteredReduxPosts)
 
   const handleCreatePost = () => {

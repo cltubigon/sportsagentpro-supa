@@ -5,6 +5,7 @@ import SignedOutNavigation from "./Navigation/SignedOutNavigation"
 import SignedInNavigation from "./Navigation/SignedInNavigation"
 import { MainNavigationStyle } from "../../styles/MainNavigationStyle"
 import { useEffect } from "react"
+import { useState } from "react"
 
 const MainNavigation = () => {
   console.log("MainNavigation")
@@ -13,12 +14,16 @@ const MainNavigation = () => {
 
   const user = useSelector((state) => state.auth.user)
 
+  const [signingOut, setSigningOut] = useState(false)
+
   useEffect(() => {
-    if (!user) {
+    if (signingOut) {
       navigate("/")
     }
-  }, [user])
 
+    return setSigningOut(false)
+  }, [user])
+  
   return (
     <>
       {location.pathname !== "/signup" &&
@@ -31,7 +36,7 @@ const MainNavigation = () => {
               </Heading>
             </Flex>
             <Flex flexGrow={1}>
-              {user ? <SignedInNavigation /> : <SignedOutNavigation />}
+              {user ? <SignedInNavigation setSigningOut={setSigningOut} /> : <SignedOutNavigation />}
             </Flex>
           </Flex>
         )}

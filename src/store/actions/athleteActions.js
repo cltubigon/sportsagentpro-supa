@@ -10,10 +10,10 @@ export const SET_ATHLETES = () => async (dispatch, getState) => {
     console.log("endtAt: ", endtAt)
   
     const { data, error } = await supabase // fetch data from supabase
-      .from("athlete")
+      .from("users")
       .select("*")
       .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1)
-      .order("id", { ascending: false })
+      .order("created_at", { ascending: false })
     if (data) {
       dispatch({ type: "SET_ATHLETES", payload: data })
       dispatch({ type: "SET_LOADING_STATUS", payload: false })

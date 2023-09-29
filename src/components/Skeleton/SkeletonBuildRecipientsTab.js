@@ -2,6 +2,7 @@ import { Box, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { Waypoint } from "react-waypoint"
 import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
+import { SET_ATHLETE_CURRENT_PAGE } from "../../store/actions/utilsActions"
 
 export const SkeletonBuildRecipientsTab = () => {
   const number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
@@ -25,12 +26,10 @@ export const SkeletonBuildRecipientsTab = () => {
 }
 export const SkeletonLoaderBuildRecipientsTab = () => {
   const dispatch = useDispatch()
-  const currentTimeStamp = useSelector(
-    (state) => state.athlete.buildAthletes.lastUpdated
-  )
+
   const handleWaypointEnter = () => {
-    console.log('waypoint triggered row')
-    dispatch(startListeningToAthleteCollection(currentTimeStamp))
+    console.log("entered waypoint")
+    dispatch(SET_ATHLETE_CURRENT_PAGE())
   }
   const number = [1, 2, 3]
   return (
@@ -83,12 +82,10 @@ export const SkeletonBuildRecipientsTabColumn = () => {
 }
 export const SkeletonLoaderBuildRecipientsTabColumn = () => {
   const dispatch = useDispatch()
-  const currentTimeStamp = useSelector(
-    (state) => state.athlete.buildAthletes.lastUpdated
-  )
+
   const handleWaypointEnter = () => {
-    console.log('waypoint triggered column')
-    dispatch(startListeningToAthleteCollection(currentTimeStamp))
+    console.log("entered waypoint")
+    dispatch(SET_ATHLETE_CURRENT_PAGE())
   }
   const number = [1, 2, 3]
   return (

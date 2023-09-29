@@ -9,6 +9,54 @@ import {
 } from "firebase/firestore"
 import { fetchOpportunityPostsOfOwner } from "./Fetch/fetchPostsAction"
 import { db } from "../../config/fbConfig"
+import supabase from "../../config/supabaseClient"
+
+export const BUILD_POST = () => async (dispatch, getState) => {
+  const build = getState().build
+  const { email, firstName, lastName, userID } = getState().auth.user
+
+  console.log('build: ', build)
+  const newBuild = {
+    ...build,
+    ownerUID: userID,
+    postOwner: email,
+    postOwnerFirstName: firstName,
+    postOwnerLastName: lastName,
+  }
+  console.log('newBuild: ', newBuild)
+
+  const {
+    isError,
+    isSubmitting,
+    activeStep,
+    submissionType,
+    recipients,
+    isProcessedSuccesfully,
+    editMode,
+    ...filteredBuild
+  } = newBuild
+
+  console.log('filteredBuild: ', filteredBuild)
+
+  const { data, error } = await supabase
+    .from("posts")
+    .insert(filteredBuild)
+    .select()
+  if (data && data[0]) {
+    dispatch({ type: "SET_IS_PROCESSED_SUCCESSFULLY", payload: true })
+  } else if (error) {
+    dispatch({ type: "SET_ERROR", payload: error.message })
+    console.log("error: ", error)
+  }
+}
+
+export const SET_ERROR = (payload) => (dispatch) => {
+  dispatch({ type: "SET_ERROR", payload })
+}
+
+export const SET_IS_SUBMITTING = (payload) => (dispatch) => {
+  dispatch({ type: "SET_IS_SUBMITTING", payload })
+}
 
 export const getSelectedPost = (postId) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -38,7 +86,7 @@ export const setEditMode = (payload) => {
     dispatch({ type: "SET_EDIT_MODE", payload })
   }
 }
-export const setIsSubmittedSuccessfully = (payload) => {
+export const setIsProcessedSuccesfully = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_IS_SUBMITTED_SUCCESSFULLY", payload })
   }
@@ -85,54 +133,54 @@ export const setSelectedRecipients = (id) => {
   }
 }
 
-export const deletePost = (post, sender) => {
-  return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore()
-    const email = getState().firebase.auth.email
+// export const deletePost = (post, sender) => {
+//   return async (dispatch, getState, { getFirebase, getFirestore }) => {
+//     const firestore = getFirestore()
+//     const email = getState().firebase.auth.email
 
-    try {
-      if (post.postOwner === email) {
-        await deleteDoc(doc(firestore, "posts", post.id))
-        sender !== "BrandOpportunities" &&
-          dispatch({ type: "DELETE_POST", post })
-        dispatch(fetchOpportunityPostsOfOwner(post.postOwner))
-      } else {
-        throw new Error("User not found")
-      }
-    } catch (error) {
-      console.error("Error removing document: ", error)
-      dispatch({ type: "DELETE_POST_ERROR", error })
-    }
-  }
-}
+//     try {
+//       if (post.postOwner === email) {
+//         await deleteDoc(doc(firestore, "posts", post.id))
+//         sender !== "BrandOpportunities" &&
+//         dispatch({ type: "DELETE_POST_STATUS", payload: true })
+//         dispatch(fetchOpportunityPostsOfOwner(post.postOwner))
+//       } else {
+//         throw new Error("User not found")
+//       }
+//     } catch (error) {
+//       console.error("Error removing document: ", error)
+//       dispatch({ type: "DELETE_POST_STATUS", payload: false })
+//     }
+//   }
+// }
 
-export const createPost = () => {
-  return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const build = getState().build
-    const firestore = getFirestore()
-    const uid = getState().firebase.auth.uid
-    const {
-      submissionType,
-      recipients,
-      isSubmittedSuccessfully,
-      editMode,
-      ...newObject
-    } = build
-    const sanitizedObject = JSON.parse(JSON.stringify(newObject))
+// export const createPost = () => {
+//   return async (dispatch, getState, { getFirebase, getFirestore }) => {
+//     const build = getState().build
+//     const firestore = getFirestore()
+//     const uid = getState().firebase.auth.uid
+//     const {
+//       submissionType,
+//       recipients,
+//       isProcessedSuccesfully,
+//       editMode,
+//       ...newObject
+//     } = build
+//     const sanitizedObject = JSON.parse(JSON.stringify(newObject))
 
-    try {
-      await addDoc(collection(firestore, "posts"), {
-        ...sanitizedObject,
-        ownerUID: uid,
-        createdAt: new Date(),
-      })
-      dispatch({ type: "CREATE_POST", sanitizedObject })
-    } catch (err) {
-      console.log("err: ", err)
-      dispatch({ type: "CREATE_POST_ERROR", err })
-    }
-  }
-}
+//     try {
+//       await addDoc(collection(firestore, "posts"), {
+//         ...sanitizedObject,
+//         ownerUID: uid,
+//         created_at: new Date(),
+//       })
+//       dispatch({ type: "CREATE_POST_STATUS", sanitizedObject })
+//     } catch (err) {
+//       console.log("err: ", err)
+//       dispatch({ type: "CREATE_POST_STATUS", err })
+//     }
+//   }
+// }
 
 export const updatePost = (uid) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -165,7 +213,7 @@ export const updatePost = (uid) => {
 
       // Update the post document
       await updateDoc(postRef, sanitizedData)
-      dispatch({ type: "UPDATE_POST_SUCCESS" })
+      dispatch({ type: "UPDATE_POST_SUCCESS", payload: true })
     } catch (error) {
       console.error("Error updating post:", error)
       dispatch({ type: "UPDATE_POST_ERROR", error })
@@ -356,8 +404,8 @@ export const setPaymentTabStatus = (payload) => {
 //   }
 // }
 
-export const resetBuildState = (sender) => {
-  console.log('sender: ', sender)
+export const RESET_BUILD_STATE = (sender) => {
+  console.log("sender: ", sender)
   return (dispatch) => {
     dispatch({ type: "RESET_BUILD_STATE" })
   }

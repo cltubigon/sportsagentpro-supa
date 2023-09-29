@@ -1,71 +1,28 @@
-import React, { useEffect, useRef } from "react"
-import { Box, Text } from "@chakra-ui/react"
-import { useState } from "react"
+import { Button, Flex, Text } from "@chakra-ui/react"
+import supabase from "./config/supabaseClient"
 
-export const Test = () => {
-  const [items, setItems] = useState([])
-  const observerRef = useRef(null)
-  const [isLoaddddd, setIsLoaddddd] = useState(false)
+const Test = () => {
+  const userId = "36ebb6f4-6cd7-42bf-88b6-3d0a84a47589"
+  const fieldToInsert = '22'
 
-  useEffect(() => {
-    // Simulated API call for fetching more items
-    const fetchMoreItems = () => {
-      setIsLoaddddd(true)
-      setTimeout(() => {
-        const newItems = [...items, ...Array(10).fill(null)]
-        setItems(newItems)
-        setIsLoaddddd(false)
-      }, 1000)
+  const handleClick = async () => {
+    const { data, error } = await supabase
+      .from("posts")
+      .insert({ ownerUID: userId, totalPayment: fieldToInsert })
+      .select()
+    if (data[0]) {
+      console.log("data[0]: ", data[0])
+    } else if (error) {
+      console.log("error: ", error)
     }
-
-    const options = {
-      root: null, // Use the viewport as the root
-      rootMargin: "0px",
-      threshold: 0.3, // Trigger when 10% of the element is visible
-    }
-
-    // Initialize the Intersection Observer
-    observerRef.current = new IntersectionObserver((entries) => {
-      const entry = entries[0]
-      if (entry.isIntersecting && !isLoaddddd) {
-        fetchMoreItems()
-      }
-    }, options)
-
-    // Start observing the sentinel element
-    if (observerRef.current) {
-      observerRef.current.observe(document.querySelector(".sentinel"))
-    }
-
-    return () => {
-      // Clean up the observer when the component unmounts
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-      }
-    }
-  }, [items, isLoaddddd])
-
-  const [totalItems, setTotalItems] = useState(null)
-  useEffect(() => {
-    setTotalItems(items.length + 5)
-  }, [items])
-  console.log("totalItems: ", totalItems)
+  }
   return (
-    <Box pt={"88px"}>
-      {items.map((item, index) => (
-        <Box
-          key={index}
-          height="100px"
-          border="1px solid #ccc"
-          marginBottom="1rem"
-          padding="1rem"
-            className={index === totalItems && 'sentinel'}
-        >
-          Item {index + 1}
-        </Box>
-      ))}
-      <div className="sentinel" style={{ height: "10px" }}></div>
-      {isLoaddddd && <p>Loading...</p>}
-    </Box>
+    <Flex pt={"120px"} flexDirection={"column"}>
+      <Button onClick={handleClick}>Send</Button>
+      <Text>Data: {JSON.stringify(fieldToInsert)}</Text>
+      <Text>userId: {userId}</Text>
+    </Flex>
   )
 }
+
+export default Test

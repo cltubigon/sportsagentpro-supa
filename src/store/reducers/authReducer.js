@@ -1,8 +1,5 @@
 const initialState = {
   authError: null,
-  // profile: null,
-  // email: null,
-  // isLoggedIn: false,
   user: null,
 }
 

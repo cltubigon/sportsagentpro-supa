@@ -41,8 +41,11 @@ export const SUPABASE_SIGNIN =
         console.log("data: ", data)
         if (data[0]) {
           console.log("data: ", data)
-          const { firstName, lastName, phoneNumber, userType } = data[0]
-          const userData = { firstName, lastName, phoneNumber, userType }
+          const { id, firstName, lastName, phoneNumber, userType } = data[0]
+          console.log('id: ', id)
+          const userID = id
+          const userData = { userID, firstName, lastName, phoneNumber, userType }
+          console.log('userData: ', userData)
           const mergedData = { ...authData.user, ...userData }
           dispatch({ type: "SET_USER", payload: mergedData })
           dispatch({ type: "LOGIN_SUCCESS" })

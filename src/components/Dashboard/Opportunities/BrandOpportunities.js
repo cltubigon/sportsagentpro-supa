@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
 import { savePostsToStorage } from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
-import { deletePost } from "../../../store/actions/buildPostActions"
+// import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
@@ -52,7 +52,7 @@ const BrandOpportunities = () => {
   
   const handleDelete = (post) => {
     setDeleting(post.postTitle)
-    dispatch(deletePost(post, "BrandOpportunities"))
+    // dispatch(deletePost(post, "BrandOpportunities"))
   }
 
   const btnStyle = {

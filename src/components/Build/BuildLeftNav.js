@@ -12,12 +12,15 @@ import {
 import { BsArrowBarLeft, BsArrowBarRight, BsCircleFill } from "react-icons/bs"
 import { useDispatch, useSelector } from "react-redux"
 import {
+  BUILD_POST,
+  RESET_BUILD_STATE,
+  SET_ERROR,
+  SET_IS_SUBMITTING,
   createPost,
   getSelectedPost,
-  resetBuildState,
   setActiveStep,
   setEditMode,
-  setIsSubmittedSuccessfully,
+  setIsProcessedSuccesfully,
   setSubmissionType,
   setTotalAmount,
   setTotalPayment,
@@ -42,9 +45,10 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
   // const build = useSelector((state) => state.build)
   // console.log("build: ", build)
   const editMode = useSelector((state) => state.build.editMode)
+  const isError = useSelector((state) => state.build.isError)
   const id = useSelector((state) => state.build.id)
-  const isSubmittedSuccessfully = useSelector(
-    (state) => state.build.isSubmittedSuccessfully
+  const isProcessedSuccesfully = useSelector(
+    (state) => state.build.isProcessedSuccesfully
   )
   const submissionType = useSelector((state) => state.build.submissionType)
   const postType = useSelector((state) => state.build.postType)
@@ -56,7 +60,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
   )
   const activeStep = useSelector((state) => state.build.activeStep)
   const detailsTabReady = useSelector((state) => state.build.detailsTabReady)
-  const firebase = useSelector((state) => state.firebase)
+  // const firebase = useSelector((state) => state.firebase)
   const selectedRecipients = useSelector(
     (state) => state.build.selectedRecipients
   )
@@ -73,7 +77,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
     if (location.pathname === "/build") {
       dispatch(setEditMode(false))
       setTimeout(() => {
-        editMode && dispatch(resetBuildState('line 77'))
+        editMode && dispatch(RESET_BUILD_STATE("line 77"))
       }, 200)
       setTimeout(() => {
         setIsLoading(false)
@@ -95,26 +99,44 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
 
   useEffect(() => {
     if (submissionType === "create") {
-      dispatch(createNewPost())
+      console.log('submission block is triggered')
+      // dispatch(createNewPost())
+      dispatch(SET_IS_SUBMITTING(true))
+      dispatch(BUILD_POST())
       dispatch(setSubmissionType(null, "sender is BuildLeftNav line 60"))
-      setSpinner(() => true)
+      // setSpinner(() => true)
     } else if (submissionType === "update") {
+      dispatch(SET_IS_SUBMITTING(true))
+      // firebase.auth && dispatch(updatePost(firebase.auth.uid))
       dispatch(setSubmissionType(null, "sender is BuildLeftNav line 65"))
-      firebase.auth && dispatch(updatePost(firebase.auth.uid))
-      setSpinner(() => true)
+      // setSpinner(() => true)
     }
     return
   }, [submissionType])
+  console.log('submissionType: ', submissionType)
+  
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Login error",
+        description: isError,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      })
+      dispatch(SET_IS_SUBMITTING(false))
+      dispatch(SET_ERROR(null))
+    }
+  }, [isError])
 
   useEffect(() => {
-    if (isSubmittedSuccessfully.status) {
-      dispatch(setIsSubmittedSuccessfully({ status: false, type: null }))
+    if (isProcessedSuccesfully) {
+      // dispatch(setIsProcessedSuccesfully(true))
       setSpinner(() => false)
       toast({
         title: "Success",
-        description: `Your post was successfully ${
-          editMode ? isSubmittedSuccessfully.type : isSubmittedSuccessfully.type
-        }`,
+        description: `Your post was successfully saved`,
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -122,9 +144,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
       })
       navigate("/opportunities")
     }
-
-    return
-  }, [isSubmittedSuccessfully.status])
+  }, [isProcessedSuccesfully])
 
   // -------------------- ACTIVITIES TAB --------------------
   const [totalAmountToPay, setTotalAmountToPay] = useState(0)

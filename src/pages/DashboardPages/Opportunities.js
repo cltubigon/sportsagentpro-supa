@@ -8,13 +8,24 @@ import {
   Input,
   Box,
 } from "@chakra-ui/react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import DashboardLeftMenu from "../../components/Dashboard/DashboardLeftMenu"
 import DashboardMenu from "../../components/Dashboard/DashboardMenu"
 import OpportunitiesContent from "../../components/Dashboard/Opportunities/OpportunitiesContent"
+import { useEffect } from "react"
+import { RESET_BUILD_STATE } from "../../store/actions/buildPostActions"
 
 const Opportunities = () => {
   const dispatch = useDispatch()
+  const isProcessedSuccesfully = useSelector(
+    (state) => state.build.isProcessedSuccesfully
+  )
+  
+  useEffect(()=> {
+    if (isProcessedSuccesfully) {
+      dispatch(RESET_BUILD_STATE())
+    }
+  }, [])
 
   return (
     <>

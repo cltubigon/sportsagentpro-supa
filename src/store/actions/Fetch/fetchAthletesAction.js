@@ -80,11 +80,11 @@ export const startListeningToAthleteCollection =
           type: "SET_LAST_ATHLETE_ITEM_REACHED",
           payload: updatedData.length < nextLimit && updatedData.length > 0,
         })
-        dispatch({
-          type: "SET_ATHLETE_COLLECTION",
-          updatedData,
-          timestamp,
-        })
+        // dispatch({
+        //   type: "SET_ATHLETE_COLLECTION",
+        //   updatedData,
+        //   timestamp,
+        // })
       } catch (error) {
         console.log('Encountered an error:', error)
       }

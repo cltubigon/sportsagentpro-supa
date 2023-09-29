@@ -15,38 +15,39 @@ import {
 } from "firebase/firestore"
 
 export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {
-  const { lastItemReached, initialLimit, nextLimit, lastVisible } = getState().utils.pagination.athletePosts
-  try {
-    if (lastItemReached) return
-    let q
-    if (!lastVisible) {
-      q = query(
-        collection(db, "posts"),
-        where("postType", "==", "opportunity"),
-        orderBy("createdAt", "desc"),
-        limit(initialLimit),
-      )
-    } else if (lastVisible) {
-      q = query(
-        collection(db, "posts"),
-        where("postType", "==", "opportunity"),
-        orderBy("createdAt", "desc"),
-        limit(nextLimit),
-        startAfter(lastVisible)
-      )
-    }
+  console.log('fetchPostsOfCurrentPage triggered but no code inside it')
+  // const { lastItemReached, initialLimit, nextLimit, lastVisible } = getState().utils.pagination.athletePosts
+  // try {
+  //   if (lastItemReached) return
+  //   let q
+  //   if (!lastVisible) {
+  //     q = query(
+  //       collection(db, "posts"),
+  //       where("postType", "==", "opportunity"),
+  //       orderBy("created_at", "desc"),
+  //       limit(initialLimit),
+  //     )
+  //   } else if (lastVisible) {
+  //     q = query(
+  //       collection(db, "posts"),
+  //       where("postType", "==", "opportunity"),
+  //       orderBy("created_at", "desc"),
+  //       limit(nextLimit),
+  //       startAfter(lastVisible)
+  //     )
+  //   }
 
-    const querySnapshot = await getDocs(q)
-    const data = querySnapshot.docs.map((doc) => doc.data())
-    dispatch({ type: 'SET_ALL_OPPORTUNITY_POSTS', payload: data })
+  //   const querySnapshot = await getDocs(q)
+  //   const data = querySnapshot.docs.map((doc) => doc.data())
+  //   dispatch({ type: 'SET_ALL_OPPORTUNITY_POSTS', payload: data })
     
-    const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-    dispatch({ type: 'SET_LAST_POST_VISIBLE', payload: setLastVisible })
-    dispatch({ type: 'SET_LAST_POST_ITEM_REACHED', payload: data.length < nextLimit && data.length > 0 })
+  //   const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+  //   dispatch({ type: 'SET_LAST_POST_VISIBLE', payload: setLastVisible })
+  //   dispatch({ type: 'SET_LAST_POST_ITEM_REACHED', payload: data.length < nextLimit && data.length > 0 })
 
-  } catch (error) {
-    console.error("Error fetching data:", error)
-  }
+  // } catch (error) {
+  //   console.error("Error fetching data:", error)
+  // }
 }
 
 export const fetchUserOpportunityPosts = (authEmail) => (dispatch) => {
