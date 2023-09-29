@@ -50,9 +50,10 @@ const AthleteOpportunities = () => {
   const [drawerViewMore, setDrawerViewMore] = useState(true)
   const [drawerData, setDrawerData] = useState(null)
   
+  console.log('athletessssss: ')
   useEffect(() => {
     console.log('fetch post is triggered')
-    dispatch(fetchPostsOfCurrentPage())
+    // dispatch(fetchPostsOfCurrentPage())
   }, [currentPage])
 
   const handleApply = (id, event, hasApplied) => {

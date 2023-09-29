@@ -16,14 +16,14 @@ const postReducer = (state = initialState, action) => {
         isLoading: action.payload,
       }
     case "SET_ALL_OPPORTUNITY_POSTS":
-      // console.log("triggered SET_ALL_OPPORTUNITY_POSTS")
+      console.log('SET_ALL_OPPORTUNITY_POSTS action.payload: ', action.payload)
       const firstID = action.payload.length > 0 && action.payload[0].id
       const hasDuplicate = state.myOpportunitiesPosts.some(
         (opp) => opp.id === firstID
       )
+      console.log('hasDuplicate: ', hasDuplicate)
       return {
         ...state,
-        isLoading: false,
         myOpportunitiesPosts: hasDuplicate
           ? [...state.myOpportunitiesPosts]
           : [...state.myOpportunitiesPosts, ...action.payload],

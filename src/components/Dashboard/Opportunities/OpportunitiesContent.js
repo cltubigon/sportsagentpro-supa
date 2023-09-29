@@ -4,12 +4,11 @@ import BrandOpportunities from "./BrandOpportunities"
 import AthleteOpportunities from "./AthleteOpportunities"
 
 const OpportunitiesContent = () => {
-  const profile = useSelector((state) => state.auth.profile)
-  const userType = profile && profile.userType
+  const user = useSelector((state) => state.auth.user)
   return (
     <>
-      {userType && userType === "athlete" && <AthleteOpportunities />}
-      {/* {userType && userType === 'brand' && <BrandOpportunities />} */}
+      {user && user.userType === "athlete" && <AthleteOpportunities />}
+      {user && user.userType === 'brand' && <BrandOpportunities />}
       {/* <BrandOpportunities /> */}
     </>
   )

@@ -21,13 +21,13 @@ import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
-import { savePostsToStorage } from "../../../store/actions/postActions"
+import { FETCH_POSTS, savePostsToStorage } from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
 // import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
-import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
-import { fetchUserOpportunityPosts } from "../../../store/actions/Fetch/fetchPostsAction"
+import { SkeletonLoaderOpportunities, SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
+// import { fetchUserOpportunityPosts } from "../../../store/actions/Fetch/fetchPostsAction"
 
 
 const BrandOpportunities = () => {
@@ -36,14 +36,19 @@ const BrandOpportunities = () => {
   const dispatch = useDispatch()
 
   const authEmail = useSelector(state => state.auth.email)
+  console.log('authEmail: ', authEmail)
   const myOpportunitiesPosts = useSelector((state) => state.post.myOpportunitiesPosts)
+  const { currentPage } = useSelector(state => state.utils.pagination.postsOfOwners)
+  console.log('currentPage: ', currentPage)
   
   const [isLoading, setIsLoading] = useState(true)
   const [deleting, setDeleting] = useState(null)
 
   useEffect(()=> {
-    dispatch(fetchUserOpportunityPosts(authEmail))
-  }, [authEmail])
+    // dispatch(fetchUserOpportunityPosts(authEmail))
+    console.log('triggered fetch')
+    dispatch(FETCH_POSTS())
+  }, [currentPage])
 
   useEffect(()=> {
     myOpportunitiesPosts && setIsLoading(false)
@@ -247,6 +252,7 @@ const BrandOpportunities = () => {
                 </Flex>
             )
           })}
+          <SkeletonLoaderOpportunities />
       </Flex>
     </>
   )

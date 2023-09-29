@@ -4,6 +4,13 @@ const initialState = {
       currentPage: 1,
       itemsPerPage: 16,
       isLoading: false,
+      lastItemReached: false,
+    },
+    postsOfOwners: {
+      currentPage: 1,
+      itemsPerPage: 16,
+      isLoading: false,
+      lastItemReached: false,
     },
   },
 }
@@ -21,6 +28,40 @@ const utilsReducer = (state = initialState, action) => {
           },
         },
       }
+    case "LAST_ITEM_REACHED_ATHLETE":
+      console.log('reducer is triggered', action)
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          athletes: {
+            ...state.pagination.athletes,
+            lastItemReached: action.payload,
+          },
+        },
+      }
+      case "SET_POSTS_OF_OWNERS_CURRENT_PAGE":
+        return {
+          ...state,
+          pagination: {
+            ...state.pagination,
+            postsOfOwners: {
+              ...state.pagination.postsOfOwners,
+              currentPage: action.payload,
+            },
+          },
+        }
+      case "LAST_ITEM_REACHED_POSTS_OF_OWNER":
+        return {
+          ...state,
+          pagination: {
+            ...state.pagination,
+            postsOfOwners: {
+              ...state.pagination.postsOfOwners,
+              lastItemReached: action.payload,
+            },
+          },
+        }
     case "SET_LOADING_STATUS":
       return {
         ...state,
