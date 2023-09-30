@@ -7,7 +7,7 @@ import {
 import { useDispatch, useSelector } from "react-redux"
 import { useForm } from "react-hook-form"
 import { useEffect } from "react"
-import { setPostTitle } from "../../../store/actions/buildPostActions"
+import { SET_POST_TITLE } from "../../../store/actions/buildPostActions"
 
 const DetailsTitleInputField = () => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const DetailsTitleInputField = () => {
 
   useEffect(() => {
     const watched = watch("postTitle")
-    if (watched !== undefined) dispatch(setPostTitle(watched))
+    if (watched !== undefined) dispatch(SET_POST_TITLE(watched))
   }, [watch("postTitle")])
 
   // CSS styles --------------

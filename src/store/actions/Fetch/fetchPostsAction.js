@@ -3,15 +3,9 @@ import "firebase/compat/firestore"
 import { db } from "../../../config/fbConfig"
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
-  orderBy,
-  onSnapshot,
   query,
   where,
-  limit,
-  startAfter,
 } from "firebase/firestore"
 
 export const fetchPostsOfCurrentPage = () => async (dispatch, getState) => {

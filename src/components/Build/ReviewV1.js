@@ -17,14 +17,10 @@ import {
   BsExclamationTriangle,
   BsFacebook,
   BsLinkedin,
-  BsPlus,
   BsTwitter,
 } from "react-icons/bs"
-import { TfiClose, TfiMenuAlt } from "react-icons/tfi"
 import {
-  setActiveStep,
-  setContent,
-  setReviewTabStatus,
+  SET_ACTIVE_STEP,
 } from "../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
@@ -34,9 +30,6 @@ import { CgMenuGridO } from "react-icons/cg"
 import {
   BsBox,
   BsCamera,
-  BsCheckCircleFill,
-  BsCurrencyDollar,
-  BsExclamationCircleFill,
   BsHeadset,
   BsInstagram,
   BsMic,
@@ -53,9 +46,7 @@ import { AiOutlineEye } from "react-icons/ai"
 import { MdOutlineCoPresent } from "react-icons/md"
 import { BiRun, BiUserVoice } from "react-icons/bi"
 import { TbLicense } from "react-icons/tb"
-import moment from "moment/moment"
 import NoSelected from "./NoSelected"
-import { Link } from "react-router-dom"
 import BuildMenu from "./BuildMenu"
 
 const ReviewV1 = () => {
@@ -64,12 +55,9 @@ const ReviewV1 = () => {
   const {
     postContent,
     postType,
-    recipients,
     selectedActivities,
     postTitle,
     postExpirationDate,
-    detailsTabReady,
-    activitiesTabReady,
   } = reduxPosts
 
   // const reduxState = useSelector(state => state)
@@ -406,8 +394,6 @@ const ReviewV1 = () => {
         gridTemplateRows={"auto 9fr auto"}
         gridTemplateColumns={"1fr"}
         h="100vh"
-        // bgColor={'#2596be'}
-        // bgColor={'#E4405F'}
       >
         {/* -------------------------------------- Menu section -------------------------------------- */}
         <GridItem area={"header"} pb={4}>
@@ -449,7 +435,7 @@ const ReviewV1 = () => {
                   cursor={"pointer"}
                   color={"blue.500"}
                   fontWeight={"semibold"}
-                  onClick={() => dispatch(setActiveStep("deal_type"))}
+                  onClick={() => dispatch(SET_ACTIVE_STEP("deal_type"))}
                 >
                   Edit
                 </Text>
@@ -509,7 +495,7 @@ const ReviewV1 = () => {
                     cursor={"pointer"}
                     color={"blue.500"}
                     fontWeight={"semibold"}
-                    onClick={() => dispatch(setActiveStep("recipients"))}
+                    onClick={() => dispatch(SET_ACTIVE_STEP("recipients"))}
                   >
                     Edit
                   </Text>
@@ -572,7 +558,7 @@ const ReviewV1 = () => {
                   cursor={"pointer"}
                   color={"blue.500"}
                   fontWeight={"semibold"}
-                  onClick={() => dispatch(setActiveStep("activities"))}
+                  onClick={() => dispatch(SET_ACTIVE_STEP("activities"))}
                 >
                   Edit
                 </Text>
@@ -627,7 +613,7 @@ const ReviewV1 = () => {
                                   <Text
                                     fontWeight={"semibold"}
                                     onClick={() =>
-                                      dispatch(setActiveStep("activities"))
+                                      dispatch(SET_ACTIVE_STEP("activities"))
                                     }
                                     color={"red"}
                                     cursor={"pointer"}
@@ -670,7 +656,7 @@ const ReviewV1 = () => {
                                 <Text
                                   fontWeight={"semibold"}
                                   onClick={() =>
-                                    dispatch(setActiveStep("activities"))
+                                    dispatch(SET_ACTIVE_STEP("activities"))
                                   }
                                   color={"red"}
                                   cursor={"pointer"}
@@ -716,7 +702,7 @@ const ReviewV1 = () => {
                   cursor={"pointer"}
                   color={"blue.500"}
                   fontWeight={"semibold"}
-                  onClick={() => dispatch(setActiveStep("details"))}
+                  onClick={() => dispatch(SET_ACTIVE_STEP("details"))}
                 >
                   Edit
                 </Text>
@@ -789,14 +775,14 @@ const ReviewV1 = () => {
           <Flex justifyContent={"space-between"} bottom={"0"}>
             <Button
               leftIcon={<BsChevronLeft />}
-              onClick={() => dispatch(setActiveStep("details"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("details"))}
             >
               Previous Step
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
               colorScheme="twitter"
-              onClick={() => dispatch(setActiveStep("payment"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("payment"))}
             >
               Next Step
             </Button>

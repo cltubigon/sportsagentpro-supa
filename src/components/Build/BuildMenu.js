@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import {
   // deletePost,
-  setSubmissionType,
+  SET_SUBMISSION_TYPE,
 } from "../../store/actions/buildPostActions"
 
 const BuildMenu = () => {
@@ -20,7 +20,7 @@ const BuildMenu = () => {
 
 
   const handleUpdate = () => {
-    dispatch(setSubmissionType("update", "sender is BuildMenu line19"))
+    dispatch(SET_SUBMISSION_TYPE("update", "sender is BuildMenu line19"))
   }
   const handleDelete = () => {
     // dispatch(deletePost(build, "sender is BuildMenu line 28"))

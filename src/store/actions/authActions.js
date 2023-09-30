@@ -1,13 +1,3 @@
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth"
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  collection,
-  addDoc,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore"
 import supabase from "../../config/supabaseClient"
 
 // export const signIn = (credentials) => {
@@ -42,13 +32,21 @@ export const SUPABASE_SIGNIN =
         if (data[0]) {
           console.log("data: ", data)
           const { id, firstName, lastName, phoneNumber, userType } = data[0]
-          console.log('id: ', id)
+          console.log("id: ", id)
           const userID = id
-          const userData = { userID, firstName, lastName, phoneNumber, userType }
-          console.log('userData: ', userData)
+          const userData = {
+            userID,
+            firstName,
+            lastName,
+            phoneNumber,
+            userType,
+          }
+          console.log("userData: ", userData)
           const mergedData = { ...authData.user, ...userData }
           dispatch({ type: "SET_USER", payload: mergedData })
           dispatch({ type: "LOGIN_SUCCESS" })
+        } else if (error) {
+          console.log("error: ", error)
         }
       } catch (error) {
         console.log("error: ", error)
@@ -67,7 +65,9 @@ export const SUPABASE_SIGNIN =
 
 export const SUPABASE_SIGNOUT = () => async (dispatch) => {
   let { error } = await supabase.auth.signOut()
-
+  if (error) {
+    console.log("error: ", error)
+  }
   dispatch({ type: "LOGOUT_SUCCESS" })
 }
 

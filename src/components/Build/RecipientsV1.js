@@ -20,9 +20,9 @@ import { TfiMenuAlt } from "react-icons/tfi"
 import { RxDashboard } from "react-icons/rx"
 import React, { useEffect, useState } from "react"
 import {
-  setActiveStep,
-  setRecipientsListLayout,
-  setSelectedRecipients,
+  SET_ACTIVE_STEP,
+  SET_RECIPIENTS_LIST_LAYOUT,
+  SET_SELECTED_RECIPIENTS,
 } from "../../store/actions/buildPostActions"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
 import { useForm } from "react-hook-form"
@@ -37,7 +37,7 @@ import { SET_ATHLETES } from "../../store/actions/athleteActions"
 
 const RecipientsV1 = () => {
   const dispatch = useDispatch()
-  const { register, watch } = useForm()
+  const { register } = useForm()
   
   const localAthletes = useSelector((state) => state.athlete.athletes)
   const { currentPage } = useSelector(
@@ -63,14 +63,14 @@ const RecipientsV1 = () => {
   }, [localAthletes])
 
   const handleListTrue = () => {
-    dispatch(setRecipientsListLayout(true))
+    dispatch(SET_RECIPIENTS_LIST_LAYOUT(true))
   }
   const handleListFalse = () => {
-    dispatch(setRecipientsListLayout(false))
+    dispatch(SET_RECIPIENTS_LIST_LAYOUT(false))
   }
 
   const handleItemClick = (id) => {
-    dispatch(setSelectedRecipients(id))
+    dispatch(SET_SELECTED_RECIPIENTS(id))
   }
 
   const recipientContainer = {
@@ -79,7 +79,6 @@ const RecipientsV1 = () => {
     px: 4,
     py: 2,
     borderRadius: "5px",
-    border: "1px solid transparent",
     _hover: { border: "1px solid #EBEFF2" },
     width: !recipientsListLayout && "234px",
     flexDirection: !recipientsListLayout && "column",
@@ -335,14 +334,14 @@ const RecipientsV1 = () => {
           <Flex justifyContent={"space-between"} bottom={"0"}>
             <Button
               leftIcon={<BsChevronLeft />}
-              onClick={() => dispatch(setActiveStep("deal_type"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("deal_type"))}
             >
               Previous Step
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
               colorScheme="twitter"
-              onClick={() => dispatch(setActiveStep("activities"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("activities"))}
             >
               Next Step
             </Button>

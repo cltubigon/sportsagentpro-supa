@@ -3,8 +3,8 @@ import { TfiPencilAlt } from "react-icons/tfi"
 import { CgMenuGridO } from "react-icons/cg"
 import { useDispatch, useSelector } from "react-redux"
 import {
-  savePostType,
-  setActiveStep,
+  SAVE_POST_TYPE,
+  SET_ACTIVE_STEP,
 } from "../../store/actions/buildPostActions"
 import { BsChevronRight } from "react-icons/bs"
 import BuildMenu from "./BuildMenu"
@@ -20,12 +20,12 @@ const DealTypeV1 = () => {
   const { postType } = build
 
   const handleNextButtonClick = () => {
-    postType === "opportunity" && dispatch(setActiveStep("activities"))
-    postType !== "opportunity" && dispatch(setActiveStep("recipients"))
+    postType === "opportunity" && dispatch(SET_ACTIVE_STEP("activities"))
+    postType !== "opportunity" && dispatch(SET_ACTIVE_STEP("recipients"))
   }
 
   const handlePostTypeClick = (type) => {
-    dispatch(savePostType(type))
+    dispatch(SAVE_POST_TYPE(type))
   }
 
   return (

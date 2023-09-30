@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import {
   SET_IS_LOADING,
-  applyToPost,
+  APPLY_TO_POST,
   withdrawToPost,
 } from "../../../store/actions/postActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
@@ -23,7 +23,6 @@ import { useState } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
-import { fetchPostsOfCurrentPage } from "../../../store/actions/Fetch/fetchPostsAction"
 import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 
 const AthleteOpportunities = () => {
@@ -60,7 +59,7 @@ const AthleteOpportunities = () => {
     event.stopPropagation()
     dispatch(SET_IS_LOADING(true))
     hasApplied && dispatch(withdrawToPost(id, email))
-    !hasApplied && dispatch(applyToPost(id, email))
+    !hasApplied && dispatch(APPLY_TO_POST(id, email))
   }
 
   const handleDrawer = (post, editorState) => {

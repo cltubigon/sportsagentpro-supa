@@ -7,17 +7,13 @@ import {
   BsListOl,
   BsListUl,
   BsTypeBold,
-  BsTypeH1,
   BsTypeItalic,
   BsTypeStrikethrough,
   BsTypeUnderline,
 } from "react-icons/bs"
-import { useDispatch } from "react-redux"
-import { setContent } from "../../store/actions/buildPostActions"
 import { useEffect } from "react"
 
 const RichEditor = ({ borderColorWidthStyle, borderRadius, height, setRawDataString, rawDataParsed, setAvailableCharacters }) => {
-    const dispatch = useDispatch()
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editorRef = useRef(null)
 

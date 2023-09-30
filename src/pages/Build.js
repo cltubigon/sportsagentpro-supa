@@ -1,23 +1,17 @@
-import { useForm } from "react-hook-form"
-import { Box, Flex, Heading, Spinner } from "@chakra-ui/react"
-import { useDispatch, useSelector } from "react-redux"
+import { Flex, Heading, Spinner } from "@chakra-ui/react"
+import { useSelector } from "react-redux"
 import { useEffect, useRef, useState } from "react"
-import { createPost } from "../store/actions/buildPostActions"
 import BuildLeftNav from "../components/Build/BuildLeftNav"
-import { saveAthletesToStorage } from "../store/actions/athleteActions"
 import ActivitiesV1 from "../components/Build/ActivitiesV1"
 import RecipientsV1 from "../components/Build/RecipientsV1"
 import ReviewV1 from "../components/Build/ReviewV1"
 import Paymentv1 from "../components/Build/PaymentV1"
 import DealTypeV1 from "../components/Build/DealTypeV1"
-import { useParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import DetailsV1 from "../components/Build/Details/DetailsV1"
 
 const Build = () => {
-  const dispatch = useDispatch()
   const flexRef = useRef(null)
-  const { id } = useParams()
 
   const activeStep = useSelector((state) => state.build.activeStep)
   const isSubmitting = useSelector((state) => state.build.isSubmitting)
@@ -86,7 +80,6 @@ const Build = () => {
           justifyContent={"flex-start"}
           ref={flexRef}
         >
-          {/* <BuildNav /> */}
           {activeStep === "deal_type" && <DealTypeV1 />}
           {activeStep === "recipients" && <RecipientsV1 />}
           {activeStep === "activities" && <ActivitiesV1 />}

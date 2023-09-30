@@ -2,7 +2,7 @@ import { Flex, Skeleton, SkeletonText } from "@chakra-ui/react"
 import React from "react"
 import { comStyle } from "../Dashboard/Opportunities/styleAthleteOpportunities"
 import { Waypoint } from "react-waypoint"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { fetchPostsOfCurrentPage } from "../../store/actions/Fetch/fetchPostsAction"
 
 const SkeletonAthleteOppLoader = () => {

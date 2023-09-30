@@ -16,22 +16,17 @@ import {
   RESET_BUILD_STATE,
   SET_ERROR,
   SET_IS_SUBMITTING,
-  createPost,
-  getSelectedPost,
-  setActiveStep,
-  setEditMode,
-  setIsProcessedSuccesfully,
-  setSubmissionType,
-  setTotalAmount,
-  setTotalPayment,
-  updatePost,
+  GET_SELECTED_POST,
+  SET_ACTIVE_STEP,
+  SET_EDIT_MODE,
+  SET_SUBMISSION_TYPE,
+  SET_TOTAL_AMOUNT,
+  SET_TOTAL_PAYMENT,
 } from "../../store/actions/buildPostActions"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { MdSupport } from "react-icons/md"
-import { duration } from "moment/moment"
-import { createNewPost } from "../../store/actions/postActions"
 import { blns } from "../../styles/buildStyles/buildLeftNavStyle"
 import { SkeletonBuildLeftNav } from "../Skeleton/SkeletonBuildLeftNav"
 
@@ -72,10 +67,10 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
   console.log("location.pathname: ", location.pathname)
   // -------------------- INITIALIZATION --------------------
   useEffect(() => {
-    dispatch(setActiveStep("deal_type"))
+    dispatch(SET_ACTIVE_STEP("deal_type"))
 
     if (location.pathname === "/build") {
-      dispatch(setEditMode(false))
+      dispatch(SET_EDIT_MODE(false))
       setTimeout(() => {
         editMode && dispatch(RESET_BUILD_STATE("line 77"))
       }, 200)
@@ -86,7 +81,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
       location.pathname !== "/build" &&
       !location.pathname.includes(id)
     ) {
-      dispatch(getSelectedPost(location.pathname.replace(/\/build\//, "")))
+      dispatch(GET_SELECTED_POST(location.pathname.replace(/\/build\//, "")))
     }
   }, [])
 
@@ -103,12 +98,12 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
       // dispatch(createNewPost())
       dispatch(SET_IS_SUBMITTING(true))
       dispatch(BUILD_POST())
-      dispatch(setSubmissionType(null, "sender is BuildLeftNav line 60"))
+      dispatch(SET_SUBMISSION_TYPE(null, "sender is BuildLeftNav line 60"))
       // setSpinner(() => true)
     } else if (submissionType === "update") {
       dispatch(SET_IS_SUBMITTING(true))
       // firebase.auth && dispatch(updatePost(firebase.auth.uid))
-      dispatch(setSubmissionType(null, "sender is BuildLeftNav line 65"))
+      dispatch(SET_SUBMISSION_TYPE(null, "sender is BuildLeftNav line 65"))
       // setSpinner(() => true)
     }
     return
@@ -160,13 +155,13 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
         (accumulator, activity) => accumulator + activity,
         0
       )
-    dispatch(setTotalAmount(recipientEarnings))
+    dispatch(SET_TOTAL_AMOUNT(recipientEarnings))
     const marketplaceFee = recipientEarnings * 0.1
     setTotalAmountToPay(recipientEarnings + marketplaceFee)
   }, [selectedActivities])
 
   useEffect(() => {
-    dispatch(setTotalPayment(totalAmountToPay))
+    dispatch(SET_TOTAL_PAYMENT(totalAmountToPay))
   }, [totalAmountToPay])
   // -------------------- END OF ACTIVITIES TAB --------------------
 
@@ -247,7 +242,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
             <Stack sx={navContainer}>
               <Flex
                 gap={5}
-                onClick={() => dispatch(setActiveStep("deal_type"))}
+                onClick={() => dispatch(SET_ACTIVE_STEP("deal_type"))}
                 sx={blns.menuContainer}
               >
                 <Flex
@@ -304,7 +299,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
                 <Flex
                   sx={blns.menuContainer}
                   gap={5}
-                  onClick={() => dispatch(setActiveStep("recipients"))}
+                  onClick={() => dispatch(SET_ACTIVE_STEP("recipients"))}
                 >
                   <Flex
                     sx={
@@ -364,7 +359,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
               <Flex
                 sx={blns.menuContainer}
                 gap={5}
-                onClick={() => dispatch(setActiveStep("activities"))}
+                onClick={() => dispatch(SET_ACTIVE_STEP("activities"))}
               >
                 <Flex
                   sx={
@@ -422,7 +417,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
               <Flex
                 sx={blns.menuContainer}
                 gap={5}
-                onClick={() => dispatch(setActiveStep("details"))}
+                onClick={() => dispatch(SET_ACTIVE_STEP("details"))}
               >
                 <Flex
                   sx={
@@ -479,7 +474,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
               <Flex
                 sx={blns.menuContainer}
                 gap={5}
-                onClick={() => dispatch(setActiveStep("review"))}
+                onClick={() => dispatch(SET_ACTIVE_STEP("review"))}
               >
                 <Flex
                   sx={
@@ -536,7 +531,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
               <Flex
                 sx={blns.menuContainer}
                 gap={5}
-                onClick={() => dispatch(setActiveStep("payment"))}
+                onClick={() => dispatch(SET_ACTIVE_STEP("payment"))}
               >
                 <Flex
                   sx={

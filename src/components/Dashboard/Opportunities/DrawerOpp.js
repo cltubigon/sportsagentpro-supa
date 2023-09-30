@@ -20,10 +20,9 @@ import { FaCircle } from "react-icons/fa"
 import { Editor } from "draft-js"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { useRef } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
-import { SET_IS_LOADING, applyToPost, withdrawToPost } from "../../../store/actions/postActions"
+import { SET_IS_LOADING, APPLY_TO_POST, withdrawToPost } from "../../../store/actions/postActions"
 
 const UtilDrawer = ({
   isOpen,
@@ -52,7 +51,7 @@ const UtilDrawer = ({
   const handleApply = (id, hasApplied) => {
     dispatch(SET_IS_LOADING(true))
     hasApplied && dispatch(withdrawToPost(id, email))
-    !hasApplied && dispatch(applyToPost(id, email))
+    !hasApplied && dispatch(APPLY_TO_POST(id, email))
   }
 
   useEffect(() => {

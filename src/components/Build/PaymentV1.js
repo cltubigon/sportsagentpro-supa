@@ -3,39 +3,23 @@ import {
   GridItem,
   Button,
   Flex,
-  Icon,
   Text,
   Box,
   Checkbox,
-  useToast,
-  Spinner,
-  Heading,
 } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { BsCheck, BsChevronLeft, BsPlus } from "react-icons/bs"
-import { TfiClose } from "react-icons/tfi"
 import {
-  // createPost,
-  setActiveStep,
-  setFirstNameAndLastName,
-  // setIsSubmittedSuccessfully,
-  setPaymentTabStatus,
-  setSelectedRecipients,
-  setSubmissionType,
-  // setTotalPayment,
-  updatePost,
+  SET_ACTIVE_STEP,
+  SET_FIRSTNAME_AND_LASTNAME,
+  SET_PAYMENT_TAB_STATUS,
+  SET_SUBMISSION_TYPE,
 } from "../../store/actions/buildPostActions"
 import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
-import { useRef } from "react"
 import BuildMenu from "./BuildMenu"
-// import { firestoreConnect } from "react-redux-firebase"
 
 const PaymentV1 = ({ setSpinner }) => {
   const dispatch = useDispatch()
-  const toast = useToast()
-  const divRef = useRef()
 
   const profile = useSelector((state) => state.auth.profile)
   const postType = useSelector((state) => state.build.postType)
@@ -57,12 +41,11 @@ const PaymentV1 = ({ setSpinner }) => {
   console.log("allActivityAmount: ", allActivityAmount)
   console.log('recipientEarnings: ', recipientEarnings)
   const [totalAmount, setTotalAmount] = useState(0)
-  // const [count, setCount] = useState(0)
 
   useEffect(() => {
     profile &&
       dispatch(
-        setFirstNameAndLastName({
+        SET_FIRSTNAME_AND_LASTNAME({
           firstName: profile.firstName,
           lastName: profile.lastName,
         })
@@ -105,11 +88,11 @@ const PaymentV1 = ({ setSpinner }) => {
     ) {
       // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => true)
-      dispatch(setPaymentTabStatus(true))
+      dispatch(SET_PAYMENT_TAB_STATUS(true))
     } else {
       // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => false)
-      dispatch(setPaymentTabStatus(false))
+      dispatch(SET_PAYMENT_TAB_STATUS(false))
     }
 
     return
@@ -119,10 +102,10 @@ const PaymentV1 = ({ setSpinner }) => {
   // console.log('filteredReduxPosts: ', filteredReduxPosts)
 
   const handleCreatePost = () => {
-    dispatch(setSubmissionType('create', 'sender is Payment line138'))
+    dispatch(SET_SUBMISSION_TYPE('create', 'sender is Payment line138'))
   }
   const handleUpdatePost = () => {
-    dispatch(setSubmissionType('update', 'sender is Payment line142'))
+    dispatch(SET_SUBMISSION_TYPE('update', 'sender is Payment line142'))
   }
 
   console.log('isReadyToPost: ', isReadyToPost)
@@ -352,7 +335,7 @@ const PaymentV1 = ({ setSpinner }) => {
           <Flex justifyContent={"space-between"} bottom={"0"}>
             <Button
               leftIcon={<BsChevronLeft />}
-              onClick={() => dispatch(setActiveStep("review"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("review"))}
             >
               Previous Step
             </Button>

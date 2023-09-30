@@ -1,14 +1,7 @@
 import {
-  collection,
-  addDoc,
-  deleteDoc,
-  updateDoc,
   doc,
   getDoc,
-  Timestamp,
 } from "firebase/firestore"
-import { fetchOpportunityPostsOfOwner } from "./Fetch/fetchPostsAction"
-import { db } from "../../config/fbConfig"
 import supabase from "../../config/supabaseClient"
 
 export const BUILD_POST = () => async (dispatch, getState) => {
@@ -58,7 +51,7 @@ export const SET_IS_SUBMITTING = (payload) => (dispatch) => {
   dispatch({ type: "SET_IS_SUBMITTING", payload })
 }
 
-export const getSelectedPost = (postId) => {
+export const GET_SELECTED_POST = (postId) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore()
     try {
@@ -76,44 +69,44 @@ export const getSelectedPost = (postId) => {
   }
 }
 
-export const setSubmissionType = (payload, sender) => {
+export const SET_SUBMISSION_TYPE = (payload, sender) => {
   return (dispatch) => {
     dispatch({ type: "SET_SUBMISSION_TYPE", payload })
   }
 }
-export const setEditMode = (payload) => {
+export const SET_EDIT_MODE = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_EDIT_MODE", payload })
   }
 }
-export const setIsProcessedSuccesfully = (payload) => {
-  return (dispatch) => {
-    dispatch({ type: "SET_IS_SUBMITTED_SUCCESSFULLY", payload })
-  }
-}
+// export const setIsProcessedSuccesfully = (payload) => {
+//   return (dispatch) => {
+//     dispatch({ type: "SET_IS_SUBMITTED_SUCCESSFULLY", payload })
+//   }
+// }
 
-export const setBuildState = (data, sender) => {
-  const { activeStep, ...payload } = data
-  return (dispatch) => {
-    dispatch({ type: "SET_BUILD_STATE", payload })
-  }
-}
-export const setTotalPayment = (payload) => {
+// export const setBuildState = (data, sender) => {
+//   const { activeStep, ...payload } = data
+//   return (dispatch) => {
+//     dispatch({ type: "SET_BUILD_STATE", payload })
+//   }
+// }
+export const SET_TOTAL_PAYMENT = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_TOTAL_PAYMENT", payload })
   }
 }
-export const setTotalAmount = (payload) => {
+export const SET_TOTAL_AMOUNT = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_TOTAL_AMOUNT", payload })
   }
 }
-export const setFirstNameAndLastName = (payload) => {
+export const SET_FIRSTNAME_AND_LASTNAME = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_FIRSTNAME_AND_LASTNAME", payload })
   }
 }
-export const setSelectedRecipients = (id) => {
+export const SET_SELECTED_RECIPIENTS = (id) => {
   return (dispatch, getState) => {
     const selectedRecipients = getState().build.selectedRecipients
     const isPresent = selectedRecipients.includes(id)
@@ -182,84 +175,84 @@ export const setSelectedRecipients = (id) => {
 //   }
 // }
 
-export const updatePost = (uid) => {
-  return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore()
-    const updatedData = getState().build
-    const postId = updatedData.id
-    // const { auth } = getState().firebase;
-    // const uid = auth.uid;
-    const sanitizedData = JSON.parse(JSON.stringify(updatedData))
+// export const updatePost = (uid) => {
+//   return async (dispatch, getState, { getFirebase, getFirestore }) => {
+//     const firestore = getFirestore()
+//     const updatedData = getState().build
+//     const postId = updatedData.id
+//     // const { auth } = getState().firebase;
+//     // const uid = auth.uid;
+//     const sanitizedData = JSON.parse(JSON.stringify(updatedData))
 
-    try {
-      // Fetch the post document
-      const postRef = doc(firestore, "posts", postId)
-      const postSnapshot = await getDoc(postRef)
-      if (!postSnapshot.exists()) {
-        throw new Error("Post not found")
-      }
+//     try {
+//       // Fetch the post document
+//       const postRef = doc(firestore, "posts", postId)
+//       const postSnapshot = await getDoc(postRef)
+//       if (!postSnapshot.exists()) {
+//         throw new Error("Post not found")
+//       }
 
-      // Verify the owner
-      const postData = postSnapshot.data()
-      if (postData.ownerUID !== uid) {
-        throw new Error("Unauthorized update")
-      }
+//       // Verify the owner
+//       const postData = postSnapshot.data()
+//       if (postData.ownerUID !== uid) {
+//         throw new Error("Unauthorized update")
+//       }
 
-      // Update an existing document
-      const timestamp = Timestamp.fromDate(new Date())
+//       // Update an existing document
+//       const timestamp = Timestamp.fromDate(new Date())
 
-      const data = { posts_last_updated: timestamp }
-      await updateDoc(doc(firestore, "logs", "C0smjlIYwHzvfRMqPIZs"), data)
+//       const data = { posts_last_updated: timestamp }
+//       await updateDoc(doc(firestore, "logs", "C0smjlIYwHzvfRMqPIZs"), data)
 
-      // Update the post document
-      await updateDoc(postRef, sanitizedData)
-      dispatch({ type: "UPDATE_POST_SUCCESS", payload: true })
-    } catch (error) {
-      console.error("Error updating post:", error)
-      dispatch({ type: "UPDATE_POST_ERROR", error })
-    }
-  }
-}
+//       // Update the post document
+//       await updateDoc(postRef, sanitizedData)
+//       dispatch({ type: "UPDATE_POST_SUCCESS", payload: true })
+//     } catch (error) {
+//       console.error("Error updating post:", error)
+//       dispatch({ type: "UPDATE_POST_ERROR", error })
+//     }
+//   }
+// }
 
-export const savePostType = (data) => {
+export const SAVE_POST_TYPE = (data) => {
   return (dispatch) => {
     dispatch({ type: "SAVE_POST_TYPE", data })
   }
 }
 
-export const setActiveStep = (data) => {
+export const SET_ACTIVE_STEP = (data) => {
   return (dispatch) => {
     dispatch({ type: "SET_ACTIVE_STEP", data })
   }
 }
 
-export const setInitialFilteredAthletes = (data) => {
-  return (dispatch) => {
-    const payload = data.map((athlete) => {
-      return { ...athlete, isChecked: false }
-    })
-    dispatch({ type: "SET_INITIAL_FILTERED_ATHLETES", payload })
-  }
-}
+// export const setInitialFilteredAthletes = (data) => {
+//   return (dispatch) => {
+//     const payload = data.map((athlete) => {
+//       return { ...athlete, isChecked: false }
+//     })
+//     dispatch({ type: "SET_INITIAL_FILTERED_ATHLETES", payload })
+//   }
+// }
 
-export const setCheckboxTrueOrFalse = (id) => {
-  return (dispatch, getState) => {
-    const state = getState()
-    const athletes = state.build.recipients
+// export const setCheckboxTrueOrFalse = (id) => {
+//   return (dispatch, getState) => {
+//     const state = getState()
+//     const athletes = state.build.recipients
 
-    const payload = athletes.map((athlete) => {
-      const selectStatus = athlete.isChecked
-      if (athlete.id === id) {
-        return { ...athlete, isChecked: !selectStatus }
-      } else {
-        return athlete
-      }
-    })
-    dispatch({ type: "SET_CHECK_TRUE_OR_FALSE", payload })
-  }
-}
+//     const payload = athletes.map((athlete) => {
+//       const selectStatus = athlete.isChecked
+//       if (athlete.id === id) {
+//         return { ...athlete, isChecked: !selectStatus }
+//       } else {
+//         return athlete
+//       }
+//     })
+//     dispatch({ type: "SET_CHECK_TRUE_OR_FALSE", payload })
+//   }
+// }
 
-export const addOrRemoveActivities = (activity) => {
+export const ADD_OR_REMOVE_ACTIVITIES = (activity) => {
   return (dispatch, getState) => {
     const state = getState()
     const selectedActivities = state.build.selectedActivities
@@ -284,7 +277,7 @@ export const addOrRemoveActivities = (activity) => {
   }
 }
 
-export const updateSelectedActivities = (data) => {
+export const UPDATE_SELECTED_ACTIVITIES = (data) => {
   return (dispatch, getState) => {
     const state = getState()
     const selectedActivities = state.build.selectedActivities
@@ -348,19 +341,19 @@ export const updateSelectedActivities = (data) => {
 //   }
 // }
 
-export const setContent = (payload) => {
+export const SET_CONTENT = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_CONTENT", payload })
   }
 }
 
-export const setPostTitle = (payload) => {
+export const SET_POST_TITLE = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_POST_TITLE", payload })
   }
 }
 
-export const setPostExpirationDate = (payload) => {
+export const SET_POST_EXPIRATION_DATE = (payload) => {
   const utcFormat = new Date(payload).toUTCString().replace("GMT", "UTC")
   const localeFormat = new Date(payload).toLocaleString()
   const objPayload = {
@@ -374,13 +367,13 @@ export const setPostExpirationDate = (payload) => {
   }
 }
 
-export const setActivityTabStatus = (payload) => {
+export const SET_ACTIVITY_TAB_STATUS = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_ACTIVITY_TAB_STATUS", payload })
   }
 }
 
-export const setDetailsTabStatus = (payload) => {
+export const SET_DETAILS_TAB_STATUS = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_DETAILS_TAB_STATUS", payload })
   }
@@ -392,7 +385,7 @@ export const setDetailsTabStatus = (payload) => {
 //   }
 // }
 
-export const setPaymentTabStatus = (payload) => {
+export const SET_PAYMENT_TAB_STATUS = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_PAYMENT_TAB_STATUS", payload })
   }
@@ -410,12 +403,12 @@ export const RESET_BUILD_STATE = (sender) => {
     dispatch({ type: "RESET_BUILD_STATE" })
   }
 }
-export const setRecipientsListLayout = (payload) => {
+export const SET_RECIPIENTS_LIST_LAYOUT = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_RECIPIENTS_LIST_LAYOUT", payload })
   }
 }
-export const setActivitiesListLayout = (payload) => {
+export const SET_ACTIVITIES_LIST_LAYOUT = (payload) => {
   return (dispatch) => {
     dispatch({ type: "SET_ACTIVITIES_LIST_LAYOUT", payload })
   }

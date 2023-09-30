@@ -15,10 +15,10 @@ import { useEffect } from "react"
 import RichEditor from "../../../utils/RichEditor/RichEditor"
 import DetailsTitleInputField from "./DetailsTitleInputField"
 import {
-  setActiveStep,
-  setContent,
-  setDetailsTabStatus,
-  setPostExpirationDate,
+  SET_ACTIVE_STEP,
+  SET_CONTENT,
+  SET_DETAILS_TAB_STATUS,
+  SET_POST_EXPIRATION_DATE,
 } from "../../../store/actions/buildPostActions"
 import { getTimeToUTCFromLocal } from "../../../utils/DateInputToUTCFromLocal"
 import BuildMenu from "../BuildMenu"
@@ -44,14 +44,14 @@ const DetailsV1 = () => {
   useEffect(() => {
     const watchedExpiration = watch("expirationDate")
     if (watchedExpiration !== undefined)
-      dispatch(setPostExpirationDate(watchedExpiration))
+      dispatch(SET_POST_EXPIRATION_DATE(watchedExpiration))
   }, [watch("expirationDate")])
 
   useEffect(() => {
     if (availableCharacters <= 1950 && availableCharacters >= 0 && postTitle) {
-      dispatch(setDetailsTabStatus(true))
+      dispatch(SET_DETAILS_TAB_STATUS(true))
     } else if (availableCharacters !== 2000) {
-      dispatch(setDetailsTabStatus(false))
+      dispatch(SET_DETAILS_TAB_STATUS(false))
     }
   }, [availableCharacters, postTitle])
 
@@ -60,7 +60,7 @@ const DetailsV1 = () => {
   useEffect(() => {
     availableCharacters >= -1 &&
       rawDataString &&
-      dispatch(setContent(rawDataString))
+      dispatch(SET_CONTENT(rawDataString))
 
     return
   }, [rawDataString])
@@ -182,14 +182,14 @@ const DetailsV1 = () => {
           <Flex justifyContent={"space-between"} bottom={"0"}>
             <Button
               leftIcon={<BsChevronLeft />}
-              onClick={() => dispatch(setActiveStep("activities"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("activities"))}
             >
               Previous Step
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
               colorScheme={availableCharacters < 0 ? "gray" : "twitter"}
-              onClick={() => dispatch(setActiveStep("review"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("review"))}
             >
               {availableCharacters < 0 ? "Skip step for now" : "Next Step"}
             </Button>

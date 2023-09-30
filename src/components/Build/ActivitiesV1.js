@@ -16,11 +16,11 @@ import {
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
-  setActiveStep,
-  updateSelectedActivities,
-  addOrRemoveActivities,
-  setActivityTabStatus,
-  setActivitiesListLayout,
+  SET_ACTIVE_STEP,
+  UPDATE_SELECTED_ACTIVITIES,
+  ADD_OR_REMOVE_ACTIVITIES,
+  SET_ACTIVITY_TAB_STATUS,
+  SET_ACTIVITIES_LIST_LAYOUT,
 } from "../../store/actions/buildPostActions"
 import { getTimeToUTCFromLocal } from "../../utils/DateInputToUTCFromLocal"
 import { motion } from "framer-motion"
@@ -46,7 +46,6 @@ const ActivitiesNav1 = () => {
   const activitiesListLayout = useSelector((state) => state.build.activitiesListLayout)
   const activitiesTabReady = useSelector((state) => state.build.activitiesTabReady)
   const selectedActivities = useSelector((state) => state.build.selectedActivities)
-  const postContent = useSelector((state) => state.build.postContent)
 
   const { register, watch } = useForm()
   const watchSearch = watch("searchActivity")
@@ -58,10 +57,10 @@ const ActivitiesNav1 = () => {
   const [inputs, setInputs] = useState({})
 
   const handleListTrue = () => {
-    dispatch(setActivitiesListLayout(true))
+    dispatch(SET_ACTIVITIES_LIST_LAYOUT(true))
   }
   const handleListFalse = () => {
-    dispatch(setActivitiesListLayout(false))
+    dispatch(SET_ACTIVITIES_LIST_LAYOUT(false))
   }
 
   useEffect(() => {
@@ -86,7 +85,7 @@ const ActivitiesNav1 = () => {
       allDatesAreReady &&
       allAmountsAreReady === allDatesAreReady
     console.log('this part is triggered')
-    dispatch(setActivityTabStatus(activityTabStatus))
+    dispatch(SET_ACTIVITY_TAB_STATUS(activityTabStatus))
   }, [reduxSelectedActivity, tab])
 
   const [activeActivity, setActiveActivity] = useState([])
@@ -121,7 +120,6 @@ const ActivitiesNav1 = () => {
     notSelectedKeys.forEach((key) => {
       if (inputs.hasOwnProperty(key)) {
         if (key.includes("activityDate")) {
-          //may try activityAmount too.
           delete inputs[key]
         } else {
           inputs[key] = "0"
@@ -157,7 +155,7 @@ const ActivitiesNav1 = () => {
 
   useEffect(() => {
     const hasNoInput = Object.keys(inputs).length === 0
-    !hasNoInput && dispatch(updateSelectedActivities(inputs))
+    !hasNoInput && dispatch(UPDATE_SELECTED_ACTIVITIES(inputs))
   }, [inputs, tab])
 
   const postType = useSelector((state) => state.build.postType) // Preious or Next Button
@@ -379,7 +377,7 @@ const ActivitiesNav1 = () => {
                         key={id}
                         sx={itemContainerStyle}
                         onClick={() =>
-                          dispatch(addOrRemoveActivities(activity))
+                          dispatch(ADD_OR_REMOVE_ACTIVITIES(activity))
                         }
                         bgColor={isSelected(id) && "blue.100"}
                         border={
@@ -424,7 +422,7 @@ const ActivitiesNav1 = () => {
                         key={id}
                         sx={itemContainerStyle}
                         onClick={() =>
-                          dispatch(addOrRemoveActivities(activity))
+                          dispatch(ADD_OR_REMOVE_ACTIVITIES(activity))
                         }
                         bgColor={isSelected(id) && "blue.100"}
                         border={
@@ -468,7 +466,7 @@ const ActivitiesNav1 = () => {
                         key={id}
                         sx={itemContainerStyle}
                         onClick={() =>
-                          dispatch(addOrRemoveActivities(activity))
+                          dispatch(ADD_OR_REMOVE_ACTIVITIES(activity))
                         }
                         bgColor={isSelected(id) && "blue.100"}
                         border={
@@ -557,7 +555,7 @@ const ActivitiesNav1 = () => {
                             color={"blue.400"}
                             cursor={"pointer"}
                             onClick={() =>
-                              dispatch(addOrRemoveActivities(activity))
+                              dispatch(ADD_OR_REMOVE_ACTIVITIES(activity))
                             }
                           />
                           <motion.div
@@ -703,13 +701,13 @@ const ActivitiesNav1 = () => {
                           zIndex={10}
                           boxSize={4}
                           onClick={() =>
-                            dispatch(addOrRemoveActivities(activity))
+                            dispatch(ADD_OR_REMOVE_ACTIVITIES(activity))
                           }
                           cursor={"pointer"}
                         />
                         <Text
                           onClick={() =>
-                            dispatch(addOrRemoveActivities(activity))
+                            dispatch(ADD_OR_REMOVE_ACTIVITIES(activity))
                           }
                           zIndex={10}
                           cursor={"pointer"}
@@ -754,14 +752,14 @@ const ActivitiesNav1 = () => {
           <Flex justifyContent={"space-between"}>
             <Button
               leftIcon={<BsChevronLeft />}
-              onClick={() => dispatch(setActiveStep(prevButton))}
+              onClick={() => dispatch(SET_ACTIVE_STEP(prevButton))}
             >
               Previous Step
             </Button>
             <Button
               rightIcon={<BsChevronRight />}
               colorScheme={activitiesTabReady ? "twitter" : "gray"}
-              onClick={() => dispatch(setActiveStep("details"))}
+              onClick={() => dispatch(SET_ACTIVE_STEP("details"))}
             >
               {activitiesTabReady ? "Next Step" : "Skip step for now"}
             </Button>

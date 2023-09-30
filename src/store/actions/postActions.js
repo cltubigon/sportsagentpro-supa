@@ -1,12 +1,7 @@
 import {
-  collection,
-  addDoc,
-  deleteDoc,
   updateDoc,
   doc,
   getDoc,
-  Timestamp,
-  setDoc,
 } from "firebase/firestore"
 import { db } from "../../config/fbConfig"
 import supabase from "../../config/supabaseClient"
@@ -66,7 +61,7 @@ export const withdrawToPost = (postId, email) => async (dispatch, getState) => {
   }
 }
 
-export const applyToPost = (postId, email) => async (dispatch, getState) => {
+export const APPLY_TO_POST = (postId, email) => async (dispatch, getState) => {
   const myOpportunitiesPosts = getState().post.myOpportunitiesPosts
   const updatedOpportunitiesPosts = (updatedPost) => {
     const data = myOpportunitiesPosts.map((opp) => {
@@ -98,15 +93,15 @@ export const SET_IS_LOADING = (payload) => (dispatch) => {
   dispatch({ type: "SET_IS_LOADING", payload })
 }
 
-export const savePostsToStorage = (payload) => {
-  console.log("SAVE_POSTS_TO_STORAGE", payload)
-  return (dispatch) => {
-    dispatch({ type: "SAVE_POSTS_TO_STORAGE", payload })
-  }
-}
-export const resetPostState = (payload) => {
-  console.log("RESET_POST_STATE", payload)
-  return (dispatch) => {
-    dispatch({ type: "RESET_POST_STATE", payload })
-  }
-}
+// export const savePostsToStorage = (payload) => {
+//   console.log("SAVE_POSTS_TO_STORAGE", payload)
+//   return (dispatch) => {
+//     dispatch({ type: "SAVE_POSTS_TO_STORAGE", payload })
+//   }
+// }
+// export const resetPostState = (payload) => {
+//   console.log("RESET_POST_STATE", payload)
+//   return (dispatch) => {
+//     dispatch({ type: "RESET_POST_STATE", payload })
+//   }
+// }
