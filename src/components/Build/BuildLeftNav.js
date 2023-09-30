@@ -80,6 +80,12 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
       location.pathname !== "/build" &&
       !location.pathname.includes(id)
     ) {
+      console.log("location.pathname: ", location.pathname)
+      console.log('id: ', id)
+      console.log(
+        "!location.pathname.includes(id): ",
+        !location.pathname.includes(id)
+      )
       dispatch(GET_SELECTED_POST(location.pathname.replace(/\/build\//, "")))
     }
   }, [])
@@ -93,7 +99,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
 
   useEffect(() => {
     if (submissionType === "create") {
-      console.log('submission block is triggered')
+      console.log("submission block is triggered")
       // dispatch(createNewPost())
       dispatch(SET_IS_SUBMITTING(true))
       dispatch(BUILD_POST())
@@ -107,8 +113,8 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
     }
     return
   }, [submissionType])
-  console.log('submissionType: ', submissionType)
-  
+  console.log("submissionType: ", submissionType)
+
   useEffect(() => {
     if (isError) {
       toast({

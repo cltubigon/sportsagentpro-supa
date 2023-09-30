@@ -15,6 +15,11 @@ const postReducer = (state = initialState, action) => {
         ...state,
         isLoading: action.payload,
       }
+    case "POST_SUCCESSFULLY_DELETED":
+      return {
+        ...state,
+        userOpportunityPosts: action.payload,
+      }
     case "SET_ALL_OPPORTUNITY_POSTS":
       console.log("SET_ALL_OPPORTUNITY_POSTS action.payload: ", action.payload)
       const firstID = action.payload.length > 0 && action.payload[0].id

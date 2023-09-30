@@ -10,6 +10,7 @@ import { athletesStyle } from "../../styles/athletesStyle"
 import { useDispatch, useSelector } from "react-redux"
 import { SET_ATHLETES } from "../../store/actions/athleteActions"
 import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
+import { HomeSkeleton } from "../Skeleton/Skeletons"
 
 const Athletes = () => {
   const dispatch = useDispatch()
@@ -20,6 +21,7 @@ const Athletes = () => {
   // const state = useSelector(state => state)
   console.log("athleteList: ", athleteList)
 
+  const [isLoading, setIsLoading] = useState(true)
   const [show, setShow] = useState(false)
   useEffect(() => {
     const showTimeout = setTimeout(() => {
@@ -29,6 +31,10 @@ const Athletes = () => {
     return () => clearTimeout(showTimeout)
   }, [])
 
+  useEffect(()=> {
+    athleteList && setIsLoading(false)
+  }, [athleteList])
+
   useEffect(() => {
     console.log("initial athletes fetch")
     dispatch(SET_ATHLETES())
@@ -37,53 +43,51 @@ const Athletes = () => {
 
   return (
     <>
-      {/* {isLoading && (
-        <HomeSkeleton />
-      )} */}
-      {/* {athleteList && !isLoading && ( */}
-      <SimpleGrid
-        minChildWidth={{
-          base: "100%",
-          sm: "290px",
-          md: "300px",
-        }}
-        gap={{ base: 3, md: 6 }}
-        tabIndex={0}
-      >
-        {athleteList &&
-          athleteList.map((athlete, index) => {
-            const { id, lastName, firstName, sports, team } = athlete
-            return (
-              <Flex key={index}>
-                <Link to={`/profile/${id}`}>
-                  <Flex sx={athletesStyle.cardCOntainer}>
-                    <Flex sx={athletesStyle.imageContainer}>
-                      <DummyImage
-                        bgColor="transparent"
-                        width={"330px"}
-                        height={240}
-                        placeholder="330x170"
-                      />
+      {isLoading && <HomeSkeleton />}
+      {athleteList && !isLoading && (
+        <SimpleGrid
+          minChildWidth={{
+            base: "100%",
+            sm: "290px",
+            md: "300px",
+          }}
+          gap={{ base: 3, md: 6 }}
+          tabIndex={0}
+        >
+          {athleteList &&
+            athleteList.map((athlete, index) => {
+              const { id, lastName, firstName, sports, team } = athlete
+              return (
+                <Flex key={index}>
+                  <Link to={`/profile/${id}`}>
+                    <Flex sx={athletesStyle.cardCOntainer}>
+                      <Flex sx={athletesStyle.imageContainer}>
+                        <DummyImage
+                          bgColor="transparent"
+                          width={"330px"}
+                          height={240}
+                          placeholder="330x170"
+                        />
+                      </Flex>
+                      <Flex flexDirection={"column"} gap={1}>
+                        <Text sx={athletesStyle.cardAthleteName}>
+                          {firstName} {lastName}
+                        </Text>
+                        <Text sx={athletesStyle.cardSportsType}>
+                          {sports} • {team}
+                        </Text>
+                        <Box sx={athletesStyle.cardSocialMedia}>
+                          <ProfileSocialMedia />
+                        </Box>
+                      </Flex>
                     </Flex>
-                    <Flex flexDirection={"column"} gap={1}>
-                      <Text sx={athletesStyle.cardAthleteName}>
-                        {firstName} {lastName}
-                      </Text>
-                      <Text sx={athletesStyle.cardSportsType}>
-                        {sports} • {team}
-                      </Text>
-                      <Box sx={athletesStyle.cardSocialMedia}>
-                        <ProfileSocialMedia />
-                      </Box>
-                    </Flex>
-                  </Flex>
-                </Link>
-              </Flex>
-            )
-          })}
-        {athleteList && show && <SkeletonLoaderAthlete />}
-      </SimpleGrid>
-      {/* )} */}
+                  </Link>
+                </Flex>
+              )
+            })}
+          {athleteList && show && <SkeletonLoaderAthlete />}
+        </SimpleGrid>
+      )}
     </>
   )
 }

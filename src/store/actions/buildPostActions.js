@@ -1,14 +1,10 @@
-import {
-  doc,
-  getDoc,
-} from "firebase/firestore"
 import supabase from "../../config/supabaseClient"
 
 export const BUILD_POST = () => async (dispatch, getState) => {
   const build = getState().build
   const { email, firstName, lastName, userID } = getState().auth.user
 
-  console.log('build: ', build)
+  console.log("build: ", build)
   const newBuild = {
     ...build,
     ownerUID: userID,
@@ -16,7 +12,7 @@ export const BUILD_POST = () => async (dispatch, getState) => {
     postOwnerFirstName: firstName,
     postOwnerLastName: lastName,
   }
-  console.log('newBuild: ', newBuild)
+  console.log("newBuild: ", newBuild)
 
   const {
     isError,
@@ -29,7 +25,7 @@ export const BUILD_POST = () => async (dispatch, getState) => {
     ...filteredBuild
   } = newBuild
 
-  console.log('filteredBuild: ', filteredBuild)
+  console.log("filteredBuild: ", filteredBuild)
 
   const { data, error } = await supabase
     .from("posts")
@@ -43,6 +39,21 @@ export const BUILD_POST = () => async (dispatch, getState) => {
   }
 }
 
+export const DELETE_POST = (id) => async (dispatch, getState) => {
+  console.log("id: ", id)
+  const { error } = await supabase.from("posts").delete().eq("id", id)
+  const userOpportunityPosts = getState().post.userOpportunityPosts
+  
+  if (!error) {
+    const updatedPosts = userOpportunityPosts.filter(post => post.id !== id)
+    dispatch({ type: 'POST_SUCCESSFULLY_DELETED', payload: updatedPosts })
+    console.log("error: ", error)
+  }
+  if (error) {
+    console.log("error: ", error)
+  }
+}
+
 export const SET_ERROR = (payload) => (dispatch) => {
   dispatch({ type: "SET_ERROR", payload })
 }
@@ -51,21 +62,17 @@ export const SET_IS_SUBMITTING = (payload) => (dispatch) => {
   dispatch({ type: "SET_IS_SUBMITTING", payload })
 }
 
-export const GET_SELECTED_POST = (postId) => {
-  return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore()
-    try {
-      const postRef = doc(firestore, "posts", postId)
-      const postSnapshot = await getDoc(postRef)
-      if (!postSnapshot.exists()) {
-        throw new Error("Post not found")
-      }
-      const data = postSnapshot.data()
-      const payload = { ...data, selectedRecipients: [] }
-      dispatch({ type: "SET_BUILD_STATE", payload })
-    } catch (error) {
-      console.log("Document does not exist!", error)
-    }
+export const GET_SELECTED_POST = (postId) => async (dispatch) => {
+  console.log("postId: ", postId)
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", postId)
+  if (data[0]) {
+    console.log("data: ", data[0])
+    dispatch({ type: "SET_BUILD_STATE", payload: data[0] })
+  } else if (error) {
+    console.log("error: ", error)
   }
 }
 

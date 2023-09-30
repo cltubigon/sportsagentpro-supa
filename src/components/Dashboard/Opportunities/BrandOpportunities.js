@@ -28,6 +28,7 @@ import {
   SkeletonLoaderOpportunities,
   SkeletonOpportunities,
 } from "../../Skeleton/SkeletonOpportunities"
+import { DELETE_POST } from "../../../store/actions/buildPostActions"
 // import { fetchUserOpportunityPosts } from "../../../store/actions/Fetch/fetchPostsAction"
 
 const BrandOpportunities = () => {
@@ -35,33 +36,36 @@ const BrandOpportunities = () => {
   const initRef = useRef()
   const dispatch = useDispatch()
 
-  const authEmail = useSelector((state) => state.auth.email)
-  console.log("authEmail: ", authEmail)
+  const [isLoading, setIsLoading] = useState(true)
+  const [deleting, setDeleting] = useState(null)
   const userOpportunityPosts = useSelector(
     (state) => state.post.userOpportunityPosts
   )
   const { currentPage } = useSelector(
     (state) => state.utils.pagination.postsOfOwners
   )
-  console.log("currentPage: ", currentPage)
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [deleting, setDeleting] = useState(null)
-
+  const [show, setShow] = useState(false)
   useEffect(() => {
-    // dispatch(fetchUserOpportunityPosts(authEmail))
-    console.log("triggered fetch")
-    dispatch(SET_USER_OPPORTUNITY_POSTS())
-  }, [currentPage])
+    const showTimeout = setTimeout(() => {
+      setShow(true)
+    }, 2000)
+
+    return () => clearTimeout(showTimeout)
+  }, [])
 
   useEffect(() => {
     userOpportunityPosts && setIsLoading(false)
     setDeleting(null)
   }, [userOpportunityPosts])
 
+  useEffect(() => {
+    dispatch(SET_USER_OPPORTUNITY_POSTS())
+  }, [currentPage])
+
   const handleDelete = (post) => {
-    setDeleting(post.postTitle)
-    // dispatch(deletePost(post, "BrandOpportunities"))
+    setDeleting(post.id)
+    dispatch(DELETE_POST(post.id))
   }
 
   const btnStyle = {
@@ -75,12 +79,9 @@ const BrandOpportunities = () => {
       {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
         {!isLoading &&
-          userOpportunityPosts &&
           userOpportunityPosts.map((post, index) => {
             const {
-              // postType,
               totalAmount,
-              // postOwner,
               postTitle,
               postContent,
               postOwnerFirstName,
@@ -89,7 +90,6 @@ const BrandOpportunities = () => {
               postExpirationDate,
               id,
             } = post
-            // const isOwner = firebase.auth && firebase.auth.email === postOwner
             const activityTitles = selectedActivities.map(
               (activity) => activity.activityTitle
             )
@@ -106,7 +106,7 @@ const BrandOpportunities = () => {
             const contentState = convertFromRaw(rawDataParsed)
             const editorState = EditorState.createWithContent(contentState)
             return (
-              deleting !== postTitle && (
+              deleting !== id && (
                 <Flex
                   key={index}
                   flexDirection={"column"}
@@ -259,7 +259,7 @@ const BrandOpportunities = () => {
               )
             )
           })}
-        <SkeletonLoaderOpportunities />
+        {show && <SkeletonLoaderOpportunities />}
       </Flex>
     </>
   )
