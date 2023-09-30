@@ -8,22 +8,13 @@ import {
   Box,
   Button,
   Checkbox,
-  Flex,
   FormControl,
-  FormErrorMessage,
-  Icon,
   Input,
   InputGroup,
   InputLeftElement,
   Menu,
   MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuItemOption,
   MenuList,
-  MenuOptionGroup,
-  Text,
-  background,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -31,7 +22,7 @@ import { useForm } from "react-hook-form"
 const FilterProfile = () => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const { register, handleSubmit, formState } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const onSubmit = (data) => {
     console.log("data: ", data)

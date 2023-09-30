@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React from 'react'
 import {
   Drawer,
   Button,
@@ -58,6 +60,7 @@ const UtilDrawer = ({
     const selectedPost =
       allOpportunityPosts &&
       drawerData &&
+      // eslint-disable-next-line react/prop-types
       allOpportunityPosts.find((post) => post.id === drawerData.id)
     // console.log("selectedPost: ", selectedPost)
     const applied =

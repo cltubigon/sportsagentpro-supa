@@ -1,6 +1,6 @@
 import React from "react"
-import { Box, Divider, Flex, Icon, Stack, Text } from "@chakra-ui/react"
-import { BiCamera, BiGlobe, BiMenu, BiMessageDetail } from "react-icons/bi"
+import { Box, Divider, Flex, Icon, Text } from "@chakra-ui/react"
+import { BiCamera, BiGlobe, BiMessageDetail } from "react-icons/bi"
 import { CgMenuGridO } from "react-icons/cg"
 import { TbFileDollar } from "react-icons/tb"
 // import { Link } from 'react-router-dom'
@@ -39,7 +39,7 @@ const DashboardLeftMenu = () => {
               <Flex
                 sx={leftNavStyle}
                 borderColor={
-                  pathname == "/athlete-home" ? "blue.400" : "transparent"
+                  pathname === "/athlete-home" ? "blue.400" : "transparent"
                 }
               >
                 <Icon as={BsHouse} />
@@ -50,7 +50,7 @@ const DashboardLeftMenu = () => {
           <Link to="/network">
             <Flex
               sx={leftNavStyle}
-              borderColor={pathname == "/network" ? "blue.400" : "transparent"}
+              borderColor={pathname === "/network" ? "blue.400" : "transparent"}
             >
               <Icon as={BiGlobe} />
               <Text>Discover</Text>

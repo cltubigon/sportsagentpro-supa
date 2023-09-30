@@ -1,4 +1,4 @@
-import { Box, Flex, Skeleton, SkeletonCircle, SkeletonText, Text } from "@chakra-ui/react"
+import { Flex, SkeletonText } from "@chakra-ui/react"
 
 export const SkeletonBuildLeftNav = () => {
     const number = [1, 2, 3, 4, 5, 6]

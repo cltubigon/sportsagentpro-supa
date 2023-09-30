@@ -1,7 +1,6 @@
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { DummyImage } from 'react-simple-placeholder-image'
 import { ProfileGallerySekeleton } from '../Skeleton/Skeletons'
-import { useSelector } from 'react-redux'
 
 const ProfileGallery = () => {
   console.log("--------------------------Gallery Rendered")

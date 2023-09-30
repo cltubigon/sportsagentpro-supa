@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { FaFileContract } from "react-icons/fa"
 import { SUPABASE_SIGNOUT } from "../../../store/actions/authActions"
-import { useEffect } from "react"
 
 const SignedInNavigation = ({ setSigningOut }) => {
   console.log("SignedIn Navigation Rendered")

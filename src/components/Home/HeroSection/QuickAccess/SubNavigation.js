@@ -2,15 +2,11 @@ import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/re
 import {GiSettingsKnobs} from 'react-icons/gi'
 import {BsSearch, BsSortDownAlt} from 'react-icons/bs'
 import React from "react"
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
 import { useForm } from "react-hook-form"
 
 const SubNavigation = () => {
-  const dispatch = useDispatch()
 
-  const { register, watch } = useForm()
-  const searchQuery = watch('searchQuery')
+  const { register } = useForm()
 
   const flexContainer = {
     w: "full",

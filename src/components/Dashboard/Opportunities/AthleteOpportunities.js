@@ -121,7 +121,7 @@ const AthleteOpportunities = () => {
               postOwnerFirstName,
               postOwnerLastName,
               selectedActivities,
-              totalPayment,
+              // totalPayment,
               postExpirationDate,
               id,
             } = post

@@ -3,11 +3,8 @@ import "firebase/compat/firestore"
 import { db } from "../../../config/fbConfig"
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   limit,
-  onSnapshot,
   orderBy,
   query,
   startAfter,
@@ -47,47 +44,46 @@ export const fetchSelectedAthlete = (collectionName, field, value) => {
 
 export const startListeningToAthleteCollection =
   (timestamp) => async (dispatch, getState) => {
-    const { initialLimit, nextLimit, lastVisible, lastItemReached } =
+    const { initialLimit, nextLimit, lastVisible } =
       getState().utils.pagination.athletes
-      
-      try {
 
-        let q
-        if (!lastVisible) {
-          console.log("if statement triggered")
-          q = query(
-            collection(db, "athlete"),
-            orderBy("lastName", "asc"),
-            limit(initialLimit)
-          )
-        } else if (lastVisible) {
-          console.log("else if statement triggered")
-          q = query(
-            collection(db, "athlete"),
-            orderBy("lastName", "asc"),
-            limit(nextLimit),
-            startAfter(lastVisible)
-          )
-        }
-  
-        const querySnapshot = await getDocs(q)
-        const updatedData = querySnapshot.docs.map((doc) => doc.data())
-        const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-
-        dispatch({ type: "SET_LAST_VISIBLE", payload: setLastVisible })
-        console.log("lastVisible in fetchData bottom: ", lastVisible)
-        dispatch({
-          type: "SET_LAST_ATHLETE_ITEM_REACHED",
-          payload: updatedData.length < nextLimit && updatedData.length > 0,
-        })
-        // dispatch({
-        //   type: "SET_ATHLETE_COLLECTION",
-        //   updatedData,
-        //   timestamp,
-        // })
-      } catch (error) {
-        console.log('Encountered an error:', error)
+    try {
+      let q
+      if (!lastVisible) {
+        console.log("if statement triggered")
+        q = query(
+          collection(db, "athlete"),
+          orderBy("lastName", "asc"),
+          limit(initialLimit)
+        )
+      } else if (lastVisible) {
+        console.log("else if statement triggered")
+        q = query(
+          collection(db, "athlete"),
+          orderBy("lastName", "asc"),
+          limit(nextLimit),
+          startAfter(lastVisible)
+        )
       }
+
+      const querySnapshot = await getDocs(q)
+      const updatedData = querySnapshot.docs.map((doc) => doc.data())
+      const setLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+
+      dispatch({ type: "SET_LAST_VISIBLE", payload: setLastVisible })
+      console.log("lastVisible in fetchData bottom: ", lastVisible)
+      dispatch({
+        type: "SET_LAST_ATHLETE_ITEM_REACHED",
+        payload: updatedData.length < nextLimit && updatedData.length > 0,
+      })
+      // dispatch({
+      //   type: "SET_ATHLETE_COLLECTION",
+      //   updatedData,
+      //   timestamp,
+      // })
+    } catch (error) {
+      console.log("Encountered an error:", error)
+    }
   }
 
 // export const startListeningToAthleteCollectionssss = (

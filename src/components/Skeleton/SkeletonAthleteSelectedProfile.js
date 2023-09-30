@@ -1,4 +1,4 @@
-import { Box, Flex, Skeleton, SkeletonCircle, SkeletonText, Text } from "@chakra-ui/react"
+import { Flex, Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react"
 
 export const SkeletonAthleteSelectedProfile = () => {
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
 import { DummyImage } from "react-simple-placeholder-image"
 import { VscStarFull, VscVerifiedFilled } from "react-icons/vsc"

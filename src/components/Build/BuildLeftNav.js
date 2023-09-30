@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CheckIcon } from "@chakra-ui/icons"
 import {
   Stack,

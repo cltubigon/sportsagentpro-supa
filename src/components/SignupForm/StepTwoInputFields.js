@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, Controller } from "react-hook-form"
 import {
   FormErrorMessage,
@@ -186,6 +187,7 @@ const StepTwoInputFields = ({ userType, oneTwoToggle, setOneTwoToggle }) => {
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
+                    // eslint-disable-next-line no-useless-escape
                     value: /^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+$/i,
                     message: "Please enter a valid email",
                   },

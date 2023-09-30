@@ -19,7 +19,7 @@ import { BsSortDown } from "react-icons/bs"
 const OppSort = () => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const { register, handleSubmit, formState } = useForm()
+  const { handleSubmit } = useForm()
 
   const onSubmit = (data) => {
     console.log("data: ", data)
