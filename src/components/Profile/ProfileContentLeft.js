@@ -15,7 +15,7 @@ const ProfileContentLeft = () => {
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [selectedAthlete, setSelectedAthlete] = useState(null)
-  console.log('selectedAthlete: ', selectedAthlete)
+  console.log("selectedAthlete: ", selectedAthlete)
 
   useEffect(() => {
     const fetchUser = async () => {
