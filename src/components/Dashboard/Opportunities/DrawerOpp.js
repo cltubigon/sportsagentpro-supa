@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
-import { SET_IS_LOADING, APPLY_TO_POST, withdrawToPost } from "../../../store/actions/postActions"
+import { APPLY_TO_POST, SET_IS_LOADING_ALL_POSTS, withdrawToPost } from "../../../store/actions/postActions"
 
 const UtilDrawer = ({
   isOpen,
@@ -39,7 +39,7 @@ const UtilDrawer = ({
 
   const email = useSelector((state) => state.auth.email)
   const allOpportunityPosts = useSelector(
-    (state) => state.post.myOpportunitiesPosts
+    (state) => state.post.allPosts
   )
 
   const [hasApplied, setHasAhasApplied] = useState(false)
@@ -51,7 +51,7 @@ const UtilDrawer = ({
   }
 
   const handleApply = (id, hasApplied) => {
-    dispatch(SET_IS_LOADING(true))
+    dispatch(SET_IS_LOADING_ALL_POSTS(true))
     hasApplied && dispatch(withdrawToPost(id, email))
     !hasApplied && dispatch(APPLY_TO_POST(id, email))
   }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
   Button,
@@ -14,9 +15,10 @@ import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import {
-  SET_IS_LOADING,
   APPLY_TO_POST,
   withdrawToPost,
+  FETCH_POSTS,
+  SET_IS_LOADING_ALL_POSTS,
 } from "../../../store/actions/postActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
@@ -28,20 +30,20 @@ import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
 const AthleteOpportunities = () => {
   const dispatch = useDispatch()
 
-  const profile = useSelector((state) => state.auth.profile)
+  // const profile = useSelector((state) => state.auth.profile)
   const { currentPage, lastItemReached } = useSelector(
-    (state) => state.utils.pagination.athletePosts
+    (state) => state.utils.pagination.allPosts
   )
-  console.log('lastItemReached: ', lastItemReached)
-  const state = useSelector(state => state)
-  console.log('state: ', state)
-  const myOpportunitiesPosts = useSelector(
-    (state) => state.post.myOpportunitiesPosts
+  
+  // const state = useSelector(state => state)
+  // console.log('state: ', state)
+  const allPosts = useSelector(
+    (state) => state.post.allPosts
   )
   // const state = useSelector((state) => state)
-  console.log('myOpportunitiesPosts: ', myOpportunitiesPosts)
-  const isLoading = useSelector((state) => state.post.isLoading)
-  const email = useSelector((state) => state.auth.email)
+  console.log('allPosts: ', allPosts)
+  const { isLoading } = useSelector((state) => state.utils.pagination.allPosts)
+  const userID = useSelector((state) => state.auth.user.userID)
   const { postContainer } = comStyle
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -51,14 +53,15 @@ const AthleteOpportunities = () => {
   console.log('athletessssss: ')
   useEffect(() => {
     console.log('fetch post is triggered')
-    // dispatch(fetchPostsOfCurrentPage())
+    // dispatch(SET_IS_LOADING_ALL_POSTS(true))
+    dispatch(FETCH_POSTS())
   }, [currentPage])
 
-  const handleApply = (id, event, hasApplied) => {
+  const handleApply = (thisPost, event, hasApplied) => {
     event.stopPropagation()
-    dispatch(SET_IS_LOADING(true))
-    hasApplied && dispatch(withdrawToPost(id, email))
-    !hasApplied && dispatch(APPLY_TO_POST(id, email))
+    dispatch(SET_IS_LOADING_ALL_POSTS(true))
+    hasApplied && dispatch(withdrawToPost(thisPost))
+    !hasApplied && dispatch(APPLY_TO_POST(thisPost))
   }
 
   const handleDrawer = (post, editorState) => {
@@ -86,9 +89,9 @@ const AthleteOpportunities = () => {
 
   return (
     <>
-      {myOpportunitiesPosts.length < 1 && <SkeletonOpportunities />}
+      {allPosts.length < 1 && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"} w={"100%"}>
-        {isLoading && myOpportunitiesPosts.length >= 1 && (
+        {isLoading && allPosts.length >= 1 && (
           <Flex
             justifyContent={"center"}
             zIndex={801}
@@ -109,12 +112,12 @@ const AthleteOpportunities = () => {
             />
           </Flex>
         )}
-        {myOpportunitiesPosts &&
-          myOpportunitiesPosts.map((post, index) => {
+        {allPosts &&
+          allPosts.map((post, index) => {
             const {
               totalAmount,
               postApplicants,
-              postType,
+              // postType,
               postTitle,
               postContent,
               postOwnerFirstName,
@@ -125,10 +128,8 @@ const AthleteOpportunities = () => {
               id,
             } = post
 
-            const hasApplied =
-              postApplicants.length > 0 &&
-              postApplicants.some((applicantEmail) => {
-                return profile && email === applicantEmail
+            const hasApplied = postApplicants.some((applicantID) => {
+                return userID === applicantID
               })
             const activityTitles = selectedActivities.map(
               (activity) => activity.activityTitle
@@ -147,7 +148,6 @@ const AthleteOpportunities = () => {
             const editorState = EditorState.createWithContent(contentState)
 
             return (
-              postType === "opportunity" && (
                 <Flex
                   key={id}
                   onClick={() => handleDrawer(post, editorState)}
@@ -241,7 +241,7 @@ const AthleteOpportunities = () => {
                       borderWidth="1px"
                       borderStyle="solid"
                       borderRadius="sm"
-                      onClick={(event) => handleApply(id, event, hasApplied)}
+                      onClick={(event) => handleApply(post, event, hasApplied)}
                     >
                       {hasApplied ? "Withdraw" : "Apply"}
                     </Button>
@@ -254,10 +254,9 @@ const AthleteOpportunities = () => {
                     </Button>
                   </Flex>
                 </Flex>
-              )
             )
           })}
-        {myOpportunitiesPosts.length > 0 && !lastItemReached  && (
+        {allPosts.length > 0 && !lastItemReached  && (
           <SkeletonAthleteOppLoader />
         )}
 
