@@ -31,6 +31,31 @@ export const FETCH_POSTS = () => async (dispatch, getState) => {
     console.log("error: ", error)
   }
 }
+export const SET_USER_OPPORTUNITY_POSTS = () => async (dispatch, getState) => {
+  console.log("fetching data")
+  const { currentPage, itemsPerPage } = getState().utils.pagination.postsOfOwners
+  const userID = getState().auth.user.userID
+  console.log('userID: ', userID)
+
+  const { data, error } = await supabase // fetch data from supabase
+    .from("posts")
+    .select("*")
+    .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1)
+    .order("created_at", { ascending: false })
+    .eq('ownerUID', userID)
+    .eq('postType', 'opportunity')
+  if (data) {
+    console.log('data: ', data)
+    if (data.length < itemsPerPage) {
+      dispatch({ type: 'LAST_ITEM_REACHED_POSTS_OF_OWNER', payload: true })
+    }
+    dispatch({ type: "SET_USER_OPPORTUNITY_POSTS", payload: data })
+    dispatch({ type: "SET_LOADING_STATUS", payload: false })
+    console.log("data: ", data)
+  } else if (error) {
+    console.log("error: ", error)
+  }
+}
 
 export const withdrawToPost = (postId, email) => async (dispatch, getState) => {
   const myOpportunitiesPosts = getState().post.myOpportunitiesPosts

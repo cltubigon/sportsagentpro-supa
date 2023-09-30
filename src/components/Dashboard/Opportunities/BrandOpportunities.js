@@ -19,9 +19,7 @@ import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
-import {
-  FETCH_POSTS,
-} from "../../../store/actions/postActions"
+import { SET_USER_OPPORTUNITY_POSTS } from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
 // import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
@@ -39,8 +37,8 @@ const BrandOpportunities = () => {
 
   const authEmail = useSelector((state) => state.auth.email)
   console.log("authEmail: ", authEmail)
-  const myOpportunitiesPosts = useSelector(
-    (state) => state.post.myOpportunitiesPosts
+  const userOpportunityPosts = useSelector(
+    (state) => state.post.userOpportunityPosts
   )
   const { currentPage } = useSelector(
     (state) => state.utils.pagination.postsOfOwners
@@ -53,13 +51,13 @@ const BrandOpportunities = () => {
   useEffect(() => {
     // dispatch(fetchUserOpportunityPosts(authEmail))
     console.log("triggered fetch")
-    dispatch(FETCH_POSTS())
+    dispatch(SET_USER_OPPORTUNITY_POSTS())
   }, [currentPage])
 
   useEffect(() => {
-    myOpportunitiesPosts && setIsLoading(false)
+    userOpportunityPosts && setIsLoading(false)
     setDeleting(null)
-  }, [myOpportunitiesPosts])
+  }, [userOpportunityPosts])
 
   const handleDelete = (post) => {
     setDeleting(post.postTitle)
@@ -77,8 +75,8 @@ const BrandOpportunities = () => {
       {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
         {!isLoading &&
-          myOpportunitiesPosts &&
-          myOpportunitiesPosts.map((post, index) => {
+          userOpportunityPosts &&
+          userOpportunityPosts.map((post, index) => {
             const {
               // postType,
               totalAmount,

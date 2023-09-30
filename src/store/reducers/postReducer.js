@@ -4,6 +4,7 @@ const initialState = {
     lastUpdated: null,
   },
   myOpportunitiesPosts: [],
+  userOpportunityPosts: [],
   isLoading: true,
 }
 
@@ -15,17 +16,30 @@ const postReducer = (state = initialState, action) => {
         isLoading: action.payload,
       }
     case "SET_ALL_OPPORTUNITY_POSTS":
-      console.log('SET_ALL_OPPORTUNITY_POSTS action.payload: ', action.payload)
+      console.log("SET_ALL_OPPORTUNITY_POSTS action.payload: ", action.payload)
       const firstID = action.payload.length > 0 && action.payload[0].id
       const hasDuplicate = state.myOpportunitiesPosts.some(
         (opp) => opp.id === firstID
       )
-      console.log('hasDuplicate: ', hasDuplicate)
+      console.log("hasDuplicate: ", hasDuplicate)
       return {
         ...state,
         myOpportunitiesPosts: hasDuplicate
           ? [...state.myOpportunitiesPosts]
           : [...state.myOpportunitiesPosts, ...action.payload],
+      }
+    case "SET_USER_OPPORTUNITY_POSTS":
+      console.log("SET_ALL_OPPORTUNITY_POSTS action.payload: ", action.payload)
+      const userFirstID = action.payload.length > 0 && action.payload[0].id
+      const userHasDuplicate = state.userOpportunityPosts.some(
+        (opp) => opp.id === userFirstID
+      )
+      console.log("userHasDuplicate: ", userHasDuplicate)
+      return {
+        ...state,
+        userOpportunityPosts: userHasDuplicate
+          ? [...state.userOpportunityPosts]
+          : [...state.userOpportunityPosts, ...action.payload],
       }
     case "UPDATED_ALL_OPPORTUNITY_POSTS":
       console.log("triggered UPDATED_ALL_OPPORTUNITY_POSTS")
