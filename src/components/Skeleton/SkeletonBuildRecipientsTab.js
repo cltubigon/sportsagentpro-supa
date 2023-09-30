@@ -1,7 +1,6 @@
-import { Box, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react"
-import { useDispatch, useSelector } from "react-redux"
+import { Flex, Skeleton, SkeletonCircle } from "@chakra-ui/react"
+import { useDispatch } from "react-redux"
 import { Waypoint } from "react-waypoint"
-import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
 import { SET_ATHLETE_CURRENT_PAGE } from "../../store/actions/utilsActions"
 
 export const SkeletonBuildRecipientsTab = () => {

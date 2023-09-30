@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, Controller } from "react-hook-form"
 import {
   FormErrorMessage,
@@ -10,7 +11,7 @@ import {
   Radio,
 } from "@chakra-ui/react"
 import { connect } from "react-redux"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { createDeal } from "../store/actions/DealActions"
 import Footer from "../components/layouts/Footer"
 
@@ -20,12 +21,11 @@ const CreateDeal = ({ createDeal }) => {
 
   const onSubmit = (data) => {
     createDeal(data)
-    // console.log(data)
   }
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ team: "", team: "", firstName: "", lastName: "", sports: "" })
+      reset({ team: "", firstName: "", lastName: "", sports: "" })
     }
   }, [formState, reset])
 

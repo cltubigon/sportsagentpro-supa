@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
 import firstimage from "../../../assets/images/firstimage.jpg"
 import { BsHeart } from "react-icons/bs"
@@ -6,11 +7,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { saveBrandToStorage } from "../../../store/actions/brandActions"
 import { useEffect } from "react"
 import { SkeletonDiscover } from "../../Skeleton/SkeletonDiscover"
-import { unstable_HistoryRouter } from "react-router-dom"
 
 const Brands = () => {
-  // const history = unstable_HistoryRouter()
-  // console.log('history: ', history)
   console.log('brand network is active')
   const dispatch = useDispatch()
   const brand = useSelector((state) => state.brand)

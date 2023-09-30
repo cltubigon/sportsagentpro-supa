@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Grid,
   GridItem,
@@ -86,11 +87,9 @@ const PaymentV1 = ({ setSpinner }) => {
         detailsTabReady &&
         agree)
     ) {
-      // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => true)
       dispatch(SET_PAYMENT_TAB_STATUS(true))
     } else {
-      // console.log("activitiesTabReady: ", activitiesTabReady)
       setIsReadyToPost(() => false)
       dispatch(SET_PAYMENT_TAB_STATUS(false))
     }
@@ -99,7 +98,6 @@ const PaymentV1 = ({ setSpinner }) => {
   }, [selectedRecipients, activitiesTabReady, detailsTabReady, agree])
 
   // const { recipients, isProcessedSuccesfully, ...filteredReduxPosts } = reduxPosts
-  // console.log('filteredReduxPosts: ', filteredReduxPosts)
 
   const handleCreatePost = () => {
     dispatch(SET_SUBMISSION_TYPE('create', 'sender is Payment line138'))

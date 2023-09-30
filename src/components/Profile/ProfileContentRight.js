@@ -1,119 +1,219 @@
-import { Flex, Icon, Stack, Text } from '@chakra-ui/react'
-import { BsCardText, BsEye, BsFolder2Open, BsMegaphone, BsPencil, BsPersonBadge } from 'react-icons/bs'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Flex, Icon, Stack, Text } from "@chakra-ui/react"
+import { useEffect } from "react"
+import { useState } from "react"
+import {
+  BsCardText,
+  BsEye,
+  BsFolder2Open,
+  BsMegaphone,
+  BsPencil,
+  BsPersonBadge,
+} from "react-icons/bs"
+import { useParams } from "react-router-dom"
+import supabase from "../../config/supabaseClient"
 
 const ProfileContentRight = () => {
-    console.log("--------------------------ProfileContentRight")
-    const boxedItems = {
-        border: "1px solid #E7EAEC",
-        px: "var(--chakra-space-3)",
-        py: "var(--chakra-space-2)",
-        borderRadius: "md",
-        flexDirection: "row",
-        justifyContent: "space-between",
+  console.log("--------------------------ProfileContentRight")
+  const { id } = useParams()
+  // eslint-disable-next-line no-unused-vars
+  const [isLoading, setIsLoading] = useState(true)
+  // eslint-disable-next-line no-unused-vars
+  const [selectedAthlete, setSelectedAthlete] = useState(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", id)
+      if (data) {
+        setSelectedAthlete(data)
+        setIsLoading(false)
+      } else if (error) {
+        console.log("error: ", error)
+      }
     }
-    const boxItemsIcons = {
-        boxSize: "36px",
-        borderRadius: "100px",
-        bgColor: "gray.200",
-        justifyContent: "center",
-        alignItems: "center",
-        // p: "3px",
-    }
+    fetchUser()
+  }, [])
+  const boxedItems = {
+    border: "1px solid #E7EAEC",
+    px: "var(--chakra-space-3)",
+    py: "var(--chakra-space-2)",
+    borderRadius: "md",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  }
+  const boxItemsIcons = {
+    boxSize: "36px",
+    borderRadius: "100px",
+    bgColor: "gray.200",
+    justifyContent: "center",
+    alignItems: "center",
+    // p: "3px",
+  }
   return (
     <>
-        <Stack mt={"0px !important"} gap={5} w={{base:'100%', md:"45%" }} maxWidth={{base:'100%', md:"418px" }} >
-            <Stack border={"1px solid #D0D4D9"} px={'var(--chakra-space-4)'} py={'var(--chakra-space-6)'} borderRadius={"md"} >
-                <Text fontSize={"larger"} fontWeight={"semibold"} >For personal use</Text>
+      <Stack
+        mt={"0px !important"}
+        gap={5}
+        w={{ base: "100%", md: "45%" }}
+        maxWidth={{ base: "100%", md: "418px" }}
+      >
+        <Stack
+          border={"1px solid #D0D4D9"}
+          px={"var(--chakra-space-4)"}
+          py={"var(--chakra-space-6)"}
+          borderRadius={"md"}
+        >
+          <Text fontSize={"larger"} fontWeight={"semibold"}>
+            For personal use
+          </Text>
 
-                <Text fontSize={"lg"} fontWeight={"semibold"} color={"gray.500"} pb={"10px"} >Frequently purchased</Text>
+          <Text
+            fontSize={"lg"}
+            fontWeight={"semibold"}
+            color={"gray.500"}
+            pb={"10px"}
+          >
+            Frequently purchased
+          </Text>
 
-                <Flex sx={boxedItems}>
-                    <Flex gap={2} alignItems={"center"} grow={1}>
-                        <Flex sx={boxItemsIcons} ><Icon as={BsMegaphone}/></Flex>
-                        <Stack flexGrow={1}>
-                            <Flex justifyContent={"space-between"}>
-                                <Text>Shoutout</Text>
-                                <Text fontWeight={"semibold"} fontSize={"md"}>$49+</Text>
-                            </Flex>
-                            <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"} >Deandre will record a video for you</Text>
-                        </Stack>
-                    </Flex>
+          <Flex sx={boxedItems}>
+            <Flex gap={2} alignItems={"center"} grow={1}>
+              <Flex sx={boxItemsIcons}>
+                <Icon as={BsMegaphone} />
+              </Flex>
+              <Stack flexGrow={1}>
+                <Flex justifyContent={"space-between"}>
+                  <Text>Shoutout</Text>
+                  <Text fontWeight={"semibold"} fontSize={"md"}>
+                    $49+
+                  </Text>
                 </Flex>
+                <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"}>
+                  Deandre will record a video for you
+                </Text>
+              </Stack>
+            </Flex>
+          </Flex>
 
-                <Text fontSize={"lg"} fontWeight={"semibold"} color={"gray.500"} py={"10px"} >More options for family, friends, or yourself</Text>
+          <Text
+            fontSize={"lg"}
+            fontWeight={"semibold"}
+            color={"gray.500"}
+            py={"10px"}
+          >
+            More options for family, friends, or yourself
+          </Text>
 
-                <Stack gap={2}>
-                    <Flex sx={boxedItems}>
-                        <Flex gap={2} alignItems={"center"} grow={1}>
-                            <Flex sx={boxItemsIcons}><Icon as={BsCardText} /></Flex>
-                            <Stack flexGrow={1}>
-                                <Flex justifyContent={"space-between"}>
-                                    <Text>Post</Text>
-                                    <Text fontWeight={"semibold"} fontSize={"md"}>$48+</Text>
-                                </Flex>
-                                <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"} >Deandre will post on social media for you</Text>
-                            </Stack>
-                        </Flex>
-                    </Flex>
-
-                    <Flex sx={boxedItems}>
-                        <Flex gap={2} alignItems={"center"} grow={1}>
-                            <Flex sx={boxItemsIcons}><Icon as={BsEye}/></Flex>
-                            <Stack flexGrow={1}>
-                                <Flex justifyContent={"space-between"}>
-                                    <Text>Appearance</Text>
-                                    <Text fontWeight={"semibold"} fontSize={"md"}>$102+</Text>
-                                </Flex>
-                                <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"} >Deandre will attend your practice or event</Text>
-                            </Stack>
-                        </Flex>
-                    </Flex>
-
-                    <Flex sx={boxedItems}>
-                        <Flex gap={2} alignItems={"center"} grow={1}>
-                            <Flex sx={boxItemsIcons} ><Icon as={BsPersonBadge}/></Flex>
-                            <Stack flexGrow={1}>
-                                <Flex justifyContent={"space-between"}>
-                                    <Text>Authograph</Text>
-                                    <Text fontWeight={"semibold"} fontSize={"md"}>$100+</Text>
-                                </Flex>
-                                <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"} >Deandre will sign something for you</Text>
-                            </Stack>
-                        </Flex>
-                    </Flex>
-
-                    <Flex sx={boxedItems}>
-                        <Flex gap={2} alignItems={"center"} grow={1}>
-                            <Flex sx={boxItemsIcons} ><Icon as={BsPencil}/></Flex>
-                            <Stack flexGrow={1}>
-                                <Flex justifyContent={"space-between"}>
-                                    <Text>Pitch Anything</Text>
-                                    <Text fontWeight={"semibold"} fontSize={"md"}>$50+</Text>
-                                </Flex>
-                                <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"} >Deandre will respond to your custom request</Text>
-                            </Stack>
-                        </Flex>
-                    </Flex>
+          <Stack gap={2}>
+            <Flex sx={boxedItems}>
+              <Flex gap={2} alignItems={"center"} grow={1}>
+                <Flex sx={boxItemsIcons}>
+                  <Icon as={BsCardText} />
+                </Flex>
+                <Stack flexGrow={1}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text>Post</Text>
+                    <Text fontWeight={"semibold"} fontSize={"md"}>
+                      $48+
+                    </Text>
+                  </Flex>
+                  <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"}>
+                    Deandre will post on social media for you
+                  </Text>
                 </Stack>
-            </Stack>
+              </Flex>
+            </Flex>
 
-            <Stack border={"1px solid #D0D4D9"} px={'var(--chakra-space-4)'} py={'var(--chakra-space-6)'} borderRadius={"md"} >
-                <Text fontSize={"larger"} fontWeight={"semibold"} >For brand or business use</Text>
-                <Text fontSize={"sm"} color={"gray.500"} pb={"10px"} >Use our step-by-step deal builder to send offers or post opportunities for a marketing campaign</Text>
-                    
-                    <Flex sx={boxedItems}>
-                        <Flex gap={2} alignItems={"center"} grow={1}>
-                            <Flex sx={boxItemsIcons} ><Icon as={BsFolder2Open}/></Flex>
-                            <Stack flexGrow={1}>
-                                <Flex justifyContent={"space-between"}>
-                                    <Text>Create offer or opportunity</Text>
-                                </Flex>
-                            </Stack>
-                        </Flex>
-                    </Flex>
-            
-            </Stack>
+            <Flex sx={boxedItems}>
+              <Flex gap={2} alignItems={"center"} grow={1}>
+                <Flex sx={boxItemsIcons}>
+                  <Icon as={BsEye} />
+                </Flex>
+                <Stack flexGrow={1}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text>Appearance</Text>
+                    <Text fontWeight={"semibold"} fontSize={"md"}>
+                      $102+
+                    </Text>
+                  </Flex>
+                  <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"}>
+                    Deandre will attend your practice or event
+                  </Text>
+                </Stack>
+              </Flex>
+            </Flex>
+
+            <Flex sx={boxedItems}>
+              <Flex gap={2} alignItems={"center"} grow={1}>
+                <Flex sx={boxItemsIcons}>
+                  <Icon as={BsPersonBadge} />
+                </Flex>
+                <Stack flexGrow={1}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text>Authograph</Text>
+                    <Text fontWeight={"semibold"} fontSize={"md"}>
+                      $100+
+                    </Text>
+                  </Flex>
+                  <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"}>
+                    Deandre will sign something for you
+                  </Text>
+                </Stack>
+              </Flex>
+            </Flex>
+
+            <Flex sx={boxedItems}>
+              <Flex gap={2} alignItems={"center"} grow={1}>
+                <Flex sx={boxItemsIcons}>
+                  <Icon as={BsPencil} />
+                </Flex>
+                <Stack flexGrow={1}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text>Pitch Anything</Text>
+                    <Text fontWeight={"semibold"} fontSize={"md"}>
+                      $50+
+                    </Text>
+                  </Flex>
+                  <Text mt={"0 !important"} fontSize={"sm"} color={"gray.600"}>
+                    Deandre will respond to your custom request
+                  </Text>
+                </Stack>
+              </Flex>
+            </Flex>
+          </Stack>
         </Stack>
+
+        <Stack
+          border={"1px solid #D0D4D9"}
+          px={"var(--chakra-space-4)"}
+          py={"var(--chakra-space-6)"}
+          borderRadius={"md"}
+        >
+          <Text fontSize={"larger"} fontWeight={"semibold"}>
+            For brand or business use
+          </Text>
+          <Text fontSize={"sm"} color={"gray.500"} pb={"10px"}>
+            Use our step-by-step deal builder to send offers or post
+            opportunities for a marketing campaign
+          </Text>
+
+          <Flex sx={boxedItems}>
+            <Flex gap={2} alignItems={"center"} grow={1}>
+              <Flex sx={boxItemsIcons}>
+                <Icon as={BsFolder2Open} />
+              </Flex>
+              <Stack flexGrow={1}>
+                <Flex justifyContent={"space-between"}>
+                  <Text>Create offer or opportunity</Text>
+                </Flex>
+              </Stack>
+            </Flex>
+          </Flex>
+        </Stack>
+      </Stack>
     </>
   )
 }

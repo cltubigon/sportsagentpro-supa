@@ -8,22 +8,13 @@ import {
   Box,
   Button,
   Checkbox,
-  Flex,
   FormControl,
-  FormErrorMessage,
-  Icon,
   Input,
   InputGroup,
   InputLeftElement,
   Menu,
   MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuItemOption,
   MenuList,
-  MenuOptionGroup,
-  Text,
-  background,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -31,7 +22,7 @@ import { useForm } from "react-hook-form"
 const OppFilter = () => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const { register, handleSubmit, formState } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const onSubmit = (data) => {
     console.log("data: ", data)
@@ -452,49 +443,40 @@ const OppFilter = () => {
   ]
   const Offline = [
     {
-      label: 'Appearance / Meet-and-Greet',
-     value: 'Appearance_MeetAndGreet',
-
+      label: "Appearance / Meet-and-Greet",
+      value: "Appearance_MeetAndGreet",
     },
     {
-      label:  'Autograph Signing',
-    value:  'AutographSigning',
-
+      label: "Autograph Signing",
+      value: "AutographSigning",
     },
     {
-      label: 'Keynote Speech',
-    value:  'KeynoteSpeech',
-
+      label: "Keynote Speech",
+      value: "KeynoteSpeech",
     },
     {
-      label:   'Sport Demonstration',
-    value:  'SportDemonstration',
-
+      label: "Sport Demonstration",
+      value: "SportDemonstration",
     },
     {
-      label:  'Production Shoot (Photo / Video)',
-     value: 'ProductionShoot(PhotoVideo)',
-
+      label: "Production Shoot (Photo / Video)",
+      value: "ProductionShoot(PhotoVideo)",
     },
     {
-    label:   'Product Testing & Feedback',
-     value: 'ProductTesting_Feedback',
-
+      label: "Product Testing & Feedback",
+      value: "ProductTesting_Feedback",
     },
     {
-     label:  'In-person Interview',
-     value: 'InPersonInterview',
-
+      label: "In-person Interview",
+      value: "InPersonInterview",
     },
     {
-     label:  'Group Marketing',
-     value: 'GroupMarketing',
-
+      label: "Group Marketing",
+      value: "GroupMarketing",
     },
     {
-     label:  'Licensing',
-     value:  'Licensing',
-
+      label: "Licensing",
+      value: "Licensing",
     },
   ]
   return (
@@ -558,7 +540,11 @@ const OppFilter = () => {
                       {online.map((data) => {
                         const { label, value } = data
                         return (
-                          <Checkbox key={value} value={value} {...register("online")}>
+                          <Checkbox
+                            key={value}
+                            value={value}
+                            {...register("online")}
+                          >
                             {label}
                           </Checkbox>
                         )
@@ -581,7 +567,11 @@ const OppFilter = () => {
                       {Offline.map((data) => {
                         const { label, value } = data
                         return (
-                          <Checkbox key={value} value={value} {...register("offline")}>
+                          <Checkbox
+                            key={value}
+                            value={value}
+                            {...register("offline")}
+                          >
                             {label}
                           </Checkbox>
                         )

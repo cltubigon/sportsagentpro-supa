@@ -1,4 +1,4 @@
-import { SimpleGrid, Skeleton, SkeletonText, Stack } from "@chakra-ui/react"
+import { Skeleton, SkeletonText, Stack } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 // import { useDispatch, useSelector } from "react-redux"
 import { Waypoint } from "react-waypoint"

@@ -1,47 +1,56 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
 import { DummyImage } from "react-simple-placeholder-image"
 import { VscStarFull, VscVerifiedFilled } from "react-icons/vsc"
 import ProfileContentInterests from "./ProfileContentInterests"
 import ProfileContentAbout from "./ProfileContentAbout"
 import ProfileSocialMedia from "./ProfileSocialMedia"
-import { useSelector } from "react-redux"
-import { useEffect } from "react"
 import { useState } from "react"
 import { useParams } from "react-router-dom/dist"
 import { SkeletonAthleteSelectedProfile } from "../Skeleton/SkeletonAthleteSelectedProfile"
+import supabase from "../../config/supabaseClient"
+import { useEffect } from "react"
 
 const ProfileContentLeft = () => {
   const { id } = useParams()
-  const selectedProfile = useSelector((state) => state.athlete.selectedProfile)
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedAthlete, setSelectedAthlete] = useState(null)
+  console.log('selectedAthlete: ', selectedAthlete)
 
   useEffect(() => {
-    if (selectedProfile && selectedProfile.id === id) {
-      console.log("id: ", id)
-      console.log("selectedProfile.id: ", selectedProfile.id)
-      selectedProfile && setIsLoading(false)
+    const fetchUser = async () => {
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", id)
+      if (data[0]) {
+        setSelectedAthlete(data[0])
+        setIsLoading(false)
+      } else if (error) {
+        console.log("error: ", error)
+      }
     }
-  }, [selectedProfile])
-  console.log("--------------------------ProfileContentLeft")
+    fetchUser()
+  }, [])
   return (
-    <Flex flexDirection={'column'} flexGrow={1}>
+    <Flex flexDirection={"column"} flexGrow={1}>
       {isLoading && (
         <Flex py={4}>
           <SkeletonAthleteSelectedProfile />
         </Flex>
       )}
-      {selectedProfile && !isLoading && (
+      {selectedAthlete && (
         <Stack flex={1} gap={4} pl={2}>
           <Flex justifyContent={"space-between"}>
             <Box>
               <Flex flexDirection={"row"} alignItems={"center"} gap={1}>
                 <Heading fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}>
-                  {selectedProfile && selectedProfile.firstName}{" "}
-                  {selectedProfile && selectedProfile.lastName}
+                  {selectedAthlete && selectedAthlete.firstName}{" "}
+                  {selectedAthlete && selectedAthlete.lastName}
                 </Heading>
                 <VscVerifiedFilled color="lightGreen" size={25} />
               </Flex>
-              <Text>{selectedProfile && selectedProfile.sports} • Forward</Text>
+              <Text>{selectedAthlete && selectedAthlete.sports} • Forward</Text>
             </Box>
             <Box>
               <DummyImage

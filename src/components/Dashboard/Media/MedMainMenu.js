@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   Icon,
   Input,
@@ -11,7 +10,6 @@ import {
 import { BiDonateHeart } from "react-icons/bi"
 import { FiUsers } from "react-icons/fi"
 import { SearchIcon } from "@chakra-ui/icons"
-import Sort from "./MedSort"
 import MedFilterProfile from "./MedFilterProfile"
 import MedFilterPreferences from "./MedFilterPrefences"
 import MedSort from "./MedSort"

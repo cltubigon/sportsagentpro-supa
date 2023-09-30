@@ -1,19 +1,16 @@
 import {
-  Box,
   Flex,
   Icon,
   Input,
   InputGroup,
   InputLeftElement,
-  Stack,
   Text,
 } from "@chakra-ui/react"
 import { BiDonateHeart } from "react-icons/bi"
-import { FiUsers } from "react-icons/fi"
 import { SearchIcon } from "@chakra-ui/icons"
 import OppSort from "./OppSort"
 import OppFilter from "./OppFilter"
-import {ImNewspaper} from 'react-icons/im'
+import { ImNewspaper } from "react-icons/im"
 
 const OppMainMenu = () => {
   const container = {

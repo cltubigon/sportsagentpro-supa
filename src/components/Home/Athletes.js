@@ -1,13 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Text, Flex, SimpleGrid, Box } from "@chakra-ui/layout"
 import { DummyImage } from "react-simple-placeholder-image"
 // import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { HomeSkeleton } from "../Skeleton/Skeletons"
 import { useEffect, useState } from "react"
-import { SkeletonDiscover } from "../Skeleton/SkeletonDiscover"
 // import { startListeningToAthleteCollection } from "../../store/actions/Fetch/fetchAthletesAction"
 import { SkeletonLoaderAthlete } from "../Skeleton/SkeletonLoaderAthlete"
-import supabase from "../../config/supabaseClient"
 import { athletesStyle } from "../../styles/athletesStyle"
 import { useDispatch, useSelector } from "react-redux"
 import { SET_ATHLETES } from "../../store/actions/athleteActions"
@@ -20,7 +18,7 @@ const Athletes = () => {
   )
   const athleteList = useSelector((state) => state.athlete.athletes)
   // const state = useSelector(state => state)
-  // console.log('state: ', state)
+  console.log("athleteList: ", athleteList)
 
   const [show, setShow] = useState(false)
   useEffect(() => {

@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Avatar,
   Box,
   Button,
   Flex,
@@ -12,49 +12,55 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Spinner,
   Text,
 } from "@chakra-ui/react"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
-import { firestoreConnect } from "react-redux-firebase"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useRef } from "react"
-import { FETCH_POSTS, savePostsToStorage } from "../../../store/actions/postActions"
+import {
+  FETCH_POSTS,
+} from "../../../store/actions/postActions"
 import { Link } from "react-router-dom"
 // import { deletePost } from "../../../store/actions/buildPostActions"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
-import { SkeletonLoaderOpportunities, SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
+import {
+  SkeletonLoaderOpportunities,
+  SkeletonOpportunities,
+} from "../../Skeleton/SkeletonOpportunities"
 // import { fetchUserOpportunityPosts } from "../../../store/actions/Fetch/fetchPostsAction"
 
-
 const BrandOpportunities = () => {
-  console.count('BrandOpportunities is rendered')
+  console.count("BrandOpportunities is rendered")
   const initRef = useRef()
   const dispatch = useDispatch()
 
-  const authEmail = useSelector(state => state.auth.email)
-  console.log('authEmail: ', authEmail)
-  const myOpportunitiesPosts = useSelector((state) => state.post.myOpportunitiesPosts)
-  const { currentPage } = useSelector(state => state.utils.pagination.postsOfOwners)
-  console.log('currentPage: ', currentPage)
-  
+  const authEmail = useSelector((state) => state.auth.email)
+  console.log("authEmail: ", authEmail)
+  const myOpportunitiesPosts = useSelector(
+    (state) => state.post.myOpportunitiesPosts
+  )
+  const { currentPage } = useSelector(
+    (state) => state.utils.pagination.postsOfOwners
+  )
+  console.log("currentPage: ", currentPage)
+
   const [isLoading, setIsLoading] = useState(true)
   const [deleting, setDeleting] = useState(null)
 
-  useEffect(()=> {
+  useEffect(() => {
     // dispatch(fetchUserOpportunityPosts(authEmail))
-    console.log('triggered fetch')
+    console.log("triggered fetch")
     dispatch(FETCH_POSTS())
   }, [currentPage])
 
-  useEffect(()=> {
+  useEffect(() => {
     myOpportunitiesPosts && setIsLoading(false)
     setDeleting(null)
   }, [myOpportunitiesPosts])
-  
+
   const handleDelete = (post) => {
     setDeleting(post.postTitle)
     // dispatch(deletePost(post, "BrandOpportunities"))
@@ -70,12 +76,13 @@ const BrandOpportunities = () => {
     <>
       {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
-        {!isLoading && myOpportunitiesPosts &&
+        {!isLoading &&
+          myOpportunitiesPosts &&
           myOpportunitiesPosts.map((post, index) => {
             const {
-              postType,
+              // postType,
               totalAmount,
-              postOwner,
+              // postOwner,
               postTitle,
               postContent,
               postOwnerFirstName,
@@ -101,7 +108,8 @@ const BrandOpportunities = () => {
             const contentState = convertFromRaw(rawDataParsed)
             const editorState = EditorState.createWithContent(contentState)
             return (
-                deleting !== postTitle && <Flex
+              deleting !== postTitle && (
+                <Flex
                   key={index}
                   flexDirection={"column"}
                   borderColor={"gray.200"}
@@ -250,9 +258,10 @@ const BrandOpportunities = () => {
                     </Popover>
                   </Flex>
                 </Flex>
+              )
             )
           })}
-          <SkeletonLoaderOpportunities />
+        <SkeletonLoaderOpportunities />
       </Flex>
     </>
   )

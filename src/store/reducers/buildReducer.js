@@ -63,8 +63,8 @@ const buildReducer = (state = initState, action) => {
         ...state,
         isProcessedSuccesfully: action.payload,
       }
-    case "UPDATE_POST_ERROR":
-      console.log(action.error)
+    // case "UPDATE_POST_ERROR":
+    //   console.log(action.error)
     case "SET_EDIT_MODE":
       return {
         ...state,

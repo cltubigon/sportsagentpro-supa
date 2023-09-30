@@ -1,6 +1,4 @@
-import { Box, Flex, Icon, Stack, Text } from "@chakra-ui/react"
-import { BiDonateHeart } from "react-icons/bi"
-import { FiUsers } from "react-icons/fi"
+import { Stack } from "@chakra-ui/react"
 import OppMainMenu from "./Opportunities/OppMainMenu"
 import DiscoverMainMenu from "./Discover/DiscoverMainMenu"
 import { useLocation } from "react-router-dom"

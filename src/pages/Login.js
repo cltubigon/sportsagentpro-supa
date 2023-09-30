@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm } from "react-hook-form"
 import {
   FormErrorMessage,
@@ -112,6 +113,7 @@ const LoginForm = () => {
               {...register("email", {
                 required: "Enter your email address",
                 pattern: {
+                  // eslint-disable-next-line no-useless-escape
                   value: /^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+$/i,
                   message: "Please enter a valid email",
                 },

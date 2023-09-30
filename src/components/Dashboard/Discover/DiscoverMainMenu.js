@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   Icon,
   Input,
@@ -59,7 +58,7 @@ const DiscoverMainMenu = () => {
               pointerEvents="none"
               children={<SearchIcon color="gray.300" />}
             />
-            <Input placeholder="Search..." minW={'320px'} />
+            <Input placeholder="Search..." minW={"320px"} />
           </InputGroup>
         </Flex>
         <Flex gap={4} alignItems={"center"}>

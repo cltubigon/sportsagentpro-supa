@@ -2,6 +2,7 @@ const initialState = {
   athletes: [],
   isLoading: false,
   fetchError: null,
+  selectedAthlete: null,
 }
 
 const athleteReducer = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const athleteReducer = (state = initialState, action) => {
       return {
         ...state,
         athletes: hasDuplicate ? state.athletes : [...state.athletes, ...action.payload],
+      }
+    case "SET_SELECTED_ATHLETE":
+      return {
+        ...state,
+        selectedAthlete: action.payload,
       }
     default:
       return state

@@ -125,7 +125,6 @@ export const fetchOpportunityPostsOfOwner = (compEmail) => {
           ...change.doc.data(),
         }))
         console.log("updatedData: ", updatedData)
-        // console.log("updatedData: ", updatedData)
         dispatch({ type: "SET_MY_OPPORTUNITIES_POSTS", updatedData })
       } catch (error) {
         console.log("fetch error: ", error)
@@ -197,37 +196,37 @@ export const startListeningToPostsCollection = (collectionName, timestamp) => {
   }
 }
 
-function throttle(func, delay) {
-  let isThrottled = false
-  let lastArgs = null
-  let lastContext = null
+// function throttle(func, delay) {
+//   let isThrottled = false
+//   let lastArgs = null
+//   let lastContext = null
 
-  function throttledFunc() {
-    if (isThrottled) {
-      // Save the latest arguments and context
-      lastArgs = arguments
-      lastContext = this
-      return
-    }
+//   function throttledFunc() {
+//     if (isThrottled) {
+//       // Save the latest arguments and context
+//       lastArgs = arguments
+//       lastContext = this
+//       return
+//     }
 
-    // Invoke the function
-    func.apply(this, arguments)
+//     // Invoke the function
+//     func.apply(this, arguments)
 
-    // Set throttling flag
-    isThrottled = true
+//     // Set throttling flag
+//     isThrottled = true
 
-    // Reset the flag after the specified delay
-    setTimeout(() => {
-      isThrottled = false
+//     // Reset the flag after the specified delay
+//     setTimeout(() => {
+//       isThrottled = false
 
-      // If there were pending arguments, invoke the function again
-      if (lastArgs) {
-        throttledFunc.apply(lastContext, lastArgs)
-        lastArgs = null
-        lastContext = null
-      }
-    }, delay)
-  }
+//       // If there were pending arguments, invoke the function again
+//       if (lastArgs) {
+//         throttledFunc.apply(lastContext, lastArgs)
+//         lastArgs = null
+//         lastContext = null
+//       }
+//     }, delay)
+//   }
 
-  return throttledFunc
-}
+//   return throttledFunc
+// }

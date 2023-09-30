@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CheckIcon } from "@chakra-ui/icons"
 import {
   Stack,
@@ -37,8 +38,6 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
   const toast = useToast()
   const navigate = useNavigate()
 
-  // const build = useSelector((state) => state.build)
-  // console.log("build: ", build)
   const editMode = useSelector((state) => state.build.editMode)
   const isError = useSelector((state) => state.build.isError)
   const id = useSelector((state) => state.build.id)

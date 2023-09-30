@@ -3,7 +3,6 @@ import React from 'react'
 
 const TitleSection = () => {
   console.log("--------------------------TitleSection")
-  const bg = useColorModeValue('red','gray.200')
   const color = useColorModeValue('white','blue.900')
   return (
     <Flex px={"var(--chakra-space-4)"} bg={color}>

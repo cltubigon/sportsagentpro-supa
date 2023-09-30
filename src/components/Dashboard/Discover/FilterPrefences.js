@@ -14,17 +14,15 @@ import {
   InputLeftElement,
   Menu,
   MenuButton,
-  MenuItem,
   MenuList,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { BiChevronRight } from "react-icons/bi"
 
 const FilterPreferences = () => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const { register, handleSubmit, formState } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const onSubmit = (data) => {
     console.log("data: ", data)

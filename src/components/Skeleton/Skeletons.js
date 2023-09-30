@@ -1,5 +1,5 @@
 import { Stack, Grid, SimpleGrid, Flex } from '@chakra-ui/layout'
-import { Icon, Skeleton, SkeletonCircle, SkeletonText, Box } from '@chakra-ui/react'
+import { Icon, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 import { MdCheckBoxOutlineBlank } from 'react-icons/md'
 
 export const HomeSkeleton = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   BrowserRouter,
   Route,
@@ -11,7 +12,7 @@ import CreateDeal from "./pages/CreateDeal"
 import Profile from "./pages/Profile"
 import ScrollToTop from "./utils/ScrollToTop"
 import MainNavigation from "./components/layouts/MainNavigation"
-import ColorMode from "./config/theme/ColorMode"
+// import ColorMode from "./config/theme/ColorMode"
 import MyProfile from "./pages/MyProfile"
 import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
@@ -68,7 +69,7 @@ function App() {
         <Route path="/media" element={<Media />}></Route>
         <Route path="/opportunities" element={<Opportunities />}></Route>
       </Routes>
-      <ColorMode />
+      {/* <ColorMode /> */}
     </BrowserRouter>
   )
 }

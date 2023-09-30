@@ -1,21 +1,12 @@
 import {
   Grid,
   GridItem,
-  Button,
-  Flex,
-  Icon,
-  Text,
-  Input,
-  Box,
 } from "@chakra-ui/react"
-import { useDispatch } from "react-redux"
 import DashboardLeftMenu from "../../components/Dashboard/DashboardLeftMenu"
 import DashboardMenu from "../../components/Dashboard/DashboardMenu"
-import NetworkContent from "../../components/Dashboard/Discover/NetworkContent"
 import MediaContent from "../../components/Dashboard/Media/MediaContent"
 
 const Media = () => {
-  const dispatch = useDispatch()
 
   return (
     <>

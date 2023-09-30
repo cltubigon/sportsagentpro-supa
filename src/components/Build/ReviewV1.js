@@ -61,7 +61,6 @@ const ReviewV1 = () => {
   } = reduxPosts
 
   // const reduxState = useSelector(state => state)
-  // console.log('reduxState: ', reduxState)
   const selectedRecipients = useSelector(
     (state) => state.build.selectedRecipients
   )

@@ -2,7 +2,6 @@ import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { SET_CURRENT_PAGE, SET_IS_LOADING } from "../store/actions/utilsActions"
 import { Flex, Text } from "@chakra-ui/react"
-import { useEffect } from "react"
 
 const PaginationAthletePosts = () => {
   const dispatch = useDispatch()

@@ -1,4 +1,4 @@
-import { Button, Flex, GridItem, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Text } from "@chakra-ui/react"
+import { Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverHeader, PopoverTrigger, Text } from "@chakra-ui/react"
 import React, { useRef } from "react"
 import { BsTrash } from "react-icons/bs"
 import { FiSave } from "react-icons/fi"
@@ -16,7 +16,7 @@ const BuildMenu = () => {
 
   const build = useSelector((state) => state.build)
 
-  const { id, activeStep, editMode } = build
+  const { activeStep, editMode } = build
 
 
   const handleUpdate = () => {

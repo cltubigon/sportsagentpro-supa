@@ -39,7 +39,6 @@ const AthleteOpportunities = () => {
     (state) => state.post.myOpportunitiesPosts
   )
   // const state = useSelector((state) => state)
-  // console.log('state: ', state)
   console.log('myOpportunitiesPosts: ', myOpportunitiesPosts)
   const isLoading = useSelector((state) => state.post.isLoading)
   const email = useSelector((state) => state.auth.email)
@@ -121,7 +120,7 @@ const AthleteOpportunities = () => {
               postOwnerFirstName,
               postOwnerLastName,
               selectedActivities,
-              totalPayment,
+              // totalPayment,
               postExpirationDate,
               id,
             } = post

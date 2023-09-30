@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/style-prop-object */
 import { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw, getDefaultKeyBinding } from "draft-js"
 import React, { useState, useRef } from "react"
 import { Box, Flex, IconButton, Text } from "@chakra-ui/react"

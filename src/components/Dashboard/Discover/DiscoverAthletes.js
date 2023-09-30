@@ -1,14 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { startListeningToAthleteCollection } from "../../../store/actions/Fetch/fetchAthletesAction"
 import { Flex, Icon, Text } from "@chakra-ui/react"
-import {
-  BsHeart,
-  BsHeartFill,
-  BsHeartHalf,
-  BsInstagram,
-  BsTwitter,
-} from "react-icons/bs"
+import { BsHeartFill, BsInstagram, BsTwitter } from "react-icons/bs"
 import firstimage from "../../../assets/images/firstimage.jpg"
 import { disAthStyle } from "../../../styles/DiscoverAthletesStyle"
 import { SkeletonDiscoverAthletes } from "../../Skeleton/SkeletonDiscoverAthletes"
@@ -23,12 +18,7 @@ const DiscoverAthletes = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(
-      startListeningToAthleteCollection(
-        "athlete",
-        currentTimeStamp
-      )
-    )
+    dispatch(startListeningToAthleteCollection("athlete", currentTimeStamp))
   }, [])
 
   useEffect(() => {

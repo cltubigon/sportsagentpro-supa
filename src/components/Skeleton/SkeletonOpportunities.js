@@ -1,4 +1,4 @@
-import { Box, Flex, Skeleton, SkeletonText, Text } from "@chakra-ui/react"
+import { Flex, Skeleton, SkeletonText } from "@chakra-ui/react"
 import { comStyle } from "../Dashboard/Opportunities/styleAthleteOpportunities"
 import { useDispatch, useSelector } from "react-redux"
 import { Waypoint } from "react-waypoint"
