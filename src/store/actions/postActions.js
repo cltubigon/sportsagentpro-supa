@@ -1,5 +1,3 @@
-import { updateDoc, doc, getDoc } from "firebase/firestore"
-import { db } from "../../config/fbConfig"
 import supabase from "../../config/supabaseClient"
 
 export const FETCH_POSTS = () => async (dispatch, getState) => {
@@ -44,47 +42,47 @@ export const SET_USER_OPPORTUNITY_POSTS = () => async (dispatch, getState) => {
   }
 }
 
-export const withdrawToPost = (postId, email) => async (dispatch, getState) => {
-  const allPosts = getState().post.allPosts
-  const updatedOpportunitiesPosts = (updatedPost) => {
-    const data = allPosts.map((opp) => {
-      if (opp.id === updatedPost.id) {
-        return updatedPost
-      }
-      return opp
-    })
-    console.log("data: ", data)
-    dispatch({ type: "UPDATED_ALL_OPPORTUNITY_POSTS", payload: data })
-  }
-  try {
-    const ref = doc(db, "posts", postId)
-    const postSnapshot = await getDoc(ref)
-    const postDoc = postSnapshot.data()
-    const currentApplicants = postDoc.postApplicants
-    const applicants = currentApplicants.filter(
-      (applicantEmail) => applicantEmail !== email
-    )
-    const updatedPost = { ...postDoc, postApplicants: applicants }
-    updatedOpportunitiesPosts(updatedPost)
-    await updateDoc(ref, updatedPost)
-    console.log("withdrawed successfully")
-  } catch (error) {
-    console.error("Error withrawing post:", error)
-  }
-}
+// export const withdrawToPost = (postId, email) => async (dispatch, getState) => {
+//   const allPosts = getState().post.allPosts
+//   const updatedOpportunitiesPosts = (updatedPost) => {
+//     const data = allPosts.map((opp) => {
+//       if (opp.id === updatedPost.id) {
+//         return updatedPost
+//       }
+//       return opp
+//     })
+//     console.log("data: ", data)
+//     dispatch({ type: "UPDATED_ALL_OPPORTUNITY_POSTS", payload: data })
+//   }
+//   try {
+//     const ref = doc(db, "posts", postId)
+//     const postSnapshot = await getDoc(ref)
+//     const postDoc = postSnapshot.data()
+//     const currentApplicants = postDoc.postApplicants
+//     const applicants = currentApplicants.filter(
+//       (applicantEmail) => applicantEmail !== email
+//     )
+//     const updatedPost = { ...postDoc, postApplicants: applicants }
+//     updatedOpportunitiesPosts(updatedPost)
+//     await updateDoc(ref, updatedPost)
+//     console.log("withdrawed successfully")
+//   } catch (error) {
+//     console.error("Error withrawing post:", error)
+//   }
+// }
 
 export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
   const allPosts = getState().post.allPosts
   const userID = getState().auth.user.userID
   
-  const index = allPosts.findIndex((post) => post.id === thisPost.id)
+  const index = allPosts.findIndex((post) => post.id === thisPost)
 
   // Update supabase posts - This will run second
   const updateSupaDatabase = async (newValue) => {
     const { data, error } = await supabase
       .from("posts")
       .update({ postApplicants: newValue })
-      .eq("id", thisPost.id)
+      .eq("id", thisPost)
       .select()
     if (data[0]) {
       if (index !== -1) {
@@ -102,8 +100,9 @@ export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
     let { data: posts, error } = await supabase
       .from("posts")
       .select("postApplicants")
-      .eq("id", thisPost.id)
-    if (posts[0]) {
+      .eq("id", thisPost)
+    if (posts) {
+      console.log('posts: ', posts)
       const currApplicants = posts[0].postApplicants
       const applicantExist = currApplicants.some((id) => id === userID)
       let newValue

@@ -2,18 +2,16 @@ import storage from "redux-persist/lib/storage" // defaults to localStorage
 import { createStore, applyMiddleware } from "redux"
 import rootReducer from "../store/reducers/rootReducer"
 import thunk from "redux-thunk"
-import { getFirebase } from "react-redux-firebase"
-import { getFirestore } from "firebase/firestore"
 import { composeWithDevTools } from "@redux-devtools/extension"
 import { persistReducer, persistStore } from "redux-persist"
 
 const persistConfig = {
   key: "user",
   storage,
-  blacklist: ["firebase", "firestore"],
+  blacklist: [],
 }
 
-const middleware = [thunk.withExtraArgument({ getFirebase, getFirestore })]
+const middleware = [thunk]
 const enhancers = [applyMiddleware(...middleware)]
 const composedEnhancers = composeWithDevTools(...enhancers)
 const persistedReducer = persistReducer(persistConfig, rootReducer)

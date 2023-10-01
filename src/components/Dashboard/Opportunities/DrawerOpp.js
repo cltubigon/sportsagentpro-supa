@@ -50,10 +50,9 @@ const UtilDrawer = ({
     setDrawerViewMore((prev) => !prev)
   }
 
-  const handleApply = (id, hasApplied) => {
+  const handleApply = (id) => {
     dispatch(SET_IS_LOADING_ALL_POSTS(true))
-    hasApplied && dispatch(withdrawToPost(id, email))
-    !hasApplied && dispatch(APPLY_TO_POST(id, email))
+    dispatch(APPLY_TO_POST(id))
   }
 
   useEffect(() => {
@@ -316,7 +315,7 @@ const UtilDrawer = ({
                     sx={
                       hasApplied ? drawer.btnHasApplied : drawer.btnNotApplied
                     }
-                    onClick={(event) => handleApply(drawerData.id, hasApplied)}
+                    onClick={(event) => handleApply(drawerData.id)}
                   >
                     {hasApplied ? "Withdraw" : "Apply Now"}
                   </Button>

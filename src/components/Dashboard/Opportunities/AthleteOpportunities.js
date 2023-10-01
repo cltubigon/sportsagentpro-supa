@@ -48,10 +48,10 @@ const AthleteOpportunitiess = () => {
     !lastItemReached && dispatch(FETCH_POSTS())
   }, [currentPage])
 
-  const handleApply = (thisPost, event) => {
+  const handleApply = (id, event) => {
     event.stopPropagation()
     dispatch(SET_IS_LOADING_ALL_POSTS(true))
-    dispatch(APPLY_TO_POST(thisPost))
+    dispatch(APPLY_TO_POST(id))
   }
 
   const handleDrawer = (post, editorState) => {
@@ -80,7 +80,7 @@ const AthleteOpportunitiess = () => {
   return (
     <>
       {isLoading && allPosts.length < 1 && <SkeletonOpportunities />}
-      {isLoading && (
+      {isLoading && allPosts.length !== 0 && (
         <Flex
           justifyContent={"center"}
           zIndex={801}
@@ -115,7 +115,7 @@ const AthleteOpportunitiess = () => {
               selectedActivities,
               // totalPayment,
               postExpirationDate,
-              // id,
+              id,
             } = post
 
             const hasApplied = postApplicants.some((applicantID) => {
@@ -225,7 +225,7 @@ const AthleteOpportunitiess = () => {
                     borderWidth="1px"
                     borderStyle="solid"
                     borderRadius="sm"
-                    onClick={(event) => handleApply(post, event, hasApplied)}
+                    onClick={(event) => handleApply(id, event, hasApplied)}
                   >
                     {hasApplied ? "Withdraw" : "Apply"}
                   </Button>
