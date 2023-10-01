@@ -76,13 +76,8 @@ export const withdrawToPost = (postId, email) => async (dispatch, getState) => {
 export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
   const allPosts = getState().post.allPosts
   const userID = getState().auth.user.userID
-
-  // const updatedSelectedPost = {
-  //   ...thisPost,
-  //   postApplicants: [...thisPost.postApplicants, userID],
-  // }
-  const index = allPosts.findIndex((post) => post.id === thisPost.id)
   
+  const index = allPosts.findIndex((post) => post.id === thisPost.id)
 
   // Update supabase posts - This will run second
   const updateSupaDatabase = async (newValue) => {
@@ -91,16 +86,15 @@ export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
       .update({ postApplicants: newValue })
       .eq("id", thisPost.id)
       .select()
-      if (data[0]) {
-        console.log('data updated: ', data[0])
-        if (index !== -1) {
-          allPosts[index] = data[0]
-        }
-        dispatch({ type: "UPDATED_ALL_OPPORTUNITY_POSTS", payload: allPosts })
-        dispatch({ type: "SET_IS_LOADING_ALL_POSTS", payload: false })
-      } else if (error) {
-        console.log('error: ', error)
+    if (data[0]) {
+      if (index !== -1) {
+        allPosts[index] = data[0]
       }
+      dispatch({ type: "UPDATED_ALL_OPPORTUNITY_POSTS", payload: allPosts })
+      dispatch({ type: "SET_IS_LOADING_ALL_POSTS", payload: false })
+    } else if (error) {
+      console.log("error: ", error)
+    }
   }
 
   // Get current applicants - This will run first
@@ -111,14 +105,19 @@ export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
       .eq("id", thisPost.id)
     if (posts[0]) {
       const currApplicants = posts[0].postApplicants
-      const newValue = [...currApplicants, userID]
+      const applicantExist = currApplicants.some((id) => id === userID)
+      let newValue
+      if (applicantExist) {
+        newValue = currApplicants.filter(applicant => applicant !== userID)
+      } else {
+        newValue = [...currApplicants, userID]
+      }
       updateSupaDatabase(newValue)
     } else if (error) {
       console.log("error: ", error)
     }
   }
   getCurrentApplicants()
-
 }
 
 export const SET_IS_LOADING_ALL_POSTS = (payload) => (dispatch) => {

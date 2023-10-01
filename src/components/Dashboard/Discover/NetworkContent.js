@@ -8,8 +8,8 @@ const NetworkContent = () => {
     const userType = user && user.userType
     return (
         <>
-            {userType && userType === 'athlete' && <DiscoverAthletes />}
-            {userType && userType === 'brand' && <Brands />}
+            {/* {userType && userType === 'athlete' && <DiscoverAthletes />} */}
+            {/* {userType && userType === 'brand' && <Brands />} */}
         </>
     )
 }
