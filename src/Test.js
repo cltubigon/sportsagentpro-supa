@@ -1,26 +1,16 @@
-import { Button, Flex, Text } from "@chakra-ui/react"
-import supabase from "./config/supabaseClient"
+import { Flex, Text } from "@chakra-ui/react"
+import { useGetPostsQuery, useGetUsersQuery } from "./store/supabaseAPI"
 
 const Test = () => {
-  const userId = "36ebb6f4-6cd7-42bf-88b6-3d0a84a47589"
-  const fieldToInsert = '22'
+  const { data, isLoading, isError } = useGetUsersQuery()
+  console.log("isLoading: ", isLoading)
+  console.log("isError: ", isError)
+  console.log("data: ", data)
 
-  const handleClick = async () => {
-    const { data, error } = await supabase
-      .from("posts")
-      .insert({ ownerUID: userId, totalPayment: fieldToInsert })
-      .select()
-    if (data[0]) {
-      console.log("data[0]: ", data[0])
-    } else if (error) {
-      console.log("error: ", error)
-    }
-  }
   return (
     <Flex pt={"120px"} flexDirection={"column"}>
-      <Button onClick={handleClick}>Send</Button>
-      <Text>Data: {JSON.stringify(fieldToInsert)}</Text>
-      <Text>userId: {userId}</Text>
+      {isLoading && <Text>Loading posts...</Text>}
+      {isError && <Text>Error loading posts.</Text>}
     </Flex>
   )
 }

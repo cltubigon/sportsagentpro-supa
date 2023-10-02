@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
-import { APPLY_TO_POST, SET_IS_LOADING_ALL_POSTS, withdrawToPost } from "../../../store/actions/postActions"
+import { APPLY_TO_POST, SET_IS_LOADING_ALL_POSTS } from "../../../store/actions/postActions"
 
 const UtilDrawer = ({
   isOpen,
