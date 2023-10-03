@@ -37,7 +37,7 @@ const Athletes = () => {
         tabIndex={0}
       >
         {data?.pages.map(({ data }) => {
-          return data.map((athlete, index) => {
+          return data?.map((athlete, index) => {
             const { id, lastName, firstName, team, sports } = athlete
             return (
               <Flex key={index}>

@@ -13,7 +13,7 @@ const fetchItemData = async (query) => {
 const useItemQueryData = (query) => {
   const queryClient = useQueryClient()
   return useQuery([query.key, query.eqValue], () => fetchItemData(query), {
-    refetchInterval: 2000,
+    refetchInterval: 30000,
     initialData: () => {
       const identifier = queryClient
         .getQueryData([query.mainKey])

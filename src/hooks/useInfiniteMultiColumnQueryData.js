@@ -5,7 +5,7 @@ const fetchInfiniteData = async ({ pageParam = 1 }, query) => {
   const itemLimit = 10
   const { data, error, count } = await supabase
     .from(query.from)
-    .select("*", { count: "estimated" })
+    .select(query.select, { count: "estimated" })
     .eq(query.eqColumn, query.eqValue)
     .range((pageParam - 1) * itemLimit, pageParam * itemLimit - 1)
     .order(query.order, { ascending: false })
@@ -14,7 +14,7 @@ const fetchInfiniteData = async ({ pageParam = 1 }, query) => {
   return { data, totalPages }
 }
 
-const useInfiniteQueryData = (query) => {
+const useInfiniteMultiColumnQueryData = (query) => {
   return useInfiniteQuery(
     [query.key],
     (pageParam) => {
@@ -32,4 +32,4 @@ const useInfiniteQueryData = (query) => {
   )
 }
 
-export default useInfiniteQueryData
+export default useInfiniteMultiColumnQueryData
