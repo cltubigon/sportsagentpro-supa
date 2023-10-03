@@ -1,12 +1,11 @@
 import authReducer from "./authReducer"
 import teamReducer from "./teamReducer"
+import { combineReducers } from "redux"
 import athleteReducer from "./athleteReducer"
 import buildReducer from "./buildReducer"
 import brandReducer from "./brandReducer"
 import postReducer from "./postReducer"
 import utilsReducer from "./utilsReducer"
-import counterSlice from "../slice/counterSlice"
-import { combineReducers } from "redux"
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -16,7 +15,6 @@ const rootReducer = combineReducers({
   utils: utilsReducer,
   team: teamReducer,
   build: buildReducer,
-  counter: counterSlice,
 })
 
 export default rootReducer

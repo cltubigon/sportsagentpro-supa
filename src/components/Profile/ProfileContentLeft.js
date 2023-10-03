@@ -5,36 +5,34 @@ import { VscStarFull, VscVerifiedFilled } from "react-icons/vsc"
 import ProfileContentInterests from "./ProfileContentInterests"
 import ProfileContentAbout from "./ProfileContentAbout"
 import ProfileSocialMedia from "./ProfileSocialMedia"
-import { useState } from "react"
-import { useParams } from "react-router-dom/dist"
 import { SkeletonAthleteSelectedProfile } from "../Skeleton/SkeletonAthleteSelectedProfile"
-import supabase from "../../config/supabaseClient"
-import { useEffect } from "react"
 
-const ProfileContentLeft = () => {
-  const { id } = useParams()
-  const [isLoading, setIsLoading] = useState(true)
-  const [selectedAthlete, setSelectedAthlete] = useState(null)
-  console.log("selectedAthlete: ", selectedAthlete)
+const ProfileContentLeft = ({query}) => {
+  console.log({ query })
+  const selectedAthlete = query.data && query.data[0]
+  // const { id } = useParams()
+  // const [isLoading, setIsLoading] = useState(true)
+  // const [selectedAthlete, setSelectedAthlete] = useState(null)
+  // console.log("selectedAthlete: ", selectedAthlete)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", id)
-      if (data[0]) {
-        setSelectedAthlete(data[0])
-        setIsLoading(false)
-      } else if (error) {
-        console.log("error: ", error)
-      }
-    }
-    fetchUser()
-  }, [])
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const { data, error } = await supabase
+  //       .from("users")
+  //       .select("*")
+  //       .eq("id", id)
+  //     if (data[0]) {
+  //       setSelectedAthlete(data[0])
+  //       setIsLoading(false)
+  //     } else if (error) {
+  //       console.log("error: ", error)
+  //     }
+  //   }
+  //   fetchUser()
+  // }, [])
   return (
     <Flex flexDirection={"column"} flexGrow={1}>
-      {isLoading && (
+      {query.isLoading && (
         <Flex py={4}>
           <SkeletonAthleteSelectedProfile />
         </Flex>

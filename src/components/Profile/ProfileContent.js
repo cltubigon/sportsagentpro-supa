@@ -3,7 +3,7 @@ import React from 'react'
 import ProfileContentRight from './ProfileContentRight'
 import ProfileContentLeft from './ProfileContentLeft'
 
-const ProfileContent = () => {
+const ProfileContent = ({ query }) => {
     const profileContentContainer = {
         px: "var(--chakra-space-4)",
         py: "var(--chakra-space-6)",
@@ -20,7 +20,7 @@ const ProfileContent = () => {
     }
   return (
     <Stack sx={profileContentContainer}>
-        <ProfileContentLeft  />
+        <ProfileContentLeft query={query} />
         <ProfileContentRight />
     </Stack>
   )
