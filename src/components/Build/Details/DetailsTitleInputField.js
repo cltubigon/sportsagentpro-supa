@@ -1,25 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  Flex,
-  Text,
-  Input,
-  Box,
-} from "@chakra-ui/react"
+import { Flex, Text, Input, Box } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { useForm } from "react-hook-form"
 import { useEffect } from "react"
 import { SET_POST_TITLE } from "../../../store/actions/buildPostActions"
+import { useState } from "react"
+import { debounce } from "throttle-debounce"
 
 const DetailsTitleInputField = () => {
+  console.log('title rendered')
   const dispatch = useDispatch()
-  const { register, watch } = useForm()
+  // const { register, watch } = useForm()
+  // const [localValue, setLocalValue] = useState('')
   const postTitle = useSelector((state) => state.build.postTitle)
 
-  useEffect(() => {
-    const watched = watch("postTitle")
-    if (watched !== undefined) dispatch(SET_POST_TITLE(watched))
-  }, [watch("postTitle")])
-
+  const debounceTitle = debounce(500, (value) => {
+    // setLocalValue(value)
+    dispatch(SET_POST_TITLE(value))
+  })
+  // console.log({ postTitle })
+  
+  const handleOnChange = (e) => {
+    const value = e.target.value
+    debounceTitle(value)
+  }
   // CSS styles --------------
   const borderColorWidthStyle = {
     borderColor: "gray.500",
@@ -46,8 +50,10 @@ const DetailsTitleInputField = () => {
         <Input
           sx={borderColorWidthStyle}
           id="postTitle"
-          value={postTitle || ""}
-          {...register("postTitle")}
+          // value={postTitle || ''}
+          defaultValue={postTitle || ''}
+          onChange={handleOnChange}
+          // {...register("postTitle")}
           placeholder="Enter offer name"
         />
       </Box>

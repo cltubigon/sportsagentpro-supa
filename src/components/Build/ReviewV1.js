@@ -48,17 +48,15 @@ import { BiRun, BiUserVoice } from "react-icons/bi"
 import { TbLicense } from "react-icons/tb"
 import NoSelected from "./NoSelected"
 import BuildMenu from "./BuildMenu"
+import DisplayQuillContent from "../RichTextEditor/ReactQuill/DisplayQuillContent"
 
 const ReviewV1 = () => {
   const dispatch = useDispatch()
-  const reduxPosts = useSelector((state) => state.build)
-  const {
-    postContent,
-    postType,
-    selectedActivities,
-    postTitle,
-    postExpirationDate,
-  } = reduxPosts
+  const postContent = useSelector((state) => state.build.postContent)
+  const postType = useSelector((state) => state.build.postType)
+  const selectedActivities = useSelector((state) => state.build.selectedActivities)
+  const postTitle = useSelector((state) => state.build.postTitle)
+  const postExpirationDate = useSelector((state) => state.build.postExpirationDate)
 
   // const reduxState = useSelector(state => state)
   const selectedRecipients = useSelector(
@@ -67,21 +65,21 @@ const ReviewV1 = () => {
   const localAthletes = useSelector((state) => state.athlete.athletes)
 
   const [viewMore, setViewMore] = useState(false)
-  const [hasBrief, setHasBrief] = useState(null)
+  // const [hasBrief, setHasBrief] = useState(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   console.log("postExpirationDate: ", postExpirationDate)
 
-  useEffect(() => {
-    if (postContent) {
-      // const rawDataParsed = postContent && JSON.parse(postContent)
-      const rawDataParsed = postContent && postContent
-      const hasBrief = rawDataParsed.blocks[0].text
-      setHasBrief(hasBrief)
-      const contentState = convertFromRaw(rawDataParsed)
-      setEditorState(EditorState.createWithContent(contentState))
-    }
-  }, [postContent])
+  // useEffect(() => {
+  //   if (postContent) {
+  //     // const rawDataParsed = postContent && JSON.parse(postContent)
+  //     const rawDataParsed = postContent && postContent
+  //     const hasBrief = rawDataParsed.blocks[0].text
+  //     setHasBrief(hasBrief)
+  //     const contentState = convertFromRaw(rawDataParsed)
+  //     setEditorState(EditorState.createWithContent(contentState))
+  //   }
+  // }, [postContent])
 
   const recipientContainer = {
     alignItems: "center",
@@ -708,7 +706,7 @@ const ReviewV1 = () => {
               </Flex>
               <Box py={4}>
                 {/* ------ Content ------ */}
-                {hasBrief || postTitle ? (
+                {postContent || postTitle ? (
                   <Flex flexDirection={"column"} gap={4}>
                     {postTitle && (
                       <Box>
@@ -734,10 +732,11 @@ const ReviewV1 = () => {
                         }
                       }
                     >
-                      {hasBrief && (
+                      {postContent && (
                         <Box>
                           <Text fontWeight={"semibold"}>Brief</Text>
-                          <Editor editorState={editorState} readOnly />
+                          {/* <Editor editorState={editorState} readOnly /> */}
+                          <DisplayQuillContent quillContent={postContent} />
                         </Box>
                       )}
                     </Box>

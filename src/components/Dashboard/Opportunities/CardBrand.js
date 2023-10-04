@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import React from "react"
 import DeletePopup from "./DeletePopup"
 import { Editor, EditorState, convertFromRaw } from "draft-js"
+import DisplayQuillContent from "../../RichTextEditor/ReactQuill/DisplayQuillContent"
 
 const CardBrandMemo = ({ post }) => {
     const {
@@ -26,9 +27,9 @@ const CardBrandMemo = ({ post }) => {
       })
       const formattedAmount = formatter.format(parseFloat(totalAmount))
 
-      const rawDataParsed = postContent && postContent
-      const contentState = convertFromRaw(rawDataParsed)
-      const editorState = EditorState.createWithContent(contentState)
+      // const rawDataParsed = postContent && postContent
+      // const contentState = convertFromRaw(rawDataParsed)
+      // const editorState = EditorState.createWithContent(contentState)
 
       const handleDelete = (post) => {
         // setDeleting(post.id)
@@ -95,7 +96,8 @@ return (
               {postTitle}
             </Text>
             <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
-              <Editor editorState={editorState} readOnly />
+              {/* <Editor editorState={editorState} readOnly /> */}
+              <DisplayQuillContent quillContent={postContent} displayTo={'Cards'} />
             </Box>
             <Flex gap={2} flexWrap={"wrap"}>
               <Text color={"gray.500"}>Activities:</Text>

@@ -14,9 +14,8 @@ const BuildMenu = () => {
   const initRef = useRef()
   const dispatch = useDispatch()
 
-  const build = useSelector((state) => state.build)
-
-  const { activeStep, editMode } = build
+  const activeStep = useSelector((state) => state.build.activeStep)
+  const editMode = useSelector((state) => state.build.editMode)
 
 
   const handleUpdate = () => {

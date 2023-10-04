@@ -6,10 +6,16 @@ const initialState = {
   allPosts: [],
   userOpportunityPosts: [],
   isLoading: true,
+  quilData: null,
 }
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_QUIL_DATA":
+      return {
+        ...state,
+        quilData: action.payload,
+      }
     case "SET_IS_LOADING":
       return {
         ...state,

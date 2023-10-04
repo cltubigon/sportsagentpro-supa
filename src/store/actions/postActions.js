@@ -74,7 +74,7 @@ export const SET_USER_OPPORTUNITY_POSTS = () => async (dispatch, getState) => {
 export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
   const allPosts = getState().post.allPosts
   const userID = getState().auth.user.userID
-  
+
   const index = allPosts.findIndex((post) => post.id === thisPost)
 
   // Update supabase posts - This will run second
@@ -102,12 +102,12 @@ export const APPLY_TO_POST = (thisPost) => async (dispatch, getState) => {
       .select("postApplicants")
       .eq("id", thisPost)
     if (posts) {
-      console.log('posts: ', posts)
+      console.log("posts: ", posts)
       const currApplicants = posts[0].postApplicants
       const applicantExist = currApplicants.some((id) => id === userID)
       let newValue
       if (applicantExist) {
-        newValue = currApplicants.filter(applicant => applicant !== userID)
+        newValue = currApplicants.filter((applicant) => applicant !== userID)
       } else {
         newValue = [...currApplicants, userID]
       }
@@ -135,3 +135,7 @@ export const SET_IS_LOADING_ALL_POSTS = (payload) => (dispatch) => {
 //     dispatch({ type: "RESET_POST_STATE", payload })
 //   }
 // }
+
+export const SET_QUIL_DATA = (data) => (dispatch) => {
+  dispatch({ type: "SET_QUIL_DATA", payload: data })
+}

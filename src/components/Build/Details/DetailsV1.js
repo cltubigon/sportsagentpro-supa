@@ -13,30 +13,30 @@ import { BsChevronLeft, BsChevronRight, BsPlus } from "react-icons/bs"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { useEffect } from "react"
-import RichEditor from "../../../utils/RichEditor/RichEditor"
+// import RichEditor from "../../../utils/RichEditor/RichEditor"
 import DetailsTitleInputField from "./DetailsTitleInputField"
 import {
   SET_ACTIVE_STEP,
-  SET_CONTENT,
-  SET_DETAILS_TAB_STATUS,
+  // SET_CONTENT,
+  // SET_DETAILS_TAB_STATUS,
   SET_POST_EXPIRATION_DATE,
 } from "../../../store/actions/buildPostActions"
 import { getTimeToUTCFromLocal } from "../../../utils/DateInputToUTCFromLocal"
 import BuildMenu from "../BuildMenu"
+import QuillEditor from "../../RichTextEditor/ReactQuill/QuillEditor"
 
 const DetailsV1 = () => {
+  console.log('DetailsV1 rendered')
   const dispatch = useDispatch()
   const { register, watch } = useForm()
-  const postContent = useSelector((state) => state.build.postContent)
-  const postTitle = useSelector((state) => state.build.postTitle)
+  // const postContent = useSelector((state) => state.build.postContent)
+  // const postTitle = useSelector((state) => state.build.postTitle)
   const postExpirationDate = useSelector(
     (state) => state.build.postExpirationDate
   )
 
-  const [availableCharacters, setAvailableCharacters] = useState(2000)
-  const [rawDataParsed, setRawDataParsed] = useState(null)
+  const availableCharacters = 2000
   const [toggleDate, setToggleDate] = useState(false)
-  const [rawDataString, setRawDataString] = useState(null)
 
   const handleToggleClick = () => {
     setToggleDate(() => true)
@@ -48,31 +48,24 @@ const DetailsV1 = () => {
       dispatch(SET_POST_EXPIRATION_DATE(watchedExpiration))
   }, [watch("expirationDate")])
 
-  useEffect(() => {
-    if (availableCharacters <= 1950 && availableCharacters >= 0 && postTitle) {
-      dispatch(SET_DETAILS_TAB_STATUS(true))
-    } else if (availableCharacters !== 2000) {
-      dispatch(SET_DETAILS_TAB_STATUS(false))
-    }
-  }, [availableCharacters, postTitle])
+  // useEffect(() => {
+  //   if (availableCharacters <= 1950 && availableCharacters >= 0 && postTitle) {
+  //     dispatch(SET_DETAILS_TAB_STATUS(true))
+  //   } else if (availableCharacters !== 2000) {
+  //     dispatch(SET_DETAILS_TAB_STATUS(false))
+  //   }
+  // }, [availableCharacters, postTitle])
 
   // ------------ RICH TEXT SAVE ------------
 
-  useEffect(() => {
-    availableCharacters >= -1 &&
-      rawDataString &&
-      dispatch(SET_CONTENT(rawDataString))
-
-    return
-  }, [rawDataString])
   // ------------ RICH TEXT GET ------------
 
-  useEffect(() => {
-    if (postContent) {
-      setRawDataParsed(postContent)
-      // setRawDataParsed(JSON.parse(postContent))
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (postContent) {
+  //     setRawDataParsed(postContent)
+  //     // setRawDataParsed(JSON.parse(postContent))
+  //   }
+  // }, [])
 
   // CSS styles --------------
   const borderColorWidthStyle = {
@@ -121,17 +114,19 @@ const DetailsV1 = () => {
             </Flex>
             <Text sx={inputLabelDescriptions} mb={3}>
               Provide a brief background of your business, the purpose of your
-              campaign, and clear step-by-step instructions for how to complete
+              campaign, and clear step-by-step instructions for how complete
               each activity in the deal.
             </Text>
-            <RichEditor
+
+            {/* <RichEditor
               borderColorWidthStyle={borderColorWidthStyle}
               borderRadius={borderRadius}
               height={height}
               setRawDataString={setRawDataString}
               rawDataParsed={rawDataParsed}
               setAvailableCharacters={setAvailableCharacters}
-            />
+            /> */}
+            <QuillEditor />
           </Box>
           <Box mb={4}>
             <Flex gap={1}>
