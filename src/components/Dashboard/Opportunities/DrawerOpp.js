@@ -19,12 +19,12 @@ import {
 import { useState } from "react"
 import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.png"
 import { FaCircle } from "react-icons/fa"
-import { Editor } from "draft-js"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import { activityList } from "../../Build/activityList"
-import { APPLY_TO_POST, SET_IS_LOADING_ALL_POSTS, withdrawToPost } from "../../../store/actions/postActions"
+import { APPLY_TO_POST, SET_IS_LOADING_ALL_POSTS } from "../../../store/actions/postActions"
+import DisplayQuillContent from '../../RichTextEditor/ReactQuill/DisplayQuillContent'
 
 const UtilDrawer = ({
   isOpen,
@@ -36,6 +36,7 @@ const UtilDrawer = ({
   isLoading,
 }) => {
   const dispatch = useDispatch()
+  console.log({ drawerData })
 
   const email = useSelector((state) => state.auth.email)
   const allOpportunityPosts = useSelector(
@@ -181,7 +182,8 @@ const UtilDrawer = ({
                         {drawerData.postTitle}
                       </Text>
                       <Flex noOfLines={drawerViewMore && [3]}>
-                        <Editor editorState={drawerData.editorState} readOnly />
+                        {/* <Editor editorState={drawerData.editorState} readOnly /> */}
+                        <DisplayQuillContent quillContent={drawerData.postContent} />
                       </Flex>
                     </Flex>
                     <Text sx={drawer.brief.viewMore} onClick={handleViewMore}>

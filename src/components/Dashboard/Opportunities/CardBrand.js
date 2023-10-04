@@ -4,12 +4,15 @@ import imageHolderRemovable from "../../../assets/images/imageHolderRemovable.pn
 import { FaCircle } from "react-icons/fa"
 import { BsHeart, BsLink45Deg } from "react-icons/bs"
 import { Link } from "react-router-dom"
-import React from "react"
+import React, { useState } from "react"
 import DeletePopup from "./DeletePopup"
-import { Editor, EditorState, convertFromRaw } from "draft-js"
 import DisplayQuillContent from "../../RichTextEditor/ReactQuill/DisplayQuillContent"
+import { DELETE_POST } from "../../../store/actions/buildPostActions"
+import { useDispatch } from "react-redux"
 
 const CardBrandMemo = ({ post }) => {
+  const dispatch = useDispatch()
+  const [deleting, setDeleting] = useState(false)
     const {
         totalAmount,
         postTitle,
@@ -27,13 +30,9 @@ const CardBrandMemo = ({ post }) => {
       })
       const formattedAmount = formatter.format(parseFloat(totalAmount))
 
-      // const rawDataParsed = postContent && postContent
-      // const contentState = convertFromRaw(rawDataParsed)
-      // const editorState = EditorState.createWithContent(contentState)
-
       const handleDelete = (post) => {
-        // setDeleting(post.id)
-        // dispatch(DELETE_POST(post.id))
+        setDeleting(post.id)
+        dispatch(DELETE_POST(post.id))
       }
 
       const btnStyle = {
@@ -44,7 +43,7 @@ const CardBrandMemo = ({ post }) => {
       }
 return (
     <>
-        <Flex
+        {!deleting && <Flex
           key={id}
           flexDirection={"column"}
           borderColor={"gray.200"}
@@ -96,7 +95,6 @@ return (
               {postTitle}
             </Text>
             <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
-              {/* <Editor editorState={editorState} readOnly /> */}
               <DisplayQuillContent quillContent={postContent} displayTo={'Cards'} />
             </Box>
             <Flex gap={2} flexWrap={"wrap"}>
@@ -138,7 +136,7 @@ return (
             </Link>
             <DeletePopup handleDelete={handleDelete} post={post} />
           </Flex>
-        </Flex>
+        </Flex>}
     </>
 )
 }

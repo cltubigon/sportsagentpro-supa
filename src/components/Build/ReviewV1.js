@@ -22,9 +22,7 @@ import {
 import {
   SET_ACTIVE_STEP,
 } from "../../store/actions/buildPostActions"
-import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
-import { useEffect } from "react"
 import { TfiPencilAlt } from "react-icons/tfi"
 import { CgMenuGridO } from "react-icons/cg"
 import {
@@ -66,7 +64,7 @@ const ReviewV1 = () => {
 
   const [viewMore, setViewMore] = useState(false)
   // const [hasBrief, setHasBrief] = useState(null)
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   console.log("postExpirationDate: ", postExpirationDate)
 

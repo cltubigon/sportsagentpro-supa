@@ -20,12 +20,12 @@ import {
   FETCH_POSTS,
   SET_IS_LOADING_ALL_POSTS,
 } from "../../../store/actions/postActions"
-import { Editor, EditorState, convertFromRaw } from "draft-js"
 import { useState } from "react"
 import { comStyle } from "./styleAthleteOpportunities"
 import UtilDrawer from "./DrawerOpp"
 import { SkeletonOpportunities } from "../../Skeleton/SkeletonOpportunities"
 import SkeletonAthleteOppLoader from "../../Skeleton/SkeletonAthleteOppLoader"
+import DisplayQuillContent from "../../RichTextEditor/ReactQuill/DisplayQuillContent"
 
 const AthleteOpportunitiess = () => {
   const dispatch = useDispatch()
@@ -54,8 +54,8 @@ const AthleteOpportunitiess = () => {
     dispatch(APPLY_TO_POST(id))
   }
 
-  const handleDrawer = (post, editorState) => {
-    setDrawerData({ ...post, editorState: editorState })
+  const handleDrawer = (post, postContent) => {
+    setDrawerData({ ...post, postContent })
     setDrawerViewMore(true)
     onOpen()
   }
@@ -133,14 +133,14 @@ const AthleteOpportunitiess = () => {
             })
             const formattedAmount = formatter.format(parseFloat(totalAmount))
 
-            const rawDataParsed = postContent && postContent
-            const contentState = convertFromRaw(rawDataParsed)
-            const editorState = EditorState.createWithContent(contentState)
+            // const rawDataParsed = postContent && postContent
+            // const contentState = convertFromRaw(rawDataParsed)
+            // const editorState = EditorState.createWithContent(contentState)
 
             return (
               <Flex
                 key={index}
-                onClick={() => handleDrawer(post, editorState)}
+                onClick={() => handleDrawer(post, postContent)}
                 sx={postContainer}
               >
                 <Flex gap={2} bgColor={"gray.100"} p={4} borderRadius={"md"}>
@@ -178,7 +178,8 @@ const AthleteOpportunitiess = () => {
                     {postTitle}
                   </Text>
                   <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
-                    <Editor editorState={editorState} readOnly />
+                    {/* <Editor editorState={editorState} readOnly /> */}
+                    <DisplayQuillContent quillContent={postContent} displayTo={'Cards'} />
                   </Box>
                   <Flex gap={2} flexWrap={"nowrap"}>
                     <Text color={"gray.500"}>Activities:</Text>
@@ -232,7 +233,7 @@ const AthleteOpportunitiess = () => {
                   <Button
                     sx={btnStyle}
                     w={"100%"}
-                    onClick={() => handleDrawer(post, editorState)}
+                    onClick={() => handleDrawer(post, postContent)}
                   >
                     Details
                   </Button>
