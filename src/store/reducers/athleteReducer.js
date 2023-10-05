@@ -8,11 +8,15 @@ const initialState = {
 const athleteReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_ATHLETES":
-      const firstID =  action.payload.length > 0 && action.payload[0].uid
-      const hasDuplicate = state.athletes.some(athlete => athlete.uid === firstID)
+      const firstID = action.payload.length > 0 && action.payload[0].uid
+      const hasDuplicate = state.athletes.some(
+        (athlete) => athlete.uid === firstID
+      )
       return {
         ...state,
-        athletes: hasDuplicate ? state.athletes : [...state.athletes, ...action.payload],
+        athletes: hasDuplicate
+          ? state.athletes
+          : [...state.athletes, ...action.payload],
       }
     case "SET_SELECTED_ATHLETE":
       return {

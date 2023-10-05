@@ -24,7 +24,7 @@ import Opportunities from "./pages/DashboardPages/Opportunities"
 import { useDispatch, useSelector } from "react-redux"
 import { SUPABASE_SIGNOUT } from "./store/actions/authActions"
 import supabase from "./config/supabaseClient"
-import Test from "./Test"
+import { Test } from "./Test"
 
 function App() {
   const dispatch = useDispatch()

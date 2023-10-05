@@ -27,7 +27,7 @@ const useInfiniteQueryData = (query) => {
           return pages.length + 1
         } else return undefined
       },
-      refetchInterval: 30000,
+      // refetchInterval: 30000,
     }
   )
 }

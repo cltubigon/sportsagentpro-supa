@@ -7,43 +7,37 @@ import { Link } from "react-router-dom"
 import React, { useState } from "react"
 import DeletePopup from "./DeletePopup"
 import DisplayQuillContent from "../../RichTextEditor/ReactQuill/DisplayQuillContent"
-import { DELETE_POST } from "../../../store/actions/buildPostActions"
-import { useDispatch } from "react-redux"
 
 const CardBrandMemo = ({ post }) => {
-  const dispatch = useDispatch()
+  console.log("card rendered", post.id)
   const [deleting, setDeleting] = useState(false)
-    const {
-        totalAmount,
-        postTitle,
-        postContent,
-        postOwnerFirstName,
-        postOwnerLastName,
-        selectedActivities,
-        postExpirationDate,
-        id,
-      } = post
+  const {
+    totalAmount,
+    postTitle,
+    postContent,
+    postOwnerFirstName,
+    postOwnerLastName,
+    selectedActivities,
+    postExpirationDate,
+    id,
+  } = post
 
-      const formatter = new Intl.NumberFormat(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-      const formattedAmount = formatter.format(parseFloat(totalAmount))
+  const formatter = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  const formattedAmount = formatter.format(parseFloat(totalAmount))
 
-      const handleDelete = (post) => {
-        setDeleting(post.id)
-        dispatch(DELETE_POST(post.id))
-      }
-
-      const btnStyle = {
-        colorScheme: "gray",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        borderRadius: "sm",
-      }
-return (
+  const btnStyle = {
+    colorScheme: "gray",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: "sm",
+  }
+  return (
     <>
-        {!deleting && <Flex
+      {!deleting && (
+        <Flex
           key={id}
           flexDirection={"column"}
           borderColor={"gray.200"}
@@ -95,7 +89,10 @@ return (
               {postTitle}
             </Text>
             <Box noOfLines={[1, 2]} mb={4} color={"gray.500"}>
-              <DisplayQuillContent quillContent={postContent} displayTo={'Cards'} />
+              <DisplayQuillContent
+                quillContent={postContent}
+                displayTo={"Cards"}
+              />
             </Box>
             <Flex gap={2} flexWrap={"wrap"}>
               <Text color={"gray.500"}>Activities:</Text>
@@ -134,11 +131,16 @@ return (
                 Edit
               </Button>
             </Link>
-            <DeletePopup handleDelete={handleDelete} post={post} />
+
+            {/* <Button sx={btnStyle} borderColor="gray.400" onClick={()=> console.log('Deleting:', id)} >
+              Delete
+            </Button> */}
+            <DeletePopup setDeleting={setDeleting} id={id} />
           </Flex>
-        </Flex>}
+        </Flex>
+      )}
     </>
-)
+  )
 }
 
 const CardBrand = React.memo(CardBrandMemo)

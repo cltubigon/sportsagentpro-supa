@@ -1,21 +1,23 @@
 import { Flex } from "@chakra-ui/react"
-import DisplayQuillContent from "./components/RichTextEditor/ReactQuill/DisplayQuillContent"
-import { useSelector } from "react-redux"
-import QuillEditor from "./components/RichTextEditor/ReactQuill/QuillEditor"
+import { FixedSizeGrid as Grid } from "react-window"
 
-const Test = () => {
-  console.log("test rendered")
-  const newValue = useSelector((state) => state.post.quilData)
-  console.log({ newValue })
-  return (
-    <Flex pt={"120px"} flexDirection={"column"} px={"80px"}>
-      {/* <LexicalEditor /> */}
-      <QuillEditor />
-      <Flex mt={"40px"}>
-        <DisplayQuillContent quillContent={newValue} />
-      </Flex>
-    </Flex>
-  )
-}
+const Cell = ({ columnIndex, rowIndex, style }) => (
+  <Flex style={style}>
+    Item {rowIndex},{columnIndex}
+  </Flex>
+)
 
-export default Test
+export const Test = () => (
+  <Flex pt={'88px'}>
+    <Grid
+      columnCount={1000}
+      columnWidth={100}
+      height={150}
+      rowCount={1000}
+      rowHeight={35}
+      width={300}
+    >
+      {Cell}
+    </Grid>
+  </Flex>
+)
