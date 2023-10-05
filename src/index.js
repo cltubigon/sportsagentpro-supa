@@ -8,7 +8,7 @@ import { Provider } from "react-redux"
 // import { createFirestoreInstance } from "redux-firestore"
 // import firebase from "firebase/compat/app"
 // import { rrfConfig } from "./config/fbConfig"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { PersistGate } from "redux-persist/integration/react"
 import {
   store as guestPersistedStore,
@@ -25,7 +25,7 @@ root.render(
         <PersistGate loading={<div>Loading...</div>} persistor={guestPersistor}>
           <QueryClientProvider client={queryClient}>
             <App />
-            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" ></ReactQueryDevtools>
+            {/* <ReactQueryDevtools initialIsOpen={false} position="bottom-right" ></ReactQueryDevtools> */}
           </QueryClientProvider>
         </PersistGate>
       </ChakraProvider>

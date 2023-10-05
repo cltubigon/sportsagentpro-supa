@@ -7,10 +7,9 @@ import {
 } from "../../Skeleton/SkeletonOpportunities"
 import CardBrand from "./CardBrand"
 import useInfiniteMultiColumnQueryData from "../../../hooks/useInfiniteMultiColumnQueryData"
-import { FixedSizeGrid } from "react-window"
 
-const BrandOpportunities = ({ clientHeight, clientWidth }) => {
-  console.count("BrandOpportunities is rendered")
+const BrandOpportunities = () => {
+  // console.count("BrandOpportunities is rendered")
 
   const { data, isError, error, isLoading, hasNextPage, fetchNextPage } =
     useInfiniteMultiColumnQueryData({
@@ -30,46 +29,19 @@ const BrandOpportunities = ({ clientHeight, clientWidth }) => {
       </Text>
     )
   }
-  console.log({ data })
 
-  const rowCount = 20
-  const columnCount = 5
-  const rowHeight = 428
-  const columnWidth = 320
-  console.log({ clientHeight })
+  console.log({ data })
 
   return (
     <>
       {isLoading && <SkeletonOpportunities />}
       {isLoading && <SkeletonOpportunities />}
-      <Flex gap={2} flexWrap={"wrap"}>
+      <Flex gap={5} flexWrap={"wrap"}>
         {
           // !isLoading &&
           data?.pages.map(({ data }) => {
             return data?.map((post, index) => {
-              return (
-                // <CardBrand post={post} />
-                <FixedSizeGrid
-                  columnCount={columnCount}
-                  rowCount={rowCount}
-                  rowHeight={rowHeight}
-                  columnWidth={columnWidth}
-                  height={clientHeight}
-                  width={clientWidth}
-                  key={index}
-                >
-                  {/* Render the Cell component */}
-                  {({ columnIndex, rowIndex, style }) => (
-                    <CardBrand
-                      columnIndex={columnIndex}
-                      rowIndex={rowIndex}
-                      style={style}
-                      post={post}
-                      key={index}
-                    />
-                  )}
-                </FixedSizeGrid>
-              )
+              return <CardBrand post={post} key={index} />
             })
           })
         }

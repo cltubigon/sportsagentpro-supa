@@ -9,18 +9,18 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text,
+  // Text,
 } from "@chakra-ui/react"
 import React from "react"
 import { useRef } from "react"
-import { DELETE_POST } from "../../../store/actions/buildPostActions"
-import { useDispatch } from "react-redux"
+// import { DELETE_POST } from "../../../store/actions/buildPostActions"
+// import { useDispatch } from "react-redux"
 import useDeleteMutateData from "../../../hooks/useDeleteMutateData"
 
 const DeletePopup = ({ setDeleting, id }) => {
   // console.log('popup rendered', id)
   const initRef = useRef()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   const { mutate } = useDeleteMutateData({
     mainKey: "posts",

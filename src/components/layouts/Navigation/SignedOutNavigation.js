@@ -16,9 +16,9 @@ const SignedOutNavigation = () => {
           <Text>Login</Text>
         </Flex>
       </Link>
-      <Link to={"/test"}>
+      {/* <Link to={"/test"}>
         <Text>Test</Text>
-      </Link>
+      </Link> */}
     </Flex>
   )
 }
