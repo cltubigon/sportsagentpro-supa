@@ -8,8 +8,8 @@ import React, { useState } from "react"
 import DeletePopup from "./DeletePopup"
 import DisplayQuillContent from "../../RichTextEditor/ReactQuill/DisplayQuillContent"
 
-const CardBrandMemo = ({ post }) => {
-  console.log("card rendered", post.id)
+const CardBrandMemo = ({ post, style }) => {
+  // console.log("card rendered", post.id)
   const [deleting, setDeleting] = useState(false)
   const {
     totalAmount,
@@ -38,14 +38,15 @@ const CardBrandMemo = ({ post }) => {
     <>
       {!deleting && (
         <Flex
-          key={id}
+          style={{...style, backgroundColor: 'yellow'}}
+          // key={id}
           flexDirection={"column"}
           borderColor={"gray.200"}
           borderWidth={"1px"}
           borderStyle={"solid"}
           borderRadius={"md"}
-          w={"320px"}
-          h={"428px"}
+          // w={"320px"}
+          // h={"428px"}
           position={"relative"}
         >
           <Flex

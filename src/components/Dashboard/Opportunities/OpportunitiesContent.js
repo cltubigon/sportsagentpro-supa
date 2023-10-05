@@ -3,12 +3,12 @@ import { useSelector } from "react-redux"
 import AthleteOpportunities from "./AthleteOpportunities"
 import BrandOpportunities from "./BrandOpportunities"
 
-const OpportunitiesContent = () => {
+const OpportunitiesContent = ({ clientHeight, clientWidth }) => {
   const user = useSelector((state) => state.auth.user)
   return (
     <>
-      {user && user.userType === "athlete" && <AthleteOpportunities />}
-      {user && user.userType === "brand" && <BrandOpportunities />}
+      {user && user.userType === "athlete" && <AthleteOpportunities  clientWidth={clientWidth} clientHeight={clientHeight} />}
+      {user && user.userType === "brand" && <BrandOpportunities  clientWidth={clientWidth} clientHeight={clientHeight} />}
       {/* <BrandOpportunities /> */}
     </>
   )

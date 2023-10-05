@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux"
 import useDeleteMutateData from "../../../hooks/useDeleteMutateData"
 
 const DeletePopup = ({ setDeleting, id }) => {
-  console.log('popup rendered', id)
+  // console.log('popup rendered', id)
   const initRef = useRef()
   const dispatch = useDispatch()
 
