@@ -2,10 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import supabase from "../config/supabaseClient"
 
 const deleteMutateData = async ({ from, eqColumn, eqValue }) => {
-  const { error, status } = await supabase
+  const { error } = await supabase
     .from(from)
     .delete()
     .eq(eqColumn, eqValue)
+    if (error) {
+      console.log({ error })
+    }
 }
 
 const useDeleteMutateData = (query) => {

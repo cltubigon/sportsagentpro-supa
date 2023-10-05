@@ -80,8 +80,8 @@ const DetailsV1 = () => {
   const inputLabels = {
     fontWeight: "semibold",
   }
-  const borderRadius = "6px"
-  const height = "200px"
+  // const borderRadius = "6px"
+  // const height = "200px"
   return (
     <>
       <Grid
