@@ -7,7 +7,7 @@ import {
 import React, { useEffect } from "react"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
-import RegisterTeam from "./pages/RegisterTeam"
+// import RegisterTeam from "./pages/RegisterTeam"
 import CreateDeal from "./pages/CreateDeal"
 import Profile from "./pages/Profile"
 import ScrollToTop from "./utils/ScrollToTop"
@@ -58,7 +58,7 @@ function App() {
         <Route path="/test" element={<Test />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
-        <Route path="/register-team" element={<RegisterTeam />}></Route>
+        {/* <Route path="/register-team" element={<RegisterTeam />}></Route> */}
         <Route path="/add-deal" element={<CreateDeal />}></Route>
         <Route path="/my-profile" element={<MyProfile />}></Route>
         <Route path="/user-type" element={<UserType />}></Route>
