@@ -9,11 +9,13 @@ const fetchData = async ({
   order,
   pageNumber,
   limit,
+  eqId,
 }) => {
   const { data, count } = await supabase
     .from(from)
     .select(select, { count: "estimated" })
     .eq(eqColumn, eqValue)
+    .eq('ownerUID', eqId)
     .range((pageNumber - 1) * limit, (pageNumber * limit) - 1)
     .order(order, { ascending: false })
   return {data, count}

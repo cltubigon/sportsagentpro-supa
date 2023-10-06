@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Flex } from "@chakra-ui/react"
 import { useEffect } from "react"
-import { Link } from "react-scroll"
 
 const UsePageNumbers = ({ props }) => {
-  const { count, pageNumber, setpageNumber } = props
+  const { count, pageNumber, setpageNumber, scrollToTop } = props
 
   const pageNumberStyles = {
     px: "15px",
@@ -27,6 +26,25 @@ const UsePageNumbers = ({ props }) => {
     }
   }, [pageNumber])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      scrollToTop()
+    }, 300)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [pageNumber])
+
+  const handlePreviousClick = () => {
+    setpageNumber(pageNumber - 1)
+    // startScroll()
+  }
+
+  const handleNextClick = () => {
+    setpageNumber(pageNumber + 1)
+    // startScroll()
+  }
+
   return (
     <Flex
       mt={"40px"}
@@ -37,7 +55,7 @@ const UsePageNumbers = ({ props }) => {
       <Flex gap={1} w={"100%"}>
         <Button
           sx={pageNumberStyles}
-          onClick={() => setpageNumber(pageNumber - 1)}
+          onClick={handlePreviousClick}
           w={"50%"}
           colorScheme={pageNumber === 1 ? "gray" : "twitter"}
           pointerEvents={pageNumber === 1 && "none"}
@@ -45,20 +63,18 @@ const UsePageNumbers = ({ props }) => {
         >
           Previous Page
         </Button>
-        <Link to="veryTop" smooth={true} duration={500} offset={100}>
-          <Button
-            sx={pageNumberStyles}
-            onClick={() => setpageNumber(pageNumber + 1)}
-            w={"50%"}
-            colorScheme={"twitter"}
-            pointerEvents={count === pageNumber && "none"}
-            bgColor={count === pageNumber && "gray.300"}
-            _hover={count === pageNumber && { bgColor: "gray.300" }}
-            color={"white"}
-          >
-            Next Page
-          </Button>
-        </Link>
+        <Button
+          sx={pageNumberStyles}
+          onClick={handleNextClick}
+          w={"50%"}
+          colorScheme={"twitter"}
+          pointerEvents={count === pageNumber && "none"}
+          bgColor={count === pageNumber && "gray.300"}
+          _hover={count === pageNumber && { bgColor: "gray.300" }}
+          color={"white"}
+        >
+          Next Page
+        </Button>
       </Flex>
     </Flex>
   )

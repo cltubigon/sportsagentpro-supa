@@ -7,7 +7,6 @@ import {
   GiRunningShoe,
   GiSoccerBall,
 } from "react-icons/gi"
-import { Link } from "react-scroll"
 
 const ExploreAtheletes = () => {
   console.log("ExploreAtheletes rendered")
@@ -68,14 +67,13 @@ const ExploreAtheletes = () => {
           </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
-          <Flex justifyContent={"center"}>
-            <Link to="testScroll" spy={true} smooth={true} duration={300} offset={100} onClick={() => console.log('Link clicked')}>
+          
+            <Flex justifyContent={"center"}>
               <Flex alignItems={"center"}>
                 <Icon as={CiBasketball} sx={iconStyle} />
               </Flex>
-            </Link>
-            <Flex sx={sportsTypeStyle}>Basketball</Flex>
-          </Flex>
+              <Flex sx={sportsTypeStyle}>Basketball</Flex>
+            </Flex>
         </Flex>
         <Flex sx={sportsContainerStyle}>
           <Flex justifyContent={"center"}>

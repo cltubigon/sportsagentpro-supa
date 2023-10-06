@@ -7,9 +7,11 @@ import { usePaginatedQuery } from "../../../hooks/usePaginatedQuery"
 import { useState } from "react"
 import UsePageNumbers from "../../../utils/UsePageNumbers"
 import { useRef } from "react"
+import { useSelector } from "react-redux"
 
-const BrandOpportunities = () => {
-  const containerRef = useRef(null)
+const BrandOpportunities = ({ scrollToTop }) => {
+  const containerRef = useRef(null)  
+  const user = useSelector(state => state.auth.user)
   const [pageNumber, setpageNumber] = useState(1)
   const [count, setcount] = useState(0)
   const limit = 30
@@ -25,17 +27,11 @@ const BrandOpportunities = () => {
       "id, postOwnerFirstName, postOwnerLastName, postTitle,postType, postContent, selectedActivities, postExpirationDate, totalAmount",
     eqColumn: "postType",
     eqValue: "opportunity",
+    eqId: user && user.userID,
     order: "created_at",
     pageNumber: pageNumber,
     limit: limit,
   })
-
-  useEffect(() => {
-    if (containerRef.current) {
-      console.log('containerRef.current', containerRef.current)
-      containerRef.current.scrollTop = 0
-    }
-  }, [pageNumber])
 
   useEffect(() => {
     console.log("useEffect triggered")
@@ -50,17 +46,17 @@ const BrandOpportunities = () => {
     )
   }
 
-  console.log({ posts, error, pageNumber })
-
   return (
-    <Flex w={"100%"} flexDirection={'column'} ref={containerRef}>
+    <Flex w={"100%"} flexDirection={"column"} ref={containerRef}>
       {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
         {posts?.data?.map((post, index) => {
           return <CardBrand post={post} key={index} />
         })}
       </Flex>
-      <UsePageNumbers props={{ setpageNumber, pageNumber, count }} />
+      <UsePageNumbers
+        props={{ setpageNumber, pageNumber, count, scrollToTop }}
+      />
     </Flex>
   )
 }
