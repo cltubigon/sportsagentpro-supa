@@ -6,6 +6,7 @@ import { TfiClose } from "react-icons/tfi"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import {
+  DELETE_POST,
   // deletePost,
   SET_SUBMISSION_TYPE,
 } from "../../store/actions/buildPostActions"
@@ -22,7 +23,7 @@ const BuildMenu = () => {
     dispatch(SET_SUBMISSION_TYPE("update", "sender is BuildMenu line19"))
   }
   const handleDelete = () => {
-    // dispatch(deletePost(build, "sender is BuildMenu line 28"))
+    dispatch(DELETE_POST())
   }
 
   const stepDetails = [

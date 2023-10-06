@@ -23,6 +23,7 @@ import {
   SET_SUBMISSION_TYPE,
   SET_TOTAL_AMOUNT,
   SET_TOTAL_PAYMENT,
+  UPDATE_POST,
 } from "../../store/actions/buildPostActions"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
@@ -107,6 +108,7 @@ const BuildLeftNav = ({ setSpinner, setCollapse, collapse }) => {
       // setSpinner(() => true)
     } else if (submissionType === "update") {
       dispatch(SET_IS_SUBMITTING(true))
+      dispatch(UPDATE_POST())
       // firebase.auth && dispatch(updatePost(firebase.auth.uid))
       dispatch(SET_SUBMISSION_TYPE(null, "sender is BuildLeftNav line 65"))
       // setSpinner(() => true)

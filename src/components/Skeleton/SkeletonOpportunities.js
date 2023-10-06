@@ -3,14 +3,14 @@ import { comStyle } from "../Dashboard/Opportunities/styleAthleteOpportunities"
 import { Waypoint } from "react-waypoint"
 
 export const SkeletonOpportunities = () => {
-  const number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+  const number = new Array(30).fill(0)
   const { postContainer } = comStyle
   return (
     <>
       <Flex gap={5} wrap={"wrap"}>
-        {number.map((id) => {
+        {number.map((id, index) => {
           return (
-            <Flex sx={postContainer} p={4} gap={2} key={id}>
+            <Flex sx={postContainer} p={4} gap={2} key={index}>
               <Skeleton
                 borderRadius={"md"}
                 startColor="#d9d9d9"

@@ -39,18 +39,29 @@ export const BUILD_POST = () => async (dispatch, getState) => {
   }
 }
 
-export const DELETE_POST = (id) => async (dispatch, getState) => {
-  console.log("id: ", id)
-  const { error } = await supabase.from("posts").delete().eq("id", id)
-  const userOpportunityPosts = getState().post.userOpportunityPosts
-  
-  if (!error) {
-    const updatedPosts = userOpportunityPosts.filter(post => post.id !== id)
-    dispatch({ type: 'POST_SUCCESSFULLY_DELETED', payload: updatedPosts })
-    console.log("error: ", error)
-  }
-  if (error) {
-    console.log("error: ", error)
+export const UPDATE_POST = () => async (dispatch, getState) => {
+  const build = getState().build
+  const {
+    isError,
+    isSubmitting,
+    activeStep,
+    submissionType,
+    recipients,
+    isProcessedSuccesfully,
+    editMode,
+    ...filteredBuild
+  } = build
+  console.log({ filteredBuild })
+
+  const { data, error } = await supabase
+    .from("posts")
+    .update(filteredBuild)
+    .eq("id", build.id)
+    .select()
+  if (data) {
+    dispatch({ type: "UPDATE_POST_SUCCESS", payload: true })
+  } else if (error) {
+    console.log("error", error)
   }
 }
 
@@ -131,6 +142,16 @@ export const SET_SELECTED_RECIPIENTS = (id) => {
       dispatch({ type: "SET_SELECTED_RECIPIENTS", payload })
     }
   }
+}
+export const DELETE_POST = () => async (dispatch, getState) => {
+  const id = getState().build.id
+
+  const { error } = await supabase.from("posts").delete().eq("id", id)
+  if (error) {
+    console.log("error", error)
+    return
+  }
+  dispatch({ type: "DELETE_POST_SUCCESS", payload: true })
 }
 
 // export const deletePost = (post, sender) => {
