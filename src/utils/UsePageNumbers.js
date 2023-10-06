@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Flex } from "@chakra-ui/react"
 import { useEffect } from "react"
+import { Link } from "react-scroll"
 
 const UsePageNumbers = ({ props }) => {
   const { count, pageNumber, setpageNumber } = props
@@ -18,7 +19,7 @@ const UsePageNumbers = ({ props }) => {
   }
   useEffect(() => {
     const timeout = setTimeout(() => {
-      console.log('timout tirggered')
+      console.log("timout tirggered")
       window.scrollTo(0, 0)
     }, 1000)
     return () => {
@@ -44,18 +45,20 @@ const UsePageNumbers = ({ props }) => {
         >
           Previous Page
         </Button>
-        <Button
-          sx={pageNumberStyles}
-          onClick={() => setpageNumber(pageNumber + 1)}
-          w={"50%"}
-          colorScheme={"twitter"}
-          pointerEvents={count === pageNumber && "none"}
-          bgColor={count === pageNumber && "gray.300"}
-          _hover={count === pageNumber && {bgColor: "gray.300"}}
-          color={"white"}
-        >
-          Next Page
-        </Button>
+        <Link to="veryTop" smooth={true} duration={500} offset={100}>
+          <Button
+            sx={pageNumberStyles}
+            onClick={() => setpageNumber(pageNumber + 1)}
+            w={"50%"}
+            colorScheme={"twitter"}
+            pointerEvents={count === pageNumber && "none"}
+            bgColor={count === pageNumber && "gray.300"}
+            _hover={count === pageNumber && { bgColor: "gray.300" }}
+            color={"white"}
+          >
+            Next Page
+          </Button>
+        </Link>
       </Flex>
     </Flex>
   )

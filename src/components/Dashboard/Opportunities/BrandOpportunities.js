@@ -53,7 +53,7 @@ const BrandOpportunities = () => {
   console.log({ posts, error, pageNumber })
 
   return (
-    <Flex w={"100%"} flexDirection={'column'} ref={containerRef} bgColor={'red.200'}>
+    <Flex w={"100%"} flexDirection={'column'} ref={containerRef}>
       {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
         {posts?.data?.map((post, index) => {
