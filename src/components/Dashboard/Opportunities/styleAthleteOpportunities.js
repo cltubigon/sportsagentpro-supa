@@ -36,12 +36,13 @@ export const comStyle = {
     },
     drawerSpinner: {
       position: "absolute",
-      w: "calc(100% - 48px)",
-      h: "100vh",
-      bgColor: "rgba(255, 255, 255, 0.5)",
-      // bgColor: 'pink.200',
+      w: '100%',
+      h: "100%",
+      bgColor: 'white',
+      // bgColor: "rgba(255, 255, 255, 0.5)",
       alignItems: "center",
-      zIndex: 802,
+      zIndex: 10,
+      left: '0',
       justifyContent: "center",
     },
     secTitle: {

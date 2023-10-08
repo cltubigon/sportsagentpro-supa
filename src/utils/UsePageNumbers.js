@@ -18,7 +18,6 @@ const UsePageNumbers = ({ props }) => {
   }
   useEffect(() => {
     const timeout = setTimeout(() => {
-      console.log("timout tirggered")
       window.scrollTo(0, 0)
     }, 1000)
     return () => {

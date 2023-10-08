@@ -35,6 +35,7 @@ const UtilDrawer = ({
   setDrawerViewMore,
   isLoading,
 }) => {
+  console.log('drawer-rendered')
   const dispatch = useDispatch()
   console.log({ drawerData })
 

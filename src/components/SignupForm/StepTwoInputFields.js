@@ -38,13 +38,15 @@ const StepTwoInputFields = ({ userType, oneTwoToggle, setOneTwoToggle }) => {
   const state = useSelector((state) => state)
   const user = useSelector((state) => state.auth.user)
 
-  console.log("state.: ", state)
 
   const [loading, setLoading] = useState(false)
   const [show, setShow] = useState(false)
 
-  const showPassword = (prev) => setShow(!prev)
+  const showPassword = () => {
+    setShow(prev => !prev)
+  }
 
+  console.log({ state, show })
   useEffect(() => {
     if (authError) {
       setLoading(false)

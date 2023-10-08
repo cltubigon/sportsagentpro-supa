@@ -21,10 +21,26 @@ const initialState = {
       lastItemReached: false,
     },
   },
+  postDrawer: {
+    status: false,
+    postID: null,
+    pageNumber: 1,
+    postApplicants: [],
+  },
 }
 
 const utilsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_SHOW_DRAWER":
+      console.log('action.payload: ', action.payload)
+      return produce(state, (draft) => {
+        draft.postDrawer = {
+          status: !state.postDrawer.status,
+          postID: action.payload.postID,
+          pageNumber: action.payload.pageNumber,
+          postApplicants: action.payload.postApplicants,
+        }
+      })
     case "SET_ATHLETE_CURRENT_PAGE":
       return produce(state, (draft) => {
         draft.pagination.athletes.currentPage = action.payload

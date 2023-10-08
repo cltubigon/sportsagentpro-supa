@@ -1,3 +1,7 @@
+export const SET_SHOW_DRAWER = (postID, pageNumber, postApplicants) => async (dispatch) => {
+  console.log('dispatching postID')
+  dispatch({ type: "SET_SHOW_DRAWER", payload: {postID, pageNumber, postApplicants} })
+}
 export const SET_ATHLETE_CURRENT_PAGE = () => async (dispatch, getState) => {
   const { currentPage } = getState().utils.pagination.athletes
   dispatch({ type: "SET_ATHLETE_CURRENT_PAGE", payload: currentPage + 1 })

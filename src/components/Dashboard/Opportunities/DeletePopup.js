@@ -26,7 +26,7 @@ const DeletePopup = ({ setDeleting, id }) => {
     mainKey: "posts",
     from: "posts",
     eqColumn: "id",
-    eqValue: id,
+    // eqValue: id,
   })
 
   const handleDelete = (id) => {

@@ -6,11 +6,9 @@ import CardBrand from "./CardBrand"
 import { usePaginatedQuery } from "../../../hooks/usePaginatedQuery"
 import { useState } from "react"
 import UsePageNumbers from "../../../utils/UsePageNumbers"
-import { useRef } from "react"
 import { useSelector } from "react-redux"
 
 const BrandOpportunities = ({ scrollToTop }) => {
-  const containerRef = useRef(null)  
   const user = useSelector(state => state.auth.user)
   const [pageNumber, setpageNumber] = useState(1)
   const [count, setcount] = useState(0)
@@ -47,7 +45,7 @@ const BrandOpportunities = ({ scrollToTop }) => {
   }
 
   return (
-    <Flex w={"100%"} flexDirection={"column"} ref={containerRef}>
+    <Flex w={"100%"} flexDirection={"column"}>
       {isLoading && <SkeletonOpportunities />}
       <Flex gap={5} flexWrap={"wrap"}>
         {posts?.data?.map((post, index) => {

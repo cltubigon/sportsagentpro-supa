@@ -25,10 +25,12 @@ import { useDispatch, useSelector } from "react-redux"
 import { SUPABASE_SIGNOUT } from "./store/actions/authActions"
 import supabase from "./config/supabaseClient"
 import Test from "./Test"
+import DrawerAthlete from "./components/Dashboard/Opportunities/DrawerAthlete"
 
 function App() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.user)
+  const postDrawer = useSelector((state) => state.utils.postDrawer)
   // const state = useSelector(state => state)
   // console.log('state: ', state)
 
@@ -52,6 +54,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <MainNavigation />
+      {postDrawer.status && <DrawerAthlete />}
       <Routes>
         <Route exact path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
