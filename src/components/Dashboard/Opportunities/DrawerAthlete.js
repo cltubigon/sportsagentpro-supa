@@ -161,6 +161,7 @@ const DrawerAthlete = () => {
           overflowY={"scroll"}
           flexDirection={"column"}
           h={"100%"}
+          w={'100%'}
           px={"15px"}
         >
           {isLoading && (

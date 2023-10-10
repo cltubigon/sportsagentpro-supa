@@ -26,6 +26,7 @@ import { SUPABASE_SIGNOUT } from "./store/actions/authActions"
 import supabase from "./config/supabaseClient"
 import Test from "./Test"
 import DrawerAthlete from "./components/Dashboard/Opportunities/DrawerAthlete"
+import ProfileAthleteSettings from "./pages/DashboardPages/ProfileAthleteSettings"
 
 function App() {
   const dispatch = useDispatch()
@@ -71,6 +72,7 @@ function App() {
         <Route path="/athlete-home" element={<AthleteHomepage />}></Route>
         <Route path="/media" element={<Media />}></Route>
         <Route path="/opportunities" element={!user ? <Login /> : <Opportunities />}></Route>
+        <Route path="/profile" element={!user ? <Login /> : <ProfileAthleteSettings />}></Route>
       </Routes>
       {/* <ColorMode /> */}
     </BrowserRouter>

@@ -1,19 +1,13 @@
-import { Avatar, AvatarBadge, Box, Button, Flex, Text } from "@chakra-ui/react"
-import { useDispatch, useSelector } from "react-redux"
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { FaFileContract } from "react-icons/fa"
-import { SUPABASE_SIGNOUT } from "../../../store/actions/authActions"
+import SignedInSubMenu from "./SignedInSubMenu"
 
 const SignedInNavigation = ({ setSigningOut }) => {
   console.log("SignedIn Navigation Rendered")
-  const dispatch = useDispatch()
 
   const user = useSelector((state) => state.auth.user)
-
-  const handleSignOut = () => {
-    dispatch(SUPABASE_SIGNOUT())
-    setSigningOut(true)
-  }
 
   return (
     <>
@@ -41,12 +35,8 @@ const SignedInNavigation = ({ setSigningOut }) => {
           <Text>Profile</Text>
         </Link>
         <Text>Help Center</Text>
-        <Text cursor={"pointer"} onClick={handleSignOut}>
-          Logout
-        </Text>
-        <Avatar name={user && `${user.firstName[0]} ${user.lastName[0]}`}>
-          <AvatarBadge boxSize="0.9em" bg="green.500" />
-        </Avatar>
+
+        <SignedInSubMenu setSigningOut={setSigningOut} />
       </Flex>
     </>
   )
