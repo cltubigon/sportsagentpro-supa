@@ -21,13 +21,10 @@ const ProfileAthleteLocation = () => {
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Ethnicity</Text>
         {/* <MultiSelectInputHook
-          // dropList={listEthnicity}
-          defaultValue={defaultLocation}
-          selectedValues={locationValue}
-          onChange={(option) => {
-            console.log({ option })
-            setlocationValue(option)
-          }}
+          value={ethnicity}
+          setValues={setethnicity}
+          initialValue={defaultValues}
+          arrayLists={listEthnicity}
         /> */}
         <GoogleMapAutoComplete
           defaultValue="Default Value"

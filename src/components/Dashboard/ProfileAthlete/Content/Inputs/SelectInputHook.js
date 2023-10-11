@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react"
 // import "./CustomDropdown.css" // Import your CSS file
 import { Flex, Icon, Text } from "@chakra-ui/react"
@@ -5,19 +6,29 @@ import { useRef } from "react"
 import { useEffect } from "react"
 import { BsChevronDown } from "react-icons/bs"
 
-const SelectInputHook = ({ dropList, ...dynamicProps }) => {
+const SelectInputHook = (props) => {
+  // value={genderIdentity}
+  //         setValue={setgenderIdentity}
+  //         initialValue={defaultValue}
+  //         arrayLists={listGenderIdentities}
+  const {value, setValue, initialValue, arrayLists: dropList} = props
   const [isOpen, setIsOpen] = useState(false)
 
   const dropdownRef = useRef(null)
+
+  useEffect(()=> {
+    setValue(initialValue)
+  }, [])
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
 
   const handleOptionClick = (option) => {
-    if (dynamicProps.onClick) {
-      dynamicProps.onClick(option)
-    }
+    // if (dynamicProps.onClick) {
+    //   dynamicProps.onClick(option)
+    // }
+    setValue(option)
     setIsOpen(false)
   }
   const handleClickOutside = (event) => {
@@ -34,7 +45,6 @@ const SelectInputHook = ({ dropList, ...dynamicProps }) => {
     }
   }, [])
 
-  console.log({ isOpen, dynamicProps, dropList })
 
   return (
     <Flex
@@ -54,7 +64,7 @@ const SelectInputHook = ({ dropList, ...dynamicProps }) => {
         w={"100%"}
         justifyContent={"space-between"}
       >
-        <Text color={'#7182A0'}>{dynamicProps.selectedValue || "Select an option"}</Text>
+        <Text color={'#7182A0'}>{value || "Select an option"}</Text>
         <Flex>
           <Icon as={BsChevronDown} />
         </Flex>

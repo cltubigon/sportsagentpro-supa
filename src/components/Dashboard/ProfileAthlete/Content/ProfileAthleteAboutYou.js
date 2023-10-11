@@ -27,34 +27,28 @@ const ProfileAthleteAboutYou = () => {
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Identifiers / Interests</Text>
         <MultiSelectInputHook
-          dropList={listInterests}
-          defaultValues={defaultValues}
-          selectedValues={interests}
-          onClick={(option) => {
-            setinterests(option)
-          }}
+          arrayLists={listInterests}
+          initialValue={defaultValues}
+          value={interests}
+          setValues={setinterests}
         />
       </Flex>
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Language</Text>
         <MultiSelectInputHook
-          dropList={listLanguages}
-          defaultValues={defaultValues}
-          selectedValues={language}
-          onClick={(option) => {
-            setlanguage(option)
-          }}
+          arrayLists={listLanguages}
+          initialValue={defaultValues}
+          value={language}
+          setValues={setlanguage}
         />
       </Flex>
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Ethnicity</Text>
         <MultiSelectInputHook
-          dropList={listEthnicity}
-          defaultValues={defaultValues}
-          selectedValues={ethnicity}
-          onClick={(option) => {
-            setethnicity(option)
-          }}
+          value={ethnicity}
+          setValues={setethnicity}
+          initialValue={defaultValues}
+          arrayLists={listEthnicity}
         />
       </Flex>
     </Flex>

@@ -15,7 +15,9 @@ const ProfileAthleteBasicInformation = () => {
   const [genderIdentity, setgenderIdentity] = useState(null)
   const [currentTeam, setcurrentTeam] = useState([])
   const [sports, setsports] = useState([])
-  const defaultValues = []
+  const defaultValue = null
+  const defaultSportsValues = ["Boxing"]
+  const defaultTeamValues = ["Golden Eagle"]
   return (
     <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
       <Flex alignItems={"center"} gap={3}>
@@ -54,43 +56,37 @@ const ProfileAthleteBasicInformation = () => {
           <span style={{ color: "red" }}>*</span> Which best describes you?
         </Text>
         <SelectInputHook
-          dropList={listWhichBestDescribesYou}
-          selectedValue={whichBestDescribesYou}
-          onClick={(option) => {
-            setwhichBestDescribesYou(option)
-          }}
+          value={whichBestDescribesYou}
+          setValue={setwhichBestDescribesYou}
+          initialValue={defaultValue}
+          arrayLists={listWhichBestDescribesYou}
         />
       </Flex>
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Gender identity</Text>
         <SelectInputHook
-          dropList={listGenderIdentities}
-          selectedValue={genderIdentity}
-          onClick={(option) => {
-            setgenderIdentity(option)
-          }}
+          value={genderIdentity}
+          setValue={setgenderIdentity}
+          initialValue={defaultValue}
+          arrayLists={listGenderIdentities}
         />
       </Flex>
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Current team</Text>
         <MultiSelectInputHook
-          dropList={listCurrentTeam}
-          defaultValues={defaultValues}
-          selectedValues={currentTeam}
-          onClick={(option) => {
-            setcurrentTeam(option)
-          }}
+          value={currentTeam}
+          setValues={setcurrentTeam}
+          initialValue={defaultTeamValues}
+          arrayLists={listCurrentTeam}
         />
       </Flex>
       <Flex flexDirection={"column"} w={"100%"}>
         <Text mb={1}>Sport</Text>
         <MultiSelectInputHook
-          dropList={listSports}
-          defaultValues={defaultValues}
-          selectedValues={sports}
-          onClick={(option) => {
-            setsports(option)
-          }}
+          value={sports}
+          setValues={setsports}
+          initialValue={defaultSportsValues}
+          arrayLists={listSports}
         />
       </Flex>
     </Flex>
