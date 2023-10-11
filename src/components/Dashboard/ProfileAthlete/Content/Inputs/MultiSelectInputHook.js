@@ -69,7 +69,7 @@ const MultiSelectInputHook = ({ defaultValues, dropList, ...dynamicProps }) => {
       flexGrow={1}
       position={"relative"}
     >
-      {selections.length === 0 && (
+      {selections?.length === 0 && (
         <Flex
           onClick={toggleDropdown}
           position={"absolute"}
@@ -79,8 +79,8 @@ const MultiSelectInputHook = ({ defaultValues, dropList, ...dynamicProps }) => {
           gap={2}
           cursor={"text"}
         >
-          <SearchIcon />
-          <Text>Search...</Text>
+          <SearchIcon color={'#7182A0'} />
+          <Text color={'#7182A0'}>Search...</Text>
         </Flex>
       )}
       <Flex
@@ -89,7 +89,7 @@ const MultiSelectInputHook = ({ defaultValues, dropList, ...dynamicProps }) => {
         px={4}
         borderRadius={"md"}
         alignItems={"center"}
-        w={"calc(100% - 16px)"}
+        w={"100%"}
         justifyContent={"space-between"}
         minH={"41px"}
         cursor={"text"}
@@ -137,13 +137,13 @@ const MultiSelectInputHook = ({ defaultValues, dropList, ...dynamicProps }) => {
         left={0}
         zIndex={99}
         bgColor={"white"}
-        w={"calc(100% - 16px)"}
+        w={"100%"}
         userSelect={"none"}
         boxShadow={"lg"}
       >
         <InputGroup display={!isOpen && "none"}>
           <InputLeftElement pointerEvents="none">
-            <SearchIcon ml={2} />
+            <SearchIcon color={'#7182A0'} ml={2} />
           </InputLeftElement>
           <Input
             id="searchInput"

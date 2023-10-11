@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 // import "./CustomDropdown.css" // Import your CSS file
-import { Flex, Icon } from "@chakra-ui/react"
+import { Flex, Icon, Text } from "@chakra-ui/react"
 import { useRef } from "react"
 import { useEffect } from "react"
 import { BsChevronDown } from "react-icons/bs"
@@ -51,10 +51,10 @@ const SelectInputHook = ({ dropList, ...dynamicProps }) => {
         borderRadius={"md"}
         cursor={"pointer"}
         alignItems={"center"}
-        w={"calc(100% - 16px)"}
+        w={"100%"}
         justifyContent={"space-between"}
       >
-        {dynamicProps.selectedValue || "Select an option"}
+        <Text color={'#7182A0'}>{dynamicProps.selectedValue || "Select an option"}</Text>
         <Flex>
           <Icon as={BsChevronDown} />
         </Flex>
@@ -66,7 +66,7 @@ const SelectInputHook = ({ dropList, ...dynamicProps }) => {
         left={0}
         zIndex={99}
         bgColor={"white"}
-        w={"calc(100% - 16px)"}
+        w={"100%"}
         userSelect={"none"}
         boxShadow={'0px 3px 6px 1px rgba(0, 0, 0, 0.2)'}
       >
@@ -75,7 +75,7 @@ const SelectInputHook = ({ dropList, ...dynamicProps }) => {
             flexDirection={"column"}
             maxH={"200px"}
             overflowY={"scroll"}
-            w={"calc(100% - 16px)"}
+            w={"100%"}
           >
             {dropList.map((option, index) => {
               return (
