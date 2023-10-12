@@ -5,18 +5,16 @@ import { Flex, Icon, Text } from "@chakra-ui/react"
 import { useRef } from "react"
 import { useEffect } from "react"
 import { BsChevronDown } from "react-icons/bs"
+import useUpdateSingleColumn from "../../../../../hooks/update/useUpdateSingleColumn"
 
 const SelectInputHook = (props) => {
-  // value={genderIdentity}
-  //         setValue={setgenderIdentity}
-  //         initialValue={defaultValue}
-  //         arrayLists={listGenderIdentities}
-  const {value, setValue, initialValue, arrayLists: dropList} = props
+  const { query, value, setValue, initialValue, arrayLists: dropList } = props
   const [isOpen, setIsOpen] = useState(false)
-
   const dropdownRef = useRef(null)
 
-  useEffect(()=> {
+  const { mutate } = useUpdateSingleColumn(query)
+
+  useEffect(() => {
     setValue(initialValue)
   }, [])
 
@@ -29,6 +27,7 @@ const SelectInputHook = (props) => {
     //   dynamicProps.onClick(option)
     // }
     setValue(option)
+    mutate(option)
     setIsOpen(false)
   }
   const handleClickOutside = (event) => {
@@ -44,7 +43,6 @@ const SelectInputHook = (props) => {
       document.removeEventListener("click", handleClickOutside)
     }
   }, [])
-
 
   return (
     <Flex
@@ -64,7 +62,7 @@ const SelectInputHook = (props) => {
         w={"100%"}
         justifyContent={"space-between"}
       >
-        <Text color={'#7182A0'}>{value || "Select an option"}</Text>
+        <Text>{value || "Select an option"}</Text>
         <Flex>
           <Icon as={BsChevronDown} />
         </Flex>
@@ -72,13 +70,13 @@ const SelectInputHook = (props) => {
       <Flex
         flexDirection={"column"}
         position={"absolute"}
-        top={'42px'}
+        top={"42px"}
         left={0}
         zIndex={99}
         bgColor={"white"}
         w={"100%"}
         userSelect={"none"}
-        boxShadow={'0px 3px 6px 1px rgba(0, 0, 0, 0.2)'}
+        boxShadow={"0px 3px 6px 1px rgba(0, 0, 0, 0.2)"}
       >
         {isOpen && (
           <Flex

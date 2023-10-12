@@ -4,6 +4,7 @@ import ProfilePictureSection from "./ProfilePictureSection"
 import ProfileAthleteBasicInformation from "./ProfileAthleteBasicInformation"
 import ProfileAthleteAboutYou from "./ProfileAthleteAboutYou"
 import ProfileAthleteLocation from "./ProfileAthleteLocation"
+import ProfileAthleticProfile from "./ProfileAthleticProfile"
 
 const ProfileAthleteMiddleContent = () => {
   console.log('middle content generated')
@@ -14,6 +15,7 @@ const ProfileAthleteMiddleContent = () => {
       <ProfileAthleteBasicInformation />
       <ProfileAthleteAboutYou />
       <ProfileAthleteLocation />
+      <ProfileAthleticProfile />
     </Flex>
   )
 }
