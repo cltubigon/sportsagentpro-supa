@@ -147,7 +147,7 @@ const ProfileAthleteMiddleContent = () => {
       maxW={"875px"}
       pb={"200px"}
     >
-      <ProfilePictureSection />
+      <ProfilePictureSection user={user} />
       {/* ===================== Basic Information ===================== */}
       <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
         <Flex alignItems={"center"} gap={3}>

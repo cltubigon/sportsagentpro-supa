@@ -1,45 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Flex, Image, Input } from "@chakra-ui/react"
+import { Button, Flex, Image, Input, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import supabase from "./config/supabaseClient"
+import { useDropzone } from "react-dropzone"
 
 const Test = () => {
-  const [file, setfile] = useState(null)
-  const handleOnChange = (e) => {
-    setfile(e.target.files[0])
-  }
-  const handleFileUpload = async (e) => {
-    const { data, error } = await supabase.storage
-      .from("avatars")
-      .upload("public/avatar6.jpeg", file, {
-        upsert: false, // Set this to false to avoid overwriting existing files
-      })
-
-    if (data) {
-      console.log({ data })
-    }
-    if (error) {
-      console.log({ error })
-    }
-  }
-  
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
+  console.log({ acceptedFiles })
 
   return (
-    <Flex pt="88px" flexDirection={'column'}>
-      <Input
-        placeholder="Select file to upload"
-        size="md"
-        type="file"
-        onChange={handleOnChange}
-      />
-      <Button onClick={handleFileUpload}>Upload</Button>
+    <Flex paddingTop={'88px'} flexDirection={'column'}>
+      <Flex {...getRootProps({ className: "dropzone" })} bgColor={'gray.300'} w={'300px'} h={'300px'} >
+        <Input {...getInputProps()} />
+        <Text>Edit</Text>
+      </Flex>
+      <ul>
+        {acceptedFiles.map((file) => (
+          <li key={file.path}>
+            {file.path} - {file.size} bytes
+          </li>
+        ))}
+      </ul>
     </Flex>
   )
 }
 
 export default Test
-
-// const imageUrl = supabase.storage
-//   .from('avatars')
-//   .getPublicUrl('public/avatar6.jpeg', { width: 500, height: 600, resize: 'cover' })
-//   console.log({ imageUrl })
