@@ -13,6 +13,7 @@ import { useEffect } from "react"
 import { useDropzone } from "react-dropzone"
 import { BsFillPersonFill } from "react-icons/bs"
 import supabase from "../../../../config/supabaseClient"
+import { useState } from "react"
 
 const dateNow = () => {
   const now = new Date()
@@ -27,25 +28,29 @@ const dateNow = () => {
 
 const ProfilePictureSection = ({ user }) => {
   const toast = useToast()
+  const [lastUploadedAvatar, setlastUploadedAvatar] = useState(null)
   const fileExtension = dateNow()
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
   console.log({ user })
 
-  // const imageURL = supabase.storage
-  //   .from(`avatars/${user?.id}`)
-  //   .getPublicUrl("20231013041609", {
-  //     transform: {
-  //       width: 120,
-  //       height: 120,
-  //       resize: "cover",
-  //     },
-  //   })
+
+  const imageURL = supabase.storage
+    .from(`avatar/${user?.id}`)
+    .getPublicUrl(lastUploadedAvatar,
+    //   {
+    //   transform: {
+    //     width: 120,
+    //     height: 120,
+    //     resize: "cover",
+    //   },
+    // }
+    )
 
   // Use the JS library to download a file.
   // const downloadFile = async () => {
   //   const { data: downloadedFile, error } = await supabase.storage
-  //     .from(`avatars/${user?.id}`)
+  //     .from(`avatar/${user?.id}`)
   //     .download(`/20231013222912`)
   //   console.log({ downloadedFile, error })
   // }
@@ -53,24 +58,25 @@ const ProfilePictureSection = ({ user }) => {
 
   const getList = async () => {
     const { data, error } = await supabase.storage
-      .from("avatars")
-      .list(`carlo`, {
+      .from("avatar")
+      .list(user?.id, {
         limit: 100,
         offset: 0,
-        sortBy: { column: "name", order: "asc" },
+        sortBy: { column: 'created_at', order: 'desc' },
       })
     if (data) {
       console.log({ data })
+      setlastUploadedAvatar(data[0]?.name)
     }
   }
   getList()
-
   const handleUpload = async () => {
     const { data, error } = await supabase.storage
-      .from("avatars")
+      .from("avatar")
       .upload(`${user?.id}/${fileExtension}`, acceptedFiles[0])
     if (data) {
       console.log({ data })
+      getList()
     } else {
       toast({
         title: ` Something went wrong`,
@@ -93,7 +99,7 @@ const ProfilePictureSection = ({ user }) => {
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
         <Flex gap={4} alignItems={"center"}>
           <Flex flexDirection={"column"} gap={2}>
-            {/* {!imageURL ? (
+            {!imageURL ? (
               <Icon
                 as={BsFillPersonFill}
                 color={"gray.400"}
@@ -105,7 +111,7 @@ const ProfilePictureSection = ({ user }) => {
               />
             ) : (
               <Image src={imageURL?.data?.publicUrl} w={"120px"} h={"120px"} borderRadius={'200px'} />
-            )} */}
+            )}
           </Flex>
           <Flex flexDirection={"column"} gap={1}>
             <Text fontSize={"xl"} fontWeight={"semibold"}>

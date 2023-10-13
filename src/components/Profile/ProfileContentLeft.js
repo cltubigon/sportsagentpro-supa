@@ -10,26 +10,7 @@ import { SkeletonAthleteSelectedProfile } from "../Skeleton/SkeletonAthleteSelec
 const ProfileContentLeft = ({query}) => {
   console.log({ query })
   const selectedAthlete = query.data && query.data[0]
-  // const { id } = useParams()
-  // const [isLoading, setIsLoading] = useState(true)
-  // const [selectedAthlete, setSelectedAthlete] = useState(null)
-  // console.log("selectedAthlete: ", selectedAthlete)
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const { data, error } = await supabase
-  //       .from("users")
-  //       .select("*")
-  //       .eq("id", id)
-  //     if (data[0]) {
-  //       setSelectedAthlete(data[0])
-  //       setIsLoading(false)
-  //     } else if (error) {
-  //       console.log("error: ", error)
-  //     }
-  //   }
-  //   fetchUser()
-  // }, [])
+  
   return (
     <Flex flexDirection={"column"} flexGrow={1}>
       {query.isLoading && (
