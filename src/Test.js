@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Flex, Image, Input, Text } from "@chakra-ui/react"
-import { useState } from "react"
-import supabase from "./config/supabaseClient"
+import { Flex, Input, Text } from "@chakra-ui/react"
 import { useDropzone } from "react-dropzone"
 
 const Test = () => {

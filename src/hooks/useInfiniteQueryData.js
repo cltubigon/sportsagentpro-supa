@@ -5,12 +5,13 @@ const fetchInfiniteData = async ({ pageParam = 1 }, query) => {
   const itemLimit = 10
   const { data, error, count } = await supabase
     .from(query.from)
-    .select("*", { count: "estimated" })
+    .select("*,images(meta_data)", { count: "estimated" })
     .eq(query.eqColumn, query.eqValue)
     .range((pageParam - 1) * itemLimit, pageParam * itemLimit - 1)
     .order(query.order, { ascending: false })
   const totalPages = Math.ceil(count / itemLimit)
   if (error) throw error
+  console.log({ data })
   return { data, totalPages }
 }
 

@@ -31,7 +31,7 @@ import { IoLocationOutline } from "react-icons/io5"
 import { BiRun } from "react-icons/bi"
 
 const ProfileAthleteMiddleContent = () => {
-  console.log("middle content generated")
+  // console.log("middle content generated")
   const user = useSelector((state) => state.auth.user)
   const toast = useToast()
   const [whichBestDescribesYou, setwhichBestDescribesYou] = useState(null)
@@ -56,6 +56,7 @@ const ProfileAthleteMiddleContent = () => {
     eqColumn: "id",
     eqValue: user?.userID,
   })
+  // console.log({ data })
 
   if (isError) {
     toast({
@@ -147,7 +148,7 @@ const ProfileAthleteMiddleContent = () => {
       maxW={"875px"}
       pb={"200px"}
     >
-      <ProfilePictureSection user={user} />
+      <ProfilePictureSection user={user} data={!isLoading && data} />
       {/* ===================== Basic Information ===================== */}
       <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
         <Flex alignItems={"center"} gap={3}>
@@ -541,7 +542,6 @@ const SkeletonInput = ({ label, isRequired }) => {
       </Text>
       <Skeleton
         borderRadius={"md"}
-        border={"1px solid #000"}
         startColor="#d9d9d9"
         endColor="#ededed"
         w={"100%"}

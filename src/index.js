@@ -16,20 +16,30 @@ import {
 } from "./config/userPersistConfig"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import customTheme from "./config/chakraTheme"
+import { SessionContextProvider } from "@supabase/auth-helpers-react"
+import supabase from "./config/supabaseClient"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 const queryClient = new QueryClient()
 root.render(
   <React.StrictMode>
-    <Provider store={guestPersistedStore}>
-      <ChakraProvider theme={customTheme}>
-        <PersistGate loading={<div>Loading...</div>} persistor={guestPersistor}>
-          <QueryClientProvider client={queryClient}>
-            <App />
-            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" ></ReactQueryDevtools>
-          </QueryClientProvider>
-        </PersistGate>
-      </ChakraProvider>
-    </Provider>
+    <SessionContextProvider supabaseClient={supabase}>
+      <Provider store={guestPersistedStore}>
+        <ChakraProvider theme={customTheme}>
+          <PersistGate
+            loading={<div>Loading...</div>}
+            persistor={guestPersistor}
+          >
+            <QueryClientProvider client={queryClient}>
+              <App />
+              <ReactQueryDevtools
+                initialIsOpen={false}
+                position="bottom-right"
+              ></ReactQueryDevtools>
+            </QueryClientProvider>
+          </PersistGate>
+        </ChakraProvider>
+      </Provider>
+    </SessionContextProvider>
   </React.StrictMode>
 )

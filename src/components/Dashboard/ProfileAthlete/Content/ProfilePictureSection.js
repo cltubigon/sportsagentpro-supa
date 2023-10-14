@@ -2,18 +2,19 @@
 import {
   Button,
   Flex,
-  Icon,
   Image,
   Input,
+  SkeletonCircle,
   Text,
-  useToast,
 } from "@chakra-ui/react"
 import React from "react"
 import { useEffect } from "react"
 import { useDropzone } from "react-dropzone"
-import { BsFillPersonFill } from "react-icons/bs"
 import supabase from "../../../../config/supabaseClient"
 import { useState } from "react"
+import { debounce } from "throttle-debounce"
+import { useProfilePictureHook } from "../../../../hooks/imageHooks/useProfilePictureHook"
+import { useMutateProfilePicture } from "../../../../hooks/imageHooks/useMutateProfilePicture"
 
 const dateNow = () => {
   const now = new Date()
@@ -27,90 +28,84 @@ const dateNow = () => {
 }
 
 const ProfilePictureSection = ({ user }) => {
-  const toast = useToast()
-  const [lastUploadedAvatar, setlastUploadedAvatar] = useState(null)
   const fileExtension = dateNow()
+  const [publicURL, setPublicURL] = useState(null)
+
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
-  console.log({ user })
+  const { data: image } = useProfilePictureHook()
 
-
-  const imageURL = supabase.storage
-    .from(`avatar/${user?.id}`)
-    .getPublicUrl(lastUploadedAvatar,
-    //   {
-    //   transform: {
-    //     width: 120,
-    //     height: 120,
-    //     resize: "cover",
-    //   },
-    // }
-    )
-
-  // Use the JS library to download a file.
-  // const downloadFile = async () => {
-  //   const { data: downloadedFile, error } = await supabase.storage
-  //     .from(`avatar/${user?.id}`)
-  //     .download(`/20231013222912`)
-  //   console.log({ downloadedFile, error })
-  // }
-  // downloadFile()
-
-  const getList = async () => {
-    const { data, error } = await supabase.storage
-      .from("avatar")
-      .list(user?.id, {
-        limit: 100,
-        offset: 0,
-        sortBy: { column: 'created_at', order: 'desc' },
-      })
-    if (data) {
-      console.log({ data })
-      setlastUploadedAvatar(data[0]?.name)
+  useEffect(() => {
+    if (image) {
+      console.log("image: calling getPublicUrl")
+      getPublicUrl(image && image[0]?.meta_data?.path)
     }
+  }, [image])
+
+  const { mutate } = useMutateProfilePicture()
+
+  const getPublicUrl = (path) => {
+    console.log("getPublicUrl is triggered")
+    setPublicURL(supabase.storage.from(`avatar`).getPublicUrl(path))
   }
-  getList()
-  const handleUpload = async () => {
+
+  const debounceUpload = debounce(100, async () => {
+    console.log("debounceUpload is triggered")
     const { data, error } = await supabase.storage
       .from("avatar")
       .upload(`${user?.id}/${fileExtension}`, acceptedFiles[0])
-    if (data) {
-      console.log({ data })
-      getList()
+    if (error) {
+      console.log({ error })
     } else {
-      toast({
-        title: ` Something went wrong`,
-        description: error.message,
-        status: ` error`,
-        duration: 3000,
-        isClosable: true,
-        position: `top-right`,
+      const path = data.path
+      console.log("debounce: calling getPublicUrl")
+      getPublicUrl(path)
+      getList(data.path)
+    }
+  })
+
+  const getList = async (path) => {
+    console.log("getList is triggered")
+    const fileName = path.replace(user?.id + "/", "")
+    const { data, error } = await supabase.storage
+      .from("avatar")
+      .list(`${user?.id}`, {
+        search: fileName,
       })
+    if (data) {
+      const metaData = { ...data[0], path }
+      mutate({ metaData, userID: user.userID })
+    } else if (error) {
+      console.log({ error })
     }
   }
 
   useEffect(() => {
     if (acceptedFiles.length > 0) {
-      handleUpload()
+      debounceUpload()
     }
   }, [acceptedFiles])
+
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
         <Flex gap={4} alignItems={"center"}>
           <Flex flexDirection={"column"} gap={2}>
-            {!imageURL ? (
-              <Icon
-                as={BsFillPersonFill}
-                color={"gray.400"}
+            {!publicURL ? (
+              <SkeletonCircle
+                startColor="#d9d9d9"
+                endColor="#ededed"
+                size="10"
                 w={"125px"}
                 h={"125px"}
-                p={6}
-                borderRadius={"125px"}
-                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             ) : (
-              <Image src={imageURL?.data?.publicUrl} w={"120px"} h={"120px"} borderRadius={'200px'} />
+              <Image
+                src={publicURL?.data?.publicUrl}
+                w={"125px"}
+                h={"125px"}
+                borderRadius={"200px"}
+              />
             )}
           </Flex>
           <Flex flexDirection={"column"} gap={1}>

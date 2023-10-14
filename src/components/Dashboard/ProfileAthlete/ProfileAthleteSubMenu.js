@@ -19,7 +19,7 @@ const ProfileAthleteSubMenu = () => {
   const isProfile = location.pathname === "/profile"
   const isAccount = location.pathname === "/account"
   const isPayments = location.pathname === "/profile"
-  console.log({ isProfile, isAccount, isPayments })
+  // console.log({ isProfile, isAccount, isPayments })
   return (
     <Flex>
       <Text

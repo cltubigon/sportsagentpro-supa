@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import supabase from "../config/supabaseClient"
 
 const fetchMultiColumnData = async (query) => {
@@ -6,7 +6,10 @@ const fetchMultiColumnData = async (query) => {
     .from(query.from)
     .select(query.select)
     .eq(query.eqColumn, query.eqValue)
-  if (error) throw error
+  if (error) {
+    console.log({ error })
+    throw error
+  }
   return data
 }
 
