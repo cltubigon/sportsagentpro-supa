@@ -10,7 +10,7 @@ import supabase from "../../config/supabaseClient"
 
 const ProfileContentLeft = ({query}) => {
   console.log({ query })
-  const pathName = query?.data && query.data[0].images && query.data[0].images?.meta_data?.path
+  const pathName = query?.data && query.data[0].images && query.data[0].images[0]?.meta_data?.path
   console.log({ pathName })
   const selectedAthlete = query.data && query.data[0]
   console.log(query?.data && query?.data[0]?.uid)

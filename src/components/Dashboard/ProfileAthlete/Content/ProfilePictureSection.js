@@ -2,6 +2,7 @@
 import {
   Button,
   Flex,
+  Icon,
   Image,
   Input,
   SkeletonCircle,
@@ -15,6 +16,7 @@ import { useState } from "react"
 import { debounce } from "throttle-debounce"
 import { useProfilePictureHook } from "../../../../hooks/imageHooks/useProfilePictureHook"
 import { useMutateProfilePicture } from "../../../../hooks/imageHooks/useMutateProfilePicture"
+import { BsFillPersonFill } from "react-icons/bs"
 
 const dateNow = () => {
   const now = new Date()
@@ -30,10 +32,16 @@ const dateNow = () => {
 const ProfilePictureSection = ({ user }) => {
   const fileExtension = dateNow()
   const [publicURL, setPublicURL] = useState(null)
+  const urlIsUndefined = publicURL?.data?.publicUrl.includes("undefined")
+  console.log({ user, publicURL, urlIsUndefined })
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
-  const { data: image } = useProfilePictureHook()
+  const { data: image } = useProfilePictureHook({
+    from: "images",
+    eqColumn: "id",
+    eqValue: user.id,
+  })
 
   useEffect(() => {
     if (image) {
@@ -74,6 +82,7 @@ const ProfilePictureSection = ({ user }) => {
       })
     if (data) {
       const metaData = { ...data[0], path }
+      console.log('user.id', user.id)
       mutate({ metaData, userID: user.userID })
     } else if (error) {
       console.log({ error })
@@ -91,7 +100,18 @@ const ProfilePictureSection = ({ user }) => {
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
         <Flex gap={4} alignItems={"center"}>
           <Flex flexDirection={"column"} gap={2}>
-            {!publicURL ? (
+            {publicURL && urlIsUndefined && (
+              <Icon
+                as={BsFillPersonFill}
+                color={"gray.400"}
+                w={"125px"}
+                h={"125px"}
+                p={6}
+                borderRadius={"125px"}
+                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+              />
+            )}
+            {!publicURL && (
               <SkeletonCircle
                 startColor="#d9d9d9"
                 endColor="#ededed"
@@ -99,7 +119,8 @@ const ProfilePictureSection = ({ user }) => {
                 w={"125px"}
                 h={"125px"}
               />
-            ) : (
+            )}
+            {publicURL && !urlIsUndefined && (
               <Image
                 src={publicURL?.data?.publicUrl}
                 w={"125px"}

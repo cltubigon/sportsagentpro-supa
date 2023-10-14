@@ -49,7 +49,7 @@ const ProfileAthleteMiddleContent = () => {
   const [experience, setexperience] = useState(null)
 
   const { data, isLoading, isError, error } = useGetMultiColumnData({
-    key: `profileDetails-${user?.userID}`,
+    key: ["profileInformation", user.id],
     from: "users",
     select:
       "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, identifiers_interests, language, ethnicity, bio, current_location, hometown, position, previous_teams, leagues_conferences, athletic_accolades, experience, discipline",
@@ -342,111 +342,111 @@ const ProfileAthleteMiddleContent = () => {
         )}
         {!isLoading ? (
           <LocationInput
-          query={mutateHometown}
-          label={"Hometown"}
-          data={data[0]?.hometown}
-          // setValue={sethomeTown}
-          isRequired={false}
+            query={mutateHometown}
+            label={"Hometown"}
+            data={data[0]?.hometown}
+            // setValue={sethomeTown}
+            isRequired={false}
           />
-          ) : (
-            <SkeletonInput label={"Hometown"} isRequired={false} />
-            )}
+        ) : (
+          <SkeletonInput label={"Hometown"} isRequired={false} />
+        )}
       </Flex>
-            {/* ===================== End of Location ===================== */}
-            {/* ===================== Athletic Profile ===================== */}
+      {/* ===================== End of Location ===================== */}
+      {/* ===================== Athletic Profile ===================== */}
       {/* <ProfileAthleticProfile /> */}
       <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
-      <Flex flexDirection={"column"}>
-        <Flex alignItems={"center"} gap={3}>
-          <Icon as={BiRun} boxSize={6} />
-          <Text fontWeight={"semibold"}>Athletic Profile</Text>
+        <Flex flexDirection={"column"}>
+          <Flex alignItems={"center"} gap={3}>
+            <Icon as={BiRun} boxSize={6} />
+            <Text fontWeight={"semibold"}>Athletic Profile</Text>
+          </Flex>
         </Flex>
+        {!isLoading ? (
+          <MultiSelectInput
+            query={mutatePosition}
+            label={"Position"}
+            data={data[0]?.position}
+            value={position}
+            setValue={setposition}
+            arrayLists={listPosition}
+            isRequired={false}
+          />
+        ) : (
+          <SkeletonInput label={"Position"} isRequired={false} />
+        )}
+
+        {!isLoading ? (
+          <MultiSelectInput
+            query={mutatePreviousTeams}
+            label={"Previous teams"}
+            data={data[0]?.previous_teams}
+            value={previousTeams}
+            setValue={setpreviousTeams}
+            arrayLists={listPreviousTeams}
+            isRequired={false}
+          />
+        ) : (
+          <SkeletonInput label={"Previous teams"} isRequired={false} />
+        )}
+
+        {!isLoading ? (
+          <MultiSelectInput
+            query={mutateLeaguesConferences}
+            label={"Leagues & conferences"}
+            data={data[0]?.leagues_conferences}
+            value={leaguesConferences}
+            setValue={setleaguesConferences}
+            arrayLists={listLeagueConferences}
+            isRequired={false}
+          />
+        ) : (
+          <SkeletonInput label={"Leagues & conferences"} isRequired={false} />
+        )}
+
+        {!isLoading ? (
+          <MultiSelectInput
+            query={mutateAthleticAccolades}
+            label={"Athletic accolades"}
+            data={data[0]?.athletic_accolades}
+            value={athleticAccolades}
+            setValue={setathleticAccolades}
+            arrayLists={listAthleticAccolades}
+            isRequired={false}
+          />
+        ) : (
+          <SkeletonInput label={"Athletic accolades"} isRequired={false} />
+        )}
+
+        {!isLoading ? (
+          <SelectInput
+            query={mutateExperience}
+            label={"Experience"}
+            data={data[0]?.experience}
+            value={experience}
+            setValue={setexperience}
+            arrayLists={listExperience}
+            isRequired={false}
+          />
+        ) : (
+          <SkeletonInput label={"Experience"} isRequired={false} />
+        )}
+
+        {!isLoading ? (
+          <MultiSelectInput
+            query={mutateDiscipline}
+            label={"Discipline"}
+            data={data[0]?.discipline}
+            value={discipline}
+            setValue={setdiscipline}
+            arrayLists={listDiscipline}
+            isRequired={false}
+          />
+        ) : (
+          <SkeletonInput label={"Discipline"} isRequired={false} />
+        )}
       </Flex>
-      {!isLoading ? (
-        <MultiSelectInput
-          query={mutatePosition}
-          label={"Position"}
-          data={data[0]?.position}
-          value={position}
-          setValue={setposition}
-          arrayLists={listPosition}
-          isRequired={false}
-        />
-      ) : (
-        <SkeletonInput label={"Position"} isRequired={false} />
-      )}
-
-      {!isLoading ? (
-        <MultiSelectInput
-          query={mutatePreviousTeams}
-          label={"Previous teams"}
-          data={data[0]?.previous_teams}
-          value={previousTeams}
-          setValue={setpreviousTeams}
-          arrayLists={listPreviousTeams}
-          isRequired={false}
-        />
-      ) : (
-        <SkeletonInput label={"Previous teams"} isRequired={false} />
-      )}
-
-      {!isLoading ? (
-        <MultiSelectInput
-          query={mutateLeaguesConferences}
-          label={"Leagues & conferences"}
-          data={data[0]?.leagues_conferences}
-          value={leaguesConferences}
-          setValue={setleaguesConferences}
-          arrayLists={listLeagueConferences}
-          isRequired={false}
-        />
-      ) : (
-        <SkeletonInput label={"Leagues & conferences"} isRequired={false} />
-      )}
-
-      {!isLoading ? (
-        <MultiSelectInput
-          query={mutateAthleticAccolades}
-          label={"Athletic accolades"}
-          data={data[0]?.athletic_accolades}
-          value={athleticAccolades}
-          setValue={setathleticAccolades}
-          arrayLists={listAthleticAccolades}
-          isRequired={false}
-        />
-      ) : (
-        <SkeletonInput label={"Athletic accolades"} isRequired={false} />
-      )}
-
-      {!isLoading ? (
-        <SelectInput
-          query={mutateExperience}
-          label={"Experience"}
-          data={data[0]?.experience}
-          value={experience}
-          setValue={setexperience}
-          arrayLists={listExperience}
-          isRequired={false}
-        />
-      ) : (
-        <SkeletonInput label={"Experience"} isRequired={false} />
-      )}
-
-      {!isLoading ? (
-        <MultiSelectInput
-          query={mutateDiscipline}
-          label={"Discipline"}
-          data={data[0]?.discipline}
-          value={discipline}
-          setValue={setdiscipline}
-          arrayLists={listDiscipline}
-          isRequired={false}
-        />
-      ) : (
-        <SkeletonInput label={"Discipline"} isRequired={false} />
-      )}
-    </Flex>
-            {/* ===================== End of Athletic Profile ===================== */}
+      {/* ===================== End of Athletic Profile ===================== */}
     </Flex>
   )
 }

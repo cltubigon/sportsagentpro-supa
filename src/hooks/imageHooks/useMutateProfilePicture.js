@@ -15,6 +15,5 @@ const fetchData = async ({metaData, userID}) => {
 }
 
 export const useMutateProfilePicture = () => {
-//   const queryClient = useQueryClient()
   return useMutation(fetchData)
 }

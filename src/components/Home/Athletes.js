@@ -6,6 +6,8 @@ import { athletesStyle } from "../../styles/athletesStyle"
 import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 import { HomeSkeleton } from "../Skeleton/Skeletons"
 import useInfiniteQueryData from "../../hooks/useInfiniteQueryData"
+import supabase from "../../config/supabaseClient"
+import { Image } from "@chakra-ui/react"
 
 const Athletes = () => {
   const { data, isError, error, isLoading, hasNextPage, fetchNextPage } =
@@ -16,6 +18,8 @@ const Athletes = () => {
       eqValue: "athlete",
       order: "created_at",
     })
+
+  // const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName)
 
   if (isError) {
     return (
@@ -38,19 +42,29 @@ const Athletes = () => {
       >
         {data?.pages.map(({ data }) => {
           return data?.map((athlete, index) => {
-            const { id, lastName, firstName, team, sports } = athlete
+            const { id, lastName, firstName, team, sports, images } = athlete
+            const path = images[0]?.meta_data.path
+            const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path)
+            const urlIsUndefined =
+              imageURL?.data?.publicUrl.includes("undefined")
+            console.log({ path })
+            console.log({ athlete })
             return (
               <Flex key={index}>
                 <Link to={`/profile/${id}`}>
                   <Flex sx={athletesStyle.cardCOntainer}>
-                    <Flex sx={athletesStyle.imageContainer}>
-                      <DummyImage
-                        bgColor="transparent"
-                        width={"330px"}
-                        height={240}
-                        placeholder="330x170"
-                      />
-                    </Flex>
+                    {imageURL && !urlIsUndefined && (
+                      <Flex
+                        sx={athletesStyle.imageContainer}
+                        bgImage={imageURL && imageURL.data.publicUrl}
+                      ></Flex>
+                    )}
+                    {imageURL && urlIsUndefined && (
+                      <Flex
+                        sx={athletesStyle.imageContainer}
+                        bgImage={"url(images/athlete-placeholder.jpg)"}
+                      ></Flex>
+                    )}
                     <Flex flexDirection={"column"} gap={1}>
                       <Text sx={athletesStyle.cardAthleteName}>
                         {firstName} {lastName}

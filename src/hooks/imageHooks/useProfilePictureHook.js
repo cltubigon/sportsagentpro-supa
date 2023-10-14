@@ -1,18 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
 import supabase from "../../config/supabaseClient"
 
-const fetchData = async () => {
+const fetchData = async ({ from, eqColumn, eqValue }) => {
+    console.log({ from, eqColumn, eqValue })
   const { data, error } = await supabase
-    .from("images")
+    .from(from)
     .select("*")
-    .eq("userID", "3ff4705d-1291-44f4-a651-505358beff5f")
-    if (data) {
-        return data
-    } else if (error) {
-        console.log({ error })
-    }
+    .eq(eqColumn, eqValue)
+  if (data) {
+    return data
+  } else if (error) {
+    console.log({ error })
+  }
 }
 
-export const useProfilePictureHook = () => {
-  return useQuery(["profile"], fetchData)
+export const useProfilePictureHook = (query) => {
+  return useQuery([`profilePicture - ${query.eqValue}`], () => fetchData(query))
 }
