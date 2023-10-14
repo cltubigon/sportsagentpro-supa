@@ -1,5 +1,4 @@
 import { Text, Flex, SimpleGrid, Box } from "@chakra-ui/layout"
-import { DummyImage } from "react-simple-placeholder-image"
 import { Link } from "react-router-dom"
 import { SkeletonLoaderAthlete } from "../Skeleton/SkeletonLoaderAthlete"
 import { athletesStyle } from "../../styles/athletesStyle"
@@ -7,7 +6,6 @@ import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 import { HomeSkeleton } from "../Skeleton/Skeletons"
 import useInfiniteQueryData from "../../hooks/useInfiniteQueryData"
 import supabase from "../../config/supabaseClient"
-import { Image } from "@chakra-ui/react"
 
 const Athletes = () => {
   const { data, isError, error, isLoading, hasNextPage, fetchNextPage } =
