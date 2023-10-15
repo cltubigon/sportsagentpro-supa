@@ -7,6 +7,7 @@ import { HomeSkeleton } from "../Skeleton/Skeletons"
 import useInfiniteQueryData from "../../hooks/useInfiniteQueryData"
 import supabase from "../../config/supabaseClient"
 import { Skeleton } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 
 const Athletes = () => {
   const { data, isError, error, isLoading, hasNextPage, fetchNextPage } =
@@ -28,6 +29,18 @@ const Athletes = () => {
         {error.message}
       </Text>
     )
+  }
+
+  const imageAnimation = {
+    initial: {
+      scale: 1,
+    },
+    animateZoom: {
+      scale: 1.1,
+      transition: {
+        duration: 0.3,
+      }
+    },
   }
   return (
     <>
@@ -70,11 +83,18 @@ const Athletes = () => {
                       />
                     )}
                     {profilePictures.length > 0 && (
-                      <Flex
-                        sx={athletesStyle.imageContainer}
-                        bgImage={imageURL && imageURL.data.publicUrl}
-                        bgPosition={"center"}
-                      ></Flex>
+                      <Flex w={"100%"} overflow={'hidden'} borderRadius={'md'}>
+                        <Flex
+                          sx={athletesStyle.imageContainer}
+                          bgImage={imageURL && imageURL.data.publicUrl}
+                          bgPosition={"center"}
+                          as={motion.div}
+                          whileHover={'animateZoom'}
+                          variants={imageAnimation}
+                          initial={'initial'}
+                          // animate={'animateZoom'}
+                        ></Flex>
+                      </Flex>
                     )}
                     {/* ================= End of Image ================= */}
                     <Flex flexDirection={"column"} gap={1}>

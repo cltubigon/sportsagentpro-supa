@@ -16,6 +16,7 @@ import { debounce } from "throttle-debounce"
 import { useProfilePictureHook } from "../../../../hooks/imageHooks/useProfilePictureHook"
 import { useMutateProfilePicture } from "../../../../hooks/imageHooks/useMutateProfilePicture"
 import { BsFillPersonFill } from "react-icons/bs"
+import { Link } from "react-router-dom"
 
 const dateNow = () => {
   const now = new Date()
@@ -28,7 +29,7 @@ const dateNow = () => {
   return `${year}${month}${day}${hours}${minutes}${seconds}`
 }
 
-const ProfilePictureSection = ({ user }) => {
+const ProfilePictureSection = ({ user, data }) => {
   const fileExtension = dateNow()
   const [publicURL, setPublicURL] = useState(null)
 
@@ -85,8 +86,9 @@ const ProfilePictureSection = ({ user }) => {
       debounceUpload()
     }
   }, [acceptedFiles])
-  console.log({ publicURL, image })
-
+  console.log({ user, data, publicURL, image })
+const currentTeam = data && data[0].current_team?.map(team => team).join(" • ")
+const currentSport = data && data[0].sport?.map(val => val).join(" • ")
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
@@ -137,10 +139,10 @@ const ProfilePictureSection = ({ user }) => {
           </Flex>
           <Flex flexDirection={"column"} gap={1}>
             <Text fontSize={"xl"} fontWeight={"semibold"}>
-              Burnice Bailey
+              {`${user.firstName} ${user.lastName}`}
             </Text>
-            <Text fontSize={"sm"}>Professional Athlete</Text>
-            <Text fontSize={"sm"}>Basketball • AC Connecticut</Text>
+            {data && <Text fontSize={"sm"}>{data[0].which_best_describes_you || '-'}</Text>}
+            {data && (currentSport || currentTeam) ? <Text fontSize={"sm"} noOfLines={[1]} >{currentSport} • {currentTeam}</Text> : <Text>-</Text>}
           </Flex>
         </Flex>
         <Flex
@@ -155,8 +157,9 @@ const ProfilePictureSection = ({ user }) => {
         </Flex>
       </Flex>
       <Flex>
-        <Button>View profile</Button>
-        <Button colorScheme="twitter">Save</Button>
+        <Link to={`/profile/${user.userID}`}>
+        <Button colorScheme="twitter">View profile</Button>
+        </Link>
       </Flex>
     </Flex>
   )

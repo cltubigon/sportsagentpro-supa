@@ -16,6 +16,7 @@ const fetchInfiniteData = async ({ pageParam = 1 }, query) => {
 }
 
 const useInfiniteQueryData = (query) => {
+  console.log('fetching...')
   return useInfiniteQuery(
     [query.key],
     (pageParam) => {

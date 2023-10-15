@@ -1,4 +1,4 @@
-import { Flex, Icon, Input, Skeleton, Text, useToast } from "@chakra-ui/react"
+import { Flex, Icon, Input, Skeleton, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import ProfilePictureSection from "./ProfilePictureSection"
 // import ProfileAthleteAboutYou from "./ProfileAthleteAboutYou"
@@ -33,7 +33,6 @@ import { BiRun } from "react-icons/bi"
 const ProfileAthleteMiddleContent = () => {
   // console.log("middle content generated")
   const user = useSelector((state) => state.auth.user)
-  const toast = useToast()
   const [whichBestDescribesYou, setwhichBestDescribesYou] = useState(null)
   const [genderIdentity, setgenderIdentity] = useState(null)
   const [currentTeam, setcurrentTeam] = useState([])
@@ -48,7 +47,7 @@ const ProfileAthleteMiddleContent = () => {
   const [discipline, setdiscipline] = useState([])
   const [experience, setexperience] = useState(null)
 
-  const { data, isLoading, isError, error } = useGetMultiColumnData({
+  const { data, isLoading } = useGetMultiColumnData({
     key: ["profileInformation", user.id],
     from: "users",
     select:
@@ -56,20 +55,9 @@ const ProfileAthleteMiddleContent = () => {
     eqColumn: "uid",
     eqValue: user?.id,
   })
-  // console.log({ data })
-
-  if (isError) {
-    toast({
-      title: ` Something went wrong`,
-      description: error.message,
-      status: ` error`,
-      duration: 3000,
-      isClosable: true,
-      position: `top-right`,
-    })
-  }
 
   const defaultUserQuery = {
+    mainKey: ["profileInformation", user.id],
     from: "users",
     eqColumn: "id",
     eqValue: user?.userID,
