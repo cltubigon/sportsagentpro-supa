@@ -32,8 +32,7 @@ const dateNow = () => {
 const ProfilePictureSection = ({ user }) => {
   const fileExtension = dateNow()
   const [publicURL, setPublicURL] = useState(null)
-  const urlIsUndefined = publicURL?.data?.publicUrl.includes("undefined")
-  console.log({ user, publicURL, urlIsUndefined })
+  console.log({ user, publicURL })
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
@@ -44,9 +43,12 @@ const ProfilePictureSection = ({ user }) => {
   })
 
   useEffect(() => {
-    if (image) {
+    console.log({ image })
+    if (image && image.length > 0) {
       console.log("image: calling getPublicUrl")
-      getPublicUrl(image && image[0]?.meta_data?.path)
+      // getPublicUrl(image && image[0]?.meta_data?.path)
+    } else {
+      
     }
   }, [image])
 
@@ -100,7 +102,7 @@ const ProfilePictureSection = ({ user }) => {
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
         <Flex gap={4} alignItems={"center"}>
           <Flex flexDirection={"column"} gap={2}>
-            {publicURL && urlIsUndefined && (
+            {image && image.length === 0 && (
               <Icon
                 as={BsFillPersonFill}
                 color={"gray.400"}
@@ -111,16 +113,16 @@ const ProfilePictureSection = ({ user }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {!publicURL && (
+            {!image && (
               <SkeletonCircle
-                startColor="#d9d9d9"
-                endColor="#ededed"
+              startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 size="10"
                 w={"125px"}
                 h={"125px"}
               />
             )}
-            {publicURL && !urlIsUndefined && (
+            {image && image.length > 0 && (
               <Image
                 src={publicURL?.data?.publicUrl}
                 w={"125px"}

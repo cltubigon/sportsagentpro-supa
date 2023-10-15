@@ -24,29 +24,29 @@ const SkeletonAthleteOppLoader = () => {
           <Flex sx={postContainer} p={4} gap={2}>
             <Skeleton
               borderRadius={"md"}
-              startColor="#d9d9d9"
-              endColor="#ededed"
+              startColor="#BCC6D3"
+              endColor="#d9d9d9"
               w={"272px"}
               h={"24px"}
             />
             <Skeleton
               borderRadius={"md"}
-              startColor="#d9d9d9"
-              endColor="#ededed"
+              startColor="#BCC6D3"
+              endColor="#d9d9d9"
               w={"200px"}
               h={"16px"}
             />
             <Flex mt={"25px"} flexDirection={"column"} gap={3}>
               <Skeleton
                 borderRadius={"md"}
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 w={"220px"}
                 h={"20px"}
               />
               <SkeletonText
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 noOfLines={3}
                 spacing="2"
                 skeletonHeight="3"
@@ -55,14 +55,14 @@ const SkeletonAthleteOppLoader = () => {
             <Flex mt={"25px"} flexDirection={"column"} gap={3}>
               <Skeleton
                 borderRadius={"md"}
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 w={"220px"}
                 h={"20px"}
               />
               <SkeletonText
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 noOfLines={3}
                 spacing="2"
                 skeletonHeight="3"
@@ -71,15 +71,15 @@ const SkeletonAthleteOppLoader = () => {
             <Flex mt={"15px"} flexDirection={"column"} gap={2}>
               <Skeleton
                 borderRadius={"md"}
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 w={"272px"}
                 h={"38px"}
               />
               <Skeleton
                 borderRadius={"md"}
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 w={"272px"}
                 h={"38px"}
               />
@@ -94,29 +94,29 @@ const SkeletonAthleteOppLoader = () => {
             <Flex sx={postContainer} p={4} gap={2} key={id}>
               <Skeleton
                 borderRadius={"md"}
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 w={"272px"}
                 h={"24px"}
               />
               <Skeleton
                 borderRadius={"md"}
-                startColor="#d9d9d9"
-                endColor="#ededed"
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
                 w={"200px"}
                 h={"16px"}
               />
               <Flex mt={"25px"} flexDirection={"column"} gap={3}>
                 <Skeleton
                   borderRadius={"md"}
-                  startColor="#d9d9d9"
-                  endColor="#ededed"
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
                   w={"220px"}
                   h={"20px"}
                 />
                 <SkeletonText
-                  startColor="#d9d9d9"
-                  endColor="#ededed"
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
                   noOfLines={3}
                   spacing="2"
                   skeletonHeight="3"
@@ -125,14 +125,14 @@ const SkeletonAthleteOppLoader = () => {
               <Flex mt={"25px"} flexDirection={"column"} gap={3}>
                 <Skeleton
                   borderRadius={"md"}
-                  startColor="#d9d9d9"
-                  endColor="#ededed"
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
                   w={"220px"}
                   h={"20px"}
                 />
                 <SkeletonText
-                  startColor="#d9d9d9"
-                  endColor="#ededed"
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
                   noOfLines={3}
                   spacing="2"
                   skeletonHeight="3"
@@ -141,15 +141,15 @@ const SkeletonAthleteOppLoader = () => {
               <Flex mt={"15px"} flexDirection={"column"} gap={2}>
                 <Skeleton
                   borderRadius={"md"}
-                  startColor="#d9d9d9"
-                  endColor="#ededed"
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
                   w={"272px"}
                   h={"38px"}
                 />
                 <Skeleton
                   borderRadius={"md"}
-                  startColor="#d9d9d9"
-                  endColor="#ededed"
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
                   w={"272px"}
                   h={"38px"}
                 />

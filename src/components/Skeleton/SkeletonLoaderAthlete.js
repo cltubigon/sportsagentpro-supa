@@ -12,15 +12,15 @@ export const SkeletonLoaderAthlete = ({ fetchNextPage }) => {
       <Waypoint onEnter={handleWaypointEnter}>
         <Stack mb={4}>
           <Skeleton
-            startColor="#d9d9d9"
-            endColor="#ededed"
+            startColor="#BCC6D3"
+            endColor="#d9d9d9"
             height="240px"
             mb="4"
             borderRadius={"5px"}
           />
           <SkeletonText
-            startColor="#d9d9d9"
-            endColor="#ededed"
+            startColor="#BCC6D3"
+            endColor="#d9d9d9"
             skeletonHeight={"3"}
             noOfLines={3}
             spacing="3"
@@ -31,15 +31,15 @@ export const SkeletonLoaderAthlete = ({ fetchNextPage }) => {
         return (
           <Stack key={id}>
             <Skeleton
-              startColor="#d9d9d9"
-              endColor="#ededed"
+              startColor="#BCC6D3"
+              endColor="#d9d9d9"
               height="240px"
               mb="4"
               borderRadius={"5px"}
             />
             <SkeletonText
-              startColor="#d9d9d9"
-              endColor="#ededed"
+              startColor="#BCC6D3"
+              endColor="#d9d9d9"
               skeletonHeight={"3"}
               noOfLines={3}
               spacing="3"

@@ -53,8 +53,8 @@ const ProfileAthleteMiddleContent = () => {
     from: "users",
     select:
       "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, identifiers_interests, language, ethnicity, bio, current_location, hometown, position, previous_teams, leagues_conferences, athletic_accolades, experience, discipline",
-    eqColumn: "id",
-    eqValue: user?.userID,
+    eqColumn: "uid",
+    eqValue: user?.id,
   })
   // console.log({ data })
 
@@ -542,8 +542,8 @@ const SkeletonInput = ({ label, isRequired }) => {
       </Text>
       <Skeleton
         borderRadius={"md"}
-        startColor="#d9d9d9"
-        endColor="#ededed"
+        startColor="#BCC6D3"
+        endColor="#d9d9d9"
         w={"100%"}
         h={"40px"}
       />
@@ -563,8 +563,8 @@ const SkeletonTextArea = ({ label, isRequired, description }) => {
       <Skeleton
         borderRadius={"md"}
         border={"1px solid #000"}
-        startColor="#d9d9d9"
-        endColor="#ededed"
+        startColor="#BCC6D3"
+        endColor="#d9d9d9"
         w={"100%"}
         h={"145px"}
       />

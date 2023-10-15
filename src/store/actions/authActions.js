@@ -87,6 +87,7 @@ export const SUPABASE_SIGNUP =
 
     const addUserToTable = async (authData) => {
       // This will run second
+      console.log('reached addUserToTable')
       const { data, error } = await supabase
         .from("users")
         .insert([
@@ -101,9 +102,11 @@ export const SUPABASE_SIGNUP =
         ])
         .select()
       if (data[0]) {
-        const { firstName, lastName, phoneNumber, userType } = data[0]
+        console.log('reached if else if')
+        const { id, firstName, lastName, phoneNumber, userType } = data[0]
         const userData = { firstName, lastName, phoneNumber, userType }
-        const mergedData = { ...authData.user, ...userData }
+        const mergedData = { ...authData.user, ...userData, userID: id }
+        console.log({ data, userData, mergedData })
         dispatch({ type: "SET_USER", payload: mergedData })
         dispatch({ type: "SIGNUP_SUCCESS" })
       } else if (error) {
@@ -112,6 +115,7 @@ export const SUPABASE_SIGNUP =
     }
 
     if (data.user) {
+      console.log('yes it is data user')
       addUserToTable(data)
     } else if (error) {
       console.log("error iss: ", error.message)

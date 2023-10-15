@@ -68,6 +68,7 @@ const StepTwoInputFields = ({ userType, oneTwoToggle, setOneTwoToggle }) => {
     setLoading(true)
     const { confirmPassword, ...removedConfirmPassword } = data
     dispatch(SUPABASE_SIGNUP({ ...removedConfirmPassword, userType }))
+    console.log('submitting data')
   }
 
   useEffect(() => {

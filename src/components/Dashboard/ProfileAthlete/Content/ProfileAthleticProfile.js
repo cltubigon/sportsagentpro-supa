@@ -215,8 +215,8 @@
 //       <Skeleton
 //         borderRadius={"md"}
 //         border={"1px solid #000"}
-//         startColor="#d9d9d9"
-//         endColor="#ededed"
+//         startColor="#BCC6D3"
+//         endColor="#d9d9d9"
 //         w={"100%"}
 //         h={"40px"}
 //       />
