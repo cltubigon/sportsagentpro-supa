@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Icon,
-  Image,
   Input,
   SkeletonCircle,
   Text,
@@ -32,7 +31,6 @@ const dateNow = () => {
 const ProfilePictureSection = ({ user }) => {
   const fileExtension = dateNow()
   const [publicURL, setPublicURL] = useState(null)
-  console.log({ user, publicURL })
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
@@ -43,24 +41,18 @@ const ProfilePictureSection = ({ user }) => {
   })
 
   useEffect(() => {
-    console.log({ image })
     if (image && image.length > 0) {
-      console.log("image: calling getPublicUrl")
-      // getPublicUrl(image && image[0]?.meta_data?.path)
-    } else {
-      
+      getPublicUrl(image && image[0]?.profile_picture?.path)
     }
   }, [image])
 
   const { mutate } = useMutateProfilePicture()
 
   const getPublicUrl = (path) => {
-    console.log("getPublicUrl is triggered")
     setPublicURL(supabase.storage.from(`avatar`).getPublicUrl(path))
   }
 
   const debounceUpload = debounce(100, async () => {
-    console.log("debounceUpload is triggered")
     const { data, error } = await supabase.storage
       .from("avatar")
       .upload(`${user?.id}/${fileExtension}`, acceptedFiles[0])
@@ -68,14 +60,12 @@ const ProfilePictureSection = ({ user }) => {
       console.log({ error })
     } else {
       const path = data.path
-      console.log("debounce: calling getPublicUrl")
       getPublicUrl(path)
       getList(data.path)
     }
   })
 
   const getList = async (path) => {
-    console.log("getList is triggered")
     const fileName = path.replace(user?.id + "/", "")
     const { data, error } = await supabase.storage
       .from("avatar")
@@ -84,7 +74,6 @@ const ProfilePictureSection = ({ user }) => {
       })
     if (data) {
       const metaData = { ...data[0], path }
-      console.log('user.id', user.id)
       mutate({ metaData, userID: user.userID })
     } else if (error) {
       console.log({ error })
@@ -96,12 +85,32 @@ const ProfilePictureSection = ({ user }) => {
       debounceUpload()
     }
   }, [acceptedFiles])
+  console.log({ publicURL, image })
 
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
         <Flex gap={4} alignItems={"center"}>
           <Flex flexDirection={"column"} gap={2}>
+            {/* ===================== Image ===================== */}
+            {image?.length > 0 && (
+            <Flex
+              bgImage={publicURL?.data?.publicUrl}
+              bgSize={"cover"}
+              bgPosition={"center"}
+              w={"125px"}
+              h={"125px"}
+              borderRadius={"200px"}
+              shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+            />
+              // <Image
+              //   src={publicURL?.data?.publicUrl}
+              //   w={"125px"}
+              //   h={"125px"}
+              //   borderRadius={"200px"}
+              //   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+              // />
+            )}
             {image && image.length === 0 && (
               <Icon
                 as={BsFillPersonFill}
@@ -115,21 +124,16 @@ const ProfilePictureSection = ({ user }) => {
             )}
             {!image && (
               <SkeletonCircle
-              startColor="#BCC6D3"
+                startColor="#BCC6D3"
                 endColor="#d9d9d9"
                 size="10"
                 w={"125px"}
                 h={"125px"}
+                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {image && image.length > 0 && (
-              <Image
-                src={publicURL?.data?.publicUrl}
-                w={"125px"}
-                h={"125px"}
-                borderRadius={"200px"}
-              />
-            )}
+
+            {/* ===================== End of Image ===================== */}
           </Flex>
           <Flex flexDirection={"column"} gap={1}>
             <Text fontSize={"xl"} fontWeight={"semibold"}>

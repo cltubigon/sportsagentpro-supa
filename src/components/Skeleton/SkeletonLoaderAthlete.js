@@ -2,7 +2,7 @@ import { Skeleton, SkeletonText, Stack } from "@chakra-ui/react"
 import { Waypoint } from "react-waypoint"
 
 export const SkeletonLoaderAthlete = ({ fetchNextPage }) => {
-  const number = [1, 2, 3, 4, 5, 6]
+  const number = [1, 2, 3, 4, 5, 6, 7]
   const handleWaypointEnter = () => {
     console.log("trigerring fetchNextPage")
     fetchNextPage()

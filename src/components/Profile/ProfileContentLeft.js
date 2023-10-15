@@ -1,5 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react"
+import {
+  Box,
+  Flex,
+  Heading,
+  SkeletonCircle,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
 import { DummyImage } from "react-simple-placeholder-image"
 import { VscStarFull, VscVerifiedFilled } from "react-icons/vsc"
 import ProfileContentInterests from "./ProfileContentInterests"
@@ -8,15 +15,13 @@ import ProfileSocialMedia from "./ProfileSocialMedia"
 import { SkeletonAthleteSelectedProfile } from "../Skeleton/SkeletonAthleteSelectedProfile"
 import supabase from "../../config/supabaseClient"
 
-const ProfileContentLeft = ({query}) => {
-  console.log({ query })
-  const pathName = query?.data && query.data[0].images && query.data[0].images[0]?.meta_data?.path
-  console.log({ pathName })
-  const selectedAthlete = query.data && query.data[0]
-  console.log(query?.data && query?.data[0]?.uid)
-
+const ProfileContentLeft = ({ query }) => {
+  const pathName =
+    query?.data &&
+    query.data[0].images &&
+    query.data[0].images[0]?.profile_picture?.path
   const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName)
-  console.log({ imageURL })
+  const selectedAthlete = query.data && query.data[0]
 
   return (
     <Flex flexDirection={"column"} flexGrow={1}>
@@ -39,16 +44,39 @@ const ProfileContentLeft = ({query}) => {
               <Text>{selectedAthlete && selectedAthlete.sports} • Forward</Text>
             </Box>
             <Box>
-              {!imageURL && <DummyImage
-                width={56}
-                height={56}
-                shape="avatar"
-                placeholder="Colored!"
-                bgColor="#2A4365"
-                className="profile"
-              />}
-              {imageURL && <Image src={imageURL?.data?.publicUrl} width={'56px'}
-                height={'56px'} borderRadius={'200px'} />}
+              {/* =================== Image =================== */}
+              {selectedAthlete && selectedAthlete.images.length === 0 && (
+                <DummyImage
+                  width={56}
+                  height={56}
+                  shape="avatar"
+                  placeholder="Colored!"
+                  bgColor="#A1AEBF"
+                  className="profile"
+                  shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+                />
+              )}
+              {!selectedAthlete && (
+                <SkeletonCircle
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
+                  w={"56px"}
+                  h={"56px"}
+                  shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+                />
+              )}
+              {selectedAthlete && selectedAthlete.images.length > 0 && (
+                <Flex
+                  w={"56px"}
+                  h={"56px"}
+                  borderRadius={"200px"}
+                  bgImage={imageURL?.data?.publicUrl}
+                  bgSize={"cover"}
+                  bgPosition={"center"}
+                  shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+                />
+              )}
+              {/* =================== End of Image =================== */}
             </Box>
           </Flex>
 

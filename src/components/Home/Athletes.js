@@ -18,7 +18,7 @@ const Athletes = () => {
       order: "created_at",
     })
 
-    console.log({ data })
+  console.log({ data })
 
   // const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName)
 
@@ -45,30 +45,38 @@ const Athletes = () => {
           return data?.map((athlete, index) => {
             const { id, lastName, firstName, team, sports, images } = athlete
             const profilePictures = athlete.images
-            console.log({ profilePictures })
+            // console.log({ profilePictures })
 
-            const path = images[0]?.meta_data.path
+            const path = images[0]?.profile_picture.path
             const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path)
             return (
               <Flex key={index}>
                 <Link to={`/profile/${id}`}>
                   <Flex sx={athletesStyle.cardCOntainer}>
+                    {/* ================= Image ================= */}
                     {profilePictures.length === 0 && (
                       <Flex
                         sx={athletesStyle.imageContainer}
                         bgImage={"url(images/athlete-placeholder.jpg)"}
                       ></Flex>
-                      
+                    )}
+                    {data === undefined && (
+                      <Skeleton
+                        startColor="#BCC6D3"
+                        endColor="#d9d9d9"
+                        w={"320px"}
+                        h={"240px"}
+                        borderRadius={"md"}
+                      />
                     )}
                     {profilePictures.length > 0 && (
-                      <Skeleton startColor="#BCC6D3" endColor="#d9d9d9" w={'320px'} h={'240px'} borderRadius={'md'} />
-                    )}
-                    {/* {profilePictures.length > 0 && (
                       <Flex
                         sx={athletesStyle.imageContainer}
-                        bgImage={imageURL && imageURL.data.publicUrl} bgPosition={'center'}
+                        bgImage={imageURL && imageURL.data.publicUrl}
+                        bgPosition={"center"}
                       ></Flex>
-                    )} */}
+                    )}
+                    {/* ================= End of Image ================= */}
                     <Flex flexDirection={"column"} gap={1}>
                       <Text sx={athletesStyle.cardAthleteName}>
                         {firstName} {lastName}

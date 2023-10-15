@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import supabase from "../../config/supabaseClient"
 
 const fetchData = async ({metaData, userID}) => {
-    const { id, ...meta_data } = metaData
+    const { id, ...profile_picture } = metaData
     const { data, error } = await supabase
       .from("images")
-      .upsert([{ meta_data, userID }])
+      .upsert([{ profile_picture, userID }])
       .select()
     if (data) {
       return data
@@ -15,5 +15,12 @@ const fetchData = async ({metaData, userID}) => {
 }
 
 export const useMutateProfilePicture = () => {
-  return useMutation(fetchData)
+  const queryClient = useQueryClient()
+  return useMutation(fetchData, {
+    onSuccess: (data) => {
+      console.log({ data })
+      console.log([`profilePicture - ${data[0]?.id}`])
+      queryClient.invalidateQueries([`profilePicture - ${data[0]?.id}`])
+    }
+  })
 }

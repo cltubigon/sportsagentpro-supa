@@ -5,7 +5,7 @@ const fetchInfiniteData = async ({ pageParam = 1 }, query) => {
   const itemLimit = 16
   const { data, error, count } = await supabase
     .from(query.from)
-    .select("*,images(meta_data)", { count: "estimated" })
+    .select("*,images(profile_picture)", { count: "estimated" })
     .eq(query.eqColumn, query.eqValue)
     .range((pageParam - 1) * itemLimit, pageParam * itemLimit - 1)
     .order(query.order, { ascending: false })
