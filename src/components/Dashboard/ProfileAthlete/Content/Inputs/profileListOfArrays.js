@@ -499,7 +499,6 @@ export const listSports = [
 
 export const listCurrentTeam = [
   "AC Milan (Serie A)",
-  "AC Milan (Serie A)",
   "Arizona Cardinals (NFL)",
   "Arsenal FC (Premier League)",
   "AS Roma (Serie A)",
@@ -523,7 +522,6 @@ export const listCurrentTeam = [
   "Los Angeles Dodgers (MLB)",
   "Los Angeles Lakers (NBA)",
   "Los Angeles Rams (NFL)",
-  "Manchester City FC (Premier League)",
   "Manchester City FC (Premier League)",
   "Manchester United FC (Premier League)",
   "Miami Dolphins (NFL)",

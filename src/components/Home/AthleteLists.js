@@ -70,9 +70,11 @@ const AthleteLists = ({ data }) => {
           const path = images[0]?.profile_picture.path
           const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path, {
             transform: {
-              width: 320,
+              quality: 83,
+              width: 330,
               height: 240,
               resize: "cover", // 'cover' | 'fill' | 'contain'
+              // format: 'origin'
             },
           })
           return (
@@ -138,7 +140,7 @@ const AthleteLists = ({ data }) => {
                       <Flex
                         sx={athletesStyle.imageContainer}
                         bgImage={imageURL && imageURL.data.publicUrl}
-                        bgPosition={"center"}
+                        bgPosition={"top"}
                         as={motion.div}
                         variants={imageAnimation}
                         initial={"initial"}
