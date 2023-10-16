@@ -14,6 +14,7 @@ const fetchMultiColumnData = async (query) => {
 }
 
 const useGetMultiColumnData = (query) => {
+  console.log('is fetching MultiColumnData...')
   return useQuery(query.key, () => fetchMultiColumnData(query))
 }
 
