@@ -10,13 +10,12 @@ const SubNavigation = () => {
 
   const flexContainer = {
     w: "full",
-    py: "20px",
+    pt: "108px",
+    pb: '20px',
     gap: 2,
     justifyContent: "space-between",
     px: "var(--chakra-space-4)",
-    position: 'fixed !important',
-    top: '88px',
-    bg: 'white',
+    zIndex: 20,
     maxW: '1440px',
   }
   return (

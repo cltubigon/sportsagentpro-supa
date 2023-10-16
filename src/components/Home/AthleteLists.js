@@ -68,7 +68,13 @@ const AthleteLists = ({ data }) => {
           const profilePictures = athlete.images
 
           const path = images[0]?.profile_picture.path
-          const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path)
+          const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path, {
+            transform: {
+              width: '320px',
+              height: '240px',
+              resize: "cover", // 'cover' | 'fill' | 'contain'
+            },
+          })
           return (
             <Flex
               key={index}
