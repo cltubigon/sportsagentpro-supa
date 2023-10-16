@@ -22,6 +22,7 @@ const ProfileContentLeft = ({ query }) => {
     query.data[0].images[0]?.profile_picture?.path
   const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName)
   const selectedAthlete = query.data && query.data[0]
+  console.log({ selectedAthlete })
 
   return (
     <Flex flexDirection={"column"} flexGrow={1}>
@@ -36,16 +37,16 @@ const ProfileContentLeft = ({ query }) => {
             <Box>
               <Flex flexDirection={"row"} alignItems={"center"} gap={1}>
                 <Heading fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}>
-                  {selectedAthlete && selectedAthlete.firstName}{" "}
-                  {selectedAthlete && selectedAthlete.lastName}
+                  {selectedAthlete.firstName}{" "}
+                  {selectedAthlete.lastName}
                 </Heading>
                 <VscVerifiedFilled color="lightGreen" size={25} />
               </Flex>
-              <Text>{selectedAthlete && selectedAthlete.sports} • Forward</Text>
+              <Text>{selectedAthlete.sport[0]}{selectedAthlete.position[0] && ' • '}{selectedAthlete.position[0]}</Text>
             </Box>
             <Box>
               {/* =================== Image =================== */}
-              {selectedAthlete && selectedAthlete.images.length === 0 && (
+              {selectedAthlete.images.length === 0 && (
                 <DummyImage
                   width={56}
                   height={56}
@@ -56,7 +57,7 @@ const ProfileContentLeft = ({ query }) => {
                   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
                 />
               )}
-              {!selectedAthlete && (
+              {!(
                 <SkeletonCircle
                   startColor="#BCC6D3"
                   endColor="#d9d9d9"
@@ -65,7 +66,7 @@ const ProfileContentLeft = ({ query }) => {
                   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
                 />
               )}
-              {selectedAthlete && selectedAthlete.images.length > 0 && (
+              {selectedAthlete.images.length > 0 && (
                 <Flex
                   w={"56px"}
                   h={"56px"}
@@ -95,7 +96,7 @@ const ProfileContentLeft = ({ query }) => {
           </Flex>
 
           <ProfileSocialMedia />
-          <ProfileContentAbout />
+          <ProfileContentAbout query={query} />
           <ProfileContentInterests />
         </Stack>
       )}

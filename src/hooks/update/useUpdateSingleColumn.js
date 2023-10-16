@@ -44,6 +44,7 @@ const useUpdateSingleColumn = (query) => {
     },
     onSettled: (data) => {
       if (!data)
+    console.log('invalidate query triggered')
         queryClient.invalidateQueries(mainKey)
     },
   })

@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import supabase from "../config/supabaseClient"
 
 const fetchInfiniteData = async ({ pageParam = 1 }, query) => {
-  const itemLimit = 16
+  const itemLimit = query.limit
   const { data, error, count } = await supabase
     .from(query.from)
     .select("*,images(profile_picture)", { count: "estimated" })

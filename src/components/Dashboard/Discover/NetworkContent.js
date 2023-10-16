@@ -1,15 +1,14 @@
 import React from 'react'
-// import Brands from './Brands'
-// import { useSelector } from 'react-redux'
-// import DiscoverAthletes from './DiscoverAthletes'
+import { useSelector } from 'react-redux'
+import DiscoverAthleteType from './DiscoverAthleteType'
+import DiscoverBrandType from './Brand/DiscoverBrandType'
 
 const NetworkContent = () => {
-    // const user = useSelector(state => state.auth.user)
-    // const userType = user && user.userType
+    const userType = useSelector(state => state.auth.user?.userType)
     return (
         <>
-            {/* {userType && userType === 'athlete' && <DiscoverAthletes />} */}
-            {/* {userType && userType === 'brand' && <Brands />} */}
+            {userType && userType === 'brand' && <DiscoverBrandType />}
+            {userType && userType === 'athlete' && <DiscoverAthleteType />}
         </>
     )
 }

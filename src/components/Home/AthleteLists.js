@@ -64,14 +64,14 @@ const AthleteLists = ({ data }) => {
     <>
       {data?.pages.map(({ data }) => {
         return data?.map((athlete, index) => {
-          const { id, lastName, firstName, team, sports, images } = athlete
+          const { id, lastName, firstName, current_team, sport, images } = athlete
           const profilePictures = athlete.images
 
           const path = images[0]?.profile_picture.path
           const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path, {
             transform: {
-              width: '320px',
-              height: '240px',
+              width: 320,
+              height: 240,
               resize: "cover", // 'cover' | 'fill' | 'contain'
             },
           })
@@ -168,8 +168,8 @@ const AthleteLists = ({ data }) => {
                     <Text sx={athletesStyle.cardAthleteName}>
                       {firstName} {lastName}
                     </Text>
-                    <Text sx={athletesStyle.cardSportsType}>
-                      {sports} • {team}
+                    <Text sx={athletesStyle.cardSportsType} noOfLines={[1]}>
+                      {sport[0] || '-'} • {current_team[0] || '-'}
                     </Text>
                     <Box sx={athletesStyle.cardSocialMedia}>
                       <ProfileSocialMedia />

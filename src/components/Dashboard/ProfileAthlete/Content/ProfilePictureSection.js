@@ -3,9 +3,12 @@ import {
   Button,
   Flex,
   Icon,
+  Image,
+  // Image,
   Input,
   SkeletonCircle,
   Text,
+  useToast,
 } from "@chakra-ui/react"
 import React from "react"
 import { useEffect } from "react"
@@ -17,6 +20,8 @@ import { useProfilePictureHook } from "../../../../hooks/imageHooks/useProfilePi
 import { useMutateProfilePicture } from "../../../../hooks/imageHooks/useMutateProfilePicture"
 import { BsFillPersonFill } from "react-icons/bs"
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useCallback } from "react"
 
 const dateNow = () => {
   const now = new Date()
@@ -29,11 +34,34 @@ const dateNow = () => {
   return `${year}${month}${day}${hours}${minutes}${seconds}`
 }
 
-const ProfilePictureSection = ({ user, data }) => {
+const ProfilePictureSection = ({ data }) => {
+  const toast = useToast()
+  const user = useSelector((state) => state.auth.user)
   const fileExtension = dateNow()
   const [publicURL, setPublicURL] = useState(null)
 
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
+  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+    console.log("Accepted Files:", acceptedFiles)
+    if (rejectedFiles) {
+      const code = rejectedFiles[0].errors[0].code
+      if (code === "file-too-large") {
+        toast({
+          title: "File too large",
+          description: "Must not exceed 1MB",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+          position: "top-right",
+        })
+      }
+    }
+  }, [])
+  const maxSize = 1024 * 1024
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    maxSize,
+    acceptedFiles: "image/*", // Accept only image files
+  })
 
   const { data: image } = useProfilePictureHook({
     from: "images",
@@ -50,19 +78,28 @@ const ProfilePictureSection = ({ user, data }) => {
   const { mutate } = useMutateProfilePicture()
 
   const getPublicUrl = (path) => {
-    setPublicURL(supabase.storage.from(`avatar`).getPublicUrl(path))
+    setPublicURL(
+      supabase.storage.from(`avatar`).getPublicUrl(path, {
+        transform: {
+          width: 120,
+          height: 120,
+          resize: "cover", // fill | contain
+        },
+      })
+    )
+    // setPublicURL(supabase.storage.from(`avatar`).getPublicUrl(path))
   }
 
   const debounceUpload = debounce(100, async () => {
     const { data, error } = await supabase.storage
       .from("avatar")
       .upload(`${user?.id}/${fileExtension}`, acceptedFiles[0])
-    if (error) {
-      console.log({ error })
-    } else {
+    if (data) {
       const path = data.path
       getPublicUrl(path)
       getList(data.path)
+    } else if (error) {
+      console.log({ error })
     }
   })
 
@@ -87,8 +124,9 @@ const ProfilePictureSection = ({ user, data }) => {
     }
   }, [acceptedFiles])
   console.log({ user, data, publicURL, image })
-const currentTeam = data && data[0].current_team?.map(team => team).join(" • ")
-const currentSport = data && data[0].sport?.map(val => val).join(" • ")
+  // const currentTeam =
+  //   data && data[0].current_team?.map((team) => team).join(" • ")
+  // const currentSport = data && data[0].sport?.map((val) => val).join(" • ")
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
@@ -96,22 +134,22 @@ const currentSport = data && data[0].sport?.map(val => val).join(" • ")
           <Flex flexDirection={"column"} gap={2}>
             {/* ===================== Image ===================== */}
             {image?.length > 0 && (
-            <Flex
-              bgImage={publicURL?.data?.publicUrl}
-              bgSize={"cover"}
-              bgPosition={"center"}
-              w={"125px"}
-              h={"125px"}
-              borderRadius={"200px"}
-              shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
-            />
-              // <Image
-              //   src={publicURL?.data?.publicUrl}
+              // <Flex
+              //   bgImage={publicURL?.data?.publicUrl}
+              //   bgSize={"cover"}
+              //   bgPosition={"center"}
               //   w={"125px"}
               //   h={"125px"}
               //   borderRadius={"200px"}
               //   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               // />
+              <Image
+                src={publicURL?.data?.publicUrl}
+                w={"125px"}
+                h={"125px"}
+                borderRadius={"200px"}
+                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+              />
             )}
             {image && image.length === 0 && (
               <Icon
@@ -141,8 +179,18 @@ const currentSport = data && data[0].sport?.map(val => val).join(" • ")
             <Text fontSize={"xl"} fontWeight={"semibold"}>
               {`${user.firstName} ${user.lastName}`}
             </Text>
-            {data && <Text fontSize={"sm"}>{data[0].which_best_describes_you || '-'}</Text>}
-            {data && (currentSport || currentTeam) ? <Text fontSize={"sm"} noOfLines={[1]} >{currentSport} • {currentTeam}</Text> : <Text>-</Text>}
+            {data && (
+              <Text fontSize={"sm"}>
+                {data[0].which_best_describes_you || "-"}
+              </Text>
+            )}
+            {data ? (
+              <Text fontSize={"sm"}>
+                {data && data[0].sport[0]} • {data && data[0].current_team[0]}
+              </Text>
+            ) : (
+              <Text>-</Text>
+            )}
           </Flex>
         </Flex>
         <Flex
@@ -158,7 +206,7 @@ const currentSport = data && data[0].sport?.map(val => val).join(" • ")
       </Flex>
       <Flex>
         <Link to={`/profile/${user.userID}`}>
-        <Button colorScheme="twitter">View profile</Button>
+          <Button colorScheme="twitter">View profile</Button>
         </Link>
       </Flex>
     </Flex>

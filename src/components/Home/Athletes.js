@@ -12,6 +12,7 @@ const Athletes = () => {
       eqColumn: "userType",
       eqValue: "athlete",
       order: "created_at",
+      limit: 16,
     })
 
   console.log({ data })

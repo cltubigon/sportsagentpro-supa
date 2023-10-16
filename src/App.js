@@ -13,7 +13,6 @@ import Profile from "./pages/Profile"
 import ScrollToTop from "./utils/ScrollToTop"
 import MainNavigation from "./components/layouts/MainNavigation"
 // import ColorMode from "./config/theme/ColorMode"
-import MyProfile from "./pages/MyProfile"
 import SignUp from "./pages/SignUp"
 import UserType from "./components/SignupForm/UserType"
 import Build from "./pages/Build"
@@ -64,7 +63,6 @@ function App() {
         <Route path="/profile/:id" element={<Profile />}></Route>
         {/* <Route path="/register-team" element={<RegisterTeam />}></Route> */}
         <Route path="/add-deal" element={<CreateDeal />}></Route>
-        <Route path="/my-profile" element={<MyProfile />}></Route>
         <Route path="/user-type" element={<UserType />}></Route>
         <Route path="/build/" element={!user ? <Login /> : <Build />}></Route>
         <Route path="/build/:id" element={!user ? <Login /> : <Build />}></Route>

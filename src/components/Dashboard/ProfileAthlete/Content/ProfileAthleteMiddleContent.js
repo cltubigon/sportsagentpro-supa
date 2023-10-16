@@ -5,7 +5,6 @@ import ProfilePictureSection from "./ProfilePictureSection"
 // import ProfileAthleteLocation from "./ProfileAthleteLocation"
 // import ProfileAthleticProfile from "./ProfileAthleticProfile"
 import { useSelector } from "react-redux"
-import useGetMultiColumnData from "../../../../hooks/useGetMultiColumnData"
 import SelectInputHook from "./Inputs/SelectInputHook"
 import MultiSelectInputHook from "./Inputs/MultiSelectInputHook"
 import {
@@ -30,9 +29,10 @@ import GoogleMapLocationAutoComplete from "./GoogleMapAutoComplete/GoogleMapAuto
 import { IoLocationOutline } from "react-icons/io5"
 import { BiRun } from "react-icons/bi"
 
-const ProfileAthleteMiddleContent = () => {
+const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
   // console.log("middle content generated")
-  const user = useSelector((state) => state.auth.user)
+  const id = useSelector((state) => state.auth.user?.id)
+  const userID = useSelector((state) => state.auth.user?.userID)
   const [whichBestDescribesYou, setwhichBestDescribesYou] = useState(null)
   const [genderIdentity, setgenderIdentity] = useState(null)
   const [currentTeam, setcurrentTeam] = useState([])
@@ -47,20 +47,11 @@ const ProfileAthleteMiddleContent = () => {
   const [discipline, setdiscipline] = useState([])
   const [experience, setexperience] = useState(null)
 
-  const { data, isLoading } = useGetMultiColumnData({
-    key: ["profileInformation", user.id],
-    from: "users",
-    select:
-      "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, identifiers_interests, language, ethnicity, bio, current_location, hometown, position, previous_teams, leagues_conferences, athletic_accolades, experience, discipline",
-    eqColumn: "uid",
-    eqValue: user?.id,
-  })
-
   const defaultUserQuery = {
-    mainKey: ["profileInformation", user.id],
+    mainKey: ["profileInformation", id],
     from: "users",
     eqColumn: "id",
-    eqValue: user?.userID,
+    eqValue: userID,
   }
 
   const mutateWhichBestDescribesYou = {
@@ -136,7 +127,7 @@ const ProfileAthleteMiddleContent = () => {
       maxW={"875px"}
       pb={"200px"}
     >
-      <ProfilePictureSection user={user} data={!isLoading && data} />
+      <ProfilePictureSection data={!isLoading && data} />
       {/* ===================== Basic Information ===================== */}
       <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
         <Flex alignItems={"center"} gap={3}>

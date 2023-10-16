@@ -1,63 +1,124 @@
-import { Box, Flex, Icon, Text } from '@chakra-ui/react'
-import { BsFillPersonVcardFill } from 'react-icons/bs'
-import { RiFolderUserLine, RiMedalLine } from 'react-icons/ri'
-import { GiGreekTemple, GiHouse } from 'react-icons/gi'
-import { CiLocationOn } from 'react-icons/ci'
+import { Box, Flex, Icon, Text } from "@chakra-ui/react"
+import { BsFillPersonVcardFill } from "react-icons/bs"
+import { RiFolderUserLine, RiMedalLine } from "react-icons/ri"
+import { GiGreekTemple, GiHouse } from "react-icons/gi"
+import { CiLocationOn } from "react-icons/ci"
 
-const ProfileContentAbout = () => {
+const ProfileContentAbout = ({ query }) => {
+  console.log({ query })
+  const {
+    bio,
+    current_team,
+    leagues_conferences,
+    previous_teams,
+    athletic_accolades,
+    current_location,
+    which_best_describes_you,
+    gender_identity,
+    ethnicity,
+    language,
+    hometown,
+  } = query.data[0]
+
+  const accolades = athletic_accolades.map((val) => val).join(", ")
+  const ethnicities = ethnicity.map((val) => val).join(", ")
+  const languages = language.map((val) => val).join(", ")
+  const leagues = leagues_conferences.map(val => val).join(', ')
+  const prevTeams = previous_teams.map(val => val).join(', ')
+  const currTeams = current_team.map(val => val).join(', ')
   return (
     <>
-        <Flex borderTop={"1px solid #DCE1E6"} pt={5}>
-            <Text fontSize={"xl"} fontWeight={"semibold"} >About</Text>
-        </Flex>
+      <Flex borderTop={"1px solid #DCE1E6"} pt={5}>
+        <Text fontSize={"xl"} fontWeight={"semibold"}>
+          About
+        </Text>
+      </Flex>
 
-        <Flex gap={4}>
-            <Icon as={BsFillPersonVcardFill} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
-            <Box>
-                <Text fontSize={"lg"} fontWeight={"semibold"}>Biography</Text>
-                <Text fontSize={"sm"}>Liberal studies College graduate , seeking double major student athlete super senior ready to experience another great year as a Tiger https://fanarch.com/collections/deandre-williams</Text>
-            </Box>
-        </Flex>
+      <Flex gap={4}>
+        <Icon
+          as={BsFillPersonVcardFill}
+          boxSize={"24px"}
+          color={"gray.400"}
+          mt={"4px"}
+        />
+        <Box>
+          <Text fontSize={"lg"} fontWeight={"semibold"}>
+            Biography
+          </Text>
+          <Text fontSize={"sm"}>{bio}</Text>
+        </Box>
+      </Flex>
 
-        <Flex gap={4}>
-            <Icon as={GiGreekTemple} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
-            <Box>
-                <Text fontSize={"lg"} fontWeight={"semibold"}>Affiliations</Text>
-                <Text fontSize={"sm"}>Memphis Tigers • AAC • NCAA</Text>
-            </Box>
-        </Flex>
+      <Flex gap={4}>
+        <Icon
+          as={GiGreekTemple}
+          boxSize={"24px"}
+          color={"gray.400"}
+          mt={"4px"}
+        />
+        <Box>
+          <Text fontSize={"lg"} fontWeight={"semibold"}>
+            Affiliations
+          </Text>
+          <Text fontSize={"sm"}>
+            {currTeams}{leagues && ' • '}{leagues}{prevTeams && ' • '}{prevTeams}
+          </Text>
+        </Box>
+      </Flex>
 
-        <Flex gap={4}>
-            <Icon as={RiMedalLine} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
-            <Box>
-                <Text fontSize={"lg"} fontWeight={"semibold"}>Accolades</Text>
-                <Text fontSize={"sm"}>Collegiate All-Conference • Collegiate Player of the week</Text>
-            </Box>
-        </Flex>
+      <Flex gap={4}>
+        <Icon as={RiMedalLine} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
+        <Box>
+          <Text fontSize={"lg"} fontWeight={"semibold"}>
+            Accolades
+          </Text>
+          <Text fontSize={"sm"}>
+            {accolades}
+          </Text>
+        </Box>
+      </Flex>
 
-        <Flex gap={4}>
-            <Icon as={CiLocationOn} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
-            <Box>
-                <Text fontSize={"lg"} fontWeight={"semibold"}>Location</Text>
-                <Text fontSize={"sm"}>Memphis, TN, USA</Text>
-            </Box>
-        </Flex>
+      <Flex gap={4}>
+        <Icon
+          as={CiLocationOn}
+          boxSize={"24px"}
+          color={"gray.400"}
+          mt={"4px"}
+        />
+        <Box>
+          <Text fontSize={"lg"} fontWeight={"semibold"}>
+            Location
+          </Text>
+          <Text fontSize={"sm"}>{current_location}</Text>
+        </Box>
+      </Flex>
 
-        <Flex gap={4}>
-            <Icon as={RiFolderUserLine} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
-            <Box>
-                <Text fontSize={"lg"} fontWeight={"semibold"}>Background</Text>
-                <Text fontSize={"sm"}>Student athlete • Male • African American • 26 • English</Text>
-            </Box>
-        </Flex>
+      <Flex gap={4}>
+        <Icon
+          as={RiFolderUserLine}
+          boxSize={"24px"}
+          color={"gray.400"}
+          mt={"4px"}
+        />
+        <Box>
+          <Text fontSize={"lg"} fontWeight={"semibold"}>
+            Background
+          </Text>
+          <Text fontSize={"sm"}>
+            {which_best_describes_you}{gender_identity && ' • '}{gender_identity}{ethnicities && ' • '}{ethnicities}{languages && ' • '}{languages}
+          </Text>
+        </Box>
+      </Flex>
 
-        <Flex gap={4} >
-            <Icon as={GiHouse} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
-            <Box>
-                <Text fontSize={"lg"} fontWeight={"semibold"}>Hometown</Text>
-                <Text fontSize={"sm"}>Houston, TX, USA</Text>
-            </Box>
-        </Flex>
+      <Flex gap={4}>
+        <Icon as={GiHouse} boxSize={"24px"} color={"gray.400"} mt={"4px"} />
+        <Box>
+          <Text fontSize={"lg"} fontWeight={"semibold"}>
+            Hometown
+          </Text>
+          <Text fontSize={"sm"}>{hometown}</Text>
+        </Box>
+      </Flex>
     </>
   )
 }
