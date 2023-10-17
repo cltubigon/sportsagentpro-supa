@@ -1,35 +1,35 @@
 import {
-  Flex,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Stack,
-  Text,
-} from "@chakra-ui/react"
-import { BiDonateHeart } from "react-icons/bi"
-import { FiUsers } from "react-icons/fi"
-import FilterProfile from "./FilterProfile"
-import FilterPreferences from "./FilterPrefences"
-import { SearchIcon } from "@chakra-ui/icons"
-import Sort from "./Sort"
+    Flex,
+    Icon,
+    Input,
+    InputGroup,
+    InputLeftElement,
+    Stack,
+    Text,
+  } from "@chakra-ui/react"
+  import { BiDonateHeart } from "react-icons/bi"
+  import { FiUsers } from "react-icons/fi"
+  import FilterProfile from "../FilterProfile"
+  import FilterPreferences from "../FilterPrefences"
+  import { SearchIcon } from "@chakra-ui/icons"
+  import Sort from "../Sort"
 
-const DiscoverMainMenu = () => {
-  const container = {
-    justifyContent: "space-between",
-    grow: 1,
-    flexBasis: "100%",
-    borderBottom: "1px solid",
-    borderBottomColor: "gray.300",
-    pb: 6,
-  }
-  const icon = {
-    boxSize: "20px",
-    color: "gray.500",
-  }
+const BrandType = () => {
+    const container = {
+      justifyContent: "space-between",
+      grow: 1,
+      flexBasis: "100%",
+      borderBottom: "1px solid",
+      borderBottomColor: "gray.300",
+      pb: 6,
+    }
+    const icon = {
+      boxSize: "20px",
+      color: "gray.500",
+    }
   return (
     <>
-      <Flex sx={container}>
+    <Flex sx={container}>
         <Stack>
           <Text fontSize={"20px"} fontWeight={"semibold"}>
             Discover Network
@@ -72,4 +72,4 @@ const DiscoverMainMenu = () => {
   )
 }
 
-export default DiscoverMainMenu
+export default BrandType

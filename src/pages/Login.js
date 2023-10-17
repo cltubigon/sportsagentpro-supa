@@ -66,17 +66,8 @@ const LoginForm = () => {
   }, [authError])
 
   useEffect(() => {
-    if (user && user.userType) {
-      switch (user.userType) {
-        case "brand":
-          navigate("/network")
-          break
-        case "athlete":
-          navigate("/athlete-home")
-          break
-        default:
-          break
-      }
+    if (user) {
+      navigate("/network")
     }
   }, [user])
 

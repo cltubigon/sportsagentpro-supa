@@ -1,9 +1,9 @@
 import { Stack } from "@chakra-ui/react"
 import OppMainMenu from "./Opportunities/OppMainMenu"
-import DiscoverMainMenu from "./Discover/DiscoverMainMenu"
 import { useLocation } from "react-router-dom"
 import MedMainMenu from "./Media/MedMainMenu"
 import ProfileAthleteMainMenu from "./ProfileAthlete/ProfileAthleteMainMenu"
+import DiscoverMainMenu from "./Discover/DiscoverMainMenu/DiscoverMainMenu"
 
 const DashboardMenu = () => {
   const location = useLocation()

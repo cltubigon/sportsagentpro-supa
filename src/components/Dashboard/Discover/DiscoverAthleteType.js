@@ -17,7 +17,7 @@ const DiscoverAthleteType = () => {
     order: "created_at",
     limit: 35,
   })
-  console.log({ data })
+  console.log('hi', { data })
 
   const listContainer = {
     bgSize: "cover",
