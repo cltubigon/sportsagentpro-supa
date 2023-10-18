@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Image, Skeleton } from "@chakra-ui/react"
 import { DummyImage } from "react-simple-placeholder-image"
-import { ProfileGallerySekeleton } from "../Skeleton/Skeletons"
-import supabase from "../../config/supabaseClient"
+import { ProfileGallerySekeleton } from "../../Skeleton/Skeletons"
+import supabase from "../../../config/supabaseClient"
 import { useState } from "react"
 import { useEffect } from "react"
 
@@ -35,10 +35,11 @@ const ProfileGallery = ({ query }) => {
       }
     }
   }, [query])
+  console.log({ query, imageURLs })
   const loaderArray = new Array(5).fill(0)
   return (
     <>
-      {query ? (
+      {query?.data ? (
         <Flex
           position={"relative"}
           gap={2}
@@ -49,11 +50,13 @@ const ProfileGallery = ({ query }) => {
           maxH={"280px"}
         >
           {imageURLs?.map((imageURL, index) => {
+            console.log({ index })
+            const width = {sph: '23%', stl: '19%'}
             return imageURL !== "dummy" && index < 5 ? (
               <Flex
                 key={index}
                 display={index > 4 && { lph: "none", stl: "flex" }}
-                w={"19%"}
+                w={width}
                 h={"100%"}
               >
                 <Image src={imageURL?.data.publicUrl} />
@@ -62,8 +65,8 @@ const ProfileGallery = ({ query }) => {
               index < 5 && (
                 <Flex
                   key={index}
-                  display={index > 4 && { lph: "none", stl: "flex" }}
-                  w={"19%"}
+                  display={index > 3 && { sph: "none", stl: "flex" }}
+                  w={width}
                   h={'100%'}
                 >
                   <DummyImage bgColor="#A0AEC0" placeholder="280x280" />
@@ -73,11 +76,12 @@ const ProfileGallery = ({ query }) => {
           })}
           {!query.data &&
             loaderArray?.map((item, index) => {
+              const width = {sph: '23%', stl: '19%'}
               return (
                 <Flex
                   key={index}
                   display={{ lph: "none", stl: "flex" }}
-                  w={"19%"}
+                  w={width}
                   h={'100%'}
                 >
                   <Skeleton

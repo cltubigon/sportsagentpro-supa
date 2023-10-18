@@ -45,7 +45,7 @@ export const HomeSkeleton = () => {
 export const ProfileGallerySekeleton = () => {
     return (
       <>
-        <Grid templateColumns="repeat(5, 1fr)" gridGap={2} px={4}>
+        <Grid templateColumns="repeat(5, 1fr)" gridGap={2} px={4} minH={'280px'}>
             <Stack mb={4}>
                 <Skeleton height="240px" />
             </Stack>
