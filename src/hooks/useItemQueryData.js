@@ -4,7 +4,7 @@ import supabase from "../config/supabaseClient"
 const fetchItemData = async (query) => {
   const { data, error } = await supabase
     .from(query.from)
-    .select("*, images(profile_picture)")
+    .select(query.select)
     .eq(query.eqColumn, query.eqValue)
   if (error) throw error
   return data

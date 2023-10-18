@@ -16,6 +16,6 @@ export const MainNavigationStyle = {
   },
   logoText: {
     as: "h3",
-    fontSize: "3xl",
+    fontSize: {sph: 'xl', sdt: "3xl"},
   },
 }

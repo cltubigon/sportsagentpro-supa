@@ -3,6 +3,7 @@ import {
   Box,
   Flex,
   Heading,
+  Image,
   SkeletonCircle,
   Stack,
   Text,
@@ -20,7 +21,13 @@ const ProfileContentLeft = ({ query }) => {
     query?.data &&
     query.data[0].images &&
     query.data[0].images[0]?.profile_picture?.path
-  const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName)
+  const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName, {
+    transform: {
+      width: 56,
+      height: 56,
+      resize: "cover", // fill | contain
+    },
+  })
   const selectedAthlete = query.data && query.data[0]
   console.log({ selectedAthlete })
 
@@ -67,15 +74,8 @@ const ProfileContentLeft = ({ query }) => {
                 />
               )}
               {selectedAthlete.images.length > 0 && (
-                <Flex
-                  w={"56px"}
-                  h={"56px"}
-                  borderRadius={"200px"}
-                  bgImage={imageURL?.data?.publicUrl}
-                  bgSize={"cover"}
-                  bgPosition={"center"}
-                  shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
-                />
+                <Image src={imageURL?.data?.publicUrl} w={"56px"}
+                h={"56px"} shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"} borderRadius={"200px"} />
               )}
               {/* =================== End of Image =================== */}
             </Box>

@@ -64,7 +64,8 @@ const AthleteLists = ({ data }) => {
     <>
       {data?.pages.map(({ data }) => {
         return data?.map((athlete, index) => {
-          const { id, lastName, firstName, current_team, sport, images } = athlete
+          const { id, lastName, firstName, current_team, sport, images } =
+            athlete
           const profilePictures = athlete.images
 
           const path = images[0]?.profile_picture.path
@@ -83,9 +84,10 @@ const AthleteLists = ({ data }) => {
               key={index}
               onMouseOver={() => handleOnMouseOver(index)}
               onMouseLeave={() => handleOnMouseLeave(index)}
+              w={"100%"}
             >
-              <Link to={`/profile/${id}`}>
-                <Flex sx={athletesStyle.cardCOntainer}>
+              <Flex sx={athletesStyle.cardCOntainer} w={"100%"}>
+                <Link to={`/profile/${id}`}>
                   {/* ================= Image ================= */}
                   {profilePictures.length === 0 && (
                     <Flex
@@ -172,14 +174,14 @@ const AthleteLists = ({ data }) => {
                       {firstName} {lastName}
                     </Text>
                     <Text sx={athletesStyle.cardSportsType} noOfLines={[1]}>
-                      {sport[0] || '-'} • {current_team[0] || '-'}
+                      {sport[0] || "-"} • {current_team[0] || "-"}
                     </Text>
                     <Box sx={athletesStyle.cardSocialMedia}>
                       <ProfileSocialMedia />
                     </Box>
                   </Flex>
-                </Flex>
-              </Link>
+                </Link>
+              </Flex>
             </Flex>
           )
         })

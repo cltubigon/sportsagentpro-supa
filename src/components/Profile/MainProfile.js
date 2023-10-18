@@ -14,6 +14,7 @@ const Profile = () => {
     key: "athlete",
     mainKey: 'athletes',
     from: "users",
+    select: "*, images(profile_picture, gallery)",
     eqColumn: "id",
     eqValue: params.id,
   })
@@ -22,7 +23,7 @@ const Profile = () => {
   return (
     <>
       <ProfileSubNavigation />
-      <ProfileGallery />
+      <ProfileGallery query={query} />
       <ProfileContent query={query} />
     </>
   )

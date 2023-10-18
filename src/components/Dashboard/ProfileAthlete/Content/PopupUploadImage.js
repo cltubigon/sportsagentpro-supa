@@ -80,7 +80,7 @@ const PopupUploadImage = ({ setpopup }) => {
     console.log("trying to send")
     setuploading(true)
     for (const file of acceptedFiles) {
-      const fileName = file.name + dateNow()
+      const fileName = dateNow() + file.name
       console.log({ file })
       const { data, error } = await supabase.storage
         .from("gallery")
