@@ -2,7 +2,6 @@ import { Button, Flex, Icon, Text } from "@chakra-ui/react"
 import React from "react"
 import { GoFileMedia } from "react-icons/go"
 import PopupUploadImage from "./Content/PopupUploadImage"
-import { useSelector } from "react-redux"
 import { useState } from "react"
 
 const ProfileAthleteMedia = () => {
