@@ -112,14 +112,14 @@ const PopupUploadImage = ({ setpopup }) => {
     setlistOfFiles([])
 
     const timeout = setTimeout(() => {
-      setpopup(prev => !prev)
+      setpopup((prev) => !prev)
       toast({
-      title: `Upload complete`,
-      description:  'Successfully uploaded your photos',
-      status: `success`,
-      duration: 4000,
-      isClosable: true,
-      position: `top-right`,
+        title: `Upload complete`,
+        description: "Successfully uploaded your photos",
+        status: `success`,
+        duration: 4000,
+        isClosable: true,
+        position: `top-right`,
       })
     }, 300)
     return () => {
@@ -173,10 +173,15 @@ const PopupUploadImage = ({ setpopup }) => {
         </Flex>
         <Flex
           p={10}
-          border={"1px dashed #333333"}
+          border={
+            acceptedFiles?.length === 0
+              ? "1px dashed #1DA1F2"
+              : "1px dashed #333333"
+          }
           justifyContent={"center"}
           {...getRootProps({ className: "dropzone" })}
           pointerEvents={listOfFiles?.length !== 0 && uploading && "none"}
+          bgColor={"blue.100"}
         >
           <Input {...getInputProps()} />
           {listOfFiles?.length === 0 || !uploading ? (
@@ -196,7 +201,15 @@ const PopupUploadImage = ({ setpopup }) => {
             Note: The order you upload your photos will be the order they appear
             on your profile.
           </Text>
-          <Button colorScheme="twitter" w={"100%"} mb={1} onClick={handleClick}>
+          <Button
+            colorScheme={acceptedFiles?.length > 0 && "twitter"}
+            color={acceptedFiles?.length === 0 ? "blackAlpha.700" : "white"}
+            border={acceptedFiles?.length === 0 && "1px solid #ccc"}
+            pointerEvents={acceptedFiles?.length === 0 && "none"}
+            w={"100%"}
+            mb={1}
+            onClick={handleClick}
+          >
             Upload
           </Button>
         </Flex>

@@ -39,6 +39,7 @@ const ProfilePictureSection = ({ data }) => {
   const user = useSelector((state) => state.auth.user)
   const fileExtension = dateNow()
   const [publicURL, setPublicURL] = useState(null)
+  const selectedPerson = data && data[0]
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     console.log("Accepted Files:", acceptedFiles)
@@ -69,17 +70,19 @@ const ProfilePictureSection = ({ data }) => {
     eqValue: user.id,
   })
 
+  const thePath = image && image[0]?.profile_picture?.path
+
   useEffect(() => {
     if (image && image.length > 0) {
-      getPublicUrl(image && image[0]?.profile_picture?.path)
+      getPublicUrl(thePath)
     }
   }, [image])
 
   const { mutate } = useMutateProfilePicture()
 
-  const getPublicUrl = (path) => {
+  const getPublicUrl = () => {
     setPublicURL(
-      supabase.storage.from(`avatar`).getPublicUrl(path, {
+      supabase.storage.from(`avatar`).getPublicUrl(thePath, {
         transform: {
           width: 120,
           height: 120,
@@ -95,8 +98,7 @@ const ProfilePictureSection = ({ data }) => {
       .from("avatar")
       .upload(`${user?.id}/${fileExtension}`, acceptedFiles[0])
     if (data) {
-      const path = data.path
-      getPublicUrl(path)
+      getPublicUrl(data.path)
       getList(data.path)
     } else if (error) {
       console.log({ error })
@@ -124,26 +126,25 @@ const ProfilePictureSection = ({ data }) => {
       debounceUpload()
     }
   }, [acceptedFiles])
-  console.log({ user, data, publicURL, image })
-  // const currentTeam =
-  //   data && data[0].current_team?.map((team) => team).join(" • ")
-  // const currentSport = data && data[0].sport?.map((val) => val).join(" • ")
+  console.log({ user, data, selectedPerson, publicURL, image, thePath })
+  
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
         <Flex gap={4} alignItems={"center"}>
           <Flex flexDirection={"column"} gap={2}>
             {/* ===================== Image ===================== */}
-            {image?.length > 0 && (
-              // <Flex
-              //   bgImage={publicURL?.data?.publicUrl}
-              //   bgSize={"cover"}
-              //   bgPosition={"center"}
-              //   w={"125px"}
-              //   h={"125px"}
-              //   borderRadius={"200px"}
-              //   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
-              // />
+            {!selectedPerson && (
+              <SkeletonCircle
+                startColor="#BCC6D3"
+                endColor="#d9d9d9"
+                size="10"
+                w={"125px"}
+                h={"125px"}
+                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+              />
+            )}
+            {image?.length > 0  && thePath && (
               <Image
                 src={publicURL?.data?.publicUrl}
                 w={"125px"}
@@ -152,7 +153,7 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {image && image.length === 0 && (
+            {(selectedPerson && !thePath) && (
               <Icon
                 as={BsFillPersonFill}
                 color={"gray.400"}
@@ -163,16 +164,7 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {!image && (
-              <SkeletonCircle
-                startColor="#BCC6D3"
-                endColor="#d9d9d9"
-                size="10"
-                w={"125px"}
-                h={"125px"}
-                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
-              />
-            )}
+            
 
             {/* ===================== End of Image ===================== */}
           </Flex>

@@ -8,7 +8,6 @@ import { useEffect } from "react"
 const ProfileGallery = ({ query }) => {
   console.log("--------------------------Gallery Rendered")
   const [imageURLs, setimageURLs] = useState([])
-  console.log({ query })
   useEffect(() => {
     const galleryItems =
       query?.data && query.data[0].images && query.data[0].images[0]?.gallery
@@ -30,14 +29,12 @@ const ProfileGallery = ({ query }) => {
         const placeholdersCount = 5 - imageURL.length
         const dummyArray = new Array(placeholdersCount).fill("dummy")
         const mergedArray = [...imageURL, ...dummyArray]
-        console.log({ mergedArray })
         setimageURLs(mergedArray)
       } else {
         setimageURLs(imageURL)
       }
     }
   }, [query])
-  console.log({ imageURLs })
   const loaderArray = new Array(5).fill(0)
   return (
     <>
@@ -52,7 +49,6 @@ const ProfileGallery = ({ query }) => {
           maxH={"280px"}
         >
           {imageURLs?.map((imageURL, index) => {
-            console.log({ index })
             return imageURL !== "dummy" && index < 5 ? (
               <Flex
                 key={index}

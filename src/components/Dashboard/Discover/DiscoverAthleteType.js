@@ -61,7 +61,7 @@ const DiscoverAthleteType = () => {
                     resize: "cover", // 'cover' | 'fill' | 'contain'
                   },
                 })
-              console.log({ path, imageURL })
+              // console.log({ path, imageURL, brand })
               return (
                 <Flex sx={listContainer} key={index}>
                   {profilePictures.length === 0 && (

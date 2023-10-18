@@ -77,9 +77,9 @@ const FilterBrandCategories = () => {
                 <AccordionPanel pb={4} maxH={"330px"} overflowY={"auto"}>
                   <FormControl>
                     <InputGroup display={"flex"} flexDirection={"column"}>
-                      {listBrandCategories.map((category) => {
+                      {listBrandCategories.map((category, index) => {
                         return (
-                          <Checkbox value={category} {...register(category)}>
+                          <Checkbox key={index} value={category} {...register(category)}>
                             {category}
                           </Checkbox>
                         )

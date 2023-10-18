@@ -68,8 +68,7 @@ const AthleteLists = ({ data }) => {
             athlete
           const profilePictures = athlete.images
 
-          const path = images[0]?.profile_picture.path
-          console.log({ path })
+          const path = images[0]?.profile_picture?.path
           const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path, {
             transform: {
               quality: 83,
@@ -89,12 +88,6 @@ const AthleteLists = ({ data }) => {
               <Flex sx={athletesStyle.cardCOntainer} w={"100%"}>
                 <Link to={`/profile/${id}`}>
                   {/* ================= Image ================= */}
-                  {profilePictures.length === 0 && (
-                    <Flex
-                      sx={athletesStyle.imageContainer}
-                      bgImage={"url(images/athlete-placeholder.jpg)"}
-                    ></Flex>
-                  )}
                   {data === undefined && (
                     <Skeleton
                       startColor="#BCC6D3"
@@ -104,7 +97,13 @@ const AthleteLists = ({ data }) => {
                       borderRadius={"md"}
                     />
                   )}
-                  {profilePictures.length > 0 && (
+                  {(profilePictures.length === 0 || !path) && (
+                    <Flex
+                      sx={athletesStyle.imageContainer}
+                      bgImage={"url(images/athlete-placeholder.jpg)"}
+                    ></Flex>
+                  )}
+                  {profilePictures.length > 0 && path && (
                     <Flex
                       w={"100%"}
                       overflow={"hidden"}

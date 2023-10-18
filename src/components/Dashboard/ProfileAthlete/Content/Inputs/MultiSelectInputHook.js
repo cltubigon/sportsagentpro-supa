@@ -18,7 +18,6 @@ import useUpdateSingleColumn from "../../../../../hooks/update/useUpdateSingleCo
 const MultiSelectInputHook = (props) => {
   const { query, initialValue, value: selections , setValue: setselections, arrayLists: dropList } = props
   // console.log({ initialValue })
-  console.log({ selections })
   const [isOpen, setIsOpen] = useState(false)
   const [filterValues, setfilterValues] = useState("")
   const dropdownRef = useRef(null)

@@ -29,7 +29,7 @@ const ProfileContentLeft = ({ query }) => {
     },
   })
   const selectedAthlete = query.data && query.data[0]
-  console.log({ selectedAthlete })
+  console.log({ pathName, selectedAthlete })
 
   return (
     <Flex flexDirection={"column"} flexGrow={1}>
@@ -53,7 +53,16 @@ const ProfileContentLeft = ({ query }) => {
             </Box>
             <Box>
               {/* =================== Image =================== */}
-              {selectedAthlete.images.length === 0 && (
+              {!selectedAthlete && (
+                <SkeletonCircle
+                  startColor="#BCC6D3"
+                  endColor="#d9d9d9"
+                  w={"56px"}
+                  h={"56px"}
+                  shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+                />
+              )}
+              {(selectedAthlete.images.length === 0 || !pathName) && (
                 <DummyImage
                   width={56}
                   height={56}
@@ -64,16 +73,7 @@ const ProfileContentLeft = ({ query }) => {
                   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
                 />
               )}
-              {!(
-                <SkeletonCircle
-                  startColor="#BCC6D3"
-                  endColor="#d9d9d9"
-                  w={"56px"}
-                  h={"56px"}
-                  shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
-                />
-              )}
-              {selectedAthlete.images.length > 0 && (
+              {selectedAthlete.images.length > 0 && pathName && (
                 <Image src={imageURL?.data?.publicUrl} w={"56px"}
                 h={"56px"} shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"} borderRadius={"200px"} />
               )}
