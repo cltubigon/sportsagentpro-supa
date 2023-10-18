@@ -28,6 +28,7 @@ import { GrContactInfo } from "react-icons/gr"
 import GoogleMapLocationAutoComplete from "./GoogleMapAutoComplete/GoogleMapAutoCompleteTwo"
 import { IoLocationOutline } from "react-icons/io5"
 import { BiRun } from "react-icons/bi"
+import ProfileAthleteMedia from "../ProfileAthleteMedia"
 
 const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
   // console.log("middle content generated")
@@ -119,6 +120,17 @@ const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
     updateColumn: "discipline",
   }
 
+  const sectionContainerStyle = {
+    border: "1px solid #ccc",
+    px: 4,
+    py: 6,
+    boxShadow: "md",
+    color: "gray.800",
+    flexDirection: "column",
+    gap: 4,
+    borderRadius: 'lg',
+  }
+
   return (
     <Flex
       flexGrow={1}
@@ -129,7 +141,7 @@ const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
     >
       <ProfilePictureSection data={!isLoading && data} />
       {/* ===================== Basic Information ===================== */}
-      <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
+      <Flex sx={sectionContainerStyle}>
         <Flex alignItems={"center"} gap={3}>
           <Icon as={RiProfileLine} boxSize={6} />
           <Text fontWeight={"semibold"}>Basic info</Text>
@@ -222,7 +234,7 @@ const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
       </Flex>
       {/* ===================== End Basic Information ===================== */}
       {/* ===================== About You ===================== */}
-      <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
+      <Flex sx={sectionContainerStyle}>
         <Flex flexDirection={"column"}>
           <Flex alignItems={"center"} gap={3}>
             <Icon as={GrContactInfo} boxSize={6} />
@@ -297,10 +309,13 @@ const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
         )}
       </Flex>
       {/* ===================== End of About You ===================== */}
+      {/* ===================== Media ===================== */}
+      <Flex sx={sectionContainerStyle}><ProfileAthleteMedia /></Flex>
+      {/* ===================== End of Media ===================== */}
       {/* ===================== Location ===================== */}
       {/* <ProfileAthleteAboutYou /> */}
       {/* <ProfileAthleteLocation /> */}
-      <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
+      <Flex sx={sectionContainerStyle}>
         <Flex flexDirection={"column"}>
           <Flex alignItems={"center"} gap={3}>
             <Icon as={IoLocationOutline} boxSize={6} />
@@ -334,7 +349,7 @@ const ProfileAthleteMiddleContent = ({ data, isLoading }) => {
       {/* ===================== End of Location ===================== */}
       {/* ===================== Athletic Profile ===================== */}
       {/* <ProfileAthleticProfile /> */}
-      <Flex color={"gray.800"} flexDirection={"column"} gap={4}>
+      <Flex sx={sectionContainerStyle}>
         <Flex flexDirection={"column"}>
           <Flex alignItems={"center"} gap={3}>
             <Icon as={BiRun} boxSize={6} />

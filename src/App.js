@@ -31,8 +31,8 @@ function App() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.user)
   const postDrawer = useSelector((state) => state.utils.postDrawer)
-  // const state = useSelector(state => state)
-  // console.log('state: ', state)
+  const state = useSelector(state => state)
+  console.log('state: ', state)
 
   // Check if user is authenticated
   useEffect(() => {

@@ -42,7 +42,7 @@ const ProfilePictureSection = ({ data }) => {
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     console.log("Accepted Files:", acceptedFiles)
-    if (rejectedFiles) {
+    if (rejectedFiles && rejectedFiles.length > 0) {
       const code = rejectedFiles[0].errors[0].code
       if (code === "file-too-large") {
         toast({
@@ -105,6 +105,7 @@ const ProfilePictureSection = ({ data }) => {
 
   const getList = async (path) => {
     const fileName = path.replace(user?.id + "/", "")
+    console.log({ fileName })
     const { data, error } = await supabase.storage
       .from("avatar")
       .list(`${user?.id}`, {

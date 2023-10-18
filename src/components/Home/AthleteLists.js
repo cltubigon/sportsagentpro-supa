@@ -68,6 +68,7 @@ const AthleteLists = ({ data }) => {
           const profilePictures = athlete.images
 
           const path = images[0]?.profile_picture.path
+          console.log({ path })
           const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path, {
             transform: {
               quality: 83,

@@ -27,10 +27,20 @@ const initialState = {
     pageNumber: 1,
     postApplicants: [],
   },
+  popup: {
+    isOpen: false,
+  }
 }
 
 const utilsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_POPUP":
+      console.log('action.payload: ', action.payload)
+      return produce(state, (draft) => {
+        draft.popup = {
+          isOpen: action.payload.isOpen,
+        }
+      })
     case "SET_SHOW_DRAWER":
       console.log('action.payload: ', action.payload)
       return produce(state, (draft) => {
