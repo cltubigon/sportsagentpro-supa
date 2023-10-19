@@ -26,6 +26,7 @@ import supabase from "./config/supabaseClient"
 import DrawerAthlete from "./components/Dashboard/Opportunities/DrawerAthlete"
 import ProfileAthleteSettings from "./pages/DashboardPages/ProfileAthleteSettings"
 import Test from "./Test"
+import Main from "./Blurhash/Main"
 
 function App() {
   const dispatch = useDispatch()
@@ -59,6 +60,7 @@ function App() {
         <Route exact path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
+        <Route path="/main" element={<Main />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
         {/* <Route path="/register-team" element={<RegisterTeam />}></Route> */}

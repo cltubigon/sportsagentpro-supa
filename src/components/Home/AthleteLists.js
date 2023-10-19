@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { athletesStyle } from "../../styles/athletesStyle"
 import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 import supabase from "../../config/supabaseClient"
-import { Skeleton } from "@chakra-ui/react"
+import { Image, Skeleton } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import { useState } from "react"
 
@@ -141,7 +141,6 @@ const AthleteLists = ({ data }) => {
                       </Flex>
                       <Flex
                         sx={athletesStyle.imageContainer}
-                        bgImage={imageURL && imageURL.data.publicUrl}
                         bgPosition={"top"}
                         as={motion.div}
                         variants={imageAnimation}
@@ -149,12 +148,13 @@ const AthleteLists = ({ data }) => {
                         animate={
                           isHovered === index ? "animateZoom" : "initial"
                         }
-                        // position={"relative"}
+                        position={"relative"}
                       >
+                        <Image src={imageURL && imageURL.data.publicUrl} w={'100%'} loading="lazy" />
                         <Flex
                           bgColor={"rgba(0, 0, 0, 0.35)"}
                           w={"100%"}
-                          h={"240px"}
+                          h={"100%"}
                           as={motion.div}
                           variants={imageAnimation}
                           initial={"initialOverlay"}
@@ -163,6 +163,7 @@ const AthleteLists = ({ data }) => {
                               ? "animateOverlay"
                               : "initialOverlay"
                           }
+                          position={'absolute'}
                         ></Flex>
                       </Flex>
                     </Flex>
