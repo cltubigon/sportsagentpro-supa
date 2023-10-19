@@ -4,10 +4,12 @@ import { ProfileGallerySekeleton } from "../../Skeleton/Skeletons"
 import supabase from "../../../config/supabaseClient"
 import { useState } from "react"
 import { useEffect } from "react"
+import GalleryPopup from "./GalleryPopup"
 
 const ProfileGallery = ({ query }) => {
   console.log("--------------------------Gallery Rendered")
   const [imageURLs, setimageURLs] = useState([])
+  const [popupOpen, setpopupOpen] = useState(false)
   useEffect(() => {
     const galleryItems =
       query?.data && query.data[0].images && query.data[0].images[0]?.gallery
@@ -35,7 +37,13 @@ const ProfileGallery = ({ query }) => {
       }
     }
   }, [query])
+
+  const handleImageClick = () => {
+    setpopupOpen(prev => !prev)
+  }
+
   console.log({ query, imageURLs })
+
   const loaderArray = new Array(5).fill(0)
   return (
     <>
@@ -47,7 +55,7 @@ const ProfileGallery = ({ query }) => {
           alignItems={"center"}
           justifyContent={"space-between"}
           px={4}
-          maxH={"280px"}
+          minH={{sph: '67px', stl: '136px', ltl: '176px', slt: '186px', llt: '234px', sdt: "251px", ldt: '268px'}}
         >
           {imageURLs?.map((imageURL, index) => {
             console.log({ index })
@@ -59,7 +67,7 @@ const ProfileGallery = ({ query }) => {
                 w={width}
                 h={"100%"}
               >
-                <Image src={imageURL?.data.publicUrl} />
+                <Image src={imageURL?.data.publicUrl} onClick={handleImageClick} />
               </Flex>
             ) : (
               index < 5 && (
@@ -132,6 +140,7 @@ const ProfileGallery = ({ query }) => {
       ) : (
         <ProfileGallerySekeleton />
       )}
+      {popupOpen && <GalleryPopup setpopupOpen={setpopupOpen} imageURLs={imageURLs} />}
     </>
   )
 }
