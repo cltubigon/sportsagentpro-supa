@@ -42,24 +42,24 @@ export const HomeSkeleton = () => {
       </>
     )
 }
-export const ProfileGallerySekeleton = () => {
+export const ProfileGallerySekeleton = ({ minH }) => {
     return (
       <>
-        <Grid templateColumns="repeat(5, 1fr)" gridGap={2} px={4} minH={'280px'}>
-            <Stack mb={4}>
-                <Skeleton height="240px" />
+        <Grid templateColumns="repeat(5, 1fr)" gridGap={2} px={4} minH={minH}>
+            <Stack>
+                <Skeleton height="100%" />
             </Stack>
             <Stack>
-                <Skeleton height="240px" />
+                <Skeleton height="100%" />
             </Stack>
             <Stack>
-                <Skeleton height="240px" />
+                <Skeleton height="100%" />
             </Stack>
             <Stack>
-                <Skeleton height="240px" />
+                <Skeleton height="100%" />
             </Stack>
             <Stack>
-                <Skeleton height="240px" />
+                <Skeleton height="100%" />
             </Stack>
         </Grid>
       </>

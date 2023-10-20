@@ -1,10 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react"
 import { encode } from "blurhash"
 
-function BlurhashGenerator({ image, setblurhash }) {
-
-  useEffect(() => {
+export const generateBlurImage = (image) => {
+  return new Promise((resolve, reject) => {
     const img = new Image()
     img.crossOrigin = "anonymous"
     img.src = image
@@ -17,13 +14,11 @@ function BlurhashGenerator({ image, setblurhash }) {
       ctx.drawImage(img, 0, 0, img.width, img.height)
       const imageData = ctx.getImageData(0, 0, img.width, img.height)
       const blurhash = encode(imageData.data, img.width, img.height, 4, 3)
-      setblurhash(blurhash)
+      resolve(blurhash)
     }
-  }, [image])
 
-  return <></>
-
-//   return <div>{component({ blurhash })}</div>
+    img.onerror = (error) => {
+      reject(error)
+    }
+  })
 }
-
-export default BlurhashGenerator

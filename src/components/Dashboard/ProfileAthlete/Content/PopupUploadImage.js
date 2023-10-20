@@ -15,6 +15,7 @@ import { useSelector } from "react-redux"
 import supabase from "../../../../config/supabaseClient"
 import { useState } from "react"
 import { useMutateMultiplePictures } from "../../../../hooks/imageHooks/useMutateMultiplePictures"
+import { generateBlurImage } from "../../../../utils/generateBlurImage"
 
 const dateNow = () => {
   const now = new Date()
@@ -97,10 +98,25 @@ const PopupUploadImage = ({ setpopup }) => {
           })
 
         if (dataList) {
-          console.log({ dataList })
-          const metaData = { ...dataList[0], path }
+          const image = supabase.storage.from(`gallery`).getPublicUrl(path, {
+            transform: {
+              width: 32,
+              height: 32,
+              resize: "cover", // fill | contain
+            },
+          })
+          const getHash = async (image) => {
+            try {
+              const hash = await generateBlurImage(image)
+              console.log({ dataList, image, path, hash })
+              const metaData = { ...dataList[0], path, hash }
+              mutate({ metaData, userID })
+            } catch (error) {
+              console.log({ error })
+            }
+          }
+          getHash(image.data.publicUrl)
 
-          mutate({ metaData, userID })
         } else if (errorList) {
           console.log({ errorList })
         }
