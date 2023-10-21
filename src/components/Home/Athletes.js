@@ -12,6 +12,7 @@ const Athletes = () => {
     useInfiniteQueryData({
       key: "athletes",
       from: "users",
+      select: "*,images(profile_picture, gallery)",
       eqColumn: "userType",
       eqValue: "athlete",
       order: "created_at",

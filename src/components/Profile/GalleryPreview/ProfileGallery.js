@@ -4,7 +4,7 @@ import supabase from "../../../config/supabaseClient"
 import { useState } from "react"
 import { useEffect } from "react"
 import GalleryPopup from "./GalleryPopup"
-import ImageOnload from "../../../ImageOnload"
+import ImageOnload from "../../../utils/Blurhash/ImageWithBlurhash"
 
 const ProfileGallery = ({ query }) => {
   console.log("--------------------------Gallery Rendered")
@@ -12,12 +12,11 @@ const ProfileGallery = ({ query }) => {
   const [popupOpen, setpopupOpen] = useState(false)
   useEffect(() => {
     const galleryItems =
-      query?.data && query.data[0].images && query.data[0].images[0]?.gallery
-    const galleryPathAndHash = galleryItems?.map((item) => {
-      console.log({ item })
+      query?.data && query.data[0]?.images && query.data[0]?.images[0]?.gallery
+    const galleryPathAndHash = galleryItems?.map((item, index) => {
       return { path: item.path, hash: item.hash }
-    })
-    // .sort((a, b) => b.localeCompare(a))
+    }).sort((a, b) => b.path.localeCompare(a.path))
+
     console.log({ galleryPathAndHash })
     if (galleryPathAndHash?.length > 0) {
       const publicPathAndHash = galleryPathAndHash?.map((item) => {
@@ -32,14 +31,6 @@ const ProfileGallery = ({ query }) => {
         return { path: publicpath, hash }
       })
       setimagePathAndHash(publicPathAndHash)
-      // if (publicPathAndHash?.length < 6) {
-      //   const placeholdersCount = 5 - publicPathAndHash.length
-      //   const dummyArray = new Array(placeholdersCount).fill("dummy")
-      //   const mergedArray = [...publicPathAndHash, ...dummyArray]
-      //   setimagePathAndHash(mergedArray)
-      // } else {
-      //   setimagePathAndHash(publicPathAndHash)
-      // }
     }
   }, [query])
 

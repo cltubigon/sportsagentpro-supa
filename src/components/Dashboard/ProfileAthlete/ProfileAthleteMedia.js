@@ -3,7 +3,6 @@ import React from "react"
 import { GoFileMedia } from "react-icons/go"
 import PopupUploadImage from "./Content/PopupUploadImage"
 import { useState } from "react"
-import GenerateBlurhash from "./GenerateBlurhash"
 
 const ProfileAthleteMedia = () => {
     const [popup, setpopup] = useState(false)
@@ -30,7 +29,6 @@ const ProfileAthleteMedia = () => {
           Showcase additional visuals about you by uploading at least 4 photos.
         </Text>
       </Flex>
-      {/* <GenerateBlurhash /> */}
       {popup && <PopupUploadImage setpopup={setpopup} />}
       <Button border={"1px solid #1DA1F2"} onClick={handleClick}>Add photos</Button>
     </>

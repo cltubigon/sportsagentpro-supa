@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import { Text, Flex, Box } from "@chakra-ui/layout"
 import { Link } from "react-router-dom"
 import { athletesStyle } from "../../styles/athletesStyle"
@@ -31,34 +32,34 @@ const AthleteLists = ({ data }) => {
         duration: duration,
       },
     },
-    initialOverlay: {
-      opacity: 0,
-      transition: {
-        duration: duration,
-      },
-    },
-    animateOverlay: {
-      opacity: 1,
-      transition: {
-        duration: duration,
-      },
-    },
-    initialViewHeight: {
-      display: "none",
-      opacity: 0,
-      height: "80px",
-      transition: {
-        duration: duration,
-      },
-    },
-    animateViewHeight: {
-      display: "flex",
-      opacity: 0.6,
-      height: "50px",
-      transition: {
-        duration: duration,
-      },
-    },
+    // initialOverlay: {
+    //   opacity: 0,
+    //   transition: {
+    //     duration: duration,
+    //   },
+    // },
+    // animateOverlay: {
+    //   opacity: 1,
+    //   transition: {
+    //     duration: duration,
+    //   },
+    // },
+    // initialViewHeight: {
+    //   display: "none",
+    //   opacity: 0,
+    //   height: "80px",
+    //   transition: {
+    //     duration: duration,
+    //   },
+    // },
+    // animateViewHeight: {
+    //   display: "flex",
+    //   opacity: 0.6,
+    //   height: "50px",
+    //   transition: {
+    //     duration: duration,
+    //   },
+    // },
   }
   return (
     <>
@@ -66,18 +67,21 @@ const AthleteLists = ({ data }) => {
         return data?.map((athlete, index) => {
           const { id, lastName, firstName, current_team, sport, images } =
             athlete
+
           const profilePictures = athlete.images
 
-          const path = images[0]?.profile_picture?.path
-          const imageURL = supabase.storage.from(`avatar`).getPublicUrl(path, {
-            transform: {
-              quality: 83,
-              width: 330,
-              height: 240,
-              resize: "cover", // 'cover' | 'fill' | 'contain'
-              // format: 'origin'
-            },
-          })
+          const profilePath = images[0]?.profile_picture?.path
+          const imageURL = supabase.storage
+            .from(`avatar`)
+            .getPublicUrl(profilePath, {
+              transform: {
+                quality: 83,
+                width: 330,
+                height: 240,
+                resize: "cover", // 'cover' | 'fill' | 'contain'
+              },
+            })
+
           return (
             <Flex
               key={index}
@@ -97,13 +101,13 @@ const AthleteLists = ({ data }) => {
                       borderRadius={"md"}
                     />
                   )}
-                  {(profilePictures.length === 0 || !path) && (
+                  {(profilePictures.length === 0 || !profilePath) && (
                     <Flex
                       sx={athletesStyle.imageContainer}
                       bgImage={"url(images/athlete-placeholder.jpg)"}
                     ></Flex>
                   )}
-                  {profilePictures.length > 0 && path && (
+                  {profilePictures.length > 0 && profilePath && (
                     <Flex
                       w={"100%"}
                       overflow={"hidden"}
@@ -112,7 +116,7 @@ const AthleteLists = ({ data }) => {
                       justifyContent={"center"}
                       borderRadius={"md"}
                     >
-                      <Flex
+                      {/* <Flex
                         w={"80%"}
                         borderTop={"3px solid white"}
                         borderBottom={"3px solid white"}
@@ -138,7 +142,7 @@ const AthleteLists = ({ data }) => {
                         >
                           View Athlete
                         </Text>
-                      </Flex>
+                      </Flex> */}
                       <Flex
                         sx={athletesStyle.imageContainer}
                         bgPosition={"top"}
@@ -150,8 +154,12 @@ const AthleteLists = ({ data }) => {
                         }
                         position={"relative"}
                       >
-                        <Image src={imageURL && imageURL.data.publicUrl} w={'100%'} loading="lazy" />
-                        <Flex
+                        <Image
+                          src={imageURL && imageURL.data.publicUrl}
+                          w={"100%"}
+                          loading="lazy"
+                        />
+                        {/* <Flex
                           bgColor={"rgba(0, 0, 0, 0.35)"}
                           w={"100%"}
                           h={"100%"}
@@ -163,8 +171,8 @@ const AthleteLists = ({ data }) => {
                               ? "animateOverlay"
                               : "initialOverlay"
                           }
-                          position={'absolute'}
-                        ></Flex>
+                          position={"absolute"}
+                        ></Flex> */}
                       </Flex>
                     </Flex>
                   )}

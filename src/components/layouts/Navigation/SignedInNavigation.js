@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from "@chakra-ui/react"
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { FaFileContract } from "react-icons/fa"
@@ -28,8 +28,15 @@ const SignedInNavigation = ({ setSigningOut }) => {
                 Build
               </Button>
             </Link>
+            
           </Box>
         )}
+        <Link to={'/updater'}><Text>
+        Updater
+      </Text></Link>
+      <Link to={`/profile/${user?.userID}`}>
+          <Button colorScheme="twitter">View profile</Button>
+        </Link>
 
         <SignedInSubMenu setSigningOut={setSigningOut} />
       </Flex>

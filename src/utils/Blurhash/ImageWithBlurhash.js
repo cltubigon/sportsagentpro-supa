@@ -5,11 +5,11 @@ import { useState } from "react"
 import { Blurhash } from "react-blurhash"
 import "./blurCanvass.css"
 
-const ImageOnload = ({ srcOrigin, hash, circle }) => {
+const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
   const [isFullyLoaded, setisFullyLoaded] = useState(false)
   const handleOnLoad = () => {
     console.log("onload triggered")
-    setisFullyLoaded((prev) => !prev)
+    setisFullyLoaded(true)
   }
 
   // const widthInt = parseInt(width.replace('px', ''))
@@ -18,22 +18,18 @@ const ImageOnload = ({ srcOrigin, hash, circle }) => {
   const animate = {
     initial: {
       opacity: 0,
-      filter: 'blur(5px)',
-      transition: {
-        duration: 0.4,
-      }
+      // filter: 'blur(5px)',
     },
     opacity: {
       opacity: 1,
-      filter: 'blur(0px)',
-      transition: {
-        duration: 0.4,
-      }
+      // filter: 'blur(0px)',
     },
   }
+  console.log({ isFullyLoaded, hash })
   return (
     <Flex h={"100%"} w={"100%"} position={"relative"} className="main" gap={0}>
       {/* ============== Thumbnail Image ============== */}
+      {hash && (
         <Flex
           className="subCont"
           position={"absolute"}
@@ -41,12 +37,10 @@ const ImageOnload = ({ srcOrigin, hash, circle }) => {
           left={0}
           w={"100%"}
           h={"100%"}
-          as={motion.div}
-          variants={animate}
-          initial={"opacity"}
-          animate={isFullyLoaded && "initial"}
+          opacity={isFullyLoaded && '0'}
         >
           <Blurhash
+            // display={isFullyLoaded && "none"}
             className={circle && "blur-canvass"}
             hash={hash}
             width={"100%"}
@@ -56,14 +50,12 @@ const ImageOnload = ({ srcOrigin, hash, circle }) => {
             punch={1}
           />
         </Flex>
+      )}
       {/* ============== Large Image ============== */}
       <Flex
-        as={motion.div}
-        variants={animate}
-        initial={"initial"}
-        animate={isFullyLoaded && "opacity"}
         w={"100%"}
         h={"100%"}
+        opacity={isFullyLoaded && '100'}
       >
         <Image
           src={srcOrigin}
@@ -78,4 +70,4 @@ const ImageOnload = ({ srcOrigin, hash, circle }) => {
   )
 }
 
-export default ImageOnload
+export default ImageWithBlurhash

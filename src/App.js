@@ -26,14 +26,14 @@ import supabase from "./config/supabaseClient"
 import DrawerAthlete from "./components/Dashboard/Opportunities/DrawerAthlete"
 import ProfileAthleteSettings from "./pages/DashboardPages/ProfileAthleteSettings"
 import Test from "./Test"
-import Main from "./Blurhash/Main"
+import Updater from "./components/Home/Updater"
 
 function App() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.user)
   const postDrawer = useSelector((state) => state.utils.postDrawer)
-  const state = useSelector(state => state)
-  console.log('state: ', state)
+  // const state = useSelector(state => state)
+  // console.log('state: ', state)
 
   // Check if user is authenticated
   useEffect(() => {
@@ -60,8 +60,8 @@ function App() {
         <Route exact path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
-        <Route path="/main" element={<Main />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/updater" element={<Updater />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
         {/* <Route path="/register-team" element={<RegisterTeam />}></Route> */}
         <Route path="/add-deal" element={<CreateDeal />}></Route>

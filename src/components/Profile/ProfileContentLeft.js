@@ -19,8 +19,8 @@ import supabase from "../../config/supabaseClient"
 const ProfileContentLeft = ({ query }) => {
   const pathName =
     query?.data &&
-    query.data[0].images &&
-    query.data[0].images[0]?.profile_picture?.path
+    query.data[0]?.images &&
+    query.data[0]?.images[0]?.profile_picture?.path
   const imageURL = supabase.storage.from(`avatar`).getPublicUrl(pathName, {
     transform: {
       width: 56,

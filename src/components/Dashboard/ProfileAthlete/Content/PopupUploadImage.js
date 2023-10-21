@@ -15,7 +15,7 @@ import { useSelector } from "react-redux"
 import supabase from "../../../../config/supabaseClient"
 import { useState } from "react"
 import { useMutateMultiplePictures } from "../../../../hooks/imageHooks/useMutateMultiplePictures"
-import { generateBlurImage } from "../../../../utils/generateBlurImage"
+import { generateBlurImage } from "../../../../utils/Blurhash/generateBlurImage"
 
 const dateNow = () => {
   const now = new Date()
