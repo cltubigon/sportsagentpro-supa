@@ -31,12 +31,12 @@ const SignedInNavigation = ({ setSigningOut }) => {
             
           </Box>
         )}
-        <Link to={'/updater'}><Text>
+        {/* <Link to={'/updater'}><Text>
         Updater
       </Text></Link>
       <Link to={`/profile/${user?.userID}`}>
           <Button colorScheme="twitter">View profile</Button>
-        </Link>
+        </Link> */}
 
         <SignedInSubMenu setSigningOut={setSigningOut} />
       </Flex>
