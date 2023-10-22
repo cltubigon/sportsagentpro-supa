@@ -26,7 +26,6 @@ import supabase from "./config/supabaseClient"
 import DrawerAthlete from "./components/Dashboard/Opportunities/DrawerAthlete"
 import ProfileAthleteSettings from "./pages/DashboardPages/ProfileAthleteSettings"
 import Test from "./Test"
-import Updater from "./components/Home/Updater"
 
 function App() {
   const dispatch = useDispatch()
@@ -61,7 +60,6 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/updater" element={<Updater />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
         {/* <Route path="/register-team" element={<RegisterTeam />}></Route> */}
         <Route path="/add-deal" element={<CreateDeal />}></Route>

@@ -1,5 +1,4 @@
 import { Flex, Image } from "@chakra-ui/react"
-import { motion } from "framer-motion"
 import React from "react"
 import { useState } from "react"
 import { Blurhash } from "react-blurhash"
@@ -14,17 +13,6 @@ const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
 
   // const widthInt = parseInt(width.replace('px', ''))
   // const heightInt = parseInt(height.replace('px', ''))
-
-  const animate = {
-    initial: {
-      opacity: 0,
-      // filter: 'blur(5px)',
-    },
-    opacity: {
-      opacity: 1,
-      // filter: 'blur(0px)',
-    },
-  }
   console.log({ isFullyLoaded, hash })
   return (
     <Flex h={"100%"} w={"100%"} position={"relative"} className="main" gap={0}>
