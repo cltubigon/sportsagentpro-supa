@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react"
+import { Box, Button, Flex } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { FaFileContract } from "react-icons/fa"
