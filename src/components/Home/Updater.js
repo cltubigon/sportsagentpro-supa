@@ -10,26 +10,27 @@ import Mutator from "./Mutator"
 import { useSelector } from "react-redux"
 
 const Updater = () => {
-  console.count('updater triggered')
-    const userID = useSelector(state => state.auth.user?.userID)
-    const uid = useSelector(state => state.auth.user?.userID)
+  console.count("updater triggered")
+  // const userID = "fbb739e3-51db-4b08-96a5-33048bbfee46"
+  // const uid = "d58614c5-e2be-40ec-8863-14ce7458a552"
   const query = {
-    key: `update-${userID}`,
-    from: "images",
-    select: "gallery",
-    eqColumn: "userID",
-    eqValue: userID,
-    uid: uid,
+    key: `updater`,
+    from: "users",
+    select: "*,images(profile_picture, gallery)",
+    eqColumn: "userType",
+    eqValue: "brand",
+    // uid: uid,
   }
-  const {
-    data: images,
-  } = useItemQueryDataUpdater(query)
-  console.log({ images })
+  const { data: athletes } = useItemQueryDataUpdater(query)
+  const listofAthletes = athletes?.map(groupOfAthlete => groupOfAthlete)
+  const images = listofAthletes?.map(athlete => athlete.images)
+  console.log({ images, listofAthletes, athletes })
+
   return (
     <>
       <Flex pt={"88px"}>
         <Text>Updater</Text>
-        <Mutator userID={userID} images={images} query={query} />
+        <Mutator images={images} query={query} listofAthletes={listofAthletes} />
       </Flex>
     </>
   )

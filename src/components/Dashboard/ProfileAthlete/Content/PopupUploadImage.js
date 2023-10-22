@@ -82,6 +82,7 @@ const PopupUploadImage = ({ setpopup }) => {
     setuploading(true)
     for (const file of acceptedFiles) {
       const fileName = dateNow() + file.name
+      console.log({ fileName })
       console.log({ file })
       const { data, error } = await supabase.storage
         .from("gallery")

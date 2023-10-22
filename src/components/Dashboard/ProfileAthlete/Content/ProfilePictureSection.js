@@ -5,64 +5,24 @@ import {
   Icon,
   Image,
   // Image,
-  Input,
   SkeletonCircle,
   Text,
-  useToast,
 } from "@chakra-ui/react"
 import React from "react"
 import { useEffect } from "react"
-import { useDropzone } from "react-dropzone"
 import supabase from "../../../../config/supabaseClient"
 import { useState } from "react"
-import { debounce } from "throttle-debounce"
 import { useProfilePictureHook } from "../../../../hooks/imageHooks/useProfilePictureHook"
-import { useMutateProfilePicture } from "../../../../hooks/imageHooks/useMutateProfilePicture"
 import { BsFillPersonFill } from "react-icons/bs"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { useCallback } from "react"
-
-const dateNow = () => {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, "0") // Months are zero-based, so add 1 and pad with leading zero if necessary.
-  const day = String(now.getDate()).padStart(2, "0")
-  const hours = String(now.getHours()).padStart(2, "0")
-  const minutes = String(now.getMinutes()).padStart(2, "0")
-  const seconds = String(now.getSeconds()).padStart(2, "0")
-  return `${year}${month}${day}${hours}${minutes}${seconds}`
-}
+import UploadProfilePicture from "./UploadProfilePicture"
 
 const ProfilePictureSection = ({ data }) => {
-  const toast = useToast()
   const user = useSelector((state) => state.auth.user)
-  const fileExtension = dateNow()
+
   const [publicURL, setPublicURL] = useState(null)
   const selectedPerson = data && data[0]
-
-  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    console.log("Accepted Files:", acceptedFiles)
-    if (rejectedFiles && rejectedFiles.length > 0) {
-      const code = rejectedFiles[0].errors[0].code
-      if (code === "file-too-large") {
-        toast({
-          title: "File too large",
-          description: "Must not exceed 1MB",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-          position: "top-right",
-        })
-      }
-    }
-  }, [])
-  const maxSize = 1024 * 1024
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    maxSize,
-    acceptedFiles: "image/*", // Accept only image files
-  })
 
   const { data: image } = useProfilePictureHook({
     from: "images",
@@ -71,63 +31,22 @@ const ProfilePictureSection = ({ data }) => {
   })
 
   const thePath = image && image[0]?.profile_picture?.path
-
   useEffect(() => {
     if (image && image.length > 0) {
-      getPublicUrl(thePath)
-    }
-  }, [image])
-
-  const { mutate } = useMutateProfilePicture()
-
-  const getPublicUrl = () => {
-    setPublicURL(
-      supabase.storage.from(`avatar`).getPublicUrl(thePath, {
+      console.log({ thePath })
+      const imageUrl = supabase.storage.from(`avatar`).getPublicUrl(thePath, {
         transform: {
           width: 120,
           height: 120,
           resize: "cover", // fill | contain
         },
       })
-    )
-    // setPublicURL(supabase.storage.from(`avatar`).getPublicUrl(path))
-  }
-
-  const debounceUpload = debounce(100, async () => {
-    const { data, error } = await supabase.storage
-      .from("avatar")
-      .upload(`${user?.id}/${fileExtension}`, acceptedFiles[0])
-    if (data) {
-      getPublicUrl(data.path)
-      getList(data.path)
-    } else if (error) {
-      console.log({ error })
+      setPublicURL(imageUrl)
     }
-  })
+  }, [image])
 
-  const getList = async (path) => {
-    const fileName = path.replace(user?.id + "/", "")
-    console.log({ fileName })
-    const { data, error } = await supabase.storage
-      .from("avatar")
-      .list(`${user?.id}`, {
-        search: fileName,
-      })
-    if (data) {
-      const metaData = { ...data[0], path }
-      mutate({ metaData, userID: user.userID })
-    } else if (error) {
-      console.log({ error })
-    }
-  }
-
-  useEffect(() => {
-    if (acceptedFiles.length > 0) {
-      debounceUpload()
-    }
-  }, [acceptedFiles])
   console.log({ user, data, selectedPerson, publicURL, image, thePath })
-  
+
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
@@ -144,7 +63,7 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {image?.length > 0  && thePath && (
+            {image?.length > 0 && thePath && (
               <Image
                 src={publicURL?.data?.publicUrl}
                 w={"125px"}
@@ -153,7 +72,7 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {(selectedPerson && !thePath) && (
+            {selectedPerson && !thePath && (
               <Icon
                 as={BsFillPersonFill}
                 color={"gray.400"}
@@ -164,7 +83,6 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            
 
             {/* ===================== End of Image ===================== */}
           </Flex>
@@ -186,16 +104,7 @@ const ProfilePictureSection = ({ data }) => {
             )}
           </Flex>
         </Flex>
-        <Flex
-          {...getRootProps({ className: "dropzone" })}
-          w={"120px"}
-          justifyContent={"center"}
-        >
-          <Input {...getInputProps()} />
-          <Text fontSize={"sm"} cursor={"default"}>
-            Edit
-          </Text>
-        </Flex>
+        <UploadProfilePicture />
       </Flex>
       <Flex>
         <Link to={`/profile/${user.userID}`}>

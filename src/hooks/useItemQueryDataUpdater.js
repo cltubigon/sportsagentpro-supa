@@ -7,6 +7,8 @@ const fetchItemDataUpdater = async (query) => {
     .from(from)
     .select(select)
     .eq(eqColumn, eqValue)
+    .order('created_at', { ascending: false })
+    // .range(0,9)
   if (error) throw error
   console.log({ data })
   return data

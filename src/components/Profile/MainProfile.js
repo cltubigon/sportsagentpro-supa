@@ -18,6 +18,7 @@ const Profile = () => {
     eqColumn: "id",
     eqValue: params.id,
   })
+  console.log('params.id', params.id)
   const query = { data, isLoading, isError, error }
   console.log({ data })
   return (

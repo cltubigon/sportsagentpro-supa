@@ -8,6 +8,7 @@ const fetchData = async ({metaData, userID}) => {
       .upsert([{ profile_picture, userID }])
       .select()
     if (data) {
+      console.log({ data })
       return data
     } else if (error) {
       console.log({ error })

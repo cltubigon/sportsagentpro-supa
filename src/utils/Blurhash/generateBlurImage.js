@@ -1,6 +1,7 @@
 import { encode } from "blurhash"
 
 export const generateBlurImage = (image) => {
+  console.log('called generateBlurImage', image)
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.crossOrigin = "anonymous"

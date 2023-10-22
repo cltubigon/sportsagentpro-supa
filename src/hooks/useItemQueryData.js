@@ -7,6 +7,7 @@ const fetchItemData = async (query) => {
     .select(query.select)
     .eq(query.eqColumn, query.eqValue)
   if (error) throw error
+  console.log({ data })
   return data
 }
 
