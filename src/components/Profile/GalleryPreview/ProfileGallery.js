@@ -4,7 +4,7 @@ import supabase from "../../../config/supabaseClient"
 import { useState } from "react"
 import { useEffect } from "react"
 import GalleryPopup from "./GalleryPopup"
-import ImageOnload from "../../../utils/Blurhash/ImageWithBlurhash"
+import ImageWithBlurhash from "../../../utils/Blurhash/ImageWithBlurhash"
 
 const ProfileGallery = ({ query }) => {
   console.log("--------------------------Gallery Rendered")
@@ -64,7 +64,7 @@ const ProfileGallery = ({ query }) => {
             return (
               index < 5 && (
                 <Flex sx={imgContainerStyle} key={index} borderRadius={'150px'} onClick={()=> handleImageClick(index)} >
-                  <ImageOnload
+                  <ImageWithBlurhash
                     srcOrigin={item.path?.data?.publicUrl}
                     hash={item?.hash}
                   />

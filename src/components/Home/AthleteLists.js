@@ -4,9 +4,10 @@ import { Link } from "react-router-dom"
 import { athletesStyle } from "../../styles/athletesStyle"
 import ProfileSocialMedia from "../Profile/ProfileSocialMedia"
 import supabase from "../../config/supabaseClient"
-import { Image, Skeleton } from "@chakra-ui/react"
+import { Skeleton } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import { useState } from "react"
+import ImageWithBlurhash from "../../utils/Blurhash/ImageWithBlurhash"
 
 const AthleteLists = ({ data }) => {
   const [isHovered, setisHovered] = useState(null)
@@ -81,6 +82,8 @@ const AthleteLists = ({ data }) => {
                 resize: "cover", // 'cover' | 'fill' | 'contain'
               },
             })
+          const hash =
+            profilePictures && profilePictures[0]?.profile_picture?.hash
 
           return (
             <Flex
@@ -116,33 +119,6 @@ const AthleteLists = ({ data }) => {
                       justifyContent={"center"}
                       borderRadius={"md"}
                     >
-                      {/* <Flex
-                        w={"80%"}
-                        borderTop={"3px solid white"}
-                        borderBottom={"3px solid white"}
-                        as={motion.div}
-                        variants={imageAnimation}
-                        initial={"initialViewHeight"}
-                        animate={
-                          isHovered === index
-                            ? "animateViewHeight"
-                            : "initialViewHeight"
-                        }
-                        zIndex={2}
-                        position={"absolute"}
-                        m={"auto auto"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        pointerEvents={"none"}
-                      >
-                        <Text
-                          fontSize={"xl"}
-                          color={"white"}
-                          fontWeight={"semibold"}
-                        >
-                          View Athlete
-                        </Text>
-                      </Flex> */}
                       <Flex
                         sx={athletesStyle.imageContainer}
                         bgPosition={"top"}
@@ -153,26 +129,17 @@ const AthleteLists = ({ data }) => {
                           isHovered === index ? "animateZoom" : "initial"
                         }
                         position={"relative"}
+                        h={'240px'}
                       >
-                        <Image
+                        {/* <Image
                           src={imageURL && imageURL.data.publicUrl}
                           w={"100%"}
                           loading="lazy"
+                        /> */}
+                        <ImageWithBlurhash
+                          srcOrigin={imageURL.data?.publicUrl}
+                          hash={hash}
                         />
-                        {/* <Flex
-                          bgColor={"rgba(0, 0, 0, 0.35)"}
-                          w={"100%"}
-                          h={"100%"}
-                          as={motion.div}
-                          variants={imageAnimation}
-                          initial={"initialOverlay"}
-                          animate={
-                            isHovered === index
-                              ? "animateOverlay"
-                              : "initialOverlay"
-                          }
-                          position={"absolute"}
-                        ></Flex> */}
                       </Flex>
                     </Flex>
                   )}

@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Heading,
-  Image,
   SkeletonCircle,
   Stack,
   Text,
@@ -15,6 +14,7 @@ import ProfileContentAbout from "./ProfileContentAbout"
 import ProfileSocialMedia from "./ProfileSocialMedia"
 import { SkeletonAthleteSelectedProfile } from "../Skeleton/SkeletonAthleteSelectedProfile"
 import supabase from "../../config/supabaseClient"
+import ImageWithBlurhash from "../../utils/Blurhash/ImageWithBlurhash"
 
 const ProfileContentLeft = ({ query }) => {
   const pathName =
@@ -29,7 +29,9 @@ const ProfileContentLeft = ({ query }) => {
     },
   })
   const selectedAthlete = query.data && query.data[0]
-  console.log({ pathName, selectedAthlete })
+  const hash =
+    selectedAthlete?.images && selectedAthlete?.images[0]?.profile_picture?.hash
+  console.log({ hash, pathName, selectedAthlete })
 
   return (
     <Flex flexDirection={"column"} flexGrow={1}>
@@ -44,12 +46,15 @@ const ProfileContentLeft = ({ query }) => {
             <Box>
               <Flex flexDirection={"row"} alignItems={"center"} gap={1}>
                 <Heading fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}>
-                  {selectedAthlete.firstName}{" "}
-                  {selectedAthlete.lastName}
+                  {selectedAthlete.firstName} {selectedAthlete.lastName}
                 </Heading>
                 <VscVerifiedFilled color="lightGreen" size={25} />
               </Flex>
-              <Text>{selectedAthlete.sport[0]}{selectedAthlete.position[0] && ' • '}{selectedAthlete.position[0]}</Text>
+              <Text>
+                {selectedAthlete.sport[0]}
+                {selectedAthlete.position[0] && " • "}
+                {selectedAthlete.position[0]}
+              </Text>
             </Box>
             <Box>
               {/* =================== Image =================== */}
@@ -74,8 +79,15 @@ const ProfileContentLeft = ({ query }) => {
                 />
               )}
               {selectedAthlete.images.length > 0 && pathName && (
-                <Image src={imageURL?.data?.publicUrl} w={"56px"}
-                h={"56px"} shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"} borderRadius={"200px"} />
+                // <Image src={imageURL?.data?.publicUrl} w={"56px"}
+                // h={"56px"} shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"} borderRadius={"200px"} />
+                <Flex h={'56px'} w={'56px'} shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}  borderRadius={"200px"}>
+                  <ImageWithBlurhash
+                    srcOrigin={imageURL.data?.publicUrl}
+                    hash={hash}
+                    circle={true}
+                  />
+                </Flex>
               )}
               {/* =================== End of Image =================== */}
             </Box>

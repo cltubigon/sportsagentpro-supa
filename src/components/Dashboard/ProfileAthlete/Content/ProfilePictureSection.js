@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Icon,
-  Image,
   // Image,
   SkeletonCircle,
   Text,
@@ -17,6 +16,7 @@ import { BsFillPersonFill } from "react-icons/bs"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 import UploadProfilePicture from "./UploadProfilePicture"
+import ImageWithBlurhash from "../../../../utils/Blurhash/ImageWithBlurhash"
 
 const ProfilePictureSection = ({ data }) => {
   const user = useSelector((state) => state.auth.user)
@@ -29,6 +29,8 @@ const ProfilePictureSection = ({ data }) => {
     eqColumn: "id",
     eqValue: user.id,
   })
+  const hash = image && image[0]?.profile_picture?.hash
+  const profilePicture = image && image[0]?.profile_picture
 
   const thePath = image && image[0]?.profile_picture?.path
   useEffect(() => {
@@ -46,6 +48,7 @@ const ProfilePictureSection = ({ data }) => {
   }, [image])
 
   console.log({ user, data, selectedPerson, publicURL, image, thePath })
+  console.log('profilePicture', profilePicture)
 
   return (
     <Flex>
@@ -63,16 +66,23 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {image?.length > 0 && thePath && (
-              <Image
-                src={publicURL?.data?.publicUrl}
-                w={"125px"}
-                h={"125px"}
-                borderRadius={"200px"}
-                shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
-              />
+            {image?.length > 0 && profilePicture && (
+              // <Image
+              //   src={publicURL?.data?.publicUrl}
+              //   w={"125px"}
+              //   h={"125px"}
+              //   borderRadius={"200px"}
+              //   shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
+              // />
+              <Flex w={"125px"} h={"125px"}>
+                <ImageWithBlurhash
+                  srcOrigin={publicURL?.data?.publicUrl}
+                  hash={hash}
+                  circle={true}
+                />
+              </Flex>
             )}
-            {selectedPerson && !thePath && (
+            {selectedPerson && !profilePicture && (
               <Icon
                 as={BsFillPersonFill}
                 color={"gray.400"}

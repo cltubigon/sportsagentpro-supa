@@ -13,7 +13,7 @@ const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
 
   // const widthInt = parseInt(width.replace('px', ''))
   // const heightInt = parseInt(height.replace('px', ''))
-  console.log({ isFullyLoaded, hash })
+  // console.log({ isFullyLoaded, hash, srcOrigin })
   return (
     <Flex h={"100%"} w={"100%"} position={"relative"} className="main" gap={0}>
       {/* ============== Thumbnail Image ============== */}
