@@ -1,8 +1,15 @@
-import { Flex, Icon, Image } from "@chakra-ui/react"
-import React from "react"
+import { Flex, Icon, Text } from "@chakra-ui/react"
+import React, { useState } from "react"
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import ImageWithBlurhash from "../../../utils/Blurhash/ImageWithBlurhash"
 
-const GalleryPopup = ({ setpopupOpen, imageURLs }) => {
+const GalleryPopup = ({
+  setpopupOpen,
+  imagePathAndHash,
+  initialSelectedIndex,
+}) => {
+  const [activeIndex, setactiveIndex] = useState(initialSelectedIndex)
+
   const handleCloseButton = () => {
     setpopupOpen((prev) => !prev)
   }
@@ -11,12 +18,23 @@ const GalleryPopup = ({ setpopupOpen, imageURLs }) => {
   }
   const handleRightNav = (e) => {
     e.stopPropagation()
+    if (activeIndex < imagePathAndHash?.length - 1) {
+      setactiveIndex((prev) => prev + 1)
+    } else {
+      setactiveIndex(0)
+    }
   }
   const handleLeftNav = (e) => {
     e.stopPropagation()
+    if (activeIndex > 0) {
+      setactiveIndex((prev) => prev - 1)
+    } else {
+      setactiveIndex(imagePathAndHash?.length - 1)
+    }
   }
 
-  console.log({ imageURLs })
+  console.log("imagePathAndHash.length", imagePathAndHash.length)
+  console.log({ imagePathAndHash, initialSelectedIndex })
   const navigationStyle = {
     boxSize: 16,
     color: "white",
@@ -44,13 +62,30 @@ const GalleryPopup = ({ setpopupOpen, imageURLs }) => {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <Image
-          userSelect={"none"}
-          src="/images/testimage.jpg"
+        <Flex
           maxW={"960px"}
-          maxH={"80vh"}
+          h={"100%"}
+          // w={'100%'}
+          maxH={"700px"}
+          position={"relative"}
+          userSelect={"none"}
           onClick={handleImageClick}
-        />
+        >
+          {imagePathAndHash?.map((img, index) => {
+            return (
+              index === activeIndex && (
+                <ImageWithBlurhash
+                  key={index}
+                  srcOrigin={img.path.data.publicUrl.replace(
+                    "width=275&height=275&resize=cover",
+                    "width=960&height=960&resize=contain"
+                  )}
+                  hash={img.hash}
+                /> || <Text color={'white'}>Hello</Text>
+              )
+            )
+          })}
+        </Flex>
 
         {/* ==================== Left || Right ==================== */}
         <Icon

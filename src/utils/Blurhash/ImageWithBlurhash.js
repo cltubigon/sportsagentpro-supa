@@ -7,7 +7,6 @@ import "./blurCanvass.css"
 const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
   const [isFullyLoaded, setisFullyLoaded] = useState(false)
   const handleOnLoad = () => {
-    console.log("onload triggered")
     setisFullyLoaded(true)
   }
 
@@ -47,8 +46,8 @@ const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
       >
         <Image
           src={srcOrigin}
-          h={"100%"}
-          w={"100%"}
+          justifyContent={'center'}
+          alignItems={'center'}
           loading="lazy"
           onLoad={handleOnLoad}
           borderRadius={circle && "100%"}
