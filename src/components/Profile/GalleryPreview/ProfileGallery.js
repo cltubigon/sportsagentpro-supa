@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Flex } from "@chakra-ui/react"
 import { ProfileGallerySekeleton } from "../../Skeleton/Skeletons"
 import supabase from "../../../config/supabaseClient"
