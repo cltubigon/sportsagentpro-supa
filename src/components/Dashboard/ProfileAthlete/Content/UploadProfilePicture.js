@@ -28,12 +28,10 @@ const UploadProfilePicture = () => {
   const fileExtension = dateNow()
   const maxSize = 1024 * 1024
 
-  console.log({ userID })
 
   const { mutate } = useMutateProfilePicture()
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    console.log("Accepted Files:", acceptedFiles)
     if (rejectedFiles && rejectedFiles.length > 0) {
       const code = rejectedFiles[0].errors[0].code
       if (code === "file-too-large") {
@@ -55,7 +53,6 @@ const UploadProfilePicture = () => {
   })
 
   const debounceUpload = debounce(100, async () => {
-    console.log({ uid, fileExtension })
     const { data: uploadedData, error } = await supabase.storage
       .from("avatar")
       .upload(`${uid}/${fileExtension}`, acceptedFiles[0])
@@ -69,7 +66,6 @@ const UploadProfilePicture = () => {
           search: fileName,
         })
       if (data) {
-        console.log({ data })
         const imageUrl = supabase.storage.from(`avatar`).getPublicUrl(path, {
           transform: {
             width: 32,
@@ -82,7 +78,6 @@ const UploadProfilePicture = () => {
             const hash = await generateBlurImage(image)
             if (hash) {
               const metaData = { ...data[0], hash, path }
-              console.log({ metaData, hash })
               mutate({ metaData, userID })
             }
           } catch (error) {

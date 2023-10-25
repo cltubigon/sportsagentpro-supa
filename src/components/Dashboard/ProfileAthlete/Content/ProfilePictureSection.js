@@ -35,7 +35,6 @@ const ProfilePictureSection = ({ data }) => {
   const thePath = image && image[0]?.profile_picture?.path
   useEffect(() => {
     if (image && image.length > 0) {
-      console.log({ thePath })
       const imageUrl = supabase.storage.from(`avatar`).getPublicUrl(thePath, {
         transform: {
           width: 120,
@@ -47,9 +46,7 @@ const ProfilePictureSection = ({ data }) => {
     }
   }, [image])
 
-  console.log({ user, data, selectedPerson, publicURL, image, thePath })
-  console.log('profilePicture', profilePicture)
-
+console.log({ selectedPerson, thePath })
   return (
     <Flex>
       <Flex flexDirection={"column"} flexGrow={1} gap={2}>
@@ -66,7 +63,7 @@ const ProfilePictureSection = ({ data }) => {
                 shadow={"0px 3px 5px 1px rgba(0, 0, 0, 0.2)"}
               />
             )}
-            {image?.length > 0 && profilePicture && (
+            {image?.length > 0 && profilePicture && selectedPerson &&(
               // <Image
               //   src={publicURL?.data?.publicUrl}
               //   w={"125px"}
@@ -116,7 +113,7 @@ const ProfilePictureSection = ({ data }) => {
         </Flex>
         <UploadProfilePicture />
       </Flex>
-      <Flex>
+      <Flex h={'fit-content'} >
         <Link to={`/profile/${user.userID}`}>
           <Button colorScheme="twitter">View profile</Button>
         </Link>

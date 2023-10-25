@@ -15,9 +15,9 @@ const ProfileAthleteContent = () => {
     from: "users",
     select:
       userType === "athlete"
-        ? "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, identifiers_interests, language, ethnicity, bio, current_location, hometown, position, previous_teams, leagues_conferences, athletic_accolades, experience, discipline"
+        ? "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, identifiers_interests, language, ethnicity, bio, current_location, hometown, position, previous_teams, leagues_conferences, athletic_accolades, experience, discipline, images(profile_picture, gallery)"
         : userType === "brand" &&
-          "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, brand_category",
+          "firstName, lastName, which_best_describes_you, gender_identity, current_team, sport, brand_category, images(profile_picture, gallery)",
     eqColumn: "uid",
     eqValue: id,
   })
@@ -30,7 +30,7 @@ const ProfileAthleteContent = () => {
       {userType === "brand" && (
         <ProfileBrandMiddleContent data={data} isLoading={isLoading} />
       )}
-      <ProfileAthleteRightContent />
+      <ProfileAthleteRightContent data={data} />
     </Flex>
   )
 }
