@@ -33,34 +33,6 @@ const AthleteLists = ({ data }) => {
         duration: duration,
       },
     },
-    // initialOverlay: {
-    //   opacity: 0,
-    //   transition: {
-    //     duration: duration,
-    //   },
-    // },
-    // animateOverlay: {
-    //   opacity: 1,
-    //   transition: {
-    //     duration: duration,
-    //   },
-    // },
-    // initialViewHeight: {
-    //   display: "none",
-    //   opacity: 0,
-    //   height: "80px",
-    //   transition: {
-    //     duration: duration,
-    //   },
-    // },
-    // animateViewHeight: {
-    //   display: "flex",
-    //   opacity: 0.6,
-    //   height: "50px",
-    //   transition: {
-    //     duration: duration,
-    //   },
-    // },
   }
   return (
     <>
@@ -129,6 +101,7 @@ const AthleteLists = ({ data }) => {
                           isHovered === index ? "animateZoom" : "initial"
                         }
                         position={"relative"}
+                        h={'240px'}
                       >
                         {/* <Image
                           src={imageURL && imageURL.data.publicUrl}
@@ -138,8 +111,6 @@ const AthleteLists = ({ data }) => {
                         <ImageWithBlurhash
                           srcOrigin={imageURL.data?.publicUrl}
                           hash={hash}
-                          height={'240px'}
-                          width={'320px'}
                         />
                       </Flex>
                     </Flex>

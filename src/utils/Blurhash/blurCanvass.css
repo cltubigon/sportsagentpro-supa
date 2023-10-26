@@ -1,6 +1,3 @@
 .blur-canvass canvas {
     border-radius: 100%;
 }
-:where(img, video) {
-    width: 100%;
-}

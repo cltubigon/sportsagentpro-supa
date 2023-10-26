@@ -40,6 +40,8 @@ const ProfileGallery = ({ query }) => {
     }
   }, [query])
 
+  
+
   const handleImageClick = (index) => {
     console.log({ index })
     setselectedIndex(index)
@@ -49,16 +51,16 @@ const ProfileGallery = ({ query }) => {
   console.log({ query, imagePathAndHash, galleryItems })
 
   const imgContainerStyle = {
-    // h: {
-    //   sph: "75px",
-    //   lph: "100px",
-    //   stl: "144px",
-    //   ltl: "184px",
-    //   slt: "196px",
-    //   llt: "242px",
-    //   sdt: "258px",
-    //   ldt: "275px",
-    // },
+    minH: {
+      sph: "75px",
+      lph: "100px",
+      stl: "144px",
+      ltl: "184px",
+      slt: "196px",
+      llt: "242px",
+      sdt: "258px",
+      ldt: "275px",
+    },
     px: { sph: "2px", lph: "4px" },
     minW: "20%",
   }
@@ -66,41 +68,34 @@ const ProfileGallery = ({ query }) => {
   return (
     <>
       {query?.data ? (
-        (galleryItems?.length > 0 && <Flex
-          px={"12px"}
-          justifyContent={"flex-start"}
-          // minH={'100%'}
-        >
-          {imagePathAndHash?.map((item, index) => {
-            return (
-              index < 5 && (
-                <Flex
-                  sx={imgContainerStyle}
-                  key={index}
-                  borderRadius={"150px"}
-                  onClick={() => handleImageClick(index)}
-                >
-                  <ImageWithBlurhash
-                    srcOrigin={item.path?.data?.publicUrl}
-                    hash={item?.hash}
-                  />
-                </Flex>
+        galleryItems?.length > 0 && (
+          <Flex
+            px={"12px"}
+            justifyContent={"flex-start"}
+            minH={imgContainerStyle.minH}
+          >
+            {imagePathAndHash?.map((item, index) => {
+              return (
+                index < 5 && (
+                  <Flex
+                    px={{ sph: "2px", lph: "4px" }}
+                    minW="20%"
+                    key={index}
+                    borderRadius={"150px"}
+                    onClick={() => handleImageClick(index)}
+                  >
+                    <ImageWithBlurhash
+                      srcOrigin={item.path?.data?.publicUrl}
+                      hash={item?.hash}
+                    />
+                  </Flex>
+                )
               )
-            )
-          })}
-        </Flex>)
+            })}
+          </Flex>
+        )
       ) : (
-        <ProfileGallerySekeleton
-          minH={{
-            sph: "75px",
-            stl: "144px",
-            ltl: "184px",
-            slt: "196px",
-            llt: "242px",
-            sdt: "258px",
-            ldt: "275px",
-          }}
-        />
+        <ProfileGallerySekeleton minH={imgContainerStyle.minH} />
       )}
       {popupOpen && (
         <GalleryPopup

@@ -1,4 +1,4 @@
-import { Flex, Icon, Text } from "@chakra-ui/react"
+import { Flex, Icon } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import ImageWithBlurhash from "../../../utils/Blurhash/ImageWithBlurhash"
@@ -63,28 +63,26 @@ const GalleryPopup = ({
         alignItems={"center"}
       >
         <Flex
-          maxW={"720px"}
-          // h={"100%"}
-          // w={'100%'}
-          maxH={"720px"}
           position={"relative"}
           userSelect={"none"}
           onClick={handleImageClick}
         >
           {imagePathAndHash?.map((img, index) => {
             return (
-              index === activeIndex && (
+              <Flex
+                key={index}
+                opacity={index === activeIndex ? 100 : 0}
+                w={index !== activeIndex && 0}
+                h={index !== activeIndex && 0}
+              >
                 <ImageWithBlurhash
-                  key={index}
                   srcOrigin={img.path.data.publicUrl.replace(
                     "width=275&height=275&resize=cover",
                     "width=720&height=720&resize=contain"
                   )}
                   hash={img.hash}
-                  height={'720px'}
-                  width={'720px'}
-                /> || <Text color={'white'}>Hello</Text>
-              )
+                />
+              </Flex>
             )
           })}
         </Flex>
