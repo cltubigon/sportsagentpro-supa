@@ -49,16 +49,16 @@ const ProfileGallery = ({ query }) => {
   console.log({ query, imagePathAndHash, galleryItems })
 
   const imgContainerStyle = {
-    h: {
-      sph: "75px",
-      lph: "100px",
-      stl: "144px",
-      ltl: "184px",
-      slt: "196px",
-      llt: "242px",
-      sdt: "258px",
-      ldt: "275px",
-    },
+    // h: {
+    //   sph: "75px",
+    //   lph: "100px",
+    //   stl: "144px",
+    //   ltl: "184px",
+    //   slt: "196px",
+    //   llt: "242px",
+    //   sdt: "258px",
+    //   ldt: "275px",
+    // },
     px: { sph: "2px", lph: "4px" },
     minW: "20%",
   }
@@ -69,7 +69,7 @@ const ProfileGallery = ({ query }) => {
         (galleryItems?.length > 0 && <Flex
           px={"12px"}
           justifyContent={"flex-start"}
-          minH={imgContainerStyle.h}
+          // minH={'100%'}
         >
           {imagePathAndHash?.map((item, index) => {
             return (

@@ -63,10 +63,10 @@ const GalleryPopup = ({
         alignItems={"center"}
       >
         <Flex
-          maxW={"960px"}
-          h={"100%"}
+          maxW={"720px"}
+          // h={"100%"}
           // w={'100%'}
-          maxH={"700px"}
+          maxH={"720px"}
           position={"relative"}
           userSelect={"none"}
           onClick={handleImageClick}
@@ -78,9 +78,11 @@ const GalleryPopup = ({
                   key={index}
                   srcOrigin={img.path.data.publicUrl.replace(
                     "width=275&height=275&resize=cover",
-                    "width=960&height=960&resize=contain"
+                    "width=720&height=720&resize=contain"
                   )}
                   hash={img.hash}
+                  height={'720px'}
+                  width={'720px'}
                 /> || <Text color={'white'}>Hello</Text>
               )
             )

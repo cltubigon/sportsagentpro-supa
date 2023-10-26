@@ -129,7 +129,6 @@ const AthleteLists = ({ data }) => {
                           isHovered === index ? "animateZoom" : "initial"
                         }
                         position={"relative"}
-                        h={'240px'}
                       >
                         {/* <Image
                           src={imageURL && imageURL.data.publicUrl}
@@ -139,6 +138,8 @@ const AthleteLists = ({ data }) => {
                         <ImageWithBlurhash
                           srcOrigin={imageURL.data?.publicUrl}
                           hash={hash}
+                          height={'240px'}
+                          width={'320px'}
                         />
                       </Flex>
                     </Flex>

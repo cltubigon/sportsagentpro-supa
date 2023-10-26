@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Blurhash } from "react-blurhash"
 import "./blurCanvass.css"
 
-const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
+const ImageWithBlurhash = ({ srcOrigin, hash, circle, height, width }) => {
   const [isFullyLoaded, setisFullyLoaded] = useState(false)
   const handleOnLoad = () => {
     setisFullyLoaded(true)
@@ -22,9 +22,9 @@ const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
           position={"absolute"}
           top={0}
           left={0}
-          w={"100%"}
-          h={"100%"}
-          opacity={isFullyLoaded && '0'}
+          w={'100%'}
+          h={height || 'unset'}
+          opacity={isFullyLoaded && "0"}
         >
           <Blurhash
             // display={isFullyLoaded && "none"}
@@ -39,15 +39,13 @@ const ImageWithBlurhash = ({ srcOrigin, hash, circle }) => {
         </Flex>
       )}
       {/* ============== Large Image ============== */}
-      <Flex
-        w={"100%"}
-        h={"100%"}
-        opacity={isFullyLoaded && '100'}
-      >
+      <Flex w={"100%"} h={"100%"} opacity={isFullyLoaded && "100"}>
         <Image
           src={srcOrigin}
-          justifyContent={'center'}
-          alignItems={'center'}
+          // w={"100%"}
+          // h={"100%"}
+          justifyContent={"center"}
+          alignItems={"center"}
           loading="lazy"
           onLoad={handleOnLoad}
           borderRadius={circle && "100%"}
