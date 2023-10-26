@@ -6,7 +6,7 @@ npm install firebase@9.6.1 firebase/auth
 git status
 git add .
 git remote -v
-git commit -m "Commit message"
+git commit -m "Commit messages"
 git push -u origin main
 # git add . && git commit -m "your commit message" && git push -u origin main
 

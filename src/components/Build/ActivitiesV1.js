@@ -516,10 +516,6 @@ const ActivitiesNav1 = () => {
                             as={
                               activity.activityDate &&
                               activity.activityAmount > 0
-                              // activity.activityDate !== "0" &&
-                              // activity.activityDate.length > 0 &&
-                              // (activity.activityDate ||
-                              //   activity.activityDate !== undefined)
                                 ? BsCheckCircleFill
                                 : BsExclamationCircleFill
                             }
