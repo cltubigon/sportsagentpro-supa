@@ -9,6 +9,8 @@ const GalleryPopup = ({
   initialSelectedIndex,
 }) => {
   const [activeIndex, setactiveIndex] = useState(initialSelectedIndex)
+  const [startX, setStartX] = useState(null)
+  const [startY, setStartY] = useState(null)
 
   const handleCloseButton = () => {
     setpopupOpen((prev) => !prev)
@@ -32,6 +34,64 @@ const GalleryPopup = ({
       setactiveIndex(imagePathAndHash?.length - 1)
     }
   }
+
+  //================= Swipe Code Start =================
+  const handleRightSwipe = (e) => {
+    if (activeIndex < imagePathAndHash?.length - 1) {
+      setactiveIndex((prev) => prev + 1)
+    } else {
+      setactiveIndex(0)
+    }
+  }
+  const handleLeftSwipe = (e) => {
+    if (activeIndex > 0) {
+      setactiveIndex((prev) => prev - 1)
+    } else {
+      setactiveIndex(imagePathAndHash?.length - 1)
+    }
+  }
+
+  const handleTouchStart = (e) => {
+    setStartX(e.changedTouches[0].clientX)
+    setStartY(e.changedTouches[0].clientY)
+  }
+  const handleTouchEnd = (e) => {
+    if (startX !== null) {
+      const endX = e.changedTouches[0].clientX
+      const endY = e.changedTouches[0].clientY
+      const deltaX = endX - startX
+      const deltaY = endY - startY
+      if (deltaX > 10 && deltaY > -100 && deltaY < 60) {
+        handleLeftSwipe()
+      } else if (deltaX < -20 && deltaY > -100 && deltaY < 60) {
+        handleRightSwipe()
+      }
+    }
+  }
+
+  const handleDragStart = (e) => {
+    setStartX(e.clientX)
+    setStartY(e.clientY)
+    e.dataTransfer.setDragImage(document.createElement("div"), 0, 0)
+  }
+
+  const handleDragEnd = (e) => {
+    if (startX !== null) {
+      const endX = e.clientX
+      const endY = e.clientY
+      const deltaX = endX - startX
+      const deltaY = endY - startY
+
+      if (deltaX > 10 && deltaY > -100 && deltaY < 80) {
+        handleLeftSwipe()
+      } else if (deltaX < -20 && deltaY > -100 && deltaY < 80) {
+        handleRightSwipe()
+      }
+
+      setStartX(null)
+    }
+  }
+  //================= Swipe Code end =================
 
   console.log("imagePathAndHash.length", imagePathAndHash.length)
   console.log({ imagePathAndHash, initialSelectedIndex })
@@ -72,6 +132,10 @@ const GalleryPopup = ({
             return (
               <Flex
                 key={index}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
                 opacity={index === activeIndex ? 100 : 0}
                 w={index !== activeIndex && 0}
                 h={index !== activeIndex && 0}
@@ -82,6 +146,7 @@ const GalleryPopup = ({
                     "width=720&height=720&resize=contain"
                   )}
                   hash={img.hash}
+                  // isUserSelect={true}
                 />
               </Flex>
             )
@@ -92,13 +157,13 @@ const GalleryPopup = ({
         <Icon
           as={FaChevronLeft}
           sx={navigationStyle}
-          left={{ stl: "40px", llt: '80px' }}
+          left={{ stl: "40px", llt: "80px" }}
           onClick={handleLeftNav}
         />
         <Icon
           as={FaChevronRight}
           sx={navigationStyle}
-          right={{ stl: "40px", llt: '80px' }}
+          right={{ stl: "40px", llt: "80px" }}
           onClick={handleRightNav}
         />
       </Flex>

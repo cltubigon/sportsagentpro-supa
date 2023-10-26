@@ -101,7 +101,7 @@ const AthleteLists = ({ data }) => {
                           isHovered === index ? "animateZoom" : "initial"
                         }
                         position={"relative"}
-                        h={'240px'}
+                        h={{sph: '240px', lph: '320px', stl: '240px'}}
                       >
                         {/* <Image
                           src={imageURL && imageURL.data.publicUrl}
