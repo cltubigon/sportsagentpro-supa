@@ -45,7 +45,7 @@ const ProfileContentLeft = ({ query }) => {
           <Flex justifyContent={"space-between"}>
             <Box>
               <Flex flexDirection={"row"} alignItems={"center"} gap={1}>
-                <Heading fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}>
+                <Heading fontSize={{ sph: "xl", ltl: "3xl", lg: "4xl" }}>
                   {selectedAthlete.firstName} {selectedAthlete.lastName}
                 </Heading>
                 <VscVerifiedFilled color="lightGreen" size={25} />

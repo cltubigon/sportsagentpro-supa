@@ -17,10 +17,11 @@ const SubNavigation = () => {
     px: "var(--chakra-space-4)",
     zIndex: 20,
     maxW: '1440px',
+    flexDirection: {sph: 'column', stl: 'row' },
   }
   return (
     <Flex sx={flexContainer}>
-      <Flex w={"350px"}>
+      <Flex w={{sph: '100%', lph: "350px"}}>
         <InputGroup>
           <InputLeftElement pointerEvents="none" children={<BsSearch color="gray.300" />} />
           <Input type="text" id={'searchQuery'} {...register('searchQuery')} placeholder="Search"  border={"1px solid gray"} />
@@ -28,7 +29,7 @@ const SubNavigation = () => {
       </Flex>
       <Flex gap={2}>
         <Button leftIcon={<GiSettingsKnobs />} variant='solid' border={"1px solid gray"}>Email</Button>
-        <Button leftIcon={<BsSortDownAlt />} variant='solid' border={"1px solid gray"} >Sort: Recommended</Button>
+        <Button leftIcon={<BsSortDownAlt />} flexGrow={1} variant='solid' border={"1px solid gray"} >Sort: Recommended</Button>
       </Flex>
     </Flex>
   )

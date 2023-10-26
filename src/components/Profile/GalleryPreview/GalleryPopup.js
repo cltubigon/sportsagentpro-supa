@@ -41,8 +41,9 @@ const GalleryPopup = ({
     position: "absolute",
     cursor: "pointer",
     p: 8,
-    w: "150px",
-    h: "150px",
+    display: { sph: "none", stl: "block" },
+    w: { stl: "120px", slt: "120px", llt: "150px" },
+    h: { stl: "120px", slt: "120px", llt: "150px" },
   }
   return (
     <Flex
@@ -91,13 +92,13 @@ const GalleryPopup = ({
         <Icon
           as={FaChevronLeft}
           sx={navigationStyle}
-          left={"150px"}
+          left={{ stl: "40px", llt: '80px' }}
           onClick={handleLeftNav}
         />
         <Icon
           as={FaChevronRight}
           sx={navigationStyle}
-          right={"150px"}
+          right={{ stl: "40px", llt: '80px' }}
           onClick={handleRightNav}
         />
       </Flex>

@@ -40,8 +40,6 @@ const ProfileGallery = ({ query }) => {
     }
   }, [query])
 
-  
-
   const handleImageClick = (index) => {
     console.log({ index })
     setselectedIndex(index)
@@ -52,7 +50,7 @@ const ProfileGallery = ({ query }) => {
 
   const imgContainerStyle = {
     minH: {
-      sph: "75px",
+      sph: "80px",
       lph: "100px",
       stl: "144px",
       ltl: "184px",
@@ -67,9 +65,11 @@ const ProfileGallery = ({ query }) => {
   console.log({ imagePathAndHash })
   return (
     <>
+      {/* ================ Tablet to Desktop ================ */}
       {query?.data ? (
         galleryItems?.length > 0 && (
           <Flex
+            display={{ sph: "none", stl: "flex" }}
             px={"12px"}
             justifyContent={"flex-start"}
             minH={imgContainerStyle.minH}
@@ -86,6 +86,42 @@ const ProfileGallery = ({ query }) => {
                   >
                     <ImageWithBlurhash
                       srcOrigin={item.path?.data?.publicUrl}
+                      hash={item?.hash}
+                    />
+                  </Flex>
+                )
+              )
+            })}
+          </Flex>
+        )
+      ) : (
+        <ProfileGallerySekeleton minH={imgContainerStyle.minH} />
+      )}
+      {/* ================ Mobile Only ================ */}
+      {query?.data ? (
+        galleryItems?.length > 0 && (
+          <Flex
+            display={{ sph: "flex", stl: "none" }}
+            px={"12px"}
+            justifyContent={"flex-start"}
+            minH={imgContainerStyle.minH}
+          >
+            {imagePathAndHash?.map((item, index) => {
+              return (
+                index < 4 && (
+                  <Flex
+                    px={{ sph: "2px", lph: "4px" }}
+                    minW="25%"
+                    w="25%"
+                    key={index}
+                    borderRadius={"150px"}
+                    onClick={() => handleImageClick(index)}
+                  >
+                    <ImageWithBlurhash
+                      srcOrigin={item.path?.data?.publicUrl.replace(
+                        "width=275&height=275&resize=cover",
+                        "width=80&height=80&resize=cover"
+                      )}
                       hash={item?.hash}
                     />
                   </Flex>
