@@ -33,7 +33,7 @@ const MainNavigation = () => {
           <Flex sx={MainNavigationStyle.mainContainer}>
             <Flex sx={MainNavigationStyle.logoContainer}>
               <Heading sx={MainNavigationStyle.logoText}>
-                <Link to="/">Sports Agent Pros</Link>
+                <Link to="/">Sports Agent Pro</Link>
               </Heading>
             </Flex>
             <Flex flexGrow={1}>
