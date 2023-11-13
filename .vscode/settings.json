@@ -1,5 +1,8 @@
 {
     "emmet.triggerExpansionOnTab": false,
     "editor.tabCompletion": "off",
-    "workbench.editor.wrapTabs": true
+    "workbench.editor.wrapTabs": true,
+    "deno.enable": true,
+    "deno.lint": true,
+    "deno.unstable": true
 }

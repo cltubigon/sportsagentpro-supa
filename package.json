@@ -69,6 +69,7 @@
     ]
   },
   "devDependencies": {
+    "@types/stripe": "^8.0.417",
     "supabase": "^1.106.1"
   }
 }
